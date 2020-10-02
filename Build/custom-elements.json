@@ -61,6 +61,11 @@
           "name": "--typo3-border-radius",
           "description": "Button border radius",
           "type": "Length"
+        },
+        {
+          "name": "--typo3-border-width",
+          "description": "Button border width",
+          "type": "Length"
         }
       ]
     },

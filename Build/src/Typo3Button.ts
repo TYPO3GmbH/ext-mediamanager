@@ -28,16 +28,20 @@ export class Typo3Button extends LitElement {
       justify-content: center;
       align-items: center;
       outline: none;
-      padding: 4px 4px;
-      border-width: 0.0625rem;
       text-overflow: ellipsis;
+      padding: 0.25rem;
 
       background-color: var(--typo3-button-background-color, #dedede);
       border-color: var(--typo3-border-color, #c4c4c4);
       color: var(--typo3-button-text-color, black);
-      font-size: var(--typo3-button-font-size, 12px);
+      font-size: var(--typo3-button-font-size, 0.75rem);
       line-height: var(--typo3-button-line-height, 1.5);
-      border-radius: var(--typo3-button-border-radius, 2px);
+      border-radius: var(--typo3-button-border-radius, 0.125rem);
+      border-width: var(--typo3-button-border-width, 0.0625rem);
+    }
+
+    .btn_label {
+      padding: 0 0.25rem;
     }
   `;
 
