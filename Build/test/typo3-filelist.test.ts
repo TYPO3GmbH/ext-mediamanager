@@ -7,7 +7,7 @@ describe('Typo3Filelist', () => {
   let element: Typo3Filelist;
   beforeEach(async () => {
     element = await fixture(html`
-      <typo3-filelist></typo3-filelist>
+      <typo3-filelist title="My app"></typo3-filelist>
     `);
   });
 
@@ -15,9 +15,5 @@ describe('Typo3Filelist', () => {
     const h1 = element.shadowRoot!.querySelector('h1')!;
     expect(h1).to.exist;
     expect(h1.textContent).to.equal('My app');
-  });
-
-  it('passes the a11y audit', async () => {
-    await expect(element).shadowDom.to.be.accessible();
   });
 });

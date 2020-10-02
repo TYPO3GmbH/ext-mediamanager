@@ -2,6 +2,43 @@
   "version": 2,
   "tags": [
     {
+      "name": "typo3-button",
+      "description": "This is a container for a button element",
+      "properties": [
+        {
+          "name": "label",
+          "type": "String",
+          "attribute": "label",
+          "description": "Shown as button text",
+          "default": "Button"
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attribute": "disabled",
+          "description": "Makes the element not mutable, focusable and does not submit any event",
+          "default": false
+        }
+      ],
+      "events": [
+        {
+          "name": "btn-click",
+          "description": "Fires on button click"
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon_left",
+          "description": "Icon, displayed to the left of the label"
+        },
+        {
+          "name": "icon_right",
+          "description": "Icon, displayed to the right of the label"
+        }
+      ]
+    },
+
+    {
       "name": "typo3-filelist",
       "description": "An application with a title and an action counter",
       "properties": [
