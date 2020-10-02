@@ -43,6 +43,11 @@ export class Typo3Button extends LitElement {
     .btn_label {
       padding: 0 0.25rem;
     }
+
+    ::slotted(*) {
+      color: var(--typo3-button-text-color, black);
+      fill: var(--typo3-button-text-color, black);
+    }
   `;
 
   render(): TemplateResult {
