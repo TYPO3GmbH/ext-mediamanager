@@ -57,7 +57,7 @@ export class Typo3Button extends LitElement {
           type="${this.type}"
           @click="${this._handleClick}"
           ?disabled="${this.disabled}"
-          title="${this.label}"
+          aria-label="${this.label}"
         >
           <slot name="icon_left"></slot>
           <span class="btn_label">${this.label}</span>
