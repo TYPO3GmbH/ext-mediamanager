@@ -35,9 +35,35 @@
           "name": "icon_right",
           "description": "Icon, displayed to the right of the label"
         }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-button-background-color",
+          "description": "Button Background color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-text-color",
+          "description": "Button Text color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-font-size",
+          "description": "Button Font size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-line-height",
+          "description": "Button line height",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-border-radius",
+          "description": "Button border radius",
+          "type": "Length"
+        }
       ]
     },
-
     {
       "name": "typo3-filelist",
       "description": "An application with a title and an action counter",
