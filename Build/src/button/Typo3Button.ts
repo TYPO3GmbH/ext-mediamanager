@@ -1,4 +1,4 @@
-import { LitElement, html, css, property, TemplateResult } from 'lit-element';
+import { html, LitElement, property, TemplateResult } from 'lit-element';
 import { buttonStyles } from './typo3-button-styles';
 
 export class Typo3Button extends LitElement {
@@ -27,16 +27,27 @@ export class Typo3Button extends LitElement {
   }
 
   protected get buttonContent(): TemplateResult[] {
-    const icon = html` <slot name="icon"></slot> `;
-    const content = [
-      html`
-        <div id="label">
-          <slot></slot>
-        </div>
-      `,
-    ];
+    const icon = html`<slot name="icon"></slot>`;
+    const label = html`<div id="label"><slot></slot></div>`;
 
-    this.iconRight ? content.push(icon) : content.unshift(icon);
+    const content = [];
+
+    if (this.hasText) {
+      content.push(label);
+    }
+
+    if (this.hasIcon) {
+      this.iconRight ? content.push(icon) : content.unshift(icon);
+    }
+
     return content;
+  }
+
+  private get hasText(): boolean {
+    return this.textContent ? this.textContent.trim() !== '' : false;
+  }
+
+  private get hasIcon(): boolean {
+    return !!this.querySelector('[slot="icon"]');
   }
 }

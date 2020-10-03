@@ -38,17 +38,37 @@
       "cssProperties": [
         {
           "name": "--typo3-button-background-color",
-          "description": "Button Background color",
+          "description": "Button background color",
           "type": "Color"
         },
         {
           "name": "--typo3-button-text-color",
-          "description": "Button Text color",
+          "description": "Button text color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-border-color",
+          "description": "Button border color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-background-color-hover",
+          "description": "Button background color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-text-color-hover",
+          "description": "Button text color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-border-color-hover",
+          "description": "Button border color on hover",
           "type": "Color"
         },
         {
           "name": "--typo3-button-font-size",
-          "description": "Button Font size",
+          "description": "Button font size",
           "type": "Length"
         },
         {
@@ -57,87 +77,22 @@
           "type": "Length"
         },
         {
-          "name": "--typo3-border-radius",
+          "name": "--typo3-button-border-radius",
           "description": "Button border radius",
           "type": "Length"
         },
         {
-          "name": "--typo3-border-width",
+          "name": "--typo3-button-border-width",
           "description": "Button border width",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-icon-size",
+          "description": "Button icon size",
           "type": "Length"
         }
       ]
     },
-    {
-      "name": "typo3-dropdown",
-      "description": "This is a container for a dropdown element",
-      "properties": [
-        {
-          "name": "label",
-          "type": "String",
-          "attribute": "label",
-          "description": "Shown as button text",
-          "default": "Button"
-        },
-        {
-          "name": "disabled",
-          "type": "Boolean",
-          "attribute": "disabled",
-          "description": "Makes the element not mutable, focusable and does not submit any event",
-          "default": false
-        }
-      ],
-      "events": [
-        {
-          "name": "btn-click",
-          "description": "Fires on button click"
-        }
-      ],
-      "slots": [
-        {
-          "name": "icon_left",
-          "description": "Icon, displayed to the left of the label"
-        },
-        {
-          "name": "icon_right",
-          "description": "Icon, displayed to the right of the label"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-button-background-color",
-          "description": "Button Background color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-button-text-color",
-          "description": "Button Text color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-button-font-size",
-          "description": "Button Font size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-button-line-height",
-          "description": "Button line height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-border-radius",
-          "description": "Button border radius",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-border-width",
-          "description": "Button border width",
-          "type": "Length"
-        }
-      ]
-    },
-
-
     {
       "name": "typo3-filelist",
       "description": "An application with a title and an action counter",
