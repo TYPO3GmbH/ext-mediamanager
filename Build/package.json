@@ -65,6 +65,7 @@
   "author": "typo3-filelist",
   "license": "MIT",
   "dependencies": {
+    "@ui5/webcomponents": "^1.0.0-rc.8",
     "canvas-datagrid": "^0.24.4",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0"
