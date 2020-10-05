@@ -94,6 +94,135 @@
       ]
     },
     {
+      "name": "typo3-split-button",
+      "description": "This is a container for a split button element",
+      "properties": [
+        {
+          "name": "label",
+          "type": "String",
+          "attribute": "label",
+          "description": "Shown as aria-label"
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "attribute": "disabled",
+          "description": "Makes the element not mutable, focusable and does not submit any event",
+          "default": false
+        },
+        {
+          "name": "iconRight",
+          "type": "Boolean",
+          "attribute": "icon-right",
+          "description": "Shifts icon to the right of the text",
+          "default": false
+        },
+        {
+          "name": "left",
+          "type": "Boolean",
+          "attribute": "left",
+          "description": "Shifts trigger to the left of default button",
+          "default": false
+        }
+      ],
+      "slots": [
+        {
+          "description": "The content of the button (text or HTML)"
+        },
+        {
+          "name": "icon",
+          "description": "Icon of the button"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-button-background-color",
+          "description": "Button background color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-text-color",
+          "description": "Button text color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-border-color",
+          "description": "Button border color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-background-color-hover",
+          "description": "Button background color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-text-color-hover",
+          "description": "Button text color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-border-color-hover",
+          "description": "Button border color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-button-font-size",
+          "description": "Button font size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-line-height",
+          "description": "Button line height",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-border-radius",
+          "description": "Button border radius",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-border-width",
+          "description": "Button border width",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-button-icon-size",
+          "description": "Button icon size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-split-button-background-color-hover",
+          "description": "Button background color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-split-button-trigger-background-color",
+          "description": "Button background color on hover for trigger element",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-split-button-text-color-hover",
+          "description": "Text color on hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-split-button-height",
+          "description": "Height of split button",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-split-button-font-size",
+          "description": "Fontsize of split button",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-split-button-trigger-icon-size",
+          "description": "Iconsize for split button trigger",
+          "type": "Length"
+        }
+      ]
+    },
+    {
       "name": "typo3-filelist",
       "description": "An application with a title and an action counter",
       "properties": [

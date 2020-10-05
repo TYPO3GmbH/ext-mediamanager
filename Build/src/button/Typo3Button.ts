@@ -6,8 +6,7 @@ export class Typo3Button extends LitElement {
 
   @property({ type: String }) label = '';
 
-  @property({ type: Boolean, reflect: true, attribute: 'icon-right' })
-  iconRight = false;
+  @property({ type: Boolean, reflect: true, attribute: 'icon-right' }) iconRight = false;
 
   static get styles() {
     return [buttonStyles];
