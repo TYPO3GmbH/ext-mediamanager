@@ -1,0 +1,45 @@
+import {Meta, Preview, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '@material/mwc-menu';
+import '../out-tsc/src/button/typo3-button';
+import '../out-tsc/src/dropdown/typo3-dropdown-item';
+
+
+<Meta
+  title="Components/typo3-dropdown"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Button.ts
+
+<Preview>
+    <Story name="Open Grouped Menu" height="220px">
+        {html`
+        <typo3-button id="multiButton" label="Open Grouped Menu" onClick="document.querySelector('#groupedMenu').show();">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 21l6-8h-4v-10h-4v10h-4l6 8zm16-12h-8v-2h8v2zm2-6h-10v2h10v-2zm-4 8h-6v2h6v-2zm-2 4h-4v2h4v-2zm-2 4h-2v2h2v-2z"/></svg>
+            Open Multi (activatable) Menu
+        </typo3-button>
+       <mwc-menu multi id="groupedMenu" activatable>
+        <typo3-dropdown-item selected activated group="sort_field">
+          <span>Name</span>
+        </typo3-dropdown-item>
+        <typo3-dropdown-item group="sort_field">
+          <span>Modified</span>
+        </typo3-dropdown-item>
+        <typo3-dropdown-item group="sort_field">
+          <span>Size</span>
+        </typo3-dropdown-item>
+        <li divider></li>
+        <typo3-dropdown-item selected activated group="sort_dir">
+          <span>Ascending</span>
+        </typo3-dropdown-item>
+        <typo3-dropdown-item group="sort_dir">
+          <span>Descending</span>
+        </typo3-dropdown-item>
+      </mwc-menu>
+    `}
+    </Story>
+</Preview>
+
+# API
