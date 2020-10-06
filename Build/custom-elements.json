@@ -372,6 +372,27 @@
           "type": "Length"
         }
       ]
+    },
+    {
+      "name": "typo3-grid",
+      "description": "Grid (e.g. for displaying card)",
+      "properties": [],
+      "events": [],
+      "slots": [
+        {
+          "description": "Grid cell"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-card-grid-colmin",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-grid-gap",
+          "type": "Length"
+        }
+      ]
     }
   ]
 }
