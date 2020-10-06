@@ -2,6 +2,36 @@
   "version": 2,
   "tags": [
     {
+      "name": "typo3-badge",
+      "description": "This is a container for a button element",
+      "properties": [
+        {
+          "name": "title",
+          "type": "String",
+          "attribute": "title",
+          "description": "Badge content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-badge-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-badge-text-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-badge-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-badge-font-size",
+          "type": "Length"
+        }
+      ]
+    },
+    {
       "name": "typo3-button",
       "description": "This is a container for a button element",
       "properties": [

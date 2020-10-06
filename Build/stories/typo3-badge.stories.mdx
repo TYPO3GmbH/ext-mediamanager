@@ -1,0 +1,23 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../out-tsc/src/badge/typo3-badge';
+
+<Meta
+  title="Components/typo3-badge"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-badge', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Badge.ts
+
+<Preview>
+    <Story name="Basic Badge" height="220px">
+    {html`
+        <typo3-badge title="900"></typo3-badge>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-badge" />
