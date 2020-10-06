@@ -229,7 +229,6 @@
         {
           "name": "isDragged",
           "type": "Boolean",
-          "description": "Whe",
           "default": "false"
         }
       ],
@@ -257,6 +256,90 @@
           "name": "--typo3-dropzone-background-color-selected-hover",
           "description": "Dropzone background color on hover",
           "type": "Color"
+        }
+      ]
+    },
+    {
+      "name": "typo3-card",
+      "description": "Content card including title, subtitle, image",
+      "properties": [
+        {
+          "name": "title",
+          "type": "String",
+          "attribute": "title"
+        },
+        {
+          "name": "subtitle",
+          "type": "String",
+          "attribute": "subtitle"
+        }
+      ],
+      "events": [],
+      "slots": [
+        {
+          "image": ""
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-card-width",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-border-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-border-radius",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-card-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-card-border-color-hover",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-card-body-padding-top",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-body-padding-bottom",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-body-padding-left",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-body-padding-right",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-title-text-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-title-text-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-card-subtitle-text-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-card-subtitle-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-card-image-height",
+          "type": "Length"
         }
       ]
     }
