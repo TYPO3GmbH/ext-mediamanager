@@ -49,10 +49,19 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
   .image ::slotted(*) {
     height: 80%;
     object-fit: cover;
+  }
+
+  :host slot[name='badge'] {
+    position: absolute;
+    bottom: 0;
+    right: 1.25rem;
+    display: inline-block;
+    margin-left: 0.625rem;
   }
 `;

@@ -14,6 +14,7 @@ export class Typo3Card extends LitElement {
     return html`
       <div class="image">
         <slot name="image"></slot>
+        <slot name="badge"></slot>
       </div>
       <div class="body">
         <div class="title">${this.title}</div>
