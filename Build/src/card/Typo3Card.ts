@@ -6,6 +6,8 @@ export class Typo3Card extends LitElement {
 
   @property({ type: String }) subtitle = '';
 
+  @property({ reflect: true }) variant: 'standard' | 'preview' = 'standard';
+
   static get styles() {
     return [cardStyles];
   }

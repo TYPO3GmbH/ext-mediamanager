@@ -64,4 +64,24 @@ export const cardStyles = css`
     display: inline-block;
     margin-left: 0.625rem;
   }
+
+  :host([variant='preview']) .image {
+    height: 12.875rem;
+  }
+
+  :host([variant='preview']) .image ::slotted(*) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :host([variant='preview']) .body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  :host([variant='preview']) .title,
+  :host([variant='preview']) .subtitle {
+    color: white;
+  }
 `;
