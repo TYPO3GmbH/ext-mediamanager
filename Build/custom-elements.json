@@ -120,6 +120,11 @@
           "name": "--typo3-button-icon-size",
           "description": "Button icon size",
           "type": "Length"
+        },
+        {
+          "name": "--typo3-button-text-icon-gap",
+          "description": "Gap between icon and text",
+          "type": "Length"
         }
       ]
     },
