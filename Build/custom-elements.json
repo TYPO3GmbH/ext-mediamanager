@@ -398,6 +398,47 @@
           "type": "Length"
         }
       ]
+    },
+    {
+      "name": "typo3-top-bar",
+      "description": "Top Bar for list navigation",
+      "properties": [],
+      "events": [],
+      "slots": [
+        {
+          "description": "content first one left, second right"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-action-bar-padding-top",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-action-bar-padding-bottom",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-action-bar-padding-left",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-action-bar-padding-right",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-action-bar-min-height",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-action-bar-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-action-bar-text-color",
+          "type": "Color"
+        }
+      ]
     }
   ]
 }
