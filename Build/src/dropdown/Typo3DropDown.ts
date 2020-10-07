@@ -6,6 +6,7 @@ export class Typo3DropDown extends MenuBase {
   constructor() {
     super();
     this.corner = 'BOTTOM_LEFT';
+    this.anchor = document.body;
   }
 
   static get styles(): CSSResultArray {
