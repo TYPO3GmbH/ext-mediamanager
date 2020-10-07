@@ -390,42 +390,48 @@
       ]
     },
     {
-      "name": "typo3-top-bar",
+      "name": "typo3-topbar",
       "description": "Top Bar for list navigation",
       "properties": [],
       "events": [],
       "slots": [
         {
-          "description": "content first one left, second right"
+          "name": "left",
+        },
+        {
+          "name": "middle",
+        },
+        {
+          "name": "right",
         }
       ],
       "cssProperties": [
         {
-          "name": "--typo3-action-bar-padding-top",
+          "name": "--typo3-top-bar-bar-padding-top",
           "type": "Length"
         },
         {
-          "name": "--typo3-action-bar-padding-bottom",
+          "name": "--typo3-top-bar-bar-padding-bottom",
           "type": "Length"
         },
         {
-          "name": "--typo3-action-bar-padding-left",
+          "name": "--typo3-top-bar-bar-padding-left",
           "type": "Length"
         },
         {
-          "name": "--typo3-action-bar-padding-right",
+          "name": "--typo3-top-bar-bar-padding-right",
           "type": "Length"
         },
         {
-          "name": "--typo3-action-bar-min-height",
+          "name": "--typo3-top-bar-bar-min-height",
           "type": "Length"
         },
         {
-          "name": "--typo3-action-bar-background-color",
+          "name": "--typo3-top-bar-bar-background-color",
           "type": "Color"
         },
         {
-          "name": "--typo3-action-bar-text-color",
+          "name": "--typo3-top-bar-bar-text-color",
           "type": "Color"
         }
       ]
