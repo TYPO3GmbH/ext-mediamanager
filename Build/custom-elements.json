@@ -241,16 +241,6 @@
           "type": "Color"
         },
         {
-          "name": "--typo3-split-button-height",
-          "description": "Height of split button",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-split-button-font-size",
-          "description": "Fontsize of split button",
-          "type": "Length"
-        },
-        {
           "name": "--typo3-split-button-trigger-icon-size",
           "description": "Iconsize for split button trigger",
           "type": "Length"

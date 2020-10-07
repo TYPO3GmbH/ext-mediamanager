@@ -17,13 +17,11 @@ export const splitButtonStyles = css`
   .button {
     align-items: center;
     justify-content: center;
-    height: var(--typo3-split-button-height, 1.4rem);
-    font-size: var(--typo3-split-button-font-size, 0.625rem);
     border-radius: 0;
   }
 
   .button.trigger {
-    width: var(--typo3-split-button-height, 1.4rem);
+    width: 1.75rem;
   }
 
   .button:first-child {
