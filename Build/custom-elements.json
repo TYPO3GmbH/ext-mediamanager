@@ -429,6 +429,25 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-datagrid",
+      "description": "Canvas datagrid wrapper",
+      "properties": [
+        {
+          "name": "data",
+          "attribute": "data",
+          "description": "JSON-String of grid data. See https://canvas-datagrid.js.org/#canvasDatagrid.data",
+          "type": "String"
+        },
+        {
+          "name": "schema",
+          "attribute": "schema",
+          "description": "JSON-String of canvasDatagrid.header objects. See https://canvas-datagrid.js.org/#canvasDatagrid.schema",
+          "type": "String"
+
+        }
+      ]
     }
   ]
 }
