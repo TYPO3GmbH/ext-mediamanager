@@ -6,16 +6,15 @@
     "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "format": "npm run format:eslint && npm run format:prettier",
-    "test": "tsc && karma start --coverage",
-    "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\"",
-    "storybook": "concurrently --kill-others --names tsc,storybook \"npm run tsc:watch\" \"start-storybook --node-resolve --watch --open\"",
+    "test": "npm run rollup:tsc && karma start --coverage",
+    "test:watch": "concurrently --kill-others --names rollup:watch,karma \"npm run rollup:watch\" \"karma start --auto-watch=true --single-run=false\"",
+    "storybook": "concurrently --kill-others --names rollup:watch,storybook \"npm run rollup:watch\" \"start-storybook --node-resolve --watch --open\"",
     "storybook:build": "build-storybook",
-    "build": "rimraf dist && tsc && rollup -c rollup.config.js",
+    "build": "rimraf dist && rollup -c rollup.config.js",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
-    "start": "concurrently --kill-others --names tsc,es-dev-server \"npm run tsc:watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
-    "tsc:watch": "tsc --watch",
-    "rollup:watch": "rollup -c ./rollup.config_dev.js -w"
-
+    "start": "concurrently --kill-others --namesnpm run npm runrollup:tsc,es-dev-server \"npm run rollup:watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
+    "rollup:tsc": "rollup -c ./rollup.config_dev.js",
+    "rollup:watch": "npm run rollup:tsc -- --w"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^1.0.0",

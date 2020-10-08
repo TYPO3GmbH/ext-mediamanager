@@ -5,8 +5,6 @@ import typescriptPlugin from 'rollup-plugin-typescript';
 
 const globby = require('globby');
 
-globby.sync('(src|test)/**/*.ts').forEach((inputFile) => console.log(inputFile));
-
 const configs = globby.sync('(src|test)/**/*.ts').map(inputFile => ({
   input: inputFile,
   inlineDynamicImports: true,
