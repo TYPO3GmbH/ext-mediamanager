@@ -10,6 +10,12 @@
           "type": "String",
           "attribute": "title",
           "description": "Badge content"
+        },
+        {
+          "name": "color",
+          "type": "String",
+          "attribute": "color",
+          "description": "default|primary|info|warning|danger"
         }
       ],
       "cssProperties": [
