@@ -1,0 +1,47 @@
+@import 'src/button/typo3-button.scss';
+
+.button {
+  color: var(--typo3-btn-border-color, $btn-dropdown-color);
+  background-color: var(--typo3-btn-background-color, $btn-dropdown-bg);
+  border-color: var(--typo3-btn-border-color, $btn-dropdown-border);
+
+  &:focus {
+    color: var(--typo3-btn-border-color-focus, $btn-dropdown-color);
+    background-color: var(--typo3-btn-background-color-focus, darken($btn-dropdown-bg, 10%));
+    border-color: var(--typo3-btn-border-color-focus, darken($btn-dropdown-border, 10%));
+  }
+
+  &:hover {
+    color: var(--typo3-btn-border-color-hover, $btn-dropdown-color);
+    background-color: var(--typo3-btn-background-color-hover, darken($btn-dropdown-bg, 10%));
+    border-color: var(--typo3-btn-border-color-hover, darken($btn-dropdown-border, 12%));
+  }
+
+  &:active {
+    color: var(--typo3-btn-border-color-active, $btn-dropdown-color);
+    background-color: var(--typo3-btn-background-color-active, darken($btn-dropdown-bg, 10%));
+    border-color: var(--typo3-btn-border-color-active, darken($btn-dropdown-border, 12%));
+  }
+
+  &[disabled] {
+    &:hover,
+    &:focus,
+    &.focus {
+      color: var(--typo3-btn-border-color, $btn-dropdown-color);
+      background-color: var(--typo3-btn-background-color, $btn-dropdown-bg);
+    }
+  }
+
+  >:last-child:after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+  }
+}

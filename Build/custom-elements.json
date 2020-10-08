@@ -141,7 +141,7 @@
       ]
     },
     {
-      "name": "typo3-split-button",
+      "name": "typo3-dropdown-button",
       "description": "This is a container for a split button element",
       "properties": [
         {
@@ -238,22 +238,22 @@
           "type": "Length"
         },
         {
-          "name": "--typo3-split-button-background-color-hover",
+          "name": "--typo3-dropdown-button-background-color-hover",
           "description": "Button background color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-split-button-trigger-background-color",
+          "name": "--typo3-dropdown-button-trigger-background-color",
           "description": "Button background color on hover for trigger element",
           "type": "Color"
         },
         {
-          "name": "--typo3-split-button-text-color-hover",
+          "name": "--typo3-dropdown-button-text-color-hover",
           "description": "Text color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-split-button-trigger-icon-size",
+          "name": "--typo3-dropdown-button-trigger-icon-size",
           "description": "Iconsize for split button trigger",
           "type": "Length"
         }
