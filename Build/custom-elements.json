@@ -42,6 +42,12 @@
           "description": "Shown as aria-label"
         },
         {
+          "name": "color",
+          "type": "String",
+          "attribute": "color",
+          "description": "default|primary|info|warning|danger"
+        },
+        {
           "name": "disabled",
           "type": "Boolean",
           "attribute": "disabled",
@@ -67,62 +73,62 @@
       ],
       "cssProperties": [
         {
-          "name": "--typo3-button-background-color",
+          "name": "--typo3-btn-background-color",
           "description": "Button background color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-text-color",
+          "name": "--typo3-btn-text-color",
           "description": "Button text color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-border-color",
+          "name": "--typo3-btn-border-color",
           "description": "Button border color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-background-color-hover",
+          "name": "--typo3-btn-background-color-hover",
           "description": "Button background color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-text-color-hover",
+          "name": "--typo3-btn-text-color-hover",
           "description": "Button text color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-border-color-hover",
+          "name": "--typo3-btn-border-color-hover",
           "description": "Button border color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-font-size",
+          "name": "--typo3-btn-font-size",
           "description": "Button font size",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-line-height",
+          "name": "--typo3-btn-line-height",
           "description": "Button line height",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-border-radius",
+          "name": "--typo3-btn-border-radius",
           "description": "Button border radius",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-border-width",
+          "name": "--typo3-btn-border-width",
           "description": "Button border width",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-icon-size",
+          "name": "--typo3-btn-icon-size",
           "description": "Button icon size",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-text-icon-gap",
+          "name": "--typo3-btn-text-icon-gap",
           "description": "Gap between icon and text",
           "type": "Length"
         }
@@ -171,57 +177,57 @@
       ],
       "cssProperties": [
         {
-          "name": "--typo3-button-background-color",
+          "name": "--typo3-btn-background-color",
           "description": "Button background color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-text-color",
+          "name": "--typo3-btn-text-color",
           "description": "Button text color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-border-color",
+          "name": "--typo3-btn-border-color",
           "description": "Button border color",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-background-color-hover",
+          "name": "--typo3-btn-background-color-hover",
           "description": "Button background color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-text-color-hover",
+          "name": "--typo3-btn-text-color-hover",
           "description": "Button text color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-border-color-hover",
+          "name": "--typo3-btn-border-color-hover",
           "description": "Button border color on hover",
           "type": "Color"
         },
         {
-          "name": "--typo3-button-font-size",
+          "name": "--typo3-btn-font-size",
           "description": "Button font size",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-line-height",
+          "name": "--typo3-btn-line-height",
           "description": "Button line height",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-border-radius",
+          "name": "--typo3-btn-border-radius",
           "description": "Button border radius",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-border-width",
+          "name": "--typo3-btn-border-width",
           "description": "Button border width",
           "type": "Length"
         },
         {
-          "name": "--typo3-button-icon-size",
+          "name": "--typo3-btn-icon-size",
           "description": "Button icon size",
           "type": "Length"
         },
