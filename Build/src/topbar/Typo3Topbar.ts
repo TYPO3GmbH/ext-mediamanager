@@ -1,10 +1,9 @@
-import { CSSResultArray, html, LitElement, TemplateResult } from 'lit-element';
-import { topbarStyles } from './typo3-topbar-styles';
+import { css, html, LitElement, TemplateResult } from 'lit-element';
+
+import style from './typo3-topbar.scss';
 
 export class Typo3Topbar extends LitElement {
-  static get styles(): CSSResultArray {
-    return [topbarStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     return html`

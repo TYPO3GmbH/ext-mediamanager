@@ -1,6 +1,7 @@
 import { MenuBase } from '@material/mwc-menu/mwc-menu-base';
-import { CSSResultArray } from 'lit-element';
-import { dropDownStyles } from './typo3-dropdown-styles';
+import { css } from 'lit-element';
+
+import style from './typo3-dropdown.scss';
 
 export class Typo3DropDown extends MenuBase {
   constructor() {
@@ -9,7 +10,5 @@ export class Typo3DropDown extends MenuBase {
     this.anchor = document.body;
   }
 
-  static get styles(): CSSResultArray {
-    return [dropDownStyles];
-  }
+  public static styles = style({ css });
 }
