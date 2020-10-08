@@ -396,13 +396,13 @@
       "events": [],
       "slots": [
         {
-          "name": "left",
+          "name": "left"
         },
         {
-          "name": "middle",
+          "name": "middle"
         },
         {
-          "name": "right",
+          "name": "right"
         }
       ],
       "cssProperties": [
