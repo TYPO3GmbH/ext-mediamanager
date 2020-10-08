@@ -1,11 +1,6 @@
-import {
-  CSSResultArray,
-  html,
-  LitElement,
-  property,
-  TemplateResult,
-} from 'lit-element';
-import { buttonStyles } from './typo3-button-styles';
+import { css, html, LitElement, property, TemplateResult } from 'lit-element';
+
+import style from './typo3-button.scss';
 
 export class Typo3Button extends LitElement {
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -15,9 +10,7 @@ export class Typo3Button extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'icon-right' })
   iconRight = false;
 
-  static get styles(): CSSResultArray {
-    return [buttonStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     return html`

@@ -1,15 +1,13 @@
 import { Typo3Button } from './Typo3Button';
-import { CSSResultArray, html, property, TemplateResult } from 'lit-element';
+import { css, html, property, TemplateResult } from 'lit-element';
 import { arrowIcon } from '../shared/icons/arrow_icon';
-import { buttonStyles } from './typo3-button-styles';
-import { splitButtonStyles } from './typo3-split-button-styles';
+
+import style from './typo3-split-button.scss';
 
 export class Typo3SplitButton extends Typo3Button {
   @property({ type: Boolean, reflect: true }) public left = false;
 
-  static get styles(): CSSResultArray {
-    return [buttonStyles, splitButtonStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     const buttons: TemplateResult[] = [

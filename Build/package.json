@@ -8,7 +8,7 @@
     "format": "npm run format:eslint && npm run format:prettier",
     "test": "npm run rollup:tsc && karma start --coverage",
     "test:watch": "concurrently --kill-others --names rollup:watch,karma \"npm run rollup:watch\" \"karma start --auto-watch=true --single-run=false\"",
-    "storybook": "concurrently --kill-others --names rollup:watch,storybook \"npm run rollup:watch\" \"start-storybook --node-resolve --watch --open\"",
+    "storybook": "concurrently --kill-others --names storybook  \"start-storybook --node-resolve --watch --open\"",
     "storybook:build": "build-storybook",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
