@@ -14,7 +14,7 @@ export type Position = 'top' | 'right' | 'bottom' | 'left';
 
 export class Typo3Tooltip extends LitElement {
   @property({ type: String, attribute: 'anchor-element-id' })
-  anchorElementId = '';
+  anchorElementId?: string;
 
   @property({ type: Number }) offset = 14;
 
@@ -65,7 +65,7 @@ export class Typo3Tooltip extends LitElement {
     this.isHidden = true;
   }
 
-  updatePosition(): void {
+  protected updatePosition(): void {
     const anchorElement = this.anchorElement;
     if (null === this.anchorElement) {
       return;
@@ -108,7 +108,7 @@ export class Typo3Tooltip extends LitElement {
     this.style.top = tooltipTop + 'px';
   }
 
-  get anchorElement(): HTMLElement | null {
+  protected get anchorElement(): HTMLElement | null {
     const parentElement = this.parentElement;
 
     if (null === parentElement) {
