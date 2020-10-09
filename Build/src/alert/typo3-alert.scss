@@ -1,0 +1,34 @@
+@import 'src/theme/index.scss';
+
+:host {
+  display: block;
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: $default-border-radius;
+}
+
+:host([color='default']) {
+  @include default-color-element-variant($alert-default-color, $alert-default-bg, '--typo3-alert-default');
+}
+
+:host([color='primary']) {
+  @include default-color-element-variant($alert-primary-color, $alert-primary-bg, '--typo3-alert-primary');
+}
+
+:host([color='success']) {
+  @include default-color-element-variant($alert-success-color, $alert-success-bg, '--typo3-alert-success');
+}
+
+:host([color='info']) {
+  @include default-color-element-variant($alert-info-color, $alert-info-bg, '--typo3-alert-info');
+}
+
+:host([color='warning']) {
+  @include default-color-element-variant($alert-warning-color, $alert-warning-bg, '--typo3-alert-warning');
+}
+
+:host([color='danger']) {
+  @include default-color-element-variant($alert-danger-color, $alert-danger-bg, '--typo3-alert-danger');
+}

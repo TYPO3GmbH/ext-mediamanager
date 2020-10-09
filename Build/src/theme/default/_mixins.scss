@@ -1,0 +1,4 @@
+@mixin default-color-element-variant($color, $background, $prefix) {
+  color: var(unquote($prefix + '-text-color'), $color);
+  background-color: var(unquote($prefix + '-background-color'), $background);
+}

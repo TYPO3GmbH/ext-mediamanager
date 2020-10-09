@@ -20,12 +20,9 @@ $brand-warning: #e8a33d !default;
 $brand-danger: #c83c3c !default;
 
 //== Defaults
+
 $default-border-radius: 0.125rem !default;
 $animation-duration: 0.5s;
-
-
-
-
 
 
 //== Buttons
@@ -111,3 +108,24 @@ $tooltip-padding: 0.5rem !default;
 $tooltip-border-radius: $default-border-radius !default;
 $tooltip-max-width: 15rem !default;
 $tooltip-transition: opacity $animation-duration ease-in-out;
+
+
+//== Alerts
+
+$alert-default-color: $btn-default-color !default;
+$alert-default-bg: $btn-default-bg !default;
+
+$alert-primary-color: $btn-primary-color !default;
+$alert-primary-bg: $btn-primary-bg !default;
+
+$alert-success-color: $btn-success-color !default;
+$alert-success-bg: $btn-success-bg !default;
+
+$alert-info-color: $btn-info-color !default;
+$alert-info-bg: $btn-info-bg  !default;
+
+$alert-warning-color: $btn-warning-color !default;
+$alert-warning-bg: $btn-warning-bg !default;
+
+$alert-danger-color: $btn-danger-color !default;
+$alert-danger-bg: $btn-danger-bg !default;

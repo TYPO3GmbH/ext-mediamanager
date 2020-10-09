@@ -19,27 +19,26 @@
   background-color: var(--typo3-badge-background-color, $badge-default-bg);
 }
 
+:host([color='default']) {
+  @include default-color-element-variant($badge-default-color, $badge-default-bg, '--typo3-alert-default');
+}
+
 :host([color='primary']) {
-  color: var(--typo3-badge-primary-text-color, $badge-primary-color);
-  background-color: var(--typo3-badge-primary-background-color, $badge-primary-bg);
+  @include default-color-element-variant($badge-primary-color, $badge-primary-bg, '--typo3-alert-primary');
 }
 
 :host([color='success']) {
-  color: var(--typo3-badge-success-text-color, $badge-success-color);
-  background-color: var(--typo3-badge-success-background-color, $badge-success-bg);
+  @include default-color-element-variant($badge-success-color, $badge-success-bg, '--typo3-alert-success');
 }
 
 :host([color='info']) {
-  color: var(--typo3-badge-info-text-color, $badge-info-color);
-  background-color: var(--typo3-badge-info-background-color, $badge-info-bg);
+  @include default-color-element-variant($badge-info-color, $badge-info-bg, '--typo3-alert-info');
 }
 
 :host([color='warning']) {
-  color: var(--typo3-badge-warning-text-color, $badge-warning-color);
-  background-color: var(--typo3-badge-warning-background-color, $badge-warning-bg);
+  @include default-color-element-variant($badge-warning-color, $badge-warning-bg, '--typo3-alert-warning');
 }
 
 :host([color='danger']) {
-  color: var(--typo3-badge-warning-text-color, $badge-danger-color);
-  background-color: var(--typo3-badge-warning-background-color, $badge-danger-bg);
+  @include default-color-element-variant($badge-danger-color, $badge-danger-bg, '--typo3-alert-danger');
 }

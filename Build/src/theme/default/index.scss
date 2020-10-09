@@ -1,4 +1,5 @@
 @import "src/theme/default/variables";
+@import "src/theme/default/mixins";
 
 :host {
   font-family: var(--typo3-theme--font-family, $font-family-base);
