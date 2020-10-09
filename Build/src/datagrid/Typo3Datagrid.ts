@@ -1,12 +1,13 @@
 import {
-  CSSResultArray,
+  css,
   html,
   LitElement,
   property,
   query,
   TemplateResult,
 } from 'lit-element';
-import { datagridStyles } from './typo3-datagrid-styles';
+
+import style from './typo3-datagrid.scss';
 
 export class Typo3Datagrid extends LitElement {
   @property({ type: String }) schema = '';
@@ -15,9 +16,7 @@ export class Typo3Datagrid extends LitElement {
 
   @query('canvas-datagrid') canvas!: HTMLElement;
 
-  static get styles(): CSSResultArray {
-    return [datagridStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     return html`

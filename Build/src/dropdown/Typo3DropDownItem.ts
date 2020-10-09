@@ -1,16 +1,15 @@
 import { ListItemBase } from '@material/mwc-list/mwc-list-item-base';
-import { dropDownItemStyles } from './typo3-dropdown-item-styles';
 import { html } from 'lit-html';
-import { CSSResultArray, property, TemplateResult } from 'lit-element';
+import { css, property, TemplateResult } from 'lit-element';
 import { checkmarkIcon } from '../shared/icons/checkmark-icon';
+
+import style from './typo3-dropdown-item.scss';
 
 export class Typo3DropDownItem extends ListItemBase {
   @property({ type: Boolean, reflect: true, attribute: 'display-checkmark' })
   displayCheckmark = true;
 
-  static get styles(): CSSResultArray {
-    return [dropDownItemStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     const text = this.renderText();

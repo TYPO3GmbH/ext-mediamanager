@@ -1,0 +1,45 @@
+@import 'src/theme/index.scss';
+
+:host {
+  padding: $badge-padding;
+  font-weight: $badge-font-weight;
+  vertical-align: baseline;
+  text-align: center;
+  display: inline-block;
+  border-radius: $badge-border-radius;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  width: var(--typo3-badge-size, $badge-size);
+  height: var(--typo3-badge-size, $badge-size);
+  line-height: var(--typo3-badge-size, $badge-size);
+  font-size: var(--typo3-badge-font-size, $badge-font-size);
+  color: var(--typo3-badge-text-color, $badge-default-color);
+  background-color: var(--typo3-badge-background-color, $badge-default-bg);
+}
+
+:host([color='primary']) {
+  color: var(--typo3-badge-primary-text-color, $badge-primary-color);
+  background-color: var(--typo3-badge-primary-background-color, $badge-primary-bg);
+}
+
+:host([color='success']) {
+  color: var(--typo3-badge-success-text-color, $badge-success-color);
+  background-color: var(--typo3-badge-success-background-color, $badge-success-bg);
+}
+
+:host([color='info']) {
+  color: var(--typo3-badge-info-text-color, $badge-info-color);
+  background-color: var(--typo3-badge-info-background-color, $badge-info-bg);
+}
+
+:host([color='warning']) {
+  color: var(--typo3-badge-warning-text-color, $badge-warning-color);
+  background-color: var(--typo3-badge-warning-background-color, $badge-warning-bg);
+}
+
+:host([color='danger']) {
+  color: var(--typo3-badge-warning-text-color, $badge-danger-color);
+  background-color: var(--typo3-badge-warning-background-color, $badge-danger-bg);
+}

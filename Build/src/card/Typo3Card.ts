@@ -1,11 +1,6 @@
-import {
-  CSSResultArray,
-  html,
-  LitElement,
-  property,
-  TemplateResult,
-} from 'lit-element';
-import { cardStyles } from './typo3-card-styles';
+import { css, html, LitElement, property, TemplateResult } from 'lit-element';
+
+import style from './typo3-card.scss';
 
 export class Typo3Card extends LitElement {
   @property({ type: String }) title = '';
@@ -14,9 +9,7 @@ export class Typo3Card extends LitElement {
 
   @property({ reflect: true }) variant: 'standard' | 'preview' = 'standard';
 
-  static get styles(): CSSResultArray {
-    return [cardStyles];
-  }
+  public static styles = style({ css });
 
   render(): TemplateResult {
     return html`

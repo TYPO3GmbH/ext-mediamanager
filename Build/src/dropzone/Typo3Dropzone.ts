@@ -1,20 +1,14 @@
-import {
-  CSSResultArray,
-  html,
-  LitElement,
-  property,
-  TemplateResult,
-} from 'lit-element';
-import { dropzoneStyles } from './typo3-dropzone-styles';
+import { css, html, LitElement, property, TemplateResult } from 'lit-element';
+
+import style from './typo3-dropzone.scss';
 
 export type DropEffects = 'copy' | 'move' | 'link' | 'none';
 
 export class Typo3Dropzone extends LitElement {
-  public static get styles(): CSSResultArray {
-    return [dropzoneStyles];
-  }
+  public static styles = style({ css });
 
   private _dropEffect: DropEffects = 'copy';
+
   public get dropEffect(): DropEffects {
     return this._dropEffect;
   }
