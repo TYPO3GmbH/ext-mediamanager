@@ -1,0 +1,27 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../out-tsc/src/tooltip/typo3-tooltip';
+import '../out-tsc/src/button/typo3-button';
+
+<Meta
+  title="Components/typo3-tooltip"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-tooltip', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Tooltip.ts
+
+<Preview>
+    <Story name="Basic Tooltip" height="220px">
+    {html`
+        <div style="padding: 45px 15px 15px; text-align: center;">
+            <typo3-button id="test-btn">Button with Tooltyp</typo3-button>
+            <typo3-tooltip anchor-element-id="test-btn">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</typo3-tooltip>
+        </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-tooltip" />

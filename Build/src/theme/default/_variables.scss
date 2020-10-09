@@ -1,4 +1,6 @@
+//== Fonts
 $font-family-base: "Verdana,Arial,Helvetica,sans-serif";
+$font-size-default: 0.75rem;
 
 //== Colors
 //
@@ -16,6 +18,15 @@ $brand-success: #79a548 !default;
 $brand-info: #6daae0 !default;
 $brand-warning: #e8a33d !default;
 $brand-danger: #c83c3c !default;
+
+//== Defaults
+$default-border-radius: 0.125rem !default;
+$animation-duration: 0.5s;
+
+
+
+
+
 
 //== Buttons
 
@@ -47,8 +58,8 @@ $btn-dropdown-color: #fff;
 $btn-dropdown-bg: #6c757d;
 $btn-dropdown-border: #6c757d;
 
-$btn-border-radius: 0.125rem !default;
-$btn-font-size: 0.75rem !default;
+$btn-border-radius: $default-border-radius !default;
+$btn-font-size: $font-size-default !default;
 $btn-line-height: 1.4 !default;
 $btn-padding: 0.375rem !default;
 $btn-border-width: 0.0625rem !default;
@@ -62,7 +73,7 @@ $badge-padding: 0.25em 0.4em !default;
 $badge-font-weight: 700 !default;
 $badge-border-radius: 50% !default;
 $badge-size: 1.375rem !default;
-$badge-font-size: 0.75rem !default;
+$badge-font-size: $font-size-default !default;
 
 $badge-default-color: $btn-default-color !default;
 $badge-default-bg: $btn-default-bg !default;
@@ -89,3 +100,14 @@ $splitpane-splitter-size: 0.5rem !default;
 $splitpane-handle-bg: $gray-light !default;
 $splitpane-handle-width: 0.125rem !default;
 $splitpane-handle-height: 1.5rem !default;
+
+
+//== Tooltip
+$tooltip-font-size: $font-size-default !default;
+$tooltip-line-height: 1 !default;
+$tooltip-bg: $gray-dark !default;
+$tooltip-color: #fff !default;
+$tooltip-padding: 0.5rem !default;
+$tooltip-border-radius: $default-border-radius !default;
+$tooltip-max-width: 15rem !default;
+$tooltip-transition: opacity $animation-duration ease-in-out;

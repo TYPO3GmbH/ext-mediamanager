@@ -492,6 +492,64 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-tooltip",
+      "description": "Tooltip",
+      "properties": [
+        {
+          "name": "AnchorElementId",
+          "type": "String",
+          "attribute": "anchor-element-id",
+          "description": "ID of the element that the tooltip is anchored to"
+        },
+        {
+          "name": "offset",
+          "type": "Number",
+          "attribute": "offset",
+          "description": "Spacing between anchor and tooltip"
+        },
+        {
+          "name": "position",
+          "type": "String",
+          "attribute": "position",
+          "description": "Tooltip position (relative to anchor): top|right|bottom|left"
+        }
+      ],
+      "slots": [
+        {
+          "description": "Tooltip content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-tooltip-font-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-tooltip-line-height",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-tooltip-background",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-tooltip-padding",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-tooltip-border-radius",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-tooltip-max-width",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-tooltip-transition"
+        }
+      ]
     }
   ]
 }
