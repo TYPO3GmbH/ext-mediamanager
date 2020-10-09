@@ -1,4 +1,10 @@
-import { elementUpdated, expect, fixture, html } from '@open-wc/testing';
+import {
+  elementUpdated,
+  expect,
+  fixture,
+  html,
+  oneEvent,
+} from '@open-wc/testing';
 import '../src/alert/typo3-alert.js';
 import { Typo3Alert } from '../src/alert/Typo3Alert';
 
@@ -27,7 +33,7 @@ describe('Typo3Alert', () => {
     expect(closeButton).not.to.be.null;
   });
 
-  it('can close alert when dismissable', async () => {
+  it('can dismiss alert when dismissable', async () => {
     const dismissableAlert = (await fixture(
       html` <typo3-alert dismissable="true">Alert</typo3-alert> `
     )) as Typo3Alert;
@@ -40,6 +46,21 @@ describe('Typo3Alert', () => {
 
     const alertDiv = dismissableAlert.shadowRoot!.querySelector('#alert')!;
     expect(alertDiv).to.be.null;
+  });
+
+  it('can should dispatch a `typo3-alert-closed` event on close', async () => {
+    const dismissableAlert = (await fixture(
+      html` <typo3-alert dismissable="true">Alert</typo3-alert> `
+    )) as Typo3Alert;
+    const listener = oneEvent(dismissableAlert, 'typo3-alert-closed');
+
+    const closeButton = dismissableAlert.shadowRoot!.querySelector(
+      '#btn-close'
+    ) as HTMLButtonElement;
+    closeButton.click();
+
+    const event = await listener;
+    expect(event).to.exist;
   });
 
   it('can not close alert when not dismissable', async () => {
