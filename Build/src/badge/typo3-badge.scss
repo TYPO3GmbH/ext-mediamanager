@@ -20,25 +20,25 @@
 }
 
 :host([color='default']) {
-  @include default-color-element-variant($badge-default-color, $badge-default-bg, '--typo3-alert-default');
+  @include element-variant($badge-default-color, $badge-default-bg, '--typo3-alert-default');
 }
 
 :host([color='primary']) {
-  @include default-color-element-variant($badge-primary-color, $badge-primary-bg, '--typo3-alert-primary');
+  @include element-variant($badge-primary-color, $badge-primary-bg, '--typo3-alert-primary');
 }
 
 :host([color='success']) {
-  @include default-color-element-variant($badge-success-color, $badge-success-bg, '--typo3-alert-success');
+  @include element-variant($badge-success-color, $badge-success-bg, '--typo3-alert-success');
 }
 
 :host([color='info']) {
-  @include default-color-element-variant($badge-info-color, $badge-info-bg, '--typo3-alert-info');
+  @include element-variant($badge-info-color, $badge-info-bg, '--typo3-alert-info');
 }
 
 :host([color='warning']) {
-  @include default-color-element-variant($badge-warning-color, $badge-warning-bg, '--typo3-alert-warning');
+  @include element-variant($badge-warning-color, $badge-warning-bg, '--typo3-alert-warning');
 }
 
 :host([color='danger']) {
-  @include default-color-element-variant($badge-danger-color, $badge-danger-bg, '--typo3-alert-danger');
+  @include element-variant($badge-danger-color, $badge-danger-bg, '--typo3-alert-danger');
 }

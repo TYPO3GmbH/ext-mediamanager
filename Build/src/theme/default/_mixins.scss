@@ -1,4 +1,37 @@
-@mixin default-color-element-variant($color, $background, $prefix) {
-  color: var(unquote($prefix + '-text-color'), $color);
+@mixin element-variant($color, $background, $prefix) {
+  color: var(unquote($prefix + '-color'), $color);
   background-color: var(unquote($prefix + '-background-color'), $background);
+}
+
+@mixin button-variant($color, $background, $border, $prefix) {
+  color: var(unquote($prefix + '-color'), $color);
+  background-color: var(unquote($prefix + '-background-color'), $background);
+  border-color: var(unquote($prefix + '-border-color'), $border);
+
+  &:focus {
+    color: var(unquote($prefix + '-color-focus'), $color);
+    background-color: var(unquote($prefix + '-background-color-focus'), darken($background, 10%));
+    border-color: var(unquote($prefix + '-border-color-focus'), darken($border, 10%));
+  }
+
+  &:hover {
+    color: var(unquote($prefix + '-color-hover'), $color);
+    background-color: var(unquote($prefix + '-background-color-hover'), darken($background, 10%));
+    border-color: var(unquote($prefix + '-border-color-hover'), darken($border, 12%));
+  }
+
+  &:active {
+    color: var(unquote($prefix + '-color-hover'), $color);
+    background-color: var(unquote($prefix + '-background-color-hover'), darken($background, 10%));
+    border-color: var(unquote($prefix + '-border-color-hover'), darken($border, 12%));
+  }
+
+  &[disabled] {
+    &:hover,
+    &:focus,
+    &.focus {
+      color: var(unquote($prefix + '-color'), $color);
+      background-color: var(unquote($prefix + '-background-color'), $background);
+    }
+  }
 }
