@@ -8,7 +8,7 @@ describe('Typo3Grid', () => {
     element = await fixture(html` <typo3-grid></typo3-grid> `);
   });
 
-  it('can create component`', () => {
+  it('can create component', () => {
     expect(element).to.not.be.null;
   });
 });

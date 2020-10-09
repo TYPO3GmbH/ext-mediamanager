@@ -466,6 +466,32 @@
 
         }
       ]
+    },
+    {
+      "name": "typo3-splitpane",
+      "description": "Splitpane wrapper",
+      "cssProperties": [
+        {
+          "name": "--typo3-splitpane-splitter-size",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-splitpane-splitter-background",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-splitpane-handle-width",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-splitpane-handle-height",
+          "type": "Length"
+        },
+        {
+          "name": "--typo3-splitpane-handle-background",
+          "type": "Color"
+        }
+      ]
     }
   ]
 }
