@@ -1,6 +1,7 @@
-@mixin element-variant($color, $background, $prefix) {
+@mixin element-variant($color, $background, $prefix, $border:'transparent') {
   color: var(unquote($prefix + '-color'), $color);
   background-color: var(unquote($prefix + '-background-color'), $background);
+  border-color: var(unquote($prefix + '-border-color'), $border);
 }
 
 @mixin button-variant($color, $background, $border, $prefix) {

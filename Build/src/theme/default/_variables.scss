@@ -112,20 +112,23 @@ $tooltip-transition: opacity $animation-duration ease-in-out;
 
 //== Alerts
 
-$alert-default-color: $btn-default-color !default;
-$alert-default-bg: $btn-default-bg !default;
+//== Form states and alerts
+//
+//## Define colors for form feedback states and, by default, alerts.
 
-$alert-primary-color: $btn-primary-color !default;
-$alert-primary-bg: $btn-primary-bg !default;
+$alert-success-color:             #3c763d !default;
+$alert-success-bg:               #dff0d8 !default;
+$alert-success-border:           darken(adjust-hue($alert-success-bg, -10), 5%) !default;
 
-$alert-success-color: $btn-success-color !default;
-$alert-success-bg: $btn-success-bg !default;
+$alert-info-color:                #31708f !default;
+$alert-info-bg:                  #d9edf7 !default;
+$alert-info-border:              darken(adjust-hue($alert-info-bg, -10), 7%) !default;
 
-$alert-info-color: $btn-info-color !default;
-$alert-info-bg: $btn-info-bg  !default;
+$alert-warning-color:             #8a6d3b !default;
+$alert-warning-bg:               #fcf8e3 !default;
+$alert-warning-border:           darken(adjust-hue($alert-warning-bg, -10), 5%) !default;
 
-$alert-warning-color: $btn-warning-color !default;
-$alert-warning-bg: $btn-warning-bg !default;
+$alert-danger-color:              #a94442 !default;
+$alert-danger-bg:                #f2dede !default;
+$alert-danger-border:            darken(adjust-hue($alert-danger-bg, -10), 5%) !default;
 
-$alert-danger-color: $btn-danger-color !default;
-$alert-danger-bg: $btn-danger-bg !default;

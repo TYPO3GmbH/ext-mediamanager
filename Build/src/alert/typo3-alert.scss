@@ -1,34 +1,52 @@
 @import 'src/theme/index.scss';
-
 :host {
-  display: block;
-  position: relative;
+  display: block
+}
+
+#alert {
+  display: flex;
   padding: .75rem 1.25rem;
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: $default-border-radius;
+  align-items: center;
 }
 
-:host([color='default']) {
-  @include element-variant($alert-default-color, $alert-default-bg, '--typo3-alert-default');
+#message {
+  flex: 1;
+}
+#btn-close {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2;
+  background: 0 0;
+  border: 0;
+  cursor: pointer;
+
+  :hover {
+    color: #000;
+    text-decoration: none;
+    filter: alpha(opacity=50);
+    opacity: .5;
+  }
 }
 
-:host([color='primary']) {
-  @include element-variant($alert-primary-color, $alert-primary-bg, '--typo3-alert-primary');
+:host([color='success']) #alert {
+  @include element-variant($alert-success-color, $alert-success-bg, '--typo3-alert-success', $alert-success-border);
 }
 
-:host([color='success']) {
-  @include element-variant($alert-success-color, $alert-success-bg, '--typo3-alert-success');
+:host([color='info']) #alert {
+  @include element-variant($alert-info-color, $alert-info-bg, '--typo3-alert-info', $alert-success-border);
 }
 
-:host([color='info']) {
-  @include element-variant($alert-info-color, $alert-info-bg, '--typo3-alert-info');
+:host([color='warning']) #alert {
+  @include element-variant($alert-warning-color, $alert-warning-bg, '--typo3-alert-warning', $alert-success-border);
 }
 
-:host([color='warning']) {
-  @include element-variant($alert-warning-color, $alert-warning-bg, '--typo3-alert-warning');
-}
-
-:host([color='danger']) {
-  @include element-variant($alert-danger-color, $alert-danger-bg, '--typo3-alert-danger');
+:host([color='danger']) #alert {
+  @include element-variant($alert-danger-color, $alert-danger-bg, '--typo3-alert-danger', $alert-success-border);
 }

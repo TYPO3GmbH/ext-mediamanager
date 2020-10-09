@@ -14,11 +14,15 @@ import '../out-tsc/src/alert/typo3-alert';
     <Story name="Basic Alert" height="220px">
     {html`
       <typo3-alert>Default</typo3-alert>
-      <typo3-alert color="primary">Primary</typo3-alert>
       <typo3-alert color="success">Success</typo3-alert>
       <typo3-alert color="info">Info</typo3-alert>
       <typo3-alert color="warning">Warning</typo3-alert>
       <typo3-alert color="danger">Danger</typo3-alert>
+    `}
+    </Story>
+    <Story name="Dismissable Alert" height="220px">
+    {html`
+      <typo3-alert color="success" dismissable="true">Dismissable</typo3-alert>
     `}
     </Story>
 </Preview>
