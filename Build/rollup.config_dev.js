@@ -1,7 +1,6 @@
-import commonJs from 'rollup-plugin-commonjs';
 import litSass from '@ponday/rollup-plugin-lit-sass';
-import nodeResolve from 'rollup-plugin-node-resolve';
 import typescriptPlugin from 'rollup-plugin-typescript';
+import typescript from 'typescript';
 
 const globby = require('globby');
 
@@ -15,9 +14,10 @@ const configs = globby.sync('(src|test)/**/*.ts').map(inputFile => ({
   },
   plugins: [
     litSass(),
-    nodeResolve(),
-    commonJs(),
-    typescriptPlugin()
+    typescriptPlugin({
+      importHelpers: true,
+      typescript,
+    })
   ],
   treeshake: true,
 }));
