@@ -8,7 +8,7 @@ describe('Typo3Topbar', () => {
     element = await fixture(html` <typo3-topbar></typo3-topbar> `);
   });
 
-  it('can create component`', () => {
+  it('can create component', () => {
     expect(element).to.not.be.null;
   });
 });
