@@ -11,7 +11,7 @@ import style from '../alert/typo3-alert.scss';
 export type Color = 'default' | 'success' | 'info' | 'warning' | 'danger';
 
 /**
- * @fires typo3-alert-closed - Dispatched when dismissable alert is closed
+ * @fires typo3-alert-closed - Dispatched when dismissible alert is closed
  * @slot - Default content placed in message div of this element
  *
  * @cssprop --typo3-alert-padding-y
@@ -51,7 +51,7 @@ export class Typo3Alert extends LitElement {
    * @attr
    * @type Boolean
    */
-  @property({ type: Boolean, reflect: true }) dismissable = false;
+  @property({ type: Boolean, reflect: true }) dismissible = false;
 
   @internalProperty() isHidden = false;
 
@@ -64,7 +64,7 @@ export class Typo3Alert extends LitElement {
             <div id="message">
               <slot></slot>
             </div>
-            ${this.dismissable
+            ${this.dismissible
               ? html`<button id="btn-close" @click="${this.close}">×</button>`
               : ''}
           </div>`
@@ -73,7 +73,7 @@ export class Typo3Alert extends LitElement {
   }
 
   close(): void {
-    if (this.dismissable) {
+    if (this.dismissible) {
       this.isHidden = true;
       this.dispatchEvent(new CustomEvent('typo3-alert-closed'));
     }

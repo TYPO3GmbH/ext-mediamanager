@@ -561,8 +561,8 @@
           "default": "\"default\""
         },
         {
-          "name": "dismissable",
-          "attribute": "dismissable",
+          "name": "dismissible",
+          "attribute": "dismissible",
           "type": "boolean",
           "default": "false"
         }
@@ -570,7 +570,7 @@
       "events": [
         {
           "name": "typo3-alert-closed",
-          "description": "Dispatched when dismissable alert is closed"
+          "description": "Dispatched when dismissible alert is closed"
         }
       ],
       "slots": [

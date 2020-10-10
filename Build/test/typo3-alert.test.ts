@@ -23,38 +23,38 @@ describe('Typo3Alert', () => {
     expect(closeButton).to.be.null;
   });
 
-  it('displays a close button when dismissable', async () => {
-    const dismissableAlert = await fixture(
-      html` <typo3-alert dismissable="true">Alert</typo3-alert> `
+  it('displays a close button when dismissible', async () => {
+    const dismissibleAlert = await fixture(
+      html` <typo3-alert dismissible="true">Alert</typo3-alert> `
     );
-    const closeButton = dismissableAlert.shadowRoot!.querySelector(
+    const closeButton = dismissibleAlert.shadowRoot!.querySelector(
       '#btn-close'
     );
     expect(closeButton).not.to.be.null;
   });
 
-  it('can dismiss alert when dismissable', async () => {
-    const dismissableAlert = (await fixture(
-      html` <typo3-alert dismissable="true">Alert</typo3-alert> `
+  it('can dismiss alert when dismissible', async () => {
+    const dismissibleAlert = (await fixture(
+      html` <typo3-alert dismissible="true">Alert</typo3-alert> `
     )) as Typo3Alert;
-    const closeButton = dismissableAlert.shadowRoot!.querySelector(
+    const closeButton = dismissibleAlert.shadowRoot!.querySelector(
       '#btn-close'
     ) as HTMLButtonElement;
     closeButton.click();
 
-    await elementUpdated(dismissableAlert);
+    await elementUpdated(dismissibleAlert);
 
-    const alertDiv = dismissableAlert.shadowRoot!.querySelector('#alert')!;
+    const alertDiv = dismissibleAlert.shadowRoot!.querySelector('#alert')!;
     expect(alertDiv).to.be.null;
   });
 
   it('can should dispatch a `typo3-alert-closed` event on close', async () => {
-    const dismissableAlert = (await fixture(
-      html` <typo3-alert dismissable="true">Alert</typo3-alert> `
+    const dismissibleAlert = (await fixture(
+      html` <typo3-alert dismissible="true">Alert</typo3-alert> `
     )) as Typo3Alert;
-    const listener = oneEvent(dismissableAlert, 'typo3-alert-closed');
+    const listener = oneEvent(dismissibleAlert, 'typo3-alert-closed');
 
-    const closeButton = dismissableAlert.shadowRoot!.querySelector(
+    const closeButton = dismissibleAlert.shadowRoot!.querySelector(
       '#btn-close'
     ) as HTMLButtonElement;
     closeButton.click();
@@ -63,7 +63,7 @@ describe('Typo3Alert', () => {
     expect(event).to.exist;
   });
 
-  it('can not close alert when not dismissable', async () => {
+  it('can not close alert when not dismissible', async () => {
     element.close();
 
     await elementUpdated(element);
