@@ -5,6 +5,7 @@ import style from './typo3-button.scss';
 export type Color =
   | 'default'
   | 'primary'
+  | 'secondary'
   | 'success'
   | 'info'
   | 'warning'

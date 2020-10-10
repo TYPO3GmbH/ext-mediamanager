@@ -35,6 +35,10 @@
   @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border, '--typo3-btn')
 }
 
+:host([color='secondary']) .button {
+  @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border, '--typo3-btn')
+}
+
 :host([color='success']) .button {
   @include button-variant($btn-success-color, $btn-success-bg, $btn-success-border, '--typo3-btn')
 }
