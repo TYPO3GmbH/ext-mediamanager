@@ -5,33 +5,31 @@
 
 #alert {
   display: flex;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: $default-border-radius;
+  padding: var(--typo3-alert-padding-y, .75rem) var(--typo3-alert-padding-y, 1.25rem);
+  margin-bottom: var(--typo3-alert-margin-bottom, 1rem);
+  border: $alert-border-width solid transparent;
+  border-radius: $alert-border-radius;
   align-items: center;
 }
 
 #message {
   flex: 1;
 }
+
 #btn-close {
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
+  font-size: var(--typo3-alert-close-btn-font-size, $alert-close-btn-font-size);
+  font-weight: var(--typo3-alert-close-btn-font-weight, $alert-close-btn-font-weight);
+  line-height: var(--typo3-alert-close-btn-line-height, $alert-close-btn-line-height);
+  color: var(--typo3-alert-close-btn-color, $alert-close-btn-color);
+  opacity: var(--typo3-alert-close-btn-color, .5);
   text-shadow: 0 1px 0 #fff;
-  filter: alpha(opacity=20);
-  opacity: .2;
-  background: 0 0;
-  border: 0;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
 
   :hover {
-    color: #000;
     text-decoration: none;
-    filter: alpha(opacity=50);
-    opacity: .5;
+    opacity: var(--typo3-alert-close-btn-color-hover, .75);
   }
 }
 
@@ -40,13 +38,13 @@
 }
 
 :host([color='info']) #alert {
-  @include element-variant($alert-info-color, $alert-info-bg, '--typo3-alert-info', $alert-success-border);
+  @include element-variant($alert-info-color, $alert-info-bg, '--typo3-alert-info', $alert-info-border);
 }
 
 :host([color='warning']) #alert {
-  @include element-variant($alert-warning-color, $alert-warning-bg, '--typo3-alert-warning', $alert-success-border);
+  @include element-variant($alert-warning-color, $alert-warning-bg, '--typo3-alert-warning', $alert-warning-border);
 }
 
 :host([color='danger']) #alert {
-  @include element-variant($alert-danger-color, $alert-danger-bg, '--typo3-alert-danger', $alert-success-border);
+  @include element-variant($alert-danger-color, $alert-danger-bg, '--typo3-alert-danger', $alert-danger-border);
 }

@@ -550,6 +550,111 @@
           "name": "--typo3-tooltip-transition"
         }
       ]
+    },
+    {
+      "name": "typo3-alert",
+      "properties": [
+        {
+          "name": "color",
+          "attribute": "color",
+          "type": "String",
+          "default": "\"default\""
+        },
+        {
+          "name": "dismissable",
+          "attribute": "dismissable",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-alert-closed",
+          "description": "Dispatched when dismissable alert is closed"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Default content placed in message div of this element"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-alert-padding-y"
+        },
+        {
+          "name": "--typo3-alert-padding-x"
+        },
+        {
+          "name": "--typo3-alert-margin-bottom"
+        },
+        {
+          "name": "--typo3-alert-success-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-success-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-success-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-info-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-info-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-info-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-warning-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-warning-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-warning-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-danger-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-danger-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-danger-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-close-btn-font-size"
+        },
+        {
+          "name": "--typo3-alert-close-btn-font-weight"
+        },
+        {
+          "name": "--typo3-alert-close-btn-line-height"
+        },
+        {
+          "name": "--typo3-alert-close-btn-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-alert-close-btn-color-hover",
+          "type": "Color"
+        }
+      ]
     }
   ]
 }
