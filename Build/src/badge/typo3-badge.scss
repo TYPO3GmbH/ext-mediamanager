@@ -2,7 +2,7 @@
 
 :host {
   padding: $badge-padding;
-  font-weight: $badge-font-weight;
+  font-weight: var(--typo3-badge-font-weight, $badge-font-weight);
   vertical-align: baseline;
   text-align: center;
   display: inline-block;
