@@ -1,5 +1,5 @@
 //== Fonts
-$font-family-base: Verdana,Arial,Helvetica,sans-serif;
+$font-family-base: Verdana, Arial, Helvetica, sans-serif;
 $font-size-default: 0.75rem;
 $font-weight-medium: 700;
 
@@ -26,7 +26,6 @@ $brand-danger: #c83c3c !default;
 $default-border-radius: 0.125rem !default;
 $default-border-width: 0.0625rem !default;
 $animation-duration: 0.5s;
-
 
 //== Buttons
 
@@ -85,7 +84,7 @@ $badge-success-color: $btn-success-color !default;
 $badge-success-bg: $btn-success-bg !default;
 
 $badge-info-color: $btn-info-color !default;
-$badge-info-bg: $btn-info-bg  !default;
+$badge-info-bg: $btn-info-bg !default;
 
 $badge-warning-color: $btn-warning-color !default;
 $badge-warning-bg: $btn-warning-bg !default;
@@ -110,12 +109,12 @@ $tooltip-color: #fff !default;
 $tooltip-padding: 0.5rem !default;
 $tooltip-border-radius: $default-border-radius !default;
 $tooltip-max-width: 15rem !default;
-$tooltip-transition: opacity $animation-duration ease-in-out !default;;
+$tooltip-transition: opacity $animation-duration ease-in-out !default;
 
 
 //== Alerts
 
-$alert-border-radius: $default-border-radius !default;;
+$alert-border-radius: $default-border-radius !default;
 $alert-border-width: $default-border-width !default;
 
 $alert-success-color: #3c763d !default;
@@ -139,3 +138,22 @@ $alert-close-btn-font-weight: $font-weight-medium !default;
 $alert-close-btn-line-height: 0.75 !default;
 $alert-close-btn-color: #000 !default;
 $alert-close-btn-opacity: 0.5 !default;
+
+//== Modals
+
+$modal-overlay-opacity: 0.5 !default;
+
+$modal-bg: #fff !default;
+$modal-width: 18.75rem !default;
+$modal-font-size: $font-size-default !default;
+$modal-padding: 1rem !default;
+
+$modal-border-color: rgba(#000, .2) !default;
+$modal-border-width: $default-border-width !default;
+$modal-border-radius: $default-border-radius !default;
+
+$modal-close-btn-font-size: 1.3125rem !default;
+$modal-close-btn-font-weight: $font-weight-medium !default;
+$modal-close-btn-line-height: 1.2rem !default;
+$modal-close-btn-color: #000 !default;
+$modal-close-btn-opacity: 0.5 !default;

@@ -655,6 +655,115 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-modal",
+      "attributes": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "headline",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "properties": [
+        {
+          "name": "open",
+          "attribute": "open",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "headline",
+          "attribute": "headline",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "dismissible",
+          "attribute": "dismissible",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-modal-open",
+          "description": "Dispatched when modal is opened"
+        },
+        {
+          "name": "typo3-modal-close",
+          "description": "Dispatched when modal is closed"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Default modal content"
+        },
+        {
+          "name": "footer",
+          "description": "Modal footer"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-modal-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-modal-width"
+        },
+        {
+          "name": "--typo3-modal-border-width"
+        },
+        {
+          "name": "--typo3-modal-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-modal-border-radius"
+        },
+        {
+          "name": "--typo3-modal-font-size"
+        },
+        {
+          "name": "--typo3-modal-padding"
+        },
+        {
+          "name": "--typo3-modal-overlay-opacity"
+        },
+        {
+          "name": "--typo3-modal-close-btn-font-size"
+        },
+        {
+          "name": "--typo3-modal-close-btn-font-weight"
+        },
+        {
+          "name": "--typo3-modal-close-btn-line-height"
+        },
+        {
+          "name": "--typo3-modal-close-btn-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-modal-close-btn-opacity"
+        },
+        {
+          "name": "--typo3-modal-close-btn-color-hover",
+          "type": "Color"
+        }
+      ]
     }
+
   ]
 }
