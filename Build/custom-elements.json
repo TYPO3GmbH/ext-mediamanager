@@ -569,7 +569,7 @@
       ],
       "events": [
         {
-          "name": "typo3-alert-closed",
+          "name": "typo3-alert-close",
           "description": "Dispatched when dismissible alert is closed"
         }
       ],

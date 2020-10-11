@@ -48,11 +48,11 @@ describe('Typo3Alert', () => {
     expect(alertDiv).to.be.null;
   });
 
-  it('can should dispatch a `typo3-alert-closed` event on close', async () => {
+  it('can should dispatch a `typo3-alert-close` event on close', async () => {
     const dismissibleAlert = (await fixture(
       html` <typo3-alert dismissible="true">Alert</typo3-alert> `
     )) as Typo3Alert;
-    const listener = oneEvent(dismissibleAlert, 'typo3-alert-closed');
+    const listener = oneEvent(dismissibleAlert, 'typo3-alert-close');
 
     const closeButton = dismissibleAlert.shadowRoot!.querySelector(
       '#btn-close'
