@@ -23,12 +23,26 @@ export class Typo3Button extends LitElement {
 
   public static styles = style({ css });
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.shadowRoot!.addEventListener(
+      'click',
+      event => {
+        if (this.disabled) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      },
+      true
+    );
+  }
+
   render(): TemplateResult {
     return html`
       <button
         id="button"
         class="button"
-        ?disabled="${this.disabled}"
+        .disabled="${this.disabled}"
         aria-label=${this.label}
       >
         ${this.buttonContent}
