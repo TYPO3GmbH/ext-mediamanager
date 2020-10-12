@@ -1,4 +1,10 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import {
+  elementUpdated,
+  expect,
+  fixture,
+  html,
+  oneEvent,
+} from '@open-wc/testing';
 import '../src/button/typo3-button.js';
 import { Typo3Button } from '../src/button/Typo3Button.js';
 
@@ -23,6 +29,36 @@ describe('Typo3Button.ts', () => {
   it('renders a button with aria label', () => {
     const button = element.shadowRoot!.querySelector('button')!;
     expect(button.getAttribute('aria-label')).to.be.equal('Label');
+  });
+
+  it('should dispatch a `click` event on button click', async () => {
+    const button = element.shadowRoot!.querySelector(
+      'button'
+    )! as HTMLButtonElement;
+    const listener = oneEvent(element, 'click');
+
+    button.click();
+
+    const event = await listener;
+    expect(event).to.exist;
+  });
+
+  it('should not dispatch a `click` event on button click if button is disabled', async () => {
+    let clickEventsCount = 0;
+
+    element.disabled = true;
+    element.onclick = (): void => {
+      clickEventsCount += 1;
+    };
+
+    await elementUpdated(element);
+
+    const button = element.shadowRoot!.querySelector(
+      'button'
+    )! as HTMLButtonElement;
+    button.click();
+
+    expect(clickEventsCount).to.equal(0);
   });
 
   it('passes the a11y audit', () => {
