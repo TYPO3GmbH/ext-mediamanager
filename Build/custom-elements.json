@@ -766,7 +766,6 @@
     },
     {
       "name": "typo3-context-menu",
-      "path": "./src/menu/typo3-context-menu.ts",
       "attributes": [
         {
           "name": "anchor",
@@ -790,6 +789,19 @@
         {
           "name": "typo3-context-menu-item-click",
           "description": "Dispatched when a context menu option is clicked"
+        }
+      ]
+    },
+    {
+      "name": "typo3-dropdown",
+      "slots": [
+        {
+          "name": "",
+          "description": "Default menu content"
+        },
+        {
+          "name": "button",
+          "description": "Trigger for opening menu"
         }
       ]
     }

@@ -1,13 +1,33 @@
-import { MenuBase } from '@material/mwc-menu/mwc-menu-base';
-import { css } from 'lit-element';
+import { css, LitElement, query, TemplateResult } from 'lit-element';
 
 import style from './typo3-dropdown.scss';
+import { html } from 'lit-html';
+import { Typo3Menu } from '../menu/Typo3Menu';
 
-export class Typo3DropDown extends MenuBase {
-  constructor() {
-    super();
-    this.corner = 'BOTTOM_LEFT';
+/**
+ * @slot - Default menu content
+ * @slot button - Trigger for opening menu
+ */
+export class Typo3DropDown extends LitElement {
+  public static styles = style({ css });
+
+  @query('slot[name="button"]') buttonSlotElement!: HTMLSlotElement | null;
+
+  @query('typo3-menu') typo3Menu!: Typo3Menu;
+
+  render(): TemplateResult {
+    return html`
+      <slot name="button" @click="${this.showDropdownMenu}"></slot>
+      <typo3-menu corner="BOTTOM_LEFT">
+        <slot></slot>
+      </typo3-menu>
+    `;
   }
 
-  public static styles = style({ css });
+  showDropdownMenu(): void {
+    if (this.buttonSlotElement) {
+      this.typo3Menu.anchor = this.buttonSlotElement.assignedNodes()[0] as HTMLElement;
+    }
+    this.typo3Menu.show();
+  }
 }

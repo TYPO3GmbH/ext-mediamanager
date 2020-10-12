@@ -1,1 +1,5 @@
 @import 'src/theme/index.scss';
+
+:host {
+  position: relative;
+}
