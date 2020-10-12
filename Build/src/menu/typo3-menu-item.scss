@@ -9,16 +9,24 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  padding-left: var(--typo3-dropdown-list-item-side-padding, 1rem);
-  padding-right: var(--typo3-dropdown-list-item-side-padding, 1rem);
+  padding-left: var(--typo3-menu-list-item-side-padding, $menu-item-padding-x);
+  padding-right: var(--typo3-menu-list-item-side-padding, $menu-item-padding-x);
   outline: none;
-  color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));
-  font-size: var(--typo3-btn-font-size, 0.75rem);
+  color: var(--typo3-menu-item-color, $menu-item-color);
+  font-size: var(--typo3-menu-font-size, 0.75rem);
   line-height: 2.5;
 }
 
 :host(:focus), :host(:hover) {
-  color: #16181b;
+  color: var(--typo3-menu-list-item-color-hover, $menu-item-color-hover);
   text-decoration: none;
-  background-color: #f8f9fa;
+  background-color: var(--typo3-menu-list-item-background-color-hover, $menu-item-bg-hover);
+}
+
+slot[name='icon']::slotted(*) {
+  fill: currentColor;
+  width: var(--typo3-menu-list-item-icon-size, $menu-item-icon-size);
+  height: var(--typo3-menu-list-item-icon-size, $menu-item-icon-size);
+  line-height: 1;
+  margin-right: var(--typo3-menu-list-item-icon-gap, $menu-item-icon-size);
 }

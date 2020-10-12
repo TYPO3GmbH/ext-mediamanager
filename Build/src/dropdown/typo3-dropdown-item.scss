@@ -1,21 +1,4 @@
-@import 'src/theme/index.scss';
-
-:host {
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  padding-left: var(--typo3-dropdown-list-item-side-padding, 0.5rem);
-  padding-right: var(--typo3-dropdown-list-item-side-padding, 0.5rem);
-  outline: none;
-  color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));
-  font-size: var(--typo3-btn-font-size, 0.75rem);
-  line-height: 2.5;
-}
+@import 'src/menu/typo3-menu-item.scss';
 
 .checkmark {
   color: var(--typo3-dropdown-list-item-checkmark-color, #287fde);

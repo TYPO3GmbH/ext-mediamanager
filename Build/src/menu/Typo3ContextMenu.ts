@@ -5,6 +5,7 @@ import './typo3-menu';
 import './typo3-menu-item';
 import { html } from 'lit-html';
 import { Typo3Menu } from './Typo3Menu';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 /**
  * @todo handle icon values from typo3 backend e.g. icon: "<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">↵	<span class="icon-markup">↵<img src="/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/actions-edit-delete.svg" width="16" height="16" alt="" />↵	</span>↵	↵</span>"
@@ -42,15 +43,22 @@ export class Typo3ContextMenu extends LitElement {
   protected get menuContent(): TemplateResult[] {
     return Object.values(this.options).map(
       (option: Typo3ContextMenuOptionDef) => {
-        if ('divider' === option.type) {
-          return html` <li divider></li> `;
+        switch (option.type) {
+          case 'divider':
+            return html` <li divider></li> `;
+          case 'item':
+            return html`
+              <typo3-menu-item
+                graphic="icon"
+                @click="${() => this.dispatchContextMenuItemClick(option)}"
+              >
+                <span slot="icon">${unsafeHTML(option.icon)}</span>
+                ${option.label}
+              </typo3-menu-item>
+            `;
+          default:
+            return html``;
         }
-        return html`
-          <typo3-menu-item
-            @click="${() => this.dispatchContextMenuItemClick(option)}"
-            >${option.label}</typo3-menu-item
-          >
-        `;
       }
     );
   }
