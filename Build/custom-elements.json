@@ -763,7 +763,35 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-context-menu",
+      "path": "./src/menu/typo3-context-menu.ts",
+      "attributes": [
+        {
+          "name": "anchor",
+          "type": "HTMLElement | null"
+        },
+        {
+          "name": "options",
+          "type": "{ [key: string]: Typo3ContextMenuOptionDef; }",
+          "default": "{}"
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-context-menu-open",
+          "description": "Dispatched when context menu is opened"
+        },
+        {
+          "name": "typo3-context-menu-close",
+          "description": "Dispatched when context menu is closed"
+        },
+        {
+          "name": "typo3-context-menu-item-click",
+          "description": "Dispatched when a context menu option is clicked"
+        }
+      ]
     }
-
   ]
 }

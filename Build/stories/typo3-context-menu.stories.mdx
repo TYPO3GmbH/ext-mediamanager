@@ -1,0 +1,32 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../out-tsc/src/menu/typo3-context-menu';
+
+<Meta
+  title="Components/typo3-context-menu"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-context-menu', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Menu.ts
+
+<Preview>
+    <Story name="Context Menu" height="220px">
+    {html`
+      <div style="position:relative">
+        <button id="contextTrigger" onmouseenter="contextMenu.anchor = window.contextTrigger;">
+          Open the context menu with a right click
+        </button>
+        <typo3-context-menu id="contextMenu" options='{
+            "delete": {"callbackAction": "createFile", "icon": "", "label": "New File", "type": "item"},
+            "divider1": {"type": "divider"},
+            "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
+        }'>
+        </typo3-context-menu>
+      </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+<Props of="typo3-context-menu" />
