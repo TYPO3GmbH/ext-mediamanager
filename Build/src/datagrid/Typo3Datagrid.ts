@@ -17,6 +17,8 @@ export class Typo3Datagrid extends LitElement {
 
   @property({ type: String }) data = '';
 
+  @property({ type: Boolean }) editable = false;
+
   @query('canvas-datagrid') canvas!: CanvasDatagrid;
 
   public static styles = style({ css });
@@ -31,6 +33,7 @@ export class Typo3Datagrid extends LitElement {
         showrowheaders="false"
         schema="${this.schema}"
         data="${this.data}"
+        editable="${this.editable}"
       ></canvas-datagrid>
     `;
   }

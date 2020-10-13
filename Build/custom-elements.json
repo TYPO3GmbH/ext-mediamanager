@@ -463,7 +463,11 @@
           "attribute": "schema",
           "description": "JSON-String of canvasDatagrid.header objects. See https://canvas-datagrid.js.org/#canvasDatagrid.schema",
           "type": "String"
-
+        },
+        {
+          "name": "editable",
+          "type": "boolean",
+          "default": "false"
         }
       ]
     },
