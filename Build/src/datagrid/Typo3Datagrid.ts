@@ -21,11 +21,38 @@ export class Typo3Datagrid extends LitElement {
   render(): TemplateResult {
     return html`
       <canvas-datagrid
+        @rendercell="${this._onRendercell}"
+        @contextmenu="${this._onContextmenu}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
         data="${this.data}"
       ></canvas-datagrid>
     `;
+  }
+
+  _onRendercell(e: {
+    ctx: CanvasRenderingContext2D;
+    cell: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      isGrid: boolean;
+    };
+  }): void {
+    // Draw upper border
+    e.ctx.beginPath();
+    e.ctx.moveTo(e.cell.x, e.cell.y);
+    e.ctx.lineTo(e.cell.x + e.cell.width, e.cell.y);
+    e.ctx.stroke();
+
+    // set strokeStyle to transparent to prevent outer border to be drawn
+    e.ctx.strokeStyle = 'transparent';
+  }
+
+  _onContextmenu(e: Event): boolean {
+    e.preventDefault();
+    return false;
   }
 }
