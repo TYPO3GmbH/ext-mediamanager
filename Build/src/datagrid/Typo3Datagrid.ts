@@ -8,6 +8,7 @@ import {
 } from 'lit-element';
 
 import style from './typo3-datagrid.scss';
+import { RenderCellEvent } from './RenderCellEvent';
 
 export class Typo3Datagrid extends LitElement {
   @property({ type: String }) schema = '';
@@ -31,16 +32,7 @@ export class Typo3Datagrid extends LitElement {
     `;
   }
 
-  _onRendercell(e: {
-    ctx: CanvasRenderingContext2D;
-    cell: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isGrid: boolean;
-    };
-  }): void {
+  _onRendercell(e: RenderCellEvent): void {
     // Draw upper border
     e.ctx.beginPath();
     e.ctx.moveTo(e.cell.x, e.cell.y);

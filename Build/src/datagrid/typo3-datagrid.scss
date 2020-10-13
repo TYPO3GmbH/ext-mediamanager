@@ -1,7 +1,7 @@
 @import 'src/theme/index.scss';
 
 :host canvas-datagrid {
-  --cdg-active-cell-border-color: #878787;
+  --cdg-active-cell-border-color: #{$datagrid-border-color};
   --cdg-active-cell-border-width: 1;
   --cdg-active-cell-font: 14px Verdana;
   --cdg-active-cell-overlay-border-color: transparent;
@@ -9,11 +9,12 @@
   --cdg-active-column-header-cell-background-color: transparent;
   --cdg-active-row-header-cell-background-color: transparent;
   --cdg-cell-background-color: transparent;
-  --cdg-cell-border-color: #878787;
+  --cdg-cell-border-color: #{$datagrid-border-color};
   --cdg-cell-border-width: 1;
-  --cdg-cell-color: #212424;
+  --cdg-cell-color: #{$datagrid-cell-color};
   --cdg-cell-font: 14px Verdana;
   --cdg-cell-hover-background-color: transparent;
+  --cdg-cell-height: 30;
   --cdg-column-header-cell-background-color: transparent;
   --cdg-column-header-cell-border-color: transparent;
   --cdg-column-header-cell-border-width: 1;
@@ -32,3 +33,5 @@
   --cdg-row-header-cell-hover-background-color: transparent;
   --cdg-selection-overlay-borderColor: transparent;
 }
+
+
