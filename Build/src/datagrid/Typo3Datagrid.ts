@@ -8,14 +8,16 @@ import {
 } from 'lit-element';
 
 import style from './typo3-datagrid.scss';
-import { RenderCellEvent } from './RenderCellEvent';
+import { RenderCellEvent } from './event/RenderCellEvent';
+import { RenderOrderByArrowEvent } from './event/RenderOrderByArrowEvent';
+import { CanvasDatagrid } from './CanvasDatagrid';
 
 export class Typo3Datagrid extends LitElement {
   @property({ type: String }) schema = '';
 
   @property({ type: String }) data = '';
 
-  @query('canvas-datagrid') canvas!: HTMLElement;
+  @query('canvas-datagrid') canvas!: CanvasDatagrid;
 
   public static styles = style({ css });
 
@@ -24,6 +26,7 @@ export class Typo3Datagrid extends LitElement {
       <canvas-datagrid
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
+        @renderorderbyarrow="${this._onRenderOrderByArrow}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -43,8 +46,47 @@ export class Typo3Datagrid extends LitElement {
     e.ctx.strokeStyle = 'transparent';
   }
 
-  _onContextmenu(e: Event): boolean {
+  _onContextmenu(e: Event): void {
     e.preventDefault();
-    return false;
+  }
+
+  _onRenderOrderByArrow(e: RenderOrderByArrowEvent): void {
+    e.preventDefault();
+    const canvasStyle = this.canvas.style;
+
+    let x = e.cell.x;
+    let y = e.cell.y;
+
+    e.ctx.font = canvasStyle.columnHeaderCellFont;
+    const headerTextWidth = e.ctx.measureText(e.header.title).width;
+
+    const mt = canvasStyle.columnHeaderOrderByArrowMarginTop,
+      ml = canvasStyle.columnHeaderOrderByArrowMarginLeft,
+      mr = canvasStyle.columnHeaderOrderByArrowMarginRight,
+      aw = canvasStyle.columnHeaderOrderByArrowWidth,
+      ah = canvasStyle.columnHeaderOrderByArrowHeight;
+
+    x += this.canvas.offsetLeft + mr + headerTextWidth;
+    y += this.canvas.offsetTop - ah / 2;
+
+    e.ctx.fillStyle = canvasStyle.columnHeaderOrderByArrowColor;
+    e.ctx.strokeStyle = canvasStyle.columnHeaderOrderByArrowBorderColor;
+    e.ctx.lineWidth = canvasStyle.columnHeaderOrderByArrowBorderWidth;
+
+    e.ctx.beginPath();
+    x = x + ml;
+    y = y + mt;
+
+    if (this.canvas.orderDirection === 'asc') {
+      e.ctx.moveTo(x + aw, y);
+      e.ctx.lineTo(x + aw * 0.5, y + ah);
+      e.ctx.lineTo(x, y);
+    } else {
+      e.ctx.moveTo(x, y + ah);
+      e.ctx.lineTo(x + aw * 0.5, y);
+      e.ctx.lineTo(x + aw, y + ah);
+    }
+
+    e.ctx.stroke();
   }
 }

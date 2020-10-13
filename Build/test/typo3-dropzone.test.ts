@@ -37,7 +37,7 @@ describe('Typo3Dropzone', () => {
     expect(element.dropEffect).to.equal('move');
   });
 
-  it('manages `dragover` events', async () => {
+  it('manages `dragover` event', async () => {
     await elementUpdated(element);
 
     expect(element.isDragged).to.be.false;
@@ -57,7 +57,7 @@ describe('Typo3Dropzone', () => {
     expect(element.isDragged).to.be.true;
   });
 
-  it('allows `dragover` events to be canceled', async () => {
+  it('allows `dragover` event to be canceled', async () => {
     const canceledDrag = (event: DragEvent): void => {
       event.preventDefault();
     };
@@ -87,7 +87,7 @@ describe('Typo3Dropzone', () => {
     expect(dataTransfer.dropEffect).to.equal('none');
   });
 
-  it('manages `dragleave` events via debounce', async () => {
+  it('manages `dragleave` event via debounce', async () => {
     let dragLeftCount = 0;
     const onDragLeave = (): void => {
       dragLeftCount += 1;
@@ -112,7 +112,7 @@ describe('Typo3Dropzone', () => {
     expect(dragLeftCount).to.equal(1);
   });
 
-  it('manages `dragleave` events', async () => {
+  it('manages `dragleave` event', async () => {
     let dropped = false;
     const onDrop = (): void => {
       dropped = true;

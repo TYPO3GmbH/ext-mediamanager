@@ -1,4 +1,4 @@
-export interface RenderCellEvent {
+export interface CanvasDataGridEvent extends Event {
   ctx: CanvasRenderingContext2D;
   cell: {
     x: number;
