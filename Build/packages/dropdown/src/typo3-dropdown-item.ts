@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 import { css, customElement, property, TemplateResult } from 'lit-element';
-import { checkmarkIcon } from '../../shared/icons/checkmark-icon';
+import { checkmarkIcon } from './assets/checkmark-icon';
 
 import style from './typo3-dropdown-item.scss';
 import { Typo3MenuItem } from '../../menu/src/Typo3MenuItem';
