@@ -1,6 +1,6 @@
 import { elementUpdated, expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-tooltip.js';
-import { Typo3Tooltip } from '../src/tooltip/src/Typo3Tooltip';
+import { Typo3Tooltip } from '../src/tooltip/packages/Typo3Tooltip';
 
 describe('Typo3Tooltip', () => {
   let element: Typo3Tooltip;

@@ -14,7 +14,7 @@ import { Typo3Menu } from './Typo3Menu';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 /**
- * @todo handle icon values from typo3 backend e.g. icon: "<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">↵	<span class="icon-markup">↵<img src="/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/actions-edit-delete.svg" width="16" height="16" alt="" />↵	</span>↵	↵</span>"
+ * @todo handle icon values from typo3 backend e.g. icon: "<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">↵	<span class="icon-markup">↵<img packages="/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/actions-edit-delete.svg" width="16" height="16" alt="" />↵	</span>↵	↵</span>"
  *
  * @fires typo3-context-menu-open - Dispatched when context menu is opened
  * @fires typo3-context-menu-close - Dispatched when context menu is closed

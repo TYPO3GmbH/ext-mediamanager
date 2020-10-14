@@ -4,7 +4,7 @@ import typescript from 'typescript';
 
 const globby = require('globby');
 
-const configs = globby.sync('(src|test)/**/*.ts').map(inputFile => ({
+const configs = globby.sync('(packages|test)/**/*.ts').map(inputFile => ({
   input: inputFile,
   inlineDynamicImports: true,
   output: {
