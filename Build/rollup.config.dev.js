@@ -2,8 +2,6 @@ import postcss from 'rollup-plugin-postcss';
 import postcssLit from 'rollup-plugin-postcss-lit';
 
 import postcssImport from 'postcss-import';
-import postcssVariables from 'postcss-css-variables';
-import postcssColorFunctions from 'postcss-color-function';
 
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
@@ -21,9 +19,7 @@ const configs = globby.sync('(packages|test)/**/*.(ts|pcss)').map(inputFile => (
   plugins: [
     postcss({
       plugins: [
-        postcssImport,
-        postcssVariables,
-        postcssColorFunctions
+        postcssImport
       ]
     }),
     postcssLit(),
