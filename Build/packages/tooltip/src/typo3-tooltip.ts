@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   internalProperty,
@@ -9,7 +8,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-tooltip.scss';
+import style from './typo3-tooltip.pcss';
 
 export type Position = 'top' | 'right' | 'bottom' | 'left';
 
@@ -26,7 +25,7 @@ export class Typo3Tooltip extends LitElement {
 
   @query('#tooltip') protected tooltipHtmlElement!: HTMLSlotElement | null;
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     return html`

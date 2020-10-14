@@ -1,0 +1,210 @@
+@import '../../../theme/index.pcss';
+
+:host {
+  display: inline-flex;
+  flex-direction: row;
+  vertical-align: top;
+}
+
+.button slot[name='icon'] + #label {
+  margin-left: var(--typo3-btn-text-icon-gap, var(--btn-text-icon-gap));
+}
+
+.button #label + ::slotted([slot='icon']) {
+  margin-left: var(--typo3-btn-text-icon-gap, var(--btn-text-icon-gap));
+}
+
+.button {
+  display: flex;
+  flex: 1 1 auto;
+  cursor: pointer;
+  padding: var(--btn-padding);
+  outline: none;
+  justify-content: center;
+  align-items: center;
+
+  border: var(--typo3-btn-border-width, var(--btn-border-width)) solid transparent;
+  font-size: var(--typo3-btn-font-size, var(--btn-font-size));
+  line-height: var(--typo3-btn-line-height, var(--btn-line-height));
+  border-radius: var(--typo3-btn-border-radius, var(--btn-border-radius));
+}
+
+:host([color='default']) .button {
+  color: var(--typo3-btn-default-color, var(--btn-default-color));
+  background-color: var(--typo3-btn-default-background-color, var(--btn-default-bg));
+  border-color: var(--typo3-btn-default-border-color, var(--btn-default-border));
+}
+
+:host([color='default']) .button:focus {
+  color: var(--typo3-btn-default-color-focus, var(--btn-default-color));
+  background-color: var(--typo3-btn-default-background-color-focus, color(var(--btn-default-bg) shade(10%)));
+  border-color: var(--typo3-btn-default-border-color-focus, color(var(--btn-default-border) shade(10%)));
+}
+
+:host([color='default']) .button:hover {
+  color: var(--typo3-btn-default-color-hover, var(--btn-default-color));
+  background-color: var(--typo3-btn-default-background-color-hover, color(var(--btn-default-bg) shade(10%)));
+  border-color: var(--typo3-btn-default-border-color-hover, color(var(--btn-default-border) shade(12%)));
+}
+
+:host([color='default']) .button:active {
+  color: var(--typo3-btn-default-color-active, var(--btn-default-color));
+  background-color: var(--typo3-btn-default-background-color-active, color(var(--btn-default-bg) shade(10%)));
+  border-color: var(--typo3-btn-default-border-color-active, color(var(--btn-default-border) shade(12%)));
+}
+
+:host([color='primary']) .button {
+  color: var(--typo3-btn-primary-color, var(--btn-primary-color));
+  background-color: var(--typo3-btn-primary-background-color, var(--btn-primary-bg));
+  border-color: var(--typo3-btn-primary-border-color, var(--btn-primary-border));
+}
+
+:host([color='primary']) .button:focus {
+  color: var(--typo3-btn-primary-color-focus, var(--btn-primary-color));
+  background-color: var(--typo3-btn-primary-background-color-focus, color(var(--btn-primary-bg) shade(10%)));
+  border-color: var(--typo3-btn-primary-border-color-focus, color(var(--btn-primary-border) shade(10%)));
+}
+
+:host([color='primary']) .button:hover {
+  color: var(--typo3-btn-primary-color-hover, var(--btn-primary-color));
+  background-color: var(--typo3-btn-primary-background-color-hover, color(var(--btn-primary-bg) shade(10%)));
+  border-color: var(--typo3-btn-primary-border-color-hover, color(var(--btn-primary-border) shade(12%)));
+}
+
+:host([color='primary']) .button:active {
+  color: var(--typo3-btn-primary-color-active, var(--btn-primary-color));
+  background-color: var(--typo3-btn-primary-background-color-active, color(var(--btn-primary-bg) shade(10%)));
+  border-color: var(--typo3-btn-primary-border-color-active, color(var(--btn-primary-border) shade(12%)));
+}
+
+:host([color='secondary']) .button {
+  color: var(--typo3-btn-secondary-color, var(--btn-secondary-color));
+  background-color: var(--typo3-btn-secondary-background-color, var(--btn-secondary-bg));
+  border-color: var(--typo3-btn-secondary-border-color, var(--btn-secondary-border));
+}
+
+:host([color='secondary']) .button:focus {
+  color: var(--typo3-btn-secondary-color-focus, var(--btn-secondary-color));
+  background-color: var(--typo3-btn-secondary-background-color-focus, color(var(--btn-secondary-bg) shade(10%)));
+  border-color: var(--typo3-btn-secondary-border-color-focus, color(var(--btn-secondary-border) shade(10%)));
+}
+
+:host([color='secondary']) .button:hover {
+  color: var(--typo3-btn-secondary-color-hover, var(--btn-secondary-color));
+  background-color: var(--typo3-btn-secondary-background-color-hover, color(var(--btn-secondary-bg) shade(10%)));
+  border-color: var(--typo3-btn-secondary-border-color-hover, color(var(--btn-secondary-border) shade(12%)));
+}
+
+:host([color='secondary']) .button:active {
+  color: var(--typo3-btn-secondary-color-active, var(--btn-secondary-color));
+  background-color: var(--typo3-btn-secondary-background-color-active, color(var(--btn-secondary-bg) shade(10%)));
+  border-color: var(--typo3-btn-secondary-border-color-active, color(var(--btn-secondary-border) shade(12%)));
+}
+
+:host([color='success']) .button {
+  color: var(--typo3-btn-success-color, var(--btn-success-color));
+  background-color: var(--typo3-btn-success-background-color, var(--btn-success-bg));
+  border-color: var(--typo3-btn-success-border-color, var(--btn-success-border));
+}
+
+:host([color='success']) .button:focus {
+  color: var(--typo3-btn-success-color-focus, var(--btn-success-color));
+  background-color: var(--typo3-btn-success-background-color-focus, color(var(--btn-success-bg) shade(10%)));
+  border-color: var(--typo3-btn-success-border-color-focus, color(var(--btn-success-border) shade(10%)));
+}
+
+:host([color='success']) .button:hover {
+  color: var(--typo3-btn-success-color-hover, var(--btn-success-color));
+  background-color: var(--typo3-btn-success-background-color-hover, color(var(--btn-success-bg) shade(10%)));
+  border-color: var(--typo3-btn-success-border-color-hover, color(var(--btn-success-border) shade(12%)));
+}
+
+:host([color='success']) .button:active {
+  color: var(--typo3-btn-success-color-active, var(--btn-success-color));
+  background-color: var(--typo3-btn-success-background-color-active, color(var(--btn-success-bg) shade(10%)));
+  border-color: var(--typo3-btn-success-border-color-active, color(var(--btn-success-border) shade(12%)));
+}
+
+:host([color='info']) .button {
+  color: var(--typo3-btn-info-color, var(--btn-info-color));
+  background-color: var(--typo3-btn-info-background-color, var(--btn-info-bg));
+  border-color: var(--typo3-btn-info-border-color, var(--btn-info-border));
+}
+
+:host([color='info']) .button:focus {
+  color: var(--typo3-btn-info-color-focus, var(--btn-info-color));
+  background-color: var(--typo3-btn-info-background-color-focus, color(var(--btn-info-bg) shade(10%)));
+  border-color: var(--typo3-btn-info-border-color-focus, color(var(--btn-info-border) shade(10%)));
+}
+
+:host([color='info']) .button:hover {
+  color: var(--typo3-btn-info-color-hover, var(--btn-info-color));
+  background-color: var(--typo3-btn-info-background-color-hover, color(var(--btn-info-bg) shade(10%)));
+  border-color: var(--typo3-btn-info-border-color-hover, color(var(--btn-info-border) shade(12%)));
+}
+
+:host([color='info']) .button:active {
+  color: var(--typo3-btn-info-color-active, var(--btn-info-color));
+  background-color: var(--typo3-btn-info-background-color-active, color(var(--btn-info-bg) shade(10%)));
+  border-color: var(--typo3-btn-info-border-color-active, color(var(--btn-info-border) shade(12%)));
+}
+
+:host([color='warning']) .button {
+  color: var(--typo3-btn-warning-color, var(--btn-warning-color));
+  background-color: var(--typo3-btn-warning-background-color, var(--btn-warning-bg));
+  border-color: var(--typo3-btn-warning-border-color, var(--btn-warning-border));
+}
+
+:host([color='warning']) .button:focus {
+  color: var(--typo3-btn-warning-color-focus, var(--btn-warning-color));
+  background-color: var(--typo3-btn-warning-background-color-focus, color(var(--btn-warning-bg) shade(10%)));
+  border-color: var(--typo3-btn-warning-border-color-focus, color(var(--btn-warning-border) shade(10%)));
+}
+
+:host([color='warning']) .button:hover {
+  color: var(--typo3-btn-warning-color-hover, var(--btn-warning-color));
+  background-color: var(--typo3-btn-warning-background-color-hover, color(var(--btn-warning-bg) shade(10%)));
+  border-color: var(--typo3-btn-warning-border-color-hover, color(var(--btn-warning-border) shade(12%)));
+}
+
+:host([color='warning']) .button:active {
+  color: var(--typo3-btn-warning-color-active, var(--btn-warning-color));
+  background-color: var(--typo3-btn-warning-background-color-active, color(var(--btn-warning-bg) shade(10%)));
+  border-color: var(--typo3-btn-warning-border-color-active, color(var(--btn-warning-border) shade(12%)));
+}
+
+:host([color='danger']) .button {
+  color: var(--typo3-btn-danger-color, var(--btn-danger-color));
+  background-color: var(--typo3-btn-danger-background-color, var(--btn-danger-bg));
+  border-color: var(--typo3-btn-danger-border-color, var(--btn-danger-border));
+}
+
+:host([color='danger']) .button:focus {
+  color: var(--typo3-btn-danger-color-focus, var(--btn-danger-color));
+  background-color: var(--typo3-btn-danger-background-color-focus, color(var(--btn-danger-bg) shade(10%)));
+  border-color: var(--typo3-btn-danger-border-color-focus, color(var(--btn-danger-border) shade(10%)));
+}
+
+:host([color='danger']) .button:hover {
+  color: var(--typo3-btn-danger-color-hover, var(--btn-danger-color));
+  background-color: var(--typo3-btn-danger-background-color-hover, color(var(--btn-danger-bg) shade(10%)));
+  border-color: var(--typo3-btn-danger-border-color-hover, color(var(--btn-danger-border) shade(12%)));
+}
+
+:host([color='danger']) .button:active {
+  color: var(--typo3-btn-danger-color-active, var(--btn-danger-color));
+  background-color: var(--typo3-btn-danger-background-color-active, color(var(--btn-danger-bg) shade(10%)));
+  border-color: var(--typo3-btn-danger-border-color-active, color(var(--btn-danger-border) shade(12%)));
+}
+
+:host([disabled]) .button {
+  cursor: not-allowed;
+  opacity: var(--btn-disabled-opacity);
+  pointer-events: none;
+}
+
+slot[name='icon']::slotted(svg) {
+  fill: currentColor;
+  width: var(--typo3-btn-icon-size, var(--btn-icon-size));
+  height: var(--typo3-btn-icon-size, var(--btn-icon-size));
+}

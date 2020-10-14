@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -8,7 +7,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-selection-button.scss';
+import style from './typo3-selection-button.pcss';
 import { Typo3Button } from './typo3-button';
 
 @customElement('typo3-selection-button')
@@ -21,7 +20,7 @@ export class Typo3SelectionButton extends LitElement {
 
   @query('typo3-button') button?: Typo3Button;
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     if (0 === this.count) {

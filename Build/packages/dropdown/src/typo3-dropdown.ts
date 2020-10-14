@@ -1,12 +1,6 @@
-import {
-  css,
-  customElement,
-  LitElement,
-  query,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, LitElement, query, TemplateResult } from 'lit-element';
 
-import style from './typo3-dropdown.scss';
+import style from './typo3-dropdown.pcss';
 import { html } from 'lit-html';
 import { Typo3Menu } from '../../menu/src/Typo3Menu';
 
@@ -16,7 +10,7 @@ import { Typo3Menu } from '../../menu/src/Typo3Menu';
  */
 @customElement('typo3-dropdown')
 export class Typo3Dropdown extends LitElement {
-  public static styles = style({ css });
+  public static styles = style;
 
   @query('slot[name="button"]') buttonSlotElement!: HTMLSlotElement | null;
 

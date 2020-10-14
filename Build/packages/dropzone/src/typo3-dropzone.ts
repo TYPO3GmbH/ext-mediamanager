@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -7,13 +6,13 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-dropzone.scss';
+import style from './typo3-dropzone.pcss';
 
 export type DropEffects = 'copy' | 'move' | 'link' | 'none';
 
 @customElement('typo3-dropzone')
 export class Typo3Dropzone extends LitElement {
-  public static styles = style({ css });
+  public static styles = style;
 
   private _dropEffect: DropEffects = 'copy';
 

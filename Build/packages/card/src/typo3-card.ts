@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -7,7 +6,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-card.scss';
+import style from './typo3-card.pcss';
 
 @customElement('typo3-card')
 export class Typo3Card extends LitElement {
@@ -17,7 +16,7 @@ export class Typo3Card extends LitElement {
 
   @property({ reflect: true }) variant: 'standard' | 'preview' = 'standard';
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     return html`

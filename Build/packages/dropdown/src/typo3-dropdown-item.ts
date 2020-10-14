@@ -1,8 +1,8 @@
 import { html } from 'lit-html';
-import { css, customElement, property, TemplateResult } from 'lit-element';
+import { customElement, property, TemplateResult } from 'lit-element';
 import { checkmarkIcon } from './assets/checkmark-icon';
 
-import style from './typo3-dropdown-item.scss';
+import style from './typo3-dropdown-item.pcss';
 import { Typo3MenuItem } from '../../menu/src/Typo3MenuItem';
 
 @customElement('typo3-dropdown-item')
@@ -10,7 +10,7 @@ export class Typo3DropdownItem extends Typo3MenuItem {
   @property({ type: Boolean, reflect: true, attribute: 'display-checkmark' })
   displayCheckmark = true;
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     const text = this.renderText();

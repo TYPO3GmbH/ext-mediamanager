@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -7,7 +6,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-modal.scss';
+import style from './typo3-modal.pcss';
 
 /**
  * @fires typo3-modal-open - Dispatched when modal is opened
@@ -49,7 +48,7 @@ export class Typo3Modal extends LitElement {
    */
   @property({ type: Boolean, reflect: true }) dismissible = false;
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     return html` <div

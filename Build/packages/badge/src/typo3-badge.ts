@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -7,7 +6,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-badge.scss';
+import style from './typo3-badge.pcss';
 
 export type Color =
   | 'default'
@@ -23,7 +22,7 @@ export class Typo3Badge extends LitElement {
 
   @property({ type: String, reflect: true }) color: Color = 'default';
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     return html` ${this.title} `;

@@ -1,5 +1,4 @@
 import {
-  css,
   customElement,
   html,
   LitElement,
@@ -8,7 +7,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import style from './typo3-datagrid.scss';
+import style from './typo3-datagrid.pcss';
 import { RenderCellEvent } from './lib/event/RenderCellEvent';
 import { RenderOrderByArrowEvent } from './lib/event/RenderOrderByArrowEvent';
 import { CanvasDatagrid } from './lib/CanvasDatagrid';
@@ -24,7 +23,7 @@ export class Typo3Datagrid extends LitElement {
 
   @query('canvas-datagrid') canvas!: CanvasDatagrid;
 
-  public static styles = style({ css });
+  public static styles = style;
 
   render(): TemplateResult {
     return html`

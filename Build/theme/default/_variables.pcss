@@ -1,0 +1,168 @@
+:root {
+  --font-family-base: Verdana, Arial, Helvetica, sans-serif;
+  --font-size-default: 0.75rem;
+  --font-weight-medium: 700;
+
+  /* Colors */
+  --gray-base: #000;
+  --gray-darker: #222;
+  --gray-dark: #333;
+  --gray: #555;
+  --gray-light: #777;
+  --gray-lighter: #eee;
+
+  --brand-primary: #0078e6;
+  --brand-success: #79a548;
+  --brand-info: #6daae0;
+  --brand-warning: #e8a33d;
+  --brand-danger: #c83c3c;
+
+  /* Defaults */
+  --default-border-radius: 0.125rem;
+  --default-border-width: 0.0625rem;
+  --animation-duration: 0.5s;
+
+  /* Buttons */
+  --btn-default-color: var(--gray-dark);
+  --btn-default-bg: var(--gray-lighter);
+  --btn-default-border: #bbb;
+
+  --btn-primary-color: #fff;
+  --btn-primary-bg: var(--brand-primary);
+  --btn-primary-border: color(var(--btn-primary-bg) shade(5%));
+
+  --btn-success-color: #fff;
+  --btn-success-bg: var(--brand-success);
+  --btn-success-border: color(var(--btn-success-bg) shade(5%));
+
+  --btn-info-color: #fff;
+  --btn-info-bg: var(--brand-info);
+  --btn-info-border: color(var(--btn-info-bg) shade(5%));
+
+  --btn-warning-color: #fff;
+  --btn-warning-bg: var(--brand-warning);
+  --btn-warning-border: color(var(--btn-warning-bg) shade(5%));
+
+  --btn-danger-color: #fff;
+  --btn-danger-bg: var(--brand-danger);
+  --btn-danger-border: color(var(--btn-danger-bg) shade(5%));
+
+  --btn-secondary-color: #fff;
+  --btn-secondary-bg: #6c757d;
+  --btn-secondary-border: #6c757d;
+
+  --btn-border-radius: var(--default-border-radius);
+  --btn-font-size: var(--font-size-default);
+  --btn-line-height: 1.4;
+  --btn-padding: 0.375rem;
+  --btn-border-width: var(--default-border-width);
+  --btn-icon-size: 1rem;
+  --btn-disabled-opacity: 0.65;
+  --btn-text-icon-gap: 0.25rem;
+
+  /* Badges */
+  --badge-padding: 0.25em 0.4em;
+  --badge-font-weight: 500;
+  --badge-border-radius: 50%;
+  --badge-size: 1.375rem;
+  --badge-font-size: var(--font-size-default);
+
+  --badge-default-color: var(--btn-default-color);
+  --badge-default-bg: var(--btn-default-bg);
+
+  --badge-primary-color: var(--btn-primary-color);
+  --badge-primary-bg: var(--btn-primary-bg);
+
+  --badge-success-color: var(--btn-success-color);
+  --badge-success-bg: var(--btn-success-bg);
+
+  --badge-info-color: var(--btn-info-color);
+  --badge-info-bg: var(--btn-info-bg);
+
+  --badge-warning-color: var(--btn-warning-color);
+  --badge-warning-bg: var(--btn-warning-bg);
+
+  --badge-danger-color: var(--btn-danger-color);
+  --badge-danger-bg: var(--btn-danger-bg);
+
+
+  /* SplitPane */
+  --splitpane-splitter-bg: var(--gray-lighter);
+  --splitpane-splitter-size: 0.5rem;
+  --splitpane-handle-bg: var(--gray-light);
+  --splitpane-handle-width: 0.125rem;
+  --splitpane-handle-height: 1.5rem;
+
+
+  /* Tooltip */
+  --tooltip-font-size: var(--font-size-default);
+  --tooltip-line-height: 1;
+  --tooltip-bg: var(--gray-dark);
+  --tooltip-color: #fff;
+  --tooltip-padding: 0.5rem;
+  --tooltip-border-radius: var(--default-border-radius);
+  --tooltip-max-width: 15rem;
+  --tooltip-transition: opacity var(--animation-duration) ease-in-out;
+
+  /* Alerts */
+  --alert-border-radius: var(--default-border-radius);
+  --alert-border-width: var(--default-border-width);
+
+  --alert-success-color: #3c763d;
+  --alert-success-bg: #dff0d8;
+  --alert-success-border: transparent;
+
+  --alert-info-color: #31708f;
+  --alert-info-bg: #d9edf7;
+  --alert-info-border: transparent;
+
+  --alert-warning-color: #8a6d3b;
+  --alert-warning-bg: #fcf8e3;
+  --alert-warning-border: transparent;
+
+  --alert-danger-color: #a94442;
+  --alert-danger-bg: #f2dede;
+  --alert-danger-border: transparent;
+
+  --alert-close-btn-font-size: 1.3125rem;
+  --alert-close-btn-font-weight: var(--font-weight-medium);
+  --alert-close-btn-line-height: 0.75;
+  --alert-close-btn-color: #000;
+  --alert-close-btn-opacity: 0.5;
+
+  /* Modals */
+  --modal-overlay-opacity: 0.5;
+
+  --modal-bg: #fff;
+  --modal-width: 18.75rem;
+  --modal-font-size: var(--font-size-default);
+  --modal-padding: 1rem;
+
+  --modal-border-color: rgba(#000, .2);
+  --modal-border-width: var(--default-border-width);
+  --modal-border-radius: var(--default-border-radius);
+
+  --modal-close-btn-font-size: 1.3125rem;
+  --modal-close-btn-font-weight: var(--font-weight-medium);
+  --modal-close-btn-line-height: 1.2rem;
+  --modal-close-btn-color: #000;
+  --modal-close-btn-opacity: 0.5;
+
+  /* Menu */
+  --menu-item-icon-size: var(--btn-icon-size);
+  --menu-item-padding-x: 1rem;
+  --menu-item-icon-gap: var(--btn-text-icon-gap);
+
+  --menu-item-color: rgba(0, 0, 0, 0.87);
+
+  --menu-item-bg-hover: #f8f9fa;
+  --menu-item-color-hover: #16181b;
+
+  /* Datagrid */
+  --datagrid-border-color: var(--gray-lighter);
+  --datagrid-cell-color: var(--gray-dark);
+  --datagrid-order-arrow-color: var(--gray);
+  --datagrid-font: 12px Verdana;
+  --datagrid-cell-height: 30;
+  --datagrid-cell-border-width: 1;
+}
