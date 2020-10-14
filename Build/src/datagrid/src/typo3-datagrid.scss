@@ -1,5 +1,4 @@
-@import 'src/theme/index.scss';
-
+@import 'theme/index.scss';
 :host canvas-datagrid {
   --cdg-active-cell-border-color: #{$datagrid-border-color};
   --cdg-active-cell-border-width: #{$datagrid-cell-border-width};

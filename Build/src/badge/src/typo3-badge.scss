@@ -1,5 +1,4 @@
-@import 'src/theme/index.scss';
-
+@import 'theme/index.scss';
 :host {
   padding: $badge-padding;
   font-weight: var(--typo3-badge-font-weight, $badge-font-weight);

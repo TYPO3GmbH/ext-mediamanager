@@ -1,6 +1,6 @@
 import { expect, fixture, html } from '@open-wc/testing';
-import '../src/typo3-datagrid';
-import { Typo3Datagrid } from '../src/Typo3Datagrid';
+import '../src/typo3-datagrid.js';
+import { Typo3Datagrid } from '../src/typo3-datagrid';
 
 describe('Typo3Datagrid', () => {
   let element: Typo3Datagrid;

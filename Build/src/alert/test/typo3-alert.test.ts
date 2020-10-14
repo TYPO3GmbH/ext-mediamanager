@@ -5,6 +5,7 @@ import {
   html,
   oneEvent,
 } from '@open-wc/testing';
+import '../src/typo3-alert.js';
 import { Typo3Alert } from '../src/typo3-alert';
 
 describe('Typo3Alert', () => {

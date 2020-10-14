@@ -5,6 +5,7 @@ import {
   html,
   oneEvent,
 } from '@open-wc/testing';
+import '../src/typo3-button.js';
 import { Typo3Button } from '../src/typo3-button';
 
 describe('Typo3Button.ts', () => {

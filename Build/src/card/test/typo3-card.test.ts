@@ -1,4 +1,5 @@
 import { expect, fixture, html } from '@open-wc/testing';
+import '../src/typo3-card.js';
 import { Typo3Card } from '../src/typo3-card';
 
 describe('Typo3Card', () => {

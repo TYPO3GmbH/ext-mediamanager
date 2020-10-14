@@ -12,6 +12,7 @@ import style from './typo3-datagrid.scss';
 import { RenderCellEvent } from './lib/event/RenderCellEvent';
 import { RenderOrderByArrowEvent } from './lib/event/RenderOrderByArrowEvent';
 import { CanvasDatagrid } from './lib/CanvasDatagrid';
+import 'canvas-datagrid';
 
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
