@@ -808,6 +808,31 @@
           "description": "Trigger for opening menu"
         }
       ]
+    },
+    {
+      "name": "typo3-selection-button",
+      "properties": [
+        {
+          "name": "count",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "suffix",
+          "type": "string",
+          "default": "\"Selected\""
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "default": "\"primary\""
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-selection-clear"
+        }
+      ]
     }
   ]
 }

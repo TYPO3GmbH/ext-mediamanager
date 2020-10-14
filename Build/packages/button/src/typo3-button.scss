@@ -20,6 +20,7 @@
   padding: $btn-padding;
   outline: none;
   justify-content: center;
+  align-items: center;
 
   border: var(--typo3-btn-border-width, $btn-border-width) solid transparent;
   font-size: var(--typo3-btn-font-size, $btn-font-size);

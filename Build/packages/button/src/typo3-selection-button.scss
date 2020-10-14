@@ -1,0 +1,13 @@
+@import 'packages/button/src/typo3-button.scss';
+
+div.button {
+  pointer-events: none;
+}
+
+:host typo3-button,
+:host
+{
+  --typo3-btn-border-radius: none;
+  --typo3-btn-icon-size: 0.75rem;
+}
+
