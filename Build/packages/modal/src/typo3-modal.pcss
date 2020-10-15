@@ -1,0 +1,99 @@
+.wrapper {
+  opacity: 0;
+  transition: visibility 0s, opacity 0.25s ease-in;
+}
+
+.wrapper:not(.open) {
+  visibility: hidden;
+}
+
+.wrapper.open {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay {
+  background: #000000;
+  opacity: var(--typo3-modal-overlay-opacity, var(--typo3-global-modal-overlay-opacity));
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.modal {
+  width: var(--typo3-modal-width, var(--typo3-global-modal-width));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  background-color: var(--typo3-modal-background-color, var(--typo3-global-modal-bg));
+  background-clip: padding-box;
+  border: var(--typo3-modal-border-width, var(--typo3-global-modal-border-width)) solid var(--typo3-modal-border-color, var(--typo3-global-modal-border-color));
+  border-radius: var(--typo3-modal-border-radius, var(--typo3-global-modal-border-radius));
+  outline: 0;
+  font-size: var(--typo3-modal-font-size, var(--typo3-global-modal-font-size)); ;
+}
+
+#btn-close {
+  all: unset;
+  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  margin: -1rem -1rem -1rem auto;
+  float: right;
+  border-radius: 0;
+  font-size: var(--typo3-modal-close-btn-font-size, var(--typo3-global-modal-close-btn-font-size));
+  font-weight: var(--typo3-modal-close-btn-font-weight, var(--typo3-global-modal-close-btn-font-weight));
+  line-height: var(--typo3-modal-close-btn-line-height, var(--typo3-global-modal-close-btn-line-height));
+  color: var(--typo3-modal-close-btn-color, var(--typo3-global-modal-close-btn-color));
+  opacity: var(--typo3-modal-close-btn-color, .5);
+  text-shadow: 0 1px 0 #fff;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: none;
+    opacity: var(--typo3-modal-close-btn-color-hover, .75);
+  }
+}
+
+.header{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  background-color:var(--typo3-global-gray-lighter);
+  border-bottom: var(--typo3-global-modal-border-width) solid var(--typo3-global-gray-light);
+}
+
+.header h5 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.5;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.content {
+  position: relative;
+  flex: 1 1 auto;
+  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+}

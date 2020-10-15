@@ -1,14 +1,9 @@
-import {
-  css,
-  customElement,
-  LitElement,
-  query,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, LitElement, query, TemplateResult } from 'lit-element';
 
-import style from './typo3-dropdown.scss';
+import styles from './typo3-dropdown.pcss';
+import themeStyles from '../../../theme/index.pcss';
 import { html } from 'lit-html';
-import { Typo3Menu } from '../../menu/src/Typo3Menu';
+import { Typo3Menu } from '../../menu/src/typo3-menu';
 
 /**
  * @slot - Default menu content
@@ -16,11 +11,11 @@ import { Typo3Menu } from '../../menu/src/Typo3Menu';
  */
 @customElement('typo3-dropdown')
 export class Typo3Dropdown extends LitElement {
-  public static styles = style({ css });
-
   @query('slot[name="button"]') buttonSlotElement!: HTMLSlotElement | null;
 
   @query('typo3-menu') typo3Menu!: Typo3Menu;
+
+  public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
     return html`

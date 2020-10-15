@@ -1,0 +1,59 @@
+:host {
+  display: block
+}
+
+#alert {
+  display: flex;
+  padding: var(--typo3-alert-padding-y, .75rem) var(--typo3-alert-padding-y, 1.25rem);
+  margin-bottom: var(--typo3-alert-margin-bottom, 1rem);
+  border: var(--typo3-global-alert-border-width) solid transparent;
+  border-radius: var(--typo3-global-alert-border-radius);
+  align-items: center;
+}
+
+#message {
+  flex: 1;
+}
+
+#btn-close {
+  font-size: var(--typo3-alert-close-btn-font-size, var(--typo3-global-alert-close-btn-font-size));
+  font-weight: var(--typo3-alert-close-btn-font-weight, var(--typo3-global-alert-close-btn-font-weight));
+  line-height: var(--typo3-alert-close-btn-line-height, var(--typo3-global-alert-close-btn-line-height));
+  color: var(--typo3-alert-close-btn-color, var(--typo3-global-alert-close-btn-color));
+  opacity: var(--typo3-alert-close-btn-color, .5);
+  text-shadow: 0 1px 0 #fff;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: none;
+    opacity: var(--typo3-alert-close-btn-color-hover, .75);
+  }
+}
+
+:host([color='success']) #alert {
+  color: var(--typo3-alert-success-color, var(--typo3-global-alert-success-color));
+  background-color: var(--typo3-alert-success-background-color, var(--typo3-global-alert-success-bg));
+  border-color: var(--typo3-alert-success-border-color, var(--typo3-global-alert-success-border));
+}
+
+:host([color='info']) #alert {
+  color: var(--typo3-alert-info-color, var(--typo3-global-alert-info-color));
+  background-color: var(--typo3-alert-info-background-color, var(--typo3-global-alert-info-bg));
+  border-color: var(--typo3-alert-info-border-color, var(--typo3-global-alert-info-border));
+}
+
+:host([color='warning']) #alert {
+  color: var(--typo3-alert-warning-color, var(--typo3-global-alert-warning-color));
+  background-color: var(--typo3-alert-warning-background-color, var(--typo3-global-alert-warning-bg));
+  border-color: var(--typo3-alert-warning-border-color, var(--typo3-global-alert-warning-border));
+}
+
+:host([color='danger']) #alert {
+  color: var(--typo3-alert-danger-color, var(--typo3-global-alert-danger-color));
+  background-color: var(--typo3-alert-danger-background-color, var(--typo3-global-alert-danger-bg));
+  border-color: var(--typo3-alert-danger-border-color, var(--typo3-global-alert-danger-border));
+}
+
+
