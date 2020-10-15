@@ -902,6 +902,131 @@
           "name": "--typo3-breadcrumb-separator-gap"
         }
       ]
+    },
+    {
+      "name": "typo3-snackbar",
+      "properties": [
+        {
+          "name": "visible",
+          "attribute": "visible",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "message",
+          "attribute": "message",
+          "type": "string"
+        },
+        {
+          "name": "buttonText",
+          "attribute": "buttonText",
+          "type": "string"
+        },
+        {
+          "name": "variant",
+          "attribute": "variant",
+          "type": "string",
+          "default": "\"default\""
+        },
+        {
+          "name": "placement",
+          "attribute": "placement",
+          "type": "string",
+          "default": "\"left\""
+        },
+        {
+          "name": "dismissible",
+          "attribute": "dismissible",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-snackbar-bg-color"
+        },
+        {
+          "name": "--typo3-snackbar-border"
+        },
+        {
+          "name": "--typo3-snackbar-display"
+        },
+        {
+          "name": "--typo3-snackbar-width"
+        },
+        {
+          "name": "--typo3-snackbar-max-width"
+        },
+        {
+          "name": "--typo3-snackbar-position"
+        },
+        {
+          "name": "--typo3-snackbar-bottom"
+        },
+        {
+          "name": "--typo3-snackbar-left"
+        },
+        {
+          "name": "--typo3-snackbar-padding"
+        },
+        {
+          "name": "--typo3-snackbar-border-radius"
+        },
+        {
+          "name": "--typo3-snackbar-z-index"
+        },
+        {
+          "name": "--typo3-snackbar-transform"
+        },
+        {
+          "name": "--typo3-snackbar-opacity"
+        },
+        {
+          "name": "--typo3-snackbar-transition"
+        },
+        {
+          "name": "--typo3-snackbar-right"
+        },
+        {
+          "name": "--typo3-snackbar-visible-transform"
+        },
+        {
+          "name": "--typo3-snackbar-visible-opacity"
+        },
+        {
+          "name": "--typo3-snackbar-message-grow"
+        },
+        {
+          "name": "--typo3-snackbar-message-margin"
+        },
+        {
+          "name": "--typo3-snackbar-message-padding"
+        },
+        {
+          "name": "--typo3-snackbar-success-border"
+        },
+        {
+          "name": "--typo3-snackbar-success-message-color"
+        },
+        {
+          "name": "--typo3-snackbar-warning-border"
+        },
+        {
+          "name": "--typo3-snackbar-warning-message-color"
+        },
+        {
+          "name": "--typo3-snackbar-error-border"
+        },
+        {
+          "name": "--typo3-snackbar-error-message-color"
+        },
+        {
+          "name": "--typo3-snackbar-info-border"
+        },
+        {
+          "name": "--typo3-snackbar-info-message-color"
+        }
+      ]
     }
   ]
 }

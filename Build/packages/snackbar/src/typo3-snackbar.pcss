@@ -1,0 +1,65 @@
+:host {
+  background-color: var(--typo3-snackbar-bg-color, var(--typo3-global-modal-bg));
+  border: var(--typo3-snackbar-border, 1px solid var(--typo3-global-modal-border-color));
+  display: var(--typo3-snackbar-display, flex);
+  width: var(--typo3-snackbar-width, calc(100% - 2rem));
+  max-width: var(--typo3-snackbar-max-width, 640px);
+  position: var(--typo3-snackbar-position, fixed);
+  bottom: var(--typo3-snackbar-bottom, 1rem);
+  left: var(--typo3-snackbar-left, 1rem);
+  padding: var(--typo3-snackbar-padding, 1rem);
+  border-radius: var(--typo3-snackbar-border-radius, .25rem);
+
+  z-index: var(--typo3-snackbar-z-index, 100);
+  transform: var(--typo3-snackbar-transform, translateY(calc(100% + 1rem)));
+  opacity: var(--typo3-snackbar-opacity, 0);
+  transition: var(--typo3-snackbar-transition, all .25s ease-out);
+}
+
+:host([placement="right"]) {
+  left: auto;
+  right: var(--typo3-snackbar-right, 1rem);
+}
+
+:host([visible]) {
+  transform: var(--typo3-snackbar-visible-transform, translateY(0));
+  opacity: var(--typo3-snackbar-visible-opacity, 1);
+}
+
+.snackbar__message {
+  flex-grow: var(--typo3-snackbar-message-grow, 1);
+  margin: var(--typo3-snackbar-message-margin, 0);
+  padding: var(--typo3-snackbar-message-padding, 0 1rem 0 0);
+}
+
+:host([variant="success"]) {
+  border: var(--typo3-snackbar-success-border, 1px solid var(--typo3-global-brand-success));
+}
+
+:host([variant="success"]) .snackbar__message {
+  color: var(--typo3-snackbar-success-message-color, var(--typo3-global-brand-success));
+}
+
+:host([variant="warning"]) {
+  border: var(--typo3-snackbar-warning-border, 1px solid var(--typo3-global-brand-warning));
+}
+
+:host([variant="warning"])  .snackbar__message {
+  color: var(--typo3-snackbar-warning-message-color, var(--typo3-global-brand-warning));
+}
+
+:host([variant="error"]) {
+  border: var(--typo3-snackbar-error-border, 1px solid var(--typo3-global-brand-danger));
+}
+
+:host([variant="error"]) .snackbar__message {
+  color: var(--typo3-snackbar-error-message-color, var(--typo3-global-brand-danger));
+}
+
+:host([variant="info"]) {
+  border: var(--typo3-snackbar-info-border, 1px solid var(--typo3-global-brand-info));
+}
+
+:host([variant="info"]) .snackbar__message {
+  color: var(--typo3-snackbar-info-message-color, var(--typo3-global-brand-info));
+}
