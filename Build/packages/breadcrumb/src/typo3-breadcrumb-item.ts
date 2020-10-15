@@ -21,18 +21,28 @@ export class Typo3BreadcrumbItem extends LitElement {
 
   @property({ type: String, reflect: true }) link = null;
 
+  @property({ type: Boolean, reflect: true }) shortened = false;
+
   public static styles = [themeStyles, styles];
 
+  public originalWidth = 0;
+
+  firstUpdated() {
+    this.originalWidth = this.getBoundingClientRect().width;
+  }
+
   render(): TemplateResult {
+    const displayText = !this.shortened ? this.title : '...';
+
     if (null === this.link) {
-      return html` <span class="breadcrumb-item">${this.title}</span>`;
+      return html` <span class="breadcrumb-item">${displayText}</span>`;
     }
 
     return html` <a
       class="breadcrumb-item"
       href="${this.link}"
       title="${this.title}"
-      >${this.title}</a
+      >${displayText}</a
     >`;
   }
 }

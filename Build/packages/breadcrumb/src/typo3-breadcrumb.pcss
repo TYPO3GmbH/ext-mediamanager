@@ -1,10 +1,11 @@
 :host {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding: var(--typo3-breadcrumb-padding-y, .75rem) var(--typo3-breadcrumb-padding-y, 1rem);
   margin-bottom: var(--typo3-breadcrumb-margin-bottom, 1rem);
   background-color: var(--typo3-breadcrumb-background-color, var(--typo3-global-gray-lighter));
   border-radius: var(--typo3-breadcrumb-border-radius, var(--typo3-global-default-border-radius));
+  white-space: nowrap;
 }
 
 typo3-breadcrumb-item+ typo3-breadcrumb-item::before {

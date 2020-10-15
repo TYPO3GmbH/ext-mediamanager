@@ -853,6 +853,12 @@
           "name": "link",
           "attribute": "link",
           "type": "null"
+        },
+        {
+          "name": "shortened",
+          "attribute": "shortened",
+          "type": "boolean",
+          "default": "false"
         }
       ],
       "cssProperties": [
@@ -869,6 +875,12 @@
     {
       "name": "typo3-breadcrumb",
       "properties": [],
+      "slots": [
+        {
+          "name": "item",
+          "description": "Breadcrumb items"
+        }
+      ],
       "cssProperties": [
         {
           "name": "--typo3-breadcrumb-background-color",

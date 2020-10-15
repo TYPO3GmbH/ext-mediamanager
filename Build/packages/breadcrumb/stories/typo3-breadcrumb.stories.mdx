@@ -14,12 +14,14 @@ import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb-item';
 <Preview>
     <Story name="Basic breadcrumb" height="220px">
     {html`
-        <typo3-breadcrumb>
-            <typo3-breadcrumb-item title='root'></typo3-breadcrumb-item>
-            <typo3-breadcrumb-item title='Resources'></typo3-breadcrumb-item>
-            <typo3-breadcrumb-item title='Resources' link="http://www.example.test"></typo3-breadcrumb-item>
-            <typo3-breadcrumb-item active title='Public'></typo3-breadcrumb-item>
-        </typo3-breadcrumb>
+    <typo3-breadcrumb>
+        <typo3-breadcrumb-item slot="item" title="root"></typo3-breadcrumb-item>
+        <typo3-breadcrumb-item slot="item" title="Resource"></typo3-breadcrumb-item>
+        <typo3-breadcrumb-item slot="item" title="Very long resource name" link="http://www.example.test"></typo3-breadcrumb-item>
+        <typo3-breadcrumb-item slot="item" title="Second very long resource name" link="http://www.example.test"></typo3-breadcrumb-item>
+        <typo3-breadcrumb-item slot="item" title="Short resource name" link="http://www.example.test"></typo3-breadcrumb-item>
+        <typo3-breadcrumb-item slot="item" active title="Public"></typo3-breadcrumb-item>
+    </typo3-breadcrumb>
     `}
     </Story>
 </Preview>
