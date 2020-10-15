@@ -1,0 +1,29 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb';
+import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb-item';
+
+<Meta
+  title="Components/typo3-breadcrumb"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-breadcrumb', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3breadcrumb.ts
+
+<Preview>
+    <Story name="Basic breadcrumb" height="220px">
+    {html`
+        <typo3-breadcrumb>
+            <typo3-breadcrumb-item title='root'></typo3-breadcrumb-item>
+            <typo3-breadcrumb-item title='Resources'></typo3-breadcrumb-item>
+            <typo3-breadcrumb-item title='Resources' link="http://www.example.test"></typo3-breadcrumb-item>
+            <typo3-breadcrumb-item active title='Public'></typo3-breadcrumb-item>
+        </typo3-breadcrumb>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-breadcrumb" />

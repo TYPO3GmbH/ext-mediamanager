@@ -833,6 +833,63 @@
           "name": "typo3-selection-clear"
         }
       ]
+    },
+    {
+      "name": "typo3-breadcrumb-item",
+      "properties": [
+        {
+          "name": "active",
+          "attribute": "active",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "title",
+          "attribute": "title",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "link",
+          "attribute": "link",
+          "type": "null"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-breadcrumb-item-color-active",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-breadcrumb-item-color",
+          "type": "Color"
+        }
+      ]
+    },
+    {
+      "name": "typo3-breadcrumb",
+      "properties": [],
+      "cssProperties": [
+        {
+          "name": "--typo3-breadcrumb-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-breadcrumb-border-radius"
+        },
+        {
+          "name": "--typo3-breadcrumb-margin-bottom"
+        },
+        {
+          "name": "--typo3-breadcrumb-padding-y"
+        },
+        {
+          "name": "--typo3-breadcrumb-separator-content"
+        },
+        {
+          "name": "--typo3-breadcrumb-separator-gap"
+        }
+      ]
     }
   ]
 }
