@@ -6,7 +6,8 @@ import {
   property,
   TemplateResult,
 } from 'lit-element';
-import style from './typo3-alert.pcss';
+import styles from './typo3-alert.pcss';
+import themeStyles from '../../../theme/index.pcss';
 
 export type Color = 'default' | 'success' | 'info' | 'warning' | 'danger';
 
@@ -56,7 +57,7 @@ export class Typo3Alert extends LitElement {
 
   @internalProperty() isHidden = false;
 
-  public static styles = style;
+  public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
     return html`
