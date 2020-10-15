@@ -25,9 +25,9 @@
   position: relative;
   z-index: 1;
   overflow: visible;
-  min-width: var(--typo3-splitpane-splitter-size, var(--splitpane-splitter-size));
-  min-height: var(--typo3-splitpane-splitter-size, var(--splitpane-splitter-size));
-  background-color: var(--typo3-splitpane-splitter-background, var(--splitpane-splitter-bg));
+  min-width: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
+  min-height: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
+  background-color: var(--typo3-splitpane-splitter-background, var(--typo3-global-splitpane-splitter-bg));
 
 }
 
@@ -42,9 +42,9 @@
 [part='handle']::after {
   content: '';
   display: block;
-  width: var(--typo3-splitpane-handle-width, var(--splitpane-handle-width));
-  height: var(--typo3-splitpane-handle-height, var(--splitpane-handle-height));
-  background-color: var(--typo3-splitpane-handle-background, var(--splitpane-handle-bg));
+  width: var(--typo3-splitpane-handle-width, var(--typo3-global-splitpane-handle-width));
+  height: var(--typo3-splitpane-handle-height, var(--typo3-global-splitpane-handle-height));
+  background-color: var(--typo3-splitpane-handle-background, var(--typo3-global-splitpane-handle-bg));
   position: absolute;
   top: 50%;
   left: 50%;
