@@ -20,6 +20,7 @@ describe('Typo3SelectionButton.ts', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3SelectionButton);
   });
 
   it('renders the current count', () => {

@@ -1,6 +1,6 @@
 import { elementUpdated, expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-tooltip.js';
-import { Typo3Tooltip } from '../src/tooltip/packages/Typo3Tooltip';
+import { Typo3Tooltip } from '../src/typo3-tooltip';
 
 describe('Typo3Tooltip', () => {
   let element: Typo3Tooltip;
@@ -10,6 +10,7 @@ describe('Typo3Tooltip', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Tooltip);
   });
 
   it('hides tooltip content by default', () => {

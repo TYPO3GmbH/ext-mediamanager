@@ -7,10 +7,9 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { Typo3ContextMenuOption } from './lib/Typo3ContextMenuOption';
-import './typo3-menu';
+import { Typo3Menu } from './typo3-menu';
 import './typo3-menu-item';
 import { html } from 'lit-html';
-import { Typo3Menu } from './Typo3Menu';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 /**

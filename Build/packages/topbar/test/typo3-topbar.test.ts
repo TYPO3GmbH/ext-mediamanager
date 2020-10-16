@@ -10,5 +10,6 @@ describe('Typo3Topbar', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Topbar);
   });
 });

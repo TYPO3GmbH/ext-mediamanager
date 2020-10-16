@@ -8,6 +8,11 @@ describe('Typo3Badge', () => {
     element = await fixture(html` <typo3-badge title="500"></typo3-badge> `);
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Badge);
+  });
+
   it('displays the `title` attribute', () => {
     const root = element.shadowRoot ? element.shadowRoot : element;
 

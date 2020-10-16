@@ -10,6 +10,11 @@ describe('Typo3Card', () => {
     `);
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Card);
+  });
+
   it('displays the `title` attribute as `.title`', () => {
     const root = element.shadowRoot ? element.shadowRoot : element;
     const titleEl = root.querySelector('.title');

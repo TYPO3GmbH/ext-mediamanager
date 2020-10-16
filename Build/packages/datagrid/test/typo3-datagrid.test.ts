@@ -16,6 +16,7 @@ describe('Typo3Datagrid', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Datagrid);
   });
 
   it('will render a canvas datagrid', async () => {

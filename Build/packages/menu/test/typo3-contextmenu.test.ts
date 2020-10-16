@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from '@open-wc/testing';
 import '../src/typo3-context-menu.js';
+import '../src/typo3-menu';
 import { Typo3ContextMenu } from '../src/typo3-context-menu';
 
 describe('Typo3ContextMenu', () => {
@@ -20,6 +21,11 @@ describe('Typo3ContextMenu', () => {
         }'
       ></typo3-context-menu>`
     );
+  });
+
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3ContextMenu);
   });
 
   it('has a closed typo3-menu by default', () => {

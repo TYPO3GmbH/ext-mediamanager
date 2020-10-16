@@ -16,6 +16,11 @@ describe('Typo3Button.ts', () => {
     `);
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Button);
+  });
+
   it('renders a button', () => {
     const button = element.shadowRoot!.querySelector('button')!;
     expect(button).to.exist;

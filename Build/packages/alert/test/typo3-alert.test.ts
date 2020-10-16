@@ -14,6 +14,11 @@ describe('Typo3Alert', () => {
     element = await fixture(html` <typo3-alert>Alert</typo3-alert> `);
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Alert);
+  });
+
   it('displays the slot content', () => {
     expect(element.textContent).to.contain('Alert');
   });

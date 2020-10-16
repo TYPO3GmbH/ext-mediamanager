@@ -9,6 +9,7 @@ describe('Typo3breadcrumb', () => {
   });
 
   it('can create component', () => {
-    expect(element).to.not.be.not.null;
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3breadcrumb);
   });
 });

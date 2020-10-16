@@ -17,6 +17,11 @@ describe('Typo3Dropzone', () => {
     );
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Dropzone);
+  });
+
   it('loads', async () => {
     expect(element).to.not.equal(undefined);
     if (!element.shadowRoot) throw new Error('No shadowRoot');

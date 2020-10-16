@@ -11,6 +11,7 @@ describe('Typo3Snackbar', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Snackbar);
   });
 
   it('is not visible by default', () => {

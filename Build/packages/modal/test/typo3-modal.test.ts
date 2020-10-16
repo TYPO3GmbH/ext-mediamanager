@@ -16,6 +16,11 @@ describe('Typo3Modal', () => {
     );
   });
 
+  it('can create component', () => {
+    expect(element).to.not.be.null;
+    expect(element).to.be.instanceOf(Typo3Modal);
+  });
+
   it('displays the modal headline', async () => {
     element.show();
     await elementUpdated(element);

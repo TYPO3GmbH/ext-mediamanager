@@ -1,4 +1,5 @@
 import { expect, fixture, html } from '@open-wc/testing';
+import '../src/typo3-dropdown.js';
 import { Typo3Dropdown } from '../src/typo3-dropdown';
 
 describe('Typo3Dropdown', () => {
@@ -9,5 +10,6 @@ describe('Typo3Dropdown', () => {
 
   it('can create component', () => {
     expect(element).to.not.be.not.null;
+    expect(element).to.be.instanceOf(Typo3Dropdown);
   });
 });
