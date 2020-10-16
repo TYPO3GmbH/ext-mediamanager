@@ -1,14 +1,5 @@
-import { ListItemBase } from '@material/mwc-list/mwc-list-item-base';
-
-import styles from './typo3-menu-item.pcss';
-import themeStyles from '../../../theme/index.pcss';
-import { customElement, html, TemplateResult } from 'lit-element';
+import { customElement } from 'lit-element';
+import { Typo3ListItemBase } from '../../list/src/typo3-list-item-base';
 
 @customElement('typo3-menu-item')
-export class Typo3MenuItem extends ListItemBase {
-  public static styles = [themeStyles, styles];
-
-  protected renderGraphic(): TemplateResult {
-    return html` <slot name="icon"></slot>`;
-  }
-}
+export class Typo3MenuItem extends Typo3ListItemBase {}

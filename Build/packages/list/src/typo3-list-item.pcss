@@ -1,0 +1,38 @@
+:host {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding-left: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
+  padding-right: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
+  outline: none;
+  color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
+  font-size: var(--typo3-list-font-size, 0.75rem);
+  letter-spacing: var(--typo3-list-item-letter-spacing, 0.009375em);
+  line-height: var(--typo3-list-item-line-height, 2.5rem);
+}
+
+:host(:not([disabled]):focus),
+:host(:not([disabled]):hover) {
+  color: var(--typo3-list-item-color-hover, var(--typo3-global-list-item-color-hover));
+  text-decoration: none;
+  background-color: var(--typo3-list-item-background-color-hover, var(--typo3-global-list-item-bg-hover));
+}
+
+:host([disabled]) {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.38;
+}
+
+slot[name='icon']::slotted(*) {
+  fill: currentColor;
+  width: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
+  height: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
+  line-height: 1;
+  margin-right: var(--typo3-list-item-icon-gap, var(--typo3-global-list-item-icon-size));
+}
