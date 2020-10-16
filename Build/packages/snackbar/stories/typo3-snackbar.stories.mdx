@@ -15,13 +15,74 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     <Story name="Snackbar" height="220px">
     {html`
       <typo3-snackbar placement="right"></typo3-snackbar>
-      <typo3-button color="primary" onclick='window.dispatchEvent(new CustomEvent("typo3-add-snackbar", {detail: {dismissible: true, message: "test", type: "auto"}}));'>
+      <typo3-button color="primary" onclick='window.dispatchEvent(new CustomEvent("typo3-add-snackbar", {detail: {dismissible: true, message: "test"}}));'>
         Open Snackbar
+      </typo3-button>
+      <typo3-button color="secondary" onclick='window.dispatchEvent(new CustomEvent("typo3-add-snackbar", {detail: {dismissible: false, message: "test", }}));'>
+        Open Snackbar without Button
+      </typo3-button>
+      <typo3-button color="info" onclick='window.dispatchEvent(new CustomEvent("typo3-add-snackbar", {detail: {dismissible: true, message: "test", duration: null }}));'>
+        Open Snackbar without auto hide
       </typo3-button>
     `}
     </Story>
 </Preview>
 
 # API
+
+# typo3-snackbar
+
+The typo3 snackbar element is a way to provide brief messages / acknowledgements to the user.
+
+It may or may not require an action from the user.
+
+We can customize the `typo3-snackbar` message, duration, dismissable and button properties, and use it with one of the available variants ('success', 'warning', 'error', 'info').
+
+
+## `typo3-add-snackbar` event
+The typo3-snackbar element is triggered via the `typo3-add-snackbar` custom event (which can be dispatch by any other elements).
+The `typo3-add-snackbar` event needs:
+
+| Property      | Type    | Description                                            | Accepted Values                                  | Default   |
+|---------------|---------|--------------------------------------------------------|--------------------------------------------------|-----------|
+| `message`     | String  | Text that will be displayed in the snackbar            | -                                                | -         |
+| `dismissible` | Boolean | This defines if the snackbar is dismissible via button | -                                                | true      |
+| `buttonText`  | String  | Defines the text on the button                         | -                                                | 'OK'      |
+| `duration`    | Number  | Number of milliseconds to show the snackbar            | -                                                | 2500      |
+| `variant`     | String  | Name of variant to use                                 | 'default', 'success', 'warning', 'error', 'info' | 'default' |
+
+
+## Example of `typo3-add-snackbar` custom events
+
+#### 'AutoHide' Snackbar.
+'AutoHide' Snackbars are dismissed automatically after a certain amount of time. The suggested values are between 3 and 10 seconds.
+
+```javascript
+const addSnackbarEvent = new CustomEvent('typo3-add-snackbar', {
+   bubbles: true,
+   composed: true,
+   detail: {
+      message: `welcome to the bonus page!`,
+      duration: 4000,
+      variant: 'success'
+   }
+})
+```
+
+#### 'Action' Snackbar.
+'Action' Snackbars are not dismissed automatically. The user needs to take action to dismiss them.
+
+```javascript
+const addSnackbarEvent = new CustomEvent('typo3-add-snackbar', {
+   bubbles: true,
+   composed: true,
+   detail: {
+      duration: 0,
+      message: `Settings saved!`,
+      type: 'action',
+      buttonText: 'Dismiss'
+   }
+})
+```
 
 <Props of="typo3-snackbar" />
