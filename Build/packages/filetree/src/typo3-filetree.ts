@@ -4,6 +4,8 @@ import { Typo3SvgTree } from './typo3-svg-tree';
 import { Selection } from 'd3-selection';
 import * as d3 from 'd3';
 import { Dispatch, HierarchyPointNode } from 'd3';
+import themeStyles from '../../../theme/index.pcss';
+import styles from './typo3-filetree.pcss';
 
 interface Node {
   allowDelete: boolean;
@@ -11,7 +13,7 @@ interface Node {
   depth: number;
   hasChildren: boolean;
   icon: string;
-  identifier: number;
+  identifier: number | string;
   loaded: boolean;
   mountPoint: number;
   name: string;
@@ -51,7 +53,7 @@ interface Icon {
 
 @customElement('typo3-filetree')
 export class Typo3Filetree extends Typo3SvgTree {
-  @query('.svg-tree') wrapper!: HTMLElement;
+  @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
   @query('.svg-tree-loader') svgTreeLoader!: HTMLElement;
 
@@ -106,6 +108,8 @@ export class Typo3Filetree extends Typo3SvgTree {
   };
   private textPosition!: number;
   private scrollBottom!: number;
+
+  public static styles = [themeStyles, styles];
 
   firstUpdated(): void {
     this._setWrapperHeight();
@@ -167,11 +171,7 @@ export class Typo3Filetree extends Typo3SvgTree {
         <div>
           <div id="svg-toolbar" class="svg-toolbar"></div>
           <div id="typo3-pagetree-treeContainer">
-            <div
-              id="typo3-pagetree-tree"
-              class="svg-tree-wrapper"
-              style="height:1000px;"
-            >
+            <div id="typo3-pagetree-tree" class="svg-tree-wrapper">
               <div class="node-loader"></div>
             </div>
           </div>
@@ -199,6 +199,11 @@ export class Typo3Filetree extends Typo3SvgTree {
 
   _loadData() {
     this._nodesAddPlaceholder();
+
+    this._replaceData(this._dummyResponse());
+    this._nodesRemovePlaceholder();
+
+    return;
 
     d3.json(this.settings.dataUrl).then(
       (json: unknown) => {
@@ -274,7 +279,7 @@ export class Typo3Filetree extends Typo3SvgTree {
       node._isDragged = false;
       if (node.depth > 0) {
         let currentDepth = node.depth;
-        for (const i = index; i >= 0; i--) {
+        for (let i = index; i >= 0; i--) {
           const currentNode = nodes[i];
           if (currentNode.depth < currentDepth) {
             node.parents.push(i);
@@ -414,7 +419,7 @@ export class Typo3Filetree extends Typo3SvgTree {
       position,
       position + visibleRows
     );
-    const focusableElement = this.wrapper[0].querySelector('[tabindex="0"]');
+    const focusableElement = this.wrapper.querySelector('[tabindex="0"]');
     const checkedNodeInViewport = visibleNodes.find(function (node) {
       return node.checked;
     });
@@ -515,7 +520,8 @@ export class Typo3Filetree extends Typo3SvgTree {
       })
       .on('click', node => {
         this._selectNode(node);
-        this.switchFocusNode(node);
+        // todo implement
+        this._switchFocusNode(node);
       })
       .on('contextmenu', node => {
         this.dispatch.call('nodeRightClick', node, this);
@@ -1137,5 +1143,67 @@ export class Typo3Filetree extends Typo3SvgTree {
     this.nodes.forEach(this._hideChildren.bind(this));
     this._prepareDataForVisibleNodes();
     this._update();
+  }
+
+  _switchFocusNode(node: Node): void {
+    const nodeElement = this.querySelector(
+      'identifier-' + this._getNodeStateIdentifier(node)
+    ) as HTMLElement;
+    this._switchFocus(nodeElement);
+  }
+
+  /**
+   * Make the DOM element given as parameter focusable and focus it
+   */
+  _switchFocus(element: HTMLElement): void {
+    if (element !== null) {
+      const visibleElements = element.parentNode!.querySelectorAll(
+        '[tabindex]'
+      );
+      visibleElements.forEach(visibleElement =>
+        visibleElement.setAttribute('tabindex', '-1')
+      );
+      element.setAttribute('tabindex', '0');
+      element.focus();
+    }
+  }
+
+  _dummyResponse(): Node[] {
+    return [
+      {
+        stateIdentifier: '0_0',
+        identifier: 0,
+        depth: 0,
+        tip: 'id=0',
+        icon: 'apps-pagetree-root',
+        name: 'New TYPO3 site',
+        nameSourceField: 'title',
+        mountPoint: 0,
+        workspaceId: 0,
+        siblingsCount: 1,
+        siblingsPosition: 1,
+        allowDelete: true,
+        allowEdit: true,
+        hasChildren: true,
+        isMountPoint: true,
+        loaded: true,
+      },
+      {
+        stateIdentifier: '0_1',
+        identifier: 1,
+        depth: 1,
+        tip: 'id=1 - Hidden',
+        icon: 'apps-pagetree-page-default',
+        name: 'Dummy PAge',
+        nameSourceField: 'title',
+        mountPoint: 0,
+        workspaceId: 1,
+        siblingsCount: 1,
+        siblingsPosition: 1,
+        allowDelete: true,
+        allowEdit: true,
+        overlayIcon: 'overlay-hidden',
+      },
+    ];
   }
 }
