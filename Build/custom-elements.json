@@ -770,17 +770,6 @@
     },
     {
       "name": "typo3-context-menu",
-      "attributes": [
-        {
-          "name": "anchor",
-          "type": "HTMLElement | null"
-        },
-        {
-          "name": "options",
-          "type": "{ [key: string]: Typo3ContextMenuOptionDef; }",
-          "default": "{}"
-        }
-      ],
       "events": [
         {
           "name": "typo3-context-menu-open",

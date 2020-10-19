@@ -14,19 +14,59 @@ import '../../../out-tsc/packages/menu/src/typo3-context-menu';
     <Story name="Context Menu" height="220px">
     {html`
       <div style="position:relative">
-        <button id="contextTrigger" onmouseenter="contextMenu.anchor = window.contextTrigger;">
+        <button id="contextTrigger" oncontextmenu='window.dispatchEvent(
+            new CustomEvent("typo3-show-context-menu",
+                {detail: {
+                    options: {
+                        "delete": {"callbackAction": "createFile", "icon": "<img src=\\"https:\\/\\/raw.githubusercontent.com\\/TYPO3\\/TYPO3.CMS\\/master\\/typo3\\/sysext\\/core\\/Resources\\/Public\\/Icons\\/T3Icons\\/actions\\/actions-folder-add.svg\\" \\/>", "label": "New File", "type": "item"},
+                        "divider1": {"type": "divider"},
+                        "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
+                    },
+                    sourceEvent: event
+                }}
+            )); return false;'>
           Open the context menu with a right click
         </button>
-        <typo3-context-menu id="contextMenu" options='{
-            "delete": {"callbackAction": "createFile", "icon": "<img src=\\"https:\\/\\/raw.githubusercontent.com\\/TYPO3\\/TYPO3.CMS\\/master\\/typo3\\/sysext\\/core\\/Resources\\/Public\\/Icons\\/T3Icons\\/actions\\/actions-folder-add.svg\\" \\/>", "label": "New File", "type": "item"},
-            "divider1": {"type": "divider"},
-            "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
-        }'>
-        </typo3-context-menu>
+        <typo3-context-menu id="contextMenu"></typo3-context-menu>
       </div>
     `}
     </Story>
 </Preview>
 
 # API
+
+The `typo3-context-menu` is a global element used for displaying a context-menu
+
+## `typo3-show-context-menu` event
+The visibility of the menu gets triggered via the `typo3-show-context-menu` custom event (which can be dispatch by any other elements).
+The `typo3-show-context-menu` event needs :
+
+| Property      | Type       | Description                                                                          |
+|---------------|------------|--------------------------------------------------------------------------------------|
+| `options`     | Object     | An "associative" array with objects implementing `Typo3ContextMenuOption` interface  |
+| `sourceEvent` | MouseEvent | The source event (with offsetX and offsetY values)                                   |
+
+
+## Example of `typo3-show-context-menu` custom event
+
+```html
+<div>
+    <button oncontextmenu="openContextMenu()">Open Context Menu</button>
+</div>
+<typo3-context-menu></typo3-context-menu>
+```
+```javascript
+function openContextMenu(event) {
+    const contextEvent = new CustomEvent('typo3-show-context-menu', {
+        detail: {
+            source: event,
+            options: {
+                "delete": {"callbackAction": "createFile", "icon": "", "label": "New File", "type": "item"},
+                "divider1": {"type": "divider"}
+            }
+        }
+    });
+    window.dispatchEvent(contextEvent);
+}
+```
 <Props of="typo3-context-menu" />
