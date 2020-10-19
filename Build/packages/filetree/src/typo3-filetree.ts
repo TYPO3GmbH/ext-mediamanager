@@ -6,6 +6,8 @@ import { Typo3SvgTree } from './typo3-svg-tree';
 export class Typo3Filetree extends Typo3SvgTree {
   constructor() {
     super();
+
+    this.settings.showIcons = true;
     this.settings.defaultProperties = {
       hasChildren: false,
       nameSourceField: 'title',
