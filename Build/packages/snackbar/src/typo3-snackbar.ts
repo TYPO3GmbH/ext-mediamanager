@@ -130,7 +130,7 @@ export class Typo3Snackbar extends LitElement {
   }
 
   _afterHide(): void {
-    this.cue.shift();
+    this.cue = this.cue.slice(1);
     this.removeEventListener('transitionend', this._afterHide);
   }
 

@@ -77,8 +77,10 @@
   "license": "MIT",
   "dependencies": {
     "@material/mwc-menu": "^0.18.0",
+    "@types/d3": "^5.16.3",
     "@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
     "canvas-datagrid": "^0.24.4",
+    "d3": "^6.2.0",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0"
   }
