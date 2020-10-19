@@ -11,16 +11,31 @@ import { Typo3ContextMenu } from '../src/typo3-context-menu';
 
 describe('Typo3ContextMenu', () => {
   let element: Typo3ContextMenu;
+  const defaultOptions = {
+    delete: {
+      callbackAction: 'createFile',
+      icon: '',
+      label: 'New File',
+      type: 'item',
+    },
+    divider1: { type: 'divider' },
+    history: {
+      callbackAction: 'createDirectory',
+      icon: '',
+      label: 'New Folder',
+      type: 'item',
+    },
+  };
+
+  const showContextMenuEvent = new CustomEvent('typo3-show-context-menu', {
+    detail: {
+      options: defaultOptions,
+      sourceEvent: new MouseEvent('click', {}),
+    },
+  });
+
   beforeEach(async () => {
-    element = await fixture(
-      html` <typo3-context-menu
-        options='{
-            "delete": {"callbackAction": "createFile", "icon": "", "label": "New File", "type": "item"},
-            "divider1": {"type": "divider"},
-            "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
-        }'
-      ></typo3-context-menu>`
-    );
+    element = await fixture(html` <typo3-context-menu></typo3-context-menu>`);
   });
 
   it('can create component', () => {
@@ -32,24 +47,17 @@ describe('Typo3ContextMenu', () => {
     expect(element.typo3Menu.open).to.be.false;
   });
 
-  it('opens typo3-menu when `contextmenu` event on anchor element is fired', async () => {
-    const anchor = document.createElement('div') as HTMLDivElement;
-    element.anchor = anchor;
-    await elementUpdated(element);
-
-    anchor.dispatchEvent(new Event('contextmenu'));
+  it('opens typo3-menu when `typo3-show-context-menu` event is fired', async () => {
+    window.dispatchEvent(showContextMenuEvent);
 
     await elementUpdated(element);
     expect(element.typo3Menu.open).to.be.true;
   });
 
-  it('fires a `typo3-context-menu-open` when `contextmenu` event on anchor element is fired', async () => {
-    const anchor = document.createElement('div') as HTMLDivElement;
-    element.anchor = anchor;
-    await elementUpdated(element);
-
+  it('fires a `typo3-context-menu-open` when `contextmenu` event on `typo3-show-context-menu`', async () => {
     const listener = oneEvent(element, 'typo3-context-menu-open');
-    anchor.dispatchEvent(new Event('contextmenu'));
+    window.dispatchEvent(showContextMenuEvent);
+    await elementUpdated(element);
 
     const event = await listener;
     expect(event).to.exist;
@@ -64,6 +72,9 @@ describe('Typo3ContextMenu', () => {
   });
 
   it('renders options as `typo3-menu-item`s', async () => {
+    window.dispatchEvent(showContextMenuEvent);
+    await elementUpdated(element);
+
     const items = element.shadowRoot!.querySelectorAll('typo3-menu-item');
     expect(items.length).to.be.equal(2);
 
@@ -72,11 +83,17 @@ describe('Typo3ContextMenu', () => {
   });
 
   it('renders divder option as divider item', async () => {
+    window.dispatchEvent(showContextMenuEvent);
+    await elementUpdated(element);
+
     const items = element.shadowRoot!.querySelectorAll('[divider]');
     expect(items.length).to.be.equal(1);
   });
 
   it('fires `typo3-context-menu-item-click` on item click', async () => {
+    window.dispatchEvent(showContextMenuEvent);
+    await elementUpdated(element);
+
     const listener = oneEvent(element, 'typo3-context-menu-item-click');
 
     const firstItem = element.shadowRoot!.querySelector('typo3-menu-item')!;
