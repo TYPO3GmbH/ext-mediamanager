@@ -41,7 +41,9 @@ export class Typo3breadcrumb extends LitElement {
   }
 
   render(): TemplateResult {
-    return html` <slot name="item"></slot> `;
+    return html` <div class="breadcrumb">
+      <slot name="item"></slot>
+    </div>`;
   }
 
   private handleResize = (): void => {
