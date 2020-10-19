@@ -14,7 +14,44 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 <Preview>
     <Story name="Filetree" height="220px">
     {html`
-      <typo3-filetree></typo3-filetree>
+      <typo3-filetree nodes='
+        [
+          {
+            "stateIdentifier": "0_0",
+            "identifier": 0,
+            "depth": 0,
+            "tip": "id=0",
+            "icon": "apps-pagetree-root",
+            "name": "New TYPO3 site",
+            "nameSourceField": "title",
+            "mountPoint": 0,
+            "workspaceId": 0,
+            "siblingsCount": 1,
+            "siblingsPosition": 1,
+            "allowDelete": true,
+            "allowEdit": true,
+            "hasChildren": true,
+            "isMountPoint": true,
+            "loaded": true
+          },
+          {
+            "stateIdentifier": "0_1",
+            "identifier": 1,
+            "depth": 1,
+            "tip": "id=1 - Hidden",
+            "icon": "apps-pagetree-page-default",
+            "name": "Dummy PAge",
+            "nameSourceField": "title",
+            "mountPoint": 0,
+            "workspaceId": 1,
+            "siblingsCount": 1,
+            "siblingsPosition": 1,
+            "allowDelete": true,
+            "allowEdit": true,
+            "overlayIcon": "overlay-hidden"
+          }
+        ]
+      '></typo3-filetree>
     `}
     </Story>
 </Preview>
