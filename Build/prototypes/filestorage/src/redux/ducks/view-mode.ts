@@ -3,7 +3,7 @@ export enum ViewMode {
   TILES,
 }
 
-export const SET_VIEW_MODE = 'SET_VIEW_MODE';
+export const SET_VIEW_MODE = '[VIEW_MODE] SET VIEW MODE';
 
 export type ViewModeState = Readonly<{
   viewMode: ViewMode;

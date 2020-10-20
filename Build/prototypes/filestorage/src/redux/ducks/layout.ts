@@ -1,4 +1,4 @@
-export const SET_SIDEBAR_WIDTH = 'SET_SIDEBAR_WIDTH';
+export const SET_SIDEBAR_WIDTH = '[LAYOUT] SET SIDEBAR WIDTH';
 
 export type LayoutState = Readonly<{
   sidebarWidth: number;
