@@ -287,16 +287,20 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     return html` <typo3-grid>
-      <typo3-card title="Card 1" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 2" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 3" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 4" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 5" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 6" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 7" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 8" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 9" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card title="Card 10" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 1" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 2" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 3" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 4" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 5" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 6" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 7" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 8" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card selectable title="Card 9" subtitle="Dec 6, 2017"></typo3-card>
+      <typo3-card
+        selectable
+        title="Card 10"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
     </typo3-grid>`;
   }
 

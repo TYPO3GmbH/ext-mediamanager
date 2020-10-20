@@ -309,9 +309,35 @@
           "name": "subtitle",
           "type": "String",
           "attribute": "subtitle"
+        },
+        {
+          "name": "selectable",
+          "attribute": "selectable",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "selected",
+          "attribute": "selected",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string | undefined"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "typo3-card-selected",
+          "description": "Dispatched when card is selected"
+        },
+        {
+          "name": "typo3-card-unselected",
+          "description": "Dispatched when card is unselected"
+        }
+      ],
       "slots": [
         {
           "image": ""
