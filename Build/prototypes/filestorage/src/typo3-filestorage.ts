@@ -8,15 +8,16 @@ import {
 } from 'lit-element';
 import { store } from './redux/store';
 import { connect } from 'pwa-helpers';
-import { FileStorageState, ViewMode } from './redux/reducer';
 import { SelectedDetail } from '@material/mwc-list/mwc-list-foundation';
-import { setSidebarWidth, setViewMode } from './redux/actions';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filestorage.pcss';
+import { setSidebarWidth } from './redux/ducks/layout';
+import { setViewMode, ViewMode } from './redux/ducks/view-mode';
+import { RootState } from './redux/ducks';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
-  @internalProperty() private state!: FileStorageState;
+  @internalProperty() private state!: RootState;
 
   @query('.content_left') contentLeft!: HTMLElement;
   @query('.content_right') contentRight!: HTMLElement;
@@ -187,7 +188,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </typo3-dropdown-button>
                   <typo3-dropdown-item
                     value="${ViewMode.LIST}"
-                    ?selected="${this.state.viewMode === ViewMode.LIST}"
+                    ?selected="${this.state.viewMode.viewMode ===
+                    ViewMode.LIST}"
                   >
                     <svg
                       slot="icon"
@@ -205,7 +207,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <li divider></li>
                   <typo3-dropdown-item
                     value="${ViewMode.TILES}"
-                    ?selected="${this.state.viewMode === ViewMode.TILES}"
+                    ?selected="${this.state.viewMode.viewMode ===
+                    ViewMode.TILES}"
                   >
                     <svg
                       slot="icon"
@@ -242,7 +245,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get mainContent(): TemplateResult {
-    if (this.state.viewMode === ViewMode.LIST) {
+    if (this.state.viewMode.viewMode === ViewMode.LIST) {
       return html` <typo3-datagrid
         schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
         data='[
@@ -304,7 +307,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     </typo3-grid>`;
   }
 
-  stateChanged(state: FileStorageState): void {
+  stateChanged(state: RootState): void {
     this.state = state;
   }
 
