@@ -237,10 +237,10 @@ export class Typo3SvgTree extends LitElement {
   }
 
   _setWrapperHeight(): void {
-    const height = window.innerHeight;
-
-    this.wrapper.style.height =
-      height - this.svgToolbar.clientHeight - 5 + 'px';
+    // currently obsolete
+    // const height = window.innerHeight;
+    // this.wrapper.style.height =
+    //  height - this.svgToolbar.clientHeight - 5 + 'px';
   }
 
   /**
