@@ -14,6 +14,12 @@ import styles from './typo3-filestorage.pcss';
 import { setSidebarWidth } from './redux/ducks/layout';
 import { setViewMode, ViewMode } from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
+import {
+  addSelectionItem,
+  clearSelection,
+  itemIsSelected,
+  removeSelectionItem,
+} from './redux/ducks/selection';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -169,7 +175,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 </typo3-dropdown>
                 <typo3-dropdown
                   activatable
-                  @selected="${this._onSelectedViewMode}"
+                  @selected="${this._onSelectViewMode}"
                 >
                   <typo3-dropdown-button slot="button" color="default">
                     <svg
@@ -226,16 +232,24 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 </typo3-dropdown>
               </div>
             </typo3-topbar>
-            <typo3-breadcrumb>
-              <typo3-breadcrumb-item
-                slot="item"
-                title="root"
-              ></typo3-breadcrumb-item>
-              <typo3-breadcrumb-item
-                slot="item"
-                title="root"
-              ></typo3-breadcrumb-item>
-            </typo3-breadcrumb>
+            <typo3-topbar>
+              <typo3-breadcrumb slot="left">
+                <typo3-breadcrumb-item
+                  slot="item"
+                  title="root"
+                ></typo3-breadcrumb-item>
+                <typo3-breadcrumb-item
+                  slot="item"
+                  title="root"
+                ></typo3-breadcrumb-item>
+              </typo3-breadcrumb>
+              <div slot="right">
+                <typo3-selection-button
+                  count="${this.state.selection.currentItemIds.length}"
+                  @typo3-selection-clear="${this._onClearSelection}"
+                ></typo3-selection-button>
+              </div>
+            </typo3-topbar>
           </div>
           ${this.mainContent}
         </typo3-dropzone>
@@ -290,19 +304,95 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     return html` <typo3-grid>
-      <typo3-card selectable title="Card 1" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 2" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 3" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 4" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 5" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 6" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 7" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 8" subtitle="Dec 6, 2017"></typo3-card>
-      <typo3-card selectable title="Card 9" subtitle="Dec 6, 2017"></typo3-card>
       <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-1')}"
+        value="file-1"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 1"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-2')}"
+        value="file-2"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 2"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-3')}"
+        value="file-3"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 3"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-4')}"
+        value="file-4"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 4"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-5')}"
+        value="file-5"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 5"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-6')}"
+        value="file-6"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 6"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-7')}"
+        value="file-7"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 7"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-8')}"
+        value="file-8"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 8"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-9')}"
+        value="file-9"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
+        selectable
+        title="Card 9"
+        subtitle="Dec 6, 2017"
+      ></typo3-card>
+      <typo3-card
+        ?selected="${itemIsSelected(this.state.selection)('file-10')}"
+        value="file-10"
+        @typo3-card-selected="${this._onAddSelectionItem}"
+        @typo3-card-unselected="${this._onRemoveSelectionItem}"
         selectable
         title="Card 10"
-        subtitle="Dec 6, 2017"
+        subtitle="Dec 6"
       ></typo3-card>
     </typo3-grid>`;
   }
@@ -318,7 +408,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onSelectedViewMode(event: CustomEvent<SelectedDetail>): void {
+  _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
     store.dispatch(setViewMode(event.detail.index as ViewMode));
+  }
+
+  _onAddSelectionItem(event: CustomEvent): void {
+    store.dispatch(addSelectionItem(event.detail.value));
+  }
+
+  _onRemoveSelectionItem(event: CustomEvent): void {
+    store.dispatch(removeSelectionItem(event.detail.value));
+  }
+
+  _onClearSelection(): void {
+    store.dispatch(clearSelection());
   }
 }

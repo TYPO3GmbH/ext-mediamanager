@@ -54,7 +54,10 @@ export class Typo3Card extends LitElement {
       this.selected = !this.selected;
       this.dispatchEvent(
         new CustomEvent(
-          this.selected ? 'typo3-card-selected' : 'typo3-card-unselected'
+          this.selected ? 'typo3-card-selected' : 'typo3-card-unselected',
+          {
+            detail: this,
+          }
         )
       );
     }
