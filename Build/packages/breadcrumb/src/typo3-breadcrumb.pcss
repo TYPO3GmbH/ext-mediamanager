@@ -8,10 +8,11 @@
   white-space: nowrap;
 }
 
-typo3-breadcrumb-item+ typo3-breadcrumb-item::before {
+::slotted(:not(:last-child)):after {
   display: inline-block;
   padding-right: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-btn-text-icon-gap));
   padding-left: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-btn-text-icon-gap));
   color: var(--typo3-breadcrumb-item-color, var(--typo3-global-breadcrumb-item-color));
   content: var(--typo3-breadcrumb-separator-content, "/");
 }
+
