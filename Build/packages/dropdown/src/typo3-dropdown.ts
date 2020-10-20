@@ -20,7 +20,7 @@ export class Typo3Dropdown extends LitElement {
   render(): TemplateResult {
     return html`
       <slot name="button" @click="${this.showDropdownMenu}"></slot>
-      <typo3-menu corner="BOTTOM_LEFT">
+      <typo3-menu corner="BOTTOM_LEFT" fixed="true">
         <slot></slot>
       </typo3-menu>
     `;
