@@ -73,9 +73,8 @@ export class Typo3Datagrid extends LitElement {
       aw = canvasStyle.columnHeaderOrderByArrowWidth,
       ah = canvasStyle.columnHeaderOrderByArrowHeight;
 
-    x += this.canvas.offsetLeft + mr + headerTextWidth;
-    y += this.canvas.offsetTop - ah / 2;
-
+    x += +mr + headerTextWidth + 5;
+    y += e.cell.height / 2 - ah * 1.5;
     e.ctx.fillStyle = canvasStyle.columnHeaderOrderByArrowColor;
     e.ctx.strokeStyle = canvasStyle.columnHeaderOrderByArrowBorderColor;
     e.ctx.lineWidth = canvasStyle.columnHeaderOrderByArrowBorderWidth;
