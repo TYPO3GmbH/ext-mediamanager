@@ -1,0 +1,20 @@
+import {Meta, Preview, Story} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/prototypes/filestorage/src/typo3-filestorage';
+
+<Meta
+  title="Prototypes/typo3-filestorage"
+  parameters={{ component: 'typo3-filestorage'}}
+  />
+
+# Demo Typo3Alert.ts
+
+<Preview>
+    <Story name="Default View">
+    {html`
+        <div style="height: 98vh; display:flex; overflow: hidden;">
+            <typo3-filestorage style="flex: 1"></typo3-filestorage>
+        </div>
+    `}
+    </Story>
+</Preview>
