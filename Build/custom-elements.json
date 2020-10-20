@@ -879,9 +879,6 @@
           "name": "--typo3-breadcrumb-border-radius"
         },
         {
-          "name": "--typo3-breadcrumb-margin-bottom"
-        },
-        {
           "name": "--typo3-breadcrumb-padding-y"
         },
         {

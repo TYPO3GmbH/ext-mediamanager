@@ -135,7 +135,6 @@ export class Typo3SvgTree extends LitElement {
     return html`
       <div id="typo3-filetree" class="svg-tree">
         <div>
-          <div id="svg-toolbar" class="svg-toolbar"></div>
           <div id="typo3-pagetree-treeContainer">
             <div id="typo3-pagetree-tree" class="svg-tree-wrapper">
               <div class="node-loader"></div>
