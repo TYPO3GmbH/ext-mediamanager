@@ -25,6 +25,7 @@ import {
   ClearSelection,
   itemIsSelected,
   RemoveSelectionItem,
+  slectionIsEmpty,
 } from './redux/ducks/selection';
 
 @customElement('typo3-filestorage')
@@ -71,7 +72,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar style="padding-top: 2rem;">
               <div slot="left">
-                <typo3-button>
+                <typo3-button
+                  .disabled="${slectionIsEmpty(this.state.selection)}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +92,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Download
                 </typo3-button>
-                <typo3-button>
+                <typo3-button
+                  .disabled="${slectionIsEmpty(this.state.selection)}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +110,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Delete
                 </typo3-button>
-                <typo3-button>
+                <typo3-button
+                  .disabled="${slectionIsEmpty(this.state.selection)}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +126,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Move to
                 </typo3-button>
-                <typo3-button>
+                <typo3-button
+                  .disabled="${slectionIsEmpty(this.state.selection)}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"

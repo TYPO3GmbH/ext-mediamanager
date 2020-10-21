@@ -59,3 +59,8 @@ export const itemIsSelected = createSelector(
   (state: SelectionState) => state.currentItemIds,
   currentItemIds => memoize((itemId: string) => currentItemIds.includes(itemId))
 );
+
+export const slectionIsEmpty = createSelector(
+  (state: SelectionState) => state.currentItemIds,
+  currentItemIds => currentItemIds.length === 0
+);
