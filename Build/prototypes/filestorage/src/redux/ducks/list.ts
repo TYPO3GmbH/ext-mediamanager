@@ -6,20 +6,8 @@ export const ADD_SELECTION_ITEM = '[SELECTION] ADD ITEM';
 export const REMOVE_SELECTION_ITEM = '[SELECTION] REMOVE ITEM';
 export const CLEAR_SELECTION = '[SELECTION] CLEAR';
 
-interface Item {
-  id: string;
-  icon: string;
-  name: string;
-  modified: string;
-  size: string;
-  type: string;
-  variants: string;
-  references: string;
-  rw: string;
-}
-
 export type ListState = Readonly<{
-  items: Item[];
+  items: ListItem[];
   selectedItemIds: string[];
 }>;
 
