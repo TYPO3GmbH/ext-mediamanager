@@ -25,8 +25,8 @@ import {
   ClearSelection,
   itemIsSelected,
   RemoveSelectionItem,
-  slectionIsEmpty,
-} from './redux/ducks/selection';
+  selectionIsEmpty,
+} from './redux/ducks/list';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -72,9 +72,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar style="padding-top: 2rem;">
               <div slot="left">
-                <typo3-button
-                  .disabled="${slectionIsEmpty(this.state.selection)}"
-                >
+                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -92,9 +90,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Download
                 </typo3-button>
-                <typo3-button
-                  .disabled="${slectionIsEmpty(this.state.selection)}"
-                >
+                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -110,9 +106,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Delete
                 </typo3-button>
-                <typo3-button
-                  .disabled="${slectionIsEmpty(this.state.selection)}"
-                >
+                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -126,9 +120,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Move to
                 </typo3-button>
-                <typo3-button
-                  .disabled="${slectionIsEmpty(this.state.selection)}"
-                >
+                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +152,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               </typo3-breadcrumb>
               <div slot="right">
                 <typo3-selection-button
-                  count="${this.state.selection.currentItemIds.length}"
+                  count="${this.state.list.selectedItemIds.length}"
                   @typo3-selection-clear="${this._onClearSelection}"
                 ></typo3-selection-button>
               </div>
@@ -178,16 +170,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       return html` <typo3-datagrid
         style="width: 100%; overflow: scroll"
         schema="${JSON.stringify(this.listHeader)}"
-        data="${JSON.stringify(this.state.list.data)}"
+        data="${JSON.stringify(this.state.list.items)}"
       ></typo3-datagrid>`;
     }
     return html`<typo3-grid>
-      ${this.state.list.data.map(listData => {
+      ${this.state.list.items.map(listData => {
         // hack for displaying svg for elements
         let rawSVG = listData.icon;
         rawSVG = rawSVG.replace('<svg ', '<svg slot="image" ');
         return html` <typo3-card
-          ?selected="${itemIsSelected(this.state.selection)(listData.id)}"
+          ?selected="${itemIsSelected(this.state.list)(listData.id)}"
           value="${listData.id}"
           @typo3-card-selected="${this._onAddSelectionItem}"
           @typo3-card-unselected="${this._onRemoveSelectionItem}"

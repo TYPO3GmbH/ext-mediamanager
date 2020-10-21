@@ -1,3 +1,11 @@
+import { Action } from 'redux';
+import { createSelector } from 'reselect';
+import { memoize } from 'lodash-es';
+
+export const ADD_SELECTION_ITEM = '[SELECTION] ADD ITEM';
+export const REMOVE_SELECTION_ITEM = '[SELECTION] REMOVE ITEM';
+export const CLEAR_SELECTION = '[SELECTION] CLEAR';
+
 interface Item {
   id: string;
   icon: string;
@@ -11,11 +19,12 @@ interface Item {
 }
 
 export type ListState = Readonly<{
-  data: Item[];
+  items: Item[];
+  selectedItemIds: string[];
 }>;
 
 const initialState: ListState = {
-  data: [
+  items: [
     {
       id: 'folder-ck',
       icon:
@@ -77,14 +86,63 @@ const initialState: ListState = {
       rw: 'RW',
     },
   ],
+  selectedItemIds: [],
 };
 
 export const listReducer = (
   state = initialState,
-  action: { type: string }
+  action: Actions
 ): ListState => {
   switch (action.type) {
+    case ADD_SELECTION_ITEM:
+      return {
+        ...state,
+        selectedItemIds: [...state.selectedItemIds, action.id],
+      };
+    case REMOVE_SELECTION_ITEM:
+      return {
+        ...state,
+        selectedItemIds: state.selectedItemIds.filter(
+          item => item !== action.id
+        ),
+      };
+    case CLEAR_SELECTION:
+      return {
+        ...state,
+        selectedItemIds: [],
+      };
     default:
       return state;
   }
 };
+
+export class AddSelectionItem implements Action {
+  readonly type = ADD_SELECTION_ITEM;
+  constructor(public id: string) {}
+}
+
+export class RemoveSelectionItem implements Action {
+  readonly type = REMOVE_SELECTION_ITEM;
+  constructor(public id: string) {}
+}
+
+export class ClearSelection implements Action {
+  readonly type = CLEAR_SELECTION;
+}
+
+export const itemIsSelected = createSelector(
+  (state: ListState) => state.selectedItemIds,
+  currentItemIds => memoize((itemId: string) => currentItemIds.includes(itemId))
+);
+
+export const selectionIsEmpty = createSelector(
+  (state: ListState) => state.selectedItemIds,
+  currentItemIds => currentItemIds.length === 0
+);
+
+export const selectedItems = createSelector(
+  (state: ListState) => state,
+  state => state.items.filter(item => state.selectedItemIds.includes(item.id))
+);
+
+export type Actions = AddSelectionItem | RemoveSelectionItem | ClearSelection;
