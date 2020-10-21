@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 export const SET_SIDEBAR_WIDTH = '[LAYOUT] SET SIDEBAR WIDTH';
 
 export type LayoutState = Readonly<{
@@ -10,7 +12,7 @@ const initialState: LayoutState = {
 
 export const layoutReducer = (
   state = initialState,
-  action: { type: string; sidebarWidth: number }
+  action: Actions
 ): LayoutState => {
   switch (action.type) {
     case SET_SIDEBAR_WIDTH:
@@ -20,9 +22,9 @@ export const layoutReducer = (
   }
 };
 
-export const setSidebarWidth = (sidebarWidth: number) => {
-  return {
-    type: SET_SIDEBAR_WIDTH,
-    sidebarWidth,
-  };
-};
+export class SetSidebarWidth implements Action {
+  readonly type = SET_SIDEBAR_WIDTH;
+  constructor(public sidebarWidth: number) {}
+}
+
+export type Actions = SetSidebarWidth;

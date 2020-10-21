@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 export enum ViewMode {
   LIST,
   TILES,
@@ -30,16 +32,11 @@ const initialState: ViewModeState = {
 
 export const viewModeReducer = (
   state = initialState,
-  action: {
-    type: string;
-    viewMode: ViewMode;
-    field: string;
-    direction: OrderDirection;
-  }
+  action: Actions
 ): ViewModeState => {
   switch (action.type) {
     case SET_VIEW_MODE:
-      return { ...state, mode: action.viewMode };
+      return { ...state, mode: action.viewmode };
     case SET_SORT_ORDER_FIELD:
       return {
         ...state,
@@ -48,30 +45,29 @@ export const viewModeReducer = (
     case SET_SORT_ORDER_DIRECTION:
       return {
         ...state,
-        order: { ...state.order, direction: action.direction },
+        order: {
+          ...state.order,
+          direction: action.direction as OrderDirection,
+        },
       };
     default:
       return state;
   }
 };
 
-export const setViewMode = (viewMode: ViewMode) => {
-  return {
-    type: SET_VIEW_MODE,
-    viewMode,
-  };
-};
+export class SetViewMode implements Action {
+  readonly type = SET_VIEW_MODE;
+  constructor(public viewmode: ViewMode) {}
+}
 
-export const setSortOrderField = (field: string) => {
-  return {
-    type: SET_SORT_ORDER_FIELD,
-    field,
-  };
-};
+export class SetSortOrderField implements Action {
+  readonly type = SET_SORT_ORDER_FIELD;
+  constructor(public field: string) {}
+}
 
-export const setSortOrderDirection = (direction: string) => {
-  return {
-    type: SET_SORT_ORDER_DIRECTION,
-    direction,
-  };
-};
+export class SetSortOrderDirection implements Action {
+  readonly type = SET_SORT_ORDER_DIRECTION;
+  constructor(public direction: string) {}
+}
+
+export type Actions = SetViewMode | SetSortOrderField | SetSortOrderDirection;

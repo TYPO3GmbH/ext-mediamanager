@@ -1,5 +1,17 @@
+interface Item {
+  id: string;
+  icon: string;
+  name: string;
+  modified: string;
+  size: string;
+  type: string;
+  variants: string;
+  references: string;
+  rw: string;
+}
+
 export type ListState = Readonly<{
-  data: object[];
+  data: Item[];
 }>;
 
 const initialState: ListState = {

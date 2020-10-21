@@ -11,21 +11,21 @@ import { connect } from 'pwa-helpers';
 import { SelectedDetail } from '@material/mwc-list/mwc-list-foundation';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filestorage.pcss';
-import { setSidebarWidth } from './redux/ducks/layout';
 import {
-  setSortOrderDirection,
-  setSortOrderField,
-  setViewMode,
+  SetSortOrderDirection,
+  SetSortOrderField,
+  SetViewMode,
   ViewMode,
 } from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
-import {
-  addSelectionItem,
-  clearSelection,
-  itemIsSelected,
-  removeSelectionItem,
-} from './redux/ducks/selection';
 import { unsafeSVG } from 'lit-html/directives/unsafe-svg';
+import { SetSidebarWidth } from './redux/ducks/layout';
+import {
+  AddSelectionItem,
+  ClearSelection,
+  itemIsSelected,
+  RemoveSelectionItem,
+} from './redux/ducks/selection';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -304,35 +304,36 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  _onSplitterDragend(event: CustomEvent): void {
+  _onSplitterDragend(): void {
     const width = this.contentLeft.offsetWidth + this.contentRight.offsetWidth;
     store.dispatch(
-      setSidebarWidth(Math.round((this.contentLeft.offsetWidth / width) * 100))
+      new SetSidebarWidth(
+        Math.round((this.contentLeft.offsetWidth / width) * 100)
+      )
     );
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
-    store.dispatch(setViewMode(event.detail.index as ViewMode));
+    store.dispatch(new SetViewMode(event.detail.index as ViewMode));
   }
 
   _onSelectSortField(field: string): void {
-    store.dispatch(setSortOrderField(field));
+    store.dispatch(new SetSortOrderField(field));
   }
 
   _onSelectSortDirection(direction: string): void {
-    console.log(direction);
-    store.dispatch(setSortOrderDirection(direction));
+    store.dispatch(new SetSortOrderDirection(direction));
   }
 
   _onAddSelectionItem(event: CustomEvent): void {
-    store.dispatch(addSelectionItem(event.detail.value));
+    store.dispatch(new AddSelectionItem(event.detail.value));
   }
 
   _onRemoveSelectionItem(event: CustomEvent): void {
-    store.dispatch(removeSelectionItem(event.detail.value));
+    store.dispatch(new RemoveSelectionItem(event.detail.value));
   }
 
   _onClearSelection(): void {
-    store.dispatch(clearSelection());
+    store.dispatch(new ClearSelection());
   }
 }
