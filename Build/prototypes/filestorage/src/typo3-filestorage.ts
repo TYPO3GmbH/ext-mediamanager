@@ -12,7 +12,12 @@ import { SelectedDetail } from '@material/mwc-list/mwc-list-foundation';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filestorage.pcss';
 import { setSidebarWidth } from './redux/ducks/layout';
-import { setViewMode, ViewMode } from './redux/ducks/view-mode';
+import {
+  setSortOrderDirection,
+  setSortOrderField,
+  setViewMode,
+  ViewMode,
+} from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
 import {
   addSelectionItem,
@@ -20,6 +25,7 @@ import {
   itemIsSelected,
   removeSelectionItem,
 } from './redux/ducks/selection';
+import { unsafeSVG } from 'lit-html/directives/unsafe-svg';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -29,6 +35,21 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('.content_right') contentRight!: HTMLElement;
 
   public static styles = [themeStyles, styles];
+
+  protected listHeader = [
+    { name: 'icon', type: 'html', title: ' ', width: '24' },
+    { name: 'name', title: 'Name', sortable: true },
+    { name: 'modified', title: 'Modified', width: '150', sortable: true },
+    { name: 'size', title: 'Size', width: '100', sortable: true },
+    { name: 'type', title: 'Type', width: '150' },
+    { name: 'variants', title: 'Variants', width: '100' },
+    { name: 'references', title: 'References', width: '100' },
+    { name: 'rw', title: 'RW', width: '50' },
+  ];
+
+  stateChanged(state: RootState): void {
+    this.state = state;
+  }
 
   protected render(): TemplateResult {
     return html`
@@ -41,46 +62,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           style="flex: 1 1 ${this.state.layout.sidebarWidth}%"
         >
           <div class="topbar-wrapper"></div>
-          <typo3-filetree
-            nodes='
-          [
-            {
-              "stateIdentifier": "0_0",
-              "identifier": 0,
-              "depth": 0,
-              "tip": "id=0",
-              "icon": "apps-pagetree-page-shortcut-root",
-              "name": "New TYPO3 site",
-              "nameSourceField": "title",
-              "mountPoint": 0,
-              "workspaceId": 0,
-              "siblingsCount": 1,
-              "siblingsPosition": 1,
-              "allowDelete": true,
-              "allowEdit": true,
-              "hasChildren": true,
-              "isMountPoint": true,
-              "loaded": true
-            },
-            {
-              "stateIdentifier": "0_1",
-              "identifier": 1,
-              "depth": 1,
-              "tip": "id=1 - Hidden",
-              "icon": "apps-pagetree-folder-default",
-              "name": "Dummy Page",
-              "nameSourceField": "title",
-              "mountPoint": 0,
-              "workspaceId": 1,
-              "siblingsCount": 1,
-              "siblingsPosition": 1,
-              "allowDelete": true,
-              "allowEdit": true,
-              "overlayIcon": "overlay-hidden"
-            }
-          ]
-        '
-          ></typo3-filetree>
+          <typo3-filetree .nodes="${this.state.tree.nodes}"></typo3-filetree>
         </div>
         <typo3-dropzone
           class="content_right"
@@ -153,83 +135,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 </typo3-button>
               </div>
               <div slot="right">
-                <typo3-dropdown activatable>
-                  <typo3-dropdown-button slot="button" color="default">
-                    <svg
-                      slot="icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 16 16"
-                    >
-                      <g class="icon-color">
-                        <path d="M4 2h1v12H4z" />
-                        <path
-                          d="M6 12l-1.5 2L3 12H2l2.3 3c.1.1.3.1.4 0L7 12H6zM9 5h5V4H8v2h1zM9 8h3V7H8v2h1zM9 11h1v-1H8v2h1z"
-                        />
-                      </g>
-                    </svg>
-                    Sorting
-                  </typo3-dropdown-button>
-                  <typo3-dropdown-item>
-                    <span>Name</span>
-                  </typo3-dropdown-item>
-                </typo3-dropdown>
-                <typo3-dropdown
-                  activatable
-                  @selected="${this._onSelectViewMode}"
-                >
-                  <typo3-dropdown-button slot="button" color="default">
-                    <svg
-                      slot="icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 16 16"
-                    >
-                      <g class="icon-color">
-                        <path d="M13 2v12H3V2h10m1-1H2v14h12V1z" />
-                        <path
-                          d="M4 9h2v1H4zM7 9h2v1H7zM10 9h2v1h-2zM4 11h2v1H4zM7 11h2v1H7zM10 11h2v1h-2zM4 7h2v1H4zM7 7h2v1H7zM10 7h2v1h-2zM4 5h2v1H4zM7 5h2v1H7zM10 5h2v1h-2zM4 3h2v1H4zM7 3h2v1H7zM10 3h2v1h-2z"
-                        />
-                      </g>
-                    </svg>
-                    View
-                  </typo3-dropdown-button>
-                  <typo3-dropdown-item
-                    value="${ViewMode.LIST}"
-                    ?selected="${this.state.viewMode.viewMode ===
-                    ViewMode.LIST}"
-                  >
-                    <svg
-                      slot="icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 16 16"
-                    >
-                      <g class="icon-color">
-                        <path
-                          d="M2 2h12v2H2zM2 5h10v1H2zM2 7h12v1H2zM2 9h10v1H2zM2 11h12v1H2zM2 13h10v1H2z"
-                        />
-                      </g>
-                    </svg>
-                    <span>List</span>
-                  </typo3-dropdown-item>
-                  <li divider></li>
-                  <typo3-dropdown-item
-                    value="${ViewMode.TILES}"
-                    ?selected="${this.state.viewMode.viewMode ===
-                    ViewMode.TILES}"
-                  >
-                    <svg
-                      slot="icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 16 16"
-                    >
-                      <g class="icon-color">
-                        <path
-                          d="M6 2v4H2V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 10v4h-4v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM6 10v4H2v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 2v4h-4V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5z"
-                        />
-                      </g>
-                    </svg>
-                    <span>Tiles</span>
-                  </typo3-dropdown-item>
-                </typo3-dropdown>
+                ${this.getSortingDropdown()} ${this.getViewModeDropDown()}
               </div>
             </typo3-topbar>
             <typo3-topbar>
@@ -259,146 +165,143 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get mainContent(): TemplateResult {
-    if (this.state.viewMode.viewMode === ViewMode.LIST) {
+    if (this.state.viewMode.mode === ViewMode.LIST) {
       return html` <typo3-datagrid
-        schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
-        data='[
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 1 column 1",
-          "description": "row 1 column 2",
-          "foo": "row 1 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 2 column 1",
-          "description": "row 2 column 2",
-          "foo": "row 3 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 3 column 1",
-          "description": "row 3 column 2",
-          "foo": "row 3 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 4 column 1",
-          "description": "row 4 column 2",
-          "foo": "row 4 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 5 column 1",
-          "description": "row 5 column 2",
-          "foo": "row 5 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 6 column 1",
-          "description": "row 6 column 2",
-          "foo": "row 6 column 3"
-        }
-      ]'
+        style="width: 100%; overflow: scroll"
+        schema="${JSON.stringify(this.listHeader)}"
+        data="${JSON.stringify(this.state.list.data)}"
       ></typo3-datagrid>`;
     }
-
-    return html` <typo3-grid>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-1')}"
-        value="file-1"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 1"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-2')}"
-        value="file-2"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 2"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-3')}"
-        value="file-3"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 3"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-4')}"
-        value="file-4"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 4"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-5')}"
-        value="file-5"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 5"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-6')}"
-        value="file-6"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 6"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-7')}"
-        value="file-7"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 7"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-8')}"
-        value="file-8"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 8"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-9')}"
-        value="file-9"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 9"
-        subtitle="Dec 6, 2017"
-      ></typo3-card>
-      <typo3-card
-        ?selected="${itemIsSelected(this.state.selection)('file-10')}"
-        value="file-10"
-        @typo3-card-selected="${this._onAddSelectionItem}"
-        @typo3-card-unselected="${this._onRemoveSelectionItem}"
-        selectable
-        title="Card 10"
-        subtitle="Dec 6"
-      ></typo3-card>
+    return html`<typo3-grid>
+      ${this.state.list.data.map(listData => {
+        // hack for displaying svg for elements
+        let rawSVG = listData.icon;
+        rawSVG = rawSVG.replace('<svg ', '<svg slot="image" ');
+        return html` <typo3-card
+          ?selected="${itemIsSelected(this.state.selection)(listData.id)}"
+          value="${listData.id}"
+          @typo3-card-selected="${this._onAddSelectionItem}"
+          @typo3-card-unselected="${this._onRemoveSelectionItem}"
+          selectable
+          title="${listData.name}"
+          subtitle="${listData.modified}"
+          >${unsafeSVG(rawSVG)}
+        </typo3-card>`;
+      })}
     </typo3-grid>`;
   }
 
-  stateChanged(state: RootState): void {
-    this.state = state;
+  protected getViewModeDropDown(): TemplateResult {
+    return html`
+      <typo3-dropdown activatable @selected="${this._onSelectViewMode}">
+        <typo3-dropdown-button slot="button" color="default">
+          <svg
+            slot="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <g class="icon-color">
+              <path d="M13 2v12H3V2h10m1-1H2v14h12V1z" />
+              <path
+                d="M4 9h2v1H4zM7 9h2v1H7zM10 9h2v1h-2zM4 11h2v1H4zM7 11h2v1H7zM10 11h2v1h-2zM4 7h2v1H4zM7 7h2v1H7zM10 7h2v1h-2zM4 5h2v1H4zM7 5h2v1H7zM10 5h2v1h-2zM4 3h2v1H4zM7 3h2v1H7zM10 3h2v1h-2z"
+              />
+            </g>
+          </svg>
+          View
+        </typo3-dropdown-button>
+        <typo3-dropdown-item
+          value="${ViewMode.LIST}"
+          ?selected="${this.state.viewMode.mode === ViewMode.LIST}"
+        >
+          <svg
+            slot="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <g class="icon-color">
+              <path
+                d="M2 2h12v2H2zM2 5h10v1H2zM2 7h12v1H2zM2 9h10v1H2zM2 11h12v1H2zM2 13h10v1H2z"
+              />
+            </g>
+          </svg>
+          <span>List</span>
+        </typo3-dropdown-item>
+        <li divider></li>
+        <typo3-dropdown-item
+          value="${ViewMode.TILES}"
+          ?selected="${this.state.viewMode.mode === ViewMode.TILES}"
+        >
+          <svg
+            slot="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <g class="icon-color">
+              <path
+                d="M6 2v4H2V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 10v4h-4v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM6 10v4H2v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 2v4h-4V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5z"
+              />
+            </g>
+          </svg>
+          <span>Tiles</span>
+        </typo3-dropdown-item>
+      </typo3-dropdown>
+    `;
+  }
+
+  protected getSortingDropdown(): TemplateResult {
+    return html`
+      <typo3-dropdown multi activatable>
+        <typo3-dropdown-button slot="button" color="default">
+          <svg
+            slot="icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <g class="icon-color">
+              <path d="M4 2h1v12H4z" />
+              <path
+                d="M6 12l-1.5 2L3 12H2l2.3 3c.1.1.3.1.4 0L7 12H6zM9 5h5V4H8v2h1zM9 8h3V7H8v2h1zM9 11h1v-1H8v2h1z"
+              />
+            </g>
+          </svg>
+          Sorting
+        </typo3-dropdown-button>
+        ${this.listHeader
+          .filter(header => header.sortable === true)
+          .map(listHeader => {
+            return html`
+              <typo3-dropdown-item
+                activated
+                group="sort_field"
+                ?selected="${this.state.viewMode.order.field ===
+                listHeader.name}"
+                value="${listHeader.name}"
+                @click="${() => this._onSelectSortField(listHeader.name)}"
+              >
+                <span>${listHeader.title}</span>
+              </typo3-dropdown-item>
+            `;
+          })}
+        <li divider></li>
+        ${[
+          { title: 'Ascending', name: 'asc' },
+          { title: 'Descending', name: 'desc' },
+        ].map(sortDir => {
+          return html`
+            <typo3-dropdown-item
+              activated
+              group="sort_dir"
+              ?selected="${this.state.viewMode.order.direction ===
+              sortDir.name}"
+              value="${sortDir.name}"
+              @click="${() => this._onSelectSortDirection(sortDir.name)}"
+            >
+              <span>${sortDir.title}</span>
+            </typo3-dropdown-item>
+          `;
+        })}
+      </typo3-dropdown>
+    `;
   }
 
   _onSplitterDragend(event: CustomEvent): void {
@@ -410,6 +313,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
     store.dispatch(setViewMode(event.detail.index as ViewMode));
+  }
+
+  _onSelectSortField(field: string): void {
+    store.dispatch(setSortOrderField(field));
+  }
+
+  _onSelectSortDirection(direction: string): void {
+    console.log(direction);
+    store.dispatch(setSortOrderDirection(direction));
   }
 
   _onAddSelectionItem(event: CustomEvent): void {
