@@ -1,4 +1,10 @@
-import { customElement, LitElement, query, TemplateResult } from 'lit-element';
+import {
+  customElement,
+  LitElement,
+  property,
+  query,
+  TemplateResult,
+} from 'lit-element';
 
 import styles from './typo3-dropdown.pcss';
 import themeStyles from '../../../theme/index.pcss';
@@ -11,6 +17,8 @@ import { Typo3Menu } from '../../menu/src/typo3-menu';
  */
 @customElement('typo3-dropdown')
 export class Typo3Dropdown extends LitElement {
+  @property({ type: Boolean, reflect: true }) multi = false;
+
   @query('slot[name="button"]') buttonSlotElement!: HTMLSlotElement | null;
 
   @query('typo3-menu') typo3Menu!: Typo3Menu;
@@ -20,7 +28,12 @@ export class Typo3Dropdown extends LitElement {
   render(): TemplateResult {
     return html`
       <slot name="button" @click="${this.showDropdownMenu}"></slot>
-      <typo3-menu corner="BOTTOM_LEFT" fixed="true">
+      <typo3-menu
+        corner="BOTTOM_LEFT"
+        fixed="true"
+        ?multi="${this.multi}"
+        ?forceGroupSelection="${this.multi}"
+      >
         <slot></slot>
       </typo3-menu>
     `;
