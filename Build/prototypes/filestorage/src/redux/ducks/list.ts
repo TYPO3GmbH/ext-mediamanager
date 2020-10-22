@@ -5,6 +5,7 @@ import { memoize } from 'lodash-es';
 export const ADD_SELECTION_ITEM = '[SELECTION] ADD ITEM';
 export const REMOVE_SELECTION_ITEM = '[SELECTION] REMOVE ITEM';
 export const CLEAR_SELECTION = '[SELECTION] CLEAR';
+export const SET_SELECTION = '[SELECTION] SET';
 
 export type ListState = Readonly<{
   items: ListItem[];
@@ -99,6 +100,11 @@ export const listReducer = (
         ...state,
         selectedItemIds: [],
       };
+    case SET_SELECTION:
+      return {
+        ...state,
+        selectedItemIds: action.ids.slice(),
+      };
     default:
       return state;
   }
@@ -118,6 +124,11 @@ export class ClearSelection implements Action {
   readonly type = CLEAR_SELECTION;
 }
 
+export class SetSelection implements Action {
+  readonly type = SET_SELECTION;
+  constructor(public ids: string[]) {}
+}
+
 export const itemIsSelected = createSelector(
   (state: ListState) => state.selectedItemIds,
   currentItemIds => memoize((itemId: string) => currentItemIds.includes(itemId))
@@ -128,9 +139,13 @@ export const selectionIsEmpty = createSelector(
   currentItemIds => currentItemIds.length === 0
 );
 
-export const selectedItems = createSelector(
+export const selectedRows = createSelector(
   (state: ListState) => state,
   state => state.items.filter(item => state.selectedItemIds.includes(item.id))
 );
 
-export type Actions = AddSelectionItem | RemoveSelectionItem | ClearSelection;
+export type Actions =
+  | AddSelectionItem
+  | RemoveSelectionItem
+  | ClearSelection
+  | SetSelection;

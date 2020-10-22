@@ -25,7 +25,9 @@ import {
   ClearSelection,
   itemIsSelected,
   RemoveSelectionItem,
+  selectedRows,
   selectionIsEmpty,
+  SetSelection,
 } from './redux/ducks/list';
 
 @customElement('typo3-filestorage')
@@ -38,6 +40,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   public static styles = [themeStyles, styles];
 
   protected listHeader = [
+    { name: 'id', type: 'text', title: ' ', hidden: true },
     { name: 'icon', type: 'html', title: ' ', width: '24' },
     { name: 'name', title: 'Name', sortable: true },
     { name: 'modified', title: 'Modified', width: '150', sortable: true },
@@ -171,6 +174,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         style="width: 100%; overflow: scroll"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
+        .selectedRows="${selectedRows(this.state.list)}"
+        @typo3-datagrid-selection-change="${this._onSelectionChange}"
       ></typo3-datagrid>`;
     }
     return html`<typo3-grid>
@@ -336,5 +341,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onClearSelection(): void {
     store.dispatch(new ClearSelection());
+  }
+
+  _onSelectionChange(event: CustomEvent): void {
+    store.dispatch(new SetSelection(event.detail.map(row => row.id)));
   }
 }
