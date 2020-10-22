@@ -257,7 +257,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected getSortingDropdown(): TemplateResult {
     return html`
       <typo3-dropdown multi activatable>
-        <typo3-dropdown-button slot="button" color="default">
+        <typo3-dropdown-button
+          slot="button"
+          color="default"
+          .disabled="${this.state.viewMode.mode === ViewMode.LIST}"
+        >
           <svg
             slot="icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -343,7 +347,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new ClearSelection());
   }
 
-  _onSelectionChange(event: CustomEvent): void {
+  _onSelectionChange(event: CustomEvent<ListItem[]>): void {
     store.dispatch(new SetSelection(event.detail.map(row => row.id)));
   }
 }
