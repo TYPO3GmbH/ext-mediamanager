@@ -1,8 +1,19 @@
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+const LOAD_TREE_DATA = '[TREE] LOAD DATA';
+const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
+const LOAD_TREE_DATA_FAILURE = '[TREE] LOAD DATA FAILURE';
+
 export type TreeState = Readonly<{
   nodes: object[];
+  loading: boolean;
+  error: string | null;
 }>;
 
 const initialState: TreeState = {
+  loading: false,
+  error: null,
   nodes: [
     {
       stateIdentifier: '0_0',
@@ -43,10 +54,51 @@ const initialState: TreeState = {
 
 export const treeReducer = (
   state = initialState,
-  action: { type: string }
+  action: Actions
 ): TreeState => {
   switch (action.type) {
+    case LOAD_TREE_DATA:
+      return {
+        ...state,
+        loading: true,
+      };
+    case LOAD_TREE_DATA_SUCCESS:
+      return {
+        ...state,
+        nodes: action.data,
+        loading: false,
+      };
+    case LOAD_TREE_DATA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
     default:
       return state;
   }
+};
+
+export class LoadTreeData implements Action {
+  readonly type = LOAD_TREE_DATA;
+}
+
+export class LoadTreeDataSuccess implements Action {
+  readonly type = LOAD_TREE_DATA_SUCCESS;
+  constructor(public data: object[]) {}
+}
+
+export class LoadTreeDataFailure implements Action {
+  readonly type = LOAD_TREE_DATA_FAILURE;
+  constructor(public error: string) {}
+}
+
+export type Actions = LoadTreeData | LoadTreeDataSuccess | LoadTreeDataFailure;
+
+export const fetchTree = () => {
+  const url = '/our-app/tree.json';
+
+  return (dispatch: ThunkDispatch<Actions, any, any>) => {
+    dispatch(new LoadTreeData());
+  };
 };

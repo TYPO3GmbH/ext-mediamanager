@@ -3,6 +3,7 @@ import {
   html,
   internalProperty,
   LitElement,
+  PropertyValues,
   query,
   TemplateResult,
 } from 'lit-element';
@@ -29,6 +30,7 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
+import { fetchTree } from './redux/ducks/tree';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -53,6 +55,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   stateChanged(state: RootState): void {
     this.state = state;
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+
+    store.dispatch(fetchTree());
   }
 
   protected render(): TemplateResult {

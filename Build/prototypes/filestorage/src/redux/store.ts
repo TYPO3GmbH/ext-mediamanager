@@ -7,6 +7,7 @@ import {
   Store,
 } from 'redux';
 import { rootReducer } from './ducks';
+import thunk from 'redux-thunk';
 
 // @ts-ignore
 const allowCustomActionObjectsMiddleWare: Middleware = (
@@ -18,10 +19,10 @@ const allowCustomActionObjectsMiddleWare: Middleware = (
 export const store = createStore(
   rootReducer,
   compose(
-    applyMiddleware(allowCustomActionObjectsMiddleWare),
+    applyMiddleware(thunk, allowCustomActionObjectsMiddleWare),
     process.env.NODE_ENV === 'development'
       ? (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
           (window as any).__REDUX_DEVTOOLS_EXTENSION__()
-      : null
+      : undefined
   )
 );
