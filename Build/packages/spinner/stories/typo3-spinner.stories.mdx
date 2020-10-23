@@ -1,0 +1,27 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/packages/spinner/src/typo3-spinner';
+
+<Meta
+  title="Components/typo3-spinner"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-spinner', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Spinner.ts (based on  vaadin-split-layout)
+
+<Preview>
+    <Story name="Spinner" height="220px">
+    {html`
+      <div style="height: 200px;">
+        <typo3-spinner></typo3-spinner>
+      </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+For properties and events: https://github.com/vaadin/vaadin-split-layout
+
+<Props of="typo3-spinner" />

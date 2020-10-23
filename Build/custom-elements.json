@@ -1039,6 +1039,57 @@
           "name": "--typo3-snackbar-info-message-color"
         }
       ]
+    },
+    {
+      "name": "typo3-spinner",
+      "properties": [
+        {
+          "name": "styles",
+          "type": "array",
+          "default": "[\"themeStyles\",\"styles\"]"
+        },
+        {
+          "name": "color",
+          "attribute": "color",
+          "type": "String",
+          "default": "\"primary\""
+        },
+        {
+          "name": "screenReaderText",
+          "attribute": "screenReaderText",
+          "type": "string",
+          "default": "\"Loading\""
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-spinner-size"
+        },
+        {
+          "name": "--typo3-spinner-border-width"
+        },
+        {
+          "name": "--typo3-spinner-animation-duration"
+        },
+        {
+          "name": "--typo3-spinner-default-color"
+        },
+        {
+          "name": "--typo3-spinner-primary-color"
+        },
+        {
+          "name": "--typo3-spinner-success-color"
+        },
+        {
+          "name": "--typo3-spinner-info-color"
+        },
+        {
+          "name": "--typo3-spinner-warning-color"
+        },
+        {
+          "name": "--typo3-spinner-danger-color"
+        }
+      ]
     }
   ]
 }
