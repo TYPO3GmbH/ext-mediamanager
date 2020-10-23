@@ -45,6 +45,8 @@ export class Typo3SvgTree extends LitElement {
   protected nodesContainer!: Selection<SVGGElement, unknown, null, undefined>;
   protected exclusiveSelectedNode: Typo3Node | null = null;
 
+  protected _internalNodes: Typo3Node[] = [];
+
   protected viewportHeight!: number;
 
   protected data: {
@@ -298,7 +300,6 @@ export class Typo3SvgTree extends LitElement {
    * @param {Typo3Node[]} nodes
    */
   _setParametersNode(nodes: Typo3Node[]) {
-    nodes = nodes || this.nodes;
     nodes = nodes.map((node, index) => {
       if (typeof node.command === 'undefined') {
         node = Object.assign({}, this.settings.defaultProperties, node);
@@ -354,18 +355,18 @@ export class Typo3SvgTree extends LitElement {
       nodes[0].canToggle = false;
     }
 
-    this.nodes = nodes;
+    this._internalNodes = nodes;
   }
 
   _prepareDataForVisibleNodes(): void {
     const blacklist: { [key: string]: boolean } = {};
-    this.nodes.map((node, index) => {
+    this._internalNodes.map((node, index) => {
       if (!node.expanded) {
         blacklist[index] = true;
       }
     });
 
-    this.data.nodes = this.nodes.filter(node => {
+    this.data.nodes = this._internalNodes.filter(node => {
       return (
         node.hidden !== true &&
         !node.parents.some(index => {
@@ -388,7 +389,7 @@ export class Typo3SvgTree extends LitElement {
       n.y = i * this.settings.nodeHeight + pathAboveMounts;
       if (n.parents[0] !== undefined) {
         this.data.links.push({
-          source: this.nodes[n.parents[0]],
+          source: this._internalNodes[n.parents[0]],
           target: n,
         });
       }
@@ -998,7 +999,7 @@ export class Typo3SvgTree extends LitElement {
     ) {
       if (exclusiveKeys.indexOf('' + node.identifier) > -1) {
         // this key is exclusive, so uncheck all others
-        this.nodes.forEach(node => {
+        this._internalNodes.forEach(node => {
           if (node.checked === true) {
             node.checked = false;
             this.dispatch.call('nodeSelectedAfter', this, node);
@@ -1039,7 +1040,7 @@ export class Typo3SvgTree extends LitElement {
    * Returns an array of selected nodes
    */
   _getSelectedNodes(): Typo3Node[] {
-    return this.nodes.filter(node => {
+    return this._internalNodes.filter(node => {
       return node.checked;
     });
   }
@@ -1109,7 +1110,7 @@ export class Typo3SvgTree extends LitElement {
    * Expand all nodes and refresh view
    */
   expandAll(): void {
-    this.nodes.forEach(this._showChildren.bind(this));
+    this._internalNodes.forEach(this._showChildren.bind(this));
     this._prepareDataForVisibleNodes();
     this._update();
   }
@@ -1118,7 +1119,7 @@ export class Typo3SvgTree extends LitElement {
    * Collapse all nodes recursively and refresh view
    */
   collapseAll(): void {
-    this.nodes.forEach(this._hideChildren.bind(this));
+    this._internalNodes.forEach(this._hideChildren.bind(this));
     this._prepareDataForVisibleNodes();
     this._update();
   }
