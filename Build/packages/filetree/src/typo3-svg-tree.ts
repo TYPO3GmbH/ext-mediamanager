@@ -6,17 +6,28 @@ import { Dispatch, HierarchyPointNode } from 'd3';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filetree.pcss';
 import { Typo3Node } from './lib/typo3-node';
+import { PropertyValues } from 'lit-element/lib/updating-element';
+import { isEqual } from 'lodash-es';
 
 interface Icon {
   identifier: string;
   icon: string;
 }
 
-/**
- * @fires typo3-svg-tree-loading-error - Dispatched on error during loading request
- */
 export class Typo3SvgTree extends LitElement {
-  @property({ type: Array }) nodes: Typo3Node[] = [];
+  @property({
+    type: Array,
+    hasChanged(newNodes: Typo3Node[], oldNodes: Typo3Node[]): boolean {
+      return (
+        typeof oldNodes === 'undefined' ||
+        !isEqual(
+          oldNodes.map(node => node.identifier),
+          newNodes.map(node => node.identifier)
+        )
+      );
+    },
+  })
+  nodes: Typo3Node[] = [];
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
@@ -121,13 +132,15 @@ export class Typo3SvgTree extends LitElement {
       .attr('role', 'tree');
 
     this._updateScrollPosition();
+  }
 
-    if (this.nodes.length > 0) {
+  updated(_changedProperties: PropertyValues): void {
+    super.update(_changedProperties);
+    if (_changedProperties.has('nodes')) {
+      console.log('update Tree');
       this._nodesAddPlaceholder();
       this._replaceData(this.nodes);
       this._nodesRemovePlaceholder();
-    } else {
-      this._loadData();
     }
   }
 
@@ -250,23 +263,6 @@ export class Typo3SvgTree extends LitElement {
     this.viewportHeight = this.wrapper.clientHeight;
     this.scrollBottom =
       this.scrollTop + this.viewportHeight + this.viewportHeight / 2;
-  }
-
-  _loadData(): void {
-    this._nodesAddPlaceholder();
-
-    d3.json(this.settings.dataUrl).then(
-      (json: unknown) => {
-        const nodes = Array.isArray(json) ? json : [];
-        this._replaceData(nodes);
-        this._nodesRemovePlaceholder();
-      },
-      error => {
-        this.dispatchEvent(new CustomEvent('typo3-svg-tree-loading-error'));
-        this._nodesRemovePlaceholder();
-        throw error;
-      }
-    );
   }
 
   _nodesAddPlaceholder(node?: HierarchyPointNode<unknown>): void {
@@ -526,18 +522,18 @@ export class Typo3SvgTree extends LitElement {
       .attr('height', this.settings.nodeHeight)
       .attr('data-state-id', this._getNodeStateIdentifier)
       .attr('transform', this._getNodeBgTransform)
-      .on('mouseover', node => {
+      .on('mouseover', (_, node) => {
         this._nodeBgEvents().mouseOver(node, this);
       })
-      .on('mouseout', node => {
+      .on('mouseout', (_, node) => {
         this._nodeBgEvents().mouseOut(node, this);
       })
-      .on('click', node => {
+      .on('click', (_, node) => {
         this._selectNode(node);
         // todo implement
         this._switchFocusNode(node);
       })
-      .on('contextmenu', node => {
+      .on('contextmenu', (_, node) => {
         this.dispatch.call('nodeRightClick', node, this);
       });
   }
@@ -553,7 +549,6 @@ export class Typo3SvgTree extends LitElement {
       const elementNodeBg = this.svg.select(
         '.nodes-bg .node-bg[data-state-id="' + node.stateIdentifier + '"]'
       );
-
       node.isOver = true;
       this.settings.nodeOver.node = node;
 
@@ -656,7 +651,7 @@ export class Typo3SvgTree extends LitElement {
       .attr('class', 'toggle')
       .attr('visibility', this._getToggleVisibility)
       .attr('transform', 'translate(-8, -8)')
-      .on('click', node => {
+      .on('click', (_, node: Typo3Node) => {
         this._chevronClick(node);
       });
 
@@ -679,7 +674,7 @@ export class Typo3SvgTree extends LitElement {
         .attr('class', 'node-icon-container')
         .attr('title', this._getNodeTitle)
         .attr('data-toggle', 'tooltip')
-        .on('click', (node: Typo3Node) => {
+        .on('click', (_, node: Typo3Node) => {
           this._clickOnIcon(node, this);
         });
 
@@ -735,7 +730,7 @@ export class Typo3SvgTree extends LitElement {
       })
       .attr('dy', 5)
       .attr('class', 'node-name')
-      .on('click', node => {
+      .on('click', (_, node) => {
         this._clickOnLabel(node);
       });
   }
@@ -767,10 +762,10 @@ export class Typo3SvgTree extends LitElement {
       .attr('transform', this._getNodeTransform)
       .attr('data-state-id', this._getNodeStateIdentifier)
       .attr('title', this._getNodeTitle)
-      .on('mouseover', (node: Typo3Node) => {
+      .on('mouseover', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOver(node, this);
       })
-      .on('mouseout', (node: Typo3Node) => {
+      .on('mouseout', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOut(node, this);
       });
 
@@ -959,6 +954,7 @@ export class Typo3SvgTree extends LitElement {
    * Node selection logic (triggered by different events)
    */
   _selectNode(node: Typo3Node): void {
+    console.log('select Node', node);
     if (!this._isNodeSelectable(node)) {
       return;
     }
@@ -1100,13 +1096,6 @@ export class Typo3SvgTree extends LitElement {
         node.hasChildren ? node.expanded : false
       );
     }
-  }
-
-  /**
-   * Refresh view with new data
-   */
-  refreshTree(): void {
-    this._loadData();
   }
 
   /**
