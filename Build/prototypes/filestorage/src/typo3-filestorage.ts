@@ -281,6 +281,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <span>Tiles</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
+      ${this.state.tree.loading || this.state.list.loading
+        ? html`<div class="loading"><typo3-spinner></typo3-spinner></div>`
+        : html``}
     `;
   }
 
