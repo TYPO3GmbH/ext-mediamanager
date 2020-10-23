@@ -30,7 +30,8 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
-import { fetchTree } from './redux/ducks/tree';
+import { fetchTree, SelectTreeNode } from './redux/ducks/tree';
+import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -74,7 +75,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           style="flex: 1 1 ${this.state.layout.sidebarWidth}%"
         >
           <div class="topbar-wrapper"></div>
-          <typo3-filetree .nodes="${this.state.tree.nodes}"></typo3-filetree>
+          <typo3-filetree
+            .nodes="${this.state.tree.nodes}"
+            @typo3-node-selected="${this._onSelectedNode}"
+          ></typo3-filetree>
         </div>
         <typo3-dropzone
           class="content_right"
@@ -329,6 +333,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         Math.round((this.contentLeft.offsetWidth / width) * 100)
       )
     );
+  }
+
+  _onSelectedNode(event: CustomEvent<Typo3Node>): void {
+    store.dispatch(new SelectTreeNode(event.detail));
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {

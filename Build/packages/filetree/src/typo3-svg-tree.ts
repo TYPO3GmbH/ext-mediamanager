@@ -14,6 +14,9 @@ interface Icon {
   icon: string;
 }
 
+/**
+ * @fires typo3-node-selected - Event fired on node selction
+ */
 export class Typo3SvgTree extends LitElement {
   @property({
     type: Array,
@@ -137,7 +140,6 @@ export class Typo3SvgTree extends LitElement {
   updated(_changedProperties: PropertyValues): void {
     super.update(_changedProperties);
     if (_changedProperties.has('nodes')) {
-      console.log('update Tree');
       this._nodesAddPlaceholder();
       this._replaceData(this.nodes);
       this._nodesRemovePlaceholder();
@@ -954,7 +956,6 @@ export class Typo3SvgTree extends LitElement {
    * Node selection logic (triggered by different events)
    */
   _selectNode(node: Typo3Node): void {
-    console.log('select Node', node);
     if (!this._isNodeSelectable(node)) {
       return;
     }
@@ -973,6 +974,12 @@ export class Typo3SvgTree extends LitElement {
     }
 
     node.checked = !checked;
+
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-selected', {
+        detail: node,
+      })
+    );
 
     this.dispatch.call('nodeSelectedAfter', this, node);
     this._update();
