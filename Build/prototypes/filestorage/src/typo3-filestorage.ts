@@ -37,6 +37,7 @@ import {
   SelectTreeNode,
 } from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
+import { orderBy } from 'lodash-es';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -201,8 +202,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @typo3-datagrid-selection-change="${this._onSelectionChange}"
       ></typo3-datagrid>`;
     }
+
+    const orderedData = orderBy(
+      this.state.list.items,
+      [this.state.viewMode.order.field],
+      [this.state.viewMode.order.direction]
+    );
     return html`<typo3-grid>
-      ${this.state.list.items.map(listData => {
+      ${orderedData.map(listData => {
         // hack for displaying svg for elements
         let rawSVG = listData.icon;
         rawSVG = rawSVG.replace('<svg ', '<svg slot="image" ');

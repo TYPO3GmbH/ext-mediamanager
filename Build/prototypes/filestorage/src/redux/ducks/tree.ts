@@ -117,7 +117,6 @@ export const selectedTreeNodes = createSelector(
       state.selected,
       ...state.selected.parents.map(parentIdentifier =>
         state.nodes.find(node => {
-          console.log(node.identifier);
           return node.identifier == parentIdentifier;
         })
       ),
