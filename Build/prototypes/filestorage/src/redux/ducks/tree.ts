@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { createSelector } from 'reselect';
 
 const LOAD_TREE_DATA = '[TREE] LOAD DATA';
 const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
@@ -8,7 +9,7 @@ const LOAD_TREE_DATA_FAILURE = '[TREE] LOAD DATA FAILURE';
 const SELECT_TREE_NODE = '[TREE] SELECT NODE';
 
 export type TreeState = Readonly<{
-  nodes: object[];
+  nodes: Typo3Node[];
   loading: boolean;
   error: string | null;
   selected: Typo3Node | null;
@@ -100,3 +101,26 @@ export const fetchTree = () => {
       });
   };
 };
+
+export const selectedTreeNodes = createSelector(
+  (state: TreeState) => state,
+  state => {
+    if (state.nodes.length === 0) {
+      return [];
+    }
+
+    if (null === state.selected) {
+      return [state.nodes[0]];
+    }
+
+    return [
+      state.selected,
+      ...state.selected.parents.map(parentIdentifier =>
+        state.nodes.find(node => {
+          console.log(node.identifier);
+          return node.identifier == parentIdentifier;
+        })
+      ),
+    ].reverse();
+  }
+);

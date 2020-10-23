@@ -30,7 +30,11 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
-import { fetchTree, SelectTreeNode } from './redux/ducks/tree';
+import {
+  fetchTree,
+  selectedTreeNodes,
+  SelectTreeNode,
+} from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 
 @customElement('typo3-filestorage')
@@ -156,14 +160,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             </typo3-topbar>
             <typo3-topbar>
               <typo3-breadcrumb slot="left">
-                <typo3-breadcrumb-item
-                  slot="item"
-                  title="root"
-                ></typo3-breadcrumb-item>
-                <typo3-breadcrumb-item
-                  slot="item"
-                  title="root"
-                ></typo3-breadcrumb-item>
+                ${this.breadcrumbContent}
               </typo3-breadcrumb>
               <div slot="right">
                 <typo3-selection-button
@@ -178,6 +175,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       </typo3-splitpane>
       <typo3-context-menu></typo3-context-menu>
     `;
+  }
+
+  protected get breadcrumbContent(): TemplateResult[] {
+    const nodes = selectedTreeNodes(this.state.tree) as Typo3Node[];
+
+    console.log(nodes);
+    return nodes.map(
+      node =>
+        html` <typo3-breadcrumb-item slot="item" title="${node.name}">
+        </typo3-breadcrumb-item>`
+    );
   }
 
   protected get mainContent(): TemplateResult {
