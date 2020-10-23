@@ -24,6 +24,7 @@ import { SetSidebarWidth } from './redux/ducks/layout';
 import {
   AddSelectionItem,
   ClearSelection,
+  fetchListData,
   itemIsSelected,
   RemoveSelectionItem,
   selectedRows,
@@ -179,8 +180,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get breadcrumbContent(): TemplateResult[] {
     const nodes = selectedTreeNodes(this.state.tree) as Typo3Node[];
-
-    console.log(nodes);
     return nodes.map(
       node =>
         html` <typo3-breadcrumb-item slot="item" title="${node.name}">
@@ -189,6 +188,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get mainContent(): TemplateResult {
+    if (this.state.list.items.length === 0) {
+      return html``;
+    }
+
     if (this.state.viewMode.mode === ViewMode.LIST) {
       return html` <typo3-datagrid
         style="width: 100%; overflow: scroll"
@@ -345,6 +348,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new SelectTreeNode(event.detail));
+    store.dispatch(fetchListData(event.detail.identifier));
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
