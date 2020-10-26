@@ -5,10 +5,11 @@ import postcssImport from 'postcss-import';
 
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
+import injectProcessEnv from 'rollup-plugin-inject-process-env';
 
 const globby = require('globby');
 
-const configs = globby.sync('(packages|test)/**/*.(ts|pcss)').map(inputFile => ({
+const configs = globby.sync('(packages|prototypes)/**/*.(ts|pcss)').map(inputFile => ({
   input: inputFile,
   inlineDynamicImports: true,
   output: {
@@ -26,7 +27,10 @@ const configs = globby.sync('(packages|test)/**/*.(ts|pcss)').map(inputFile => (
     typescriptPlugin({
       importHelpers: true,
       typescript,
-    })
+    }),
+    injectProcessEnv({
+      NODE_ENV: 'development',
+    }),
   ],
   treeshake: true,
 }));

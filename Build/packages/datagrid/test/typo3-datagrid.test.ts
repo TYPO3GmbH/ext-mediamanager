@@ -23,4 +23,9 @@ describe('Typo3Datagrid', () => {
     const button = element.shadowRoot!.querySelector('canvas-datagrid')!;
     expect(button).to.exist;
   });
+
+  it('will fire a `typo3-datagrid-selection-change` on selection change', async () => {
+    const button = element.shadowRoot!.querySelector('canvas-datagrid')!;
+    expect(button).to.exist;
+  });
 });

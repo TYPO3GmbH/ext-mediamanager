@@ -14,7 +14,12 @@ import { RenderCellEvent } from './lib/event/RenderCellEvent';
 import { RenderOrderByArrowEvent } from './lib/event/RenderOrderByArrowEvent';
 import { CanvasDatagrid } from './lib/CanvasDatagrid';
 import 'canvas-datagrid';
+import { PropertyValues } from 'lit-element/lib/updating-element';
+import * as _ from 'lodash-es';
 
+/**
+ *@fires typo3-datagrid-selection-change - Dispatched on change of selection
+ */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
   @property({ type: String }) schema = '';
@@ -23,7 +28,11 @@ export class Typo3Datagrid extends LitElement {
 
   @property({ type: Boolean }) editable = false;
 
-  @query('canvas-datagrid') canvas!: CanvasDatagrid;
+  @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
+
+  @property({ type: String }) rowIdentifier = 'id';
+
+  @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
 
   public static styles = [themeStyles, styles];
 
@@ -33,6 +42,7 @@ export class Typo3Datagrid extends LitElement {
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
         @renderorderbyarrow="${this._onRenderOrderByArrow}"
+        @selectionchanged="${this._onSelectionChanged}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -40,6 +50,25 @@ export class Typo3Datagrid extends LitElement {
         editable="${this.editable}"
       ></canvas-datagrid>
     `;
+  }
+
+  updated(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has('selectedRows')) {
+      const expectedRowNumbers = this.selectedRows.map(row =>
+        this.canvasGrid.data.findIndex(
+          dataRow => dataRow[this.rowIdentifier] === row[this.rowIdentifier]
+        )
+      );
+
+      const currentSelectedRowNumbers = this.canvasGrid.selectedRows
+        .map((value, key) => (value ? key : undefined))
+        .filter(rowNumber => typeof rowNumber != 'undefined');
+
+      if (_.xor(expectedRowNumbers, currentSelectedRowNumbers).length != 0) {
+        this.canvasGrid.selectNone();
+        expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
+      }
+    }
   }
 
   _onRendercell(e: RenderCellEvent): void {
@@ -59,7 +88,7 @@ export class Typo3Datagrid extends LitElement {
 
   _onRenderOrderByArrow(e: RenderOrderByArrowEvent): void {
     e.preventDefault();
-    const canvasStyle = this.canvas.style;
+    const canvasStyle = this.canvasGrid.style;
 
     let x = e.cell.x;
     let y = e.cell.y;
@@ -73,9 +102,8 @@ export class Typo3Datagrid extends LitElement {
       aw = canvasStyle.columnHeaderOrderByArrowWidth,
       ah = canvasStyle.columnHeaderOrderByArrowHeight;
 
-    x += this.canvas.offsetLeft + mr + headerTextWidth;
-    y += this.canvas.offsetTop - ah / 2;
-
+    x += +mr + headerTextWidth + 5;
+    y += e.cell.height / 2 - ah * 1.5;
     e.ctx.fillStyle = canvasStyle.columnHeaderOrderByArrowColor;
     e.ctx.strokeStyle = canvasStyle.columnHeaderOrderByArrowBorderColor;
     e.ctx.lineWidth = canvasStyle.columnHeaderOrderByArrowBorderWidth;
@@ -84,7 +112,7 @@ export class Typo3Datagrid extends LitElement {
     x = x + ml;
     y = y + mt;
 
-    if (this.canvas.orderDirection === 'asc') {
+    if (this.canvasGrid.orderDirection === 'asc') {
       e.ctx.moveTo(x + aw, y);
       e.ctx.lineTo(x + aw * 0.5, y + ah);
       e.ctx.lineTo(x, y);
@@ -95,5 +123,23 @@ export class Typo3Datagrid extends LitElement {
     }
 
     e.ctx.stroke();
+  }
+
+  _onSelectionChanged(event: {
+    selectedData: { [key: number]: string }[];
+  }): void {
+    const selectedKeys: string[] = event.selectedData.map((value, key) =>
+      value ? '' + key : ''
+    );
+
+    const selectedData = this.canvasGrid.data.filter((value, index) =>
+      selectedKeys.includes('' + index)
+    );
+
+    this.dispatchEvent(
+      new CustomEvent('typo3-datagrid-selection-change', {
+        detail: selectedData,
+      })
+    );
   }
 }

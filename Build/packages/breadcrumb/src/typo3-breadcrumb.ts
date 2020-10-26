@@ -15,7 +15,6 @@ import { Typo3BreadcrumbItem } from './typo3-breadcrumb-item';
  *
  * @cssprop --typo3-breadcrumb-background-color
  * @cssprop --typo3-breadcrumb-border-radius
- * @cssprop --typo3-breadcrumb-margin-bottom
  * @cssprop --typo3-breadcrumb-padding-y
  * @cssprop --typo3-breadcrumb-separator-content
  * @cssprop --typo3-breadcrumb-separator-gap

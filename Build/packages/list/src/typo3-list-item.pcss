@@ -9,11 +9,16 @@
   overflow: hidden;
   padding-left: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
   padding-right: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
+
+  padding-top: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
+  padding-bottom: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
+
   outline: none;
   color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
   font-size: var(--typo3-list-font-size, 0.75rem);
   letter-spacing: var(--typo3-list-item-letter-spacing, 0.009375em);
-  line-height: var(--typo3-list-item-line-height, 2.5rem);
+  line-height: var(--typo3-list-item-line-height, 1.5rem);
+  white-space: nowrap;
 }
 
 :host(:not([disabled]):focus),

@@ -1,20 +1,24 @@
-:host {
+.card {
   position: relative;
   display: inline-flex;
   flex-direction: column;
   box-sizing: border-box;
   width: var(--typo3-card-width, 12rem);
-  border: var(--typo3-card-border-size, 0.0625rem) solid var(--typo3-card-border-color, #eaeaea);
+  border: var(--typo3-card-border-size, 0.125rem) solid var(--typo3-card-border-color, #eaeaea);
   border-radius: var(--typo3-card-border-radius, 0.25rem);
   text-decoration: none;
   background-color: var(--typo3-card-background-color, #fff);
 }
 
-:host(:hover) {
-  border-color: var(--typo3-card-border-color-hover, #1ea7fd);
+.card[selected] {
+  border-color: var(--typo3-card-border-color-selected, #c1dbf2);
 }
 
-:host(:focus) {
+.card:hover {
+  border-color: var(--typo3-card-border-color-hover, var(--typo3-global-brand-info));
+}
+
+.card:focus {
   outline: none;
 }
 

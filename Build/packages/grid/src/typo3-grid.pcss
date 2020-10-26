@@ -1,5 +1,9 @@
 :host {
-  display: block;
+  text-align: left;
+  display: grid;
+  grid-gap: var(--typo3-card-grid-gap, 0.5rem);
+  padding: var(--typo3-card-grid-gap, 0.5rem);
+  grid-template-columns: repeat(auto-fill, minmax(var(--typo3-card-width, 12rem), 1fr));
 }
 
 :host([hidden]) {
@@ -10,14 +14,4 @@
 *::after,
 *::before {
   box-sizing: border-box;
-}
-
-slot {
-  display: grid;
-  grid-template-columns: repeat(
-      auto-fill,
-      minmax(var(--typo3-card-grid-colmin, 22ch), 1fr)
-    );
-  grid-gap: var(--typo3-card-grid-gap, 0.5rem);
-  padding: var(--typo3-card-grid-gap, 0.5rem);
 }
