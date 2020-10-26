@@ -367,7 +367,30 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     event: CustomEvent<{ event: MouseEvent; node: Typo3Node }>
   ): void {
     event.detail.event.preventDefault();
-    console.log('on_context-menu', event);
+    const nodeId = event.detail.node.identifier;
+    const url =
+      'https://7cb51cd8-619b-460e-bea8-e4b2a771548c.mock.pstmn.io/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=3635781b1d39b3c2188c38f6917396d897b67003&table=sys_file&uid=' +
+      nodeId;
+    fetch(url)
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        window.dispatchEvent(
+          new CustomEvent('typo3-show-context-menu', {
+            detail: {
+              sourceEvent: event.detail.event,
+              options: data,
+            },
+          })
+        );
+      })
+      .catch((error: Error) => {
+        console.log('todo: handle error on loading context-menu options');
+      });
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
