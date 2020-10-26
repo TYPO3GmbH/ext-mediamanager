@@ -3,6 +3,7 @@ import {
   html,
   internalProperty,
   LitElement,
+  property,
   PropertyValues,
   query,
   TemplateResult,
@@ -41,6 +42,8 @@ import { orderBy } from 'lodash-es';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
+  @property({ type: String }) typo3BackendUrl = 'http://localhost:3001';
+
   @internalProperty() private state!: RootState;
 
   @query('.content_left') contentLeft!: HTMLElement;
@@ -59,6 +62,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     { name: 'references', title: 'References', width: '100' },
     { name: 'rw', title: 'RW', width: '50' },
   ];
+
+  constructor() {
+    super();
+    (window as any).typo3BackendUrl = this.typo3BackendUrl;
+  }
 
   stateChanged(state: RootState): void {
     this.state = state;
@@ -406,9 +414,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   ): void {
     event.detail.event.preventDefault();
     const nodeId = event.detail.node.identifier;
-    const url =
-      'https://7cb51cd8-619b-460e-bea8-e4b2a771548c.mock.pstmn.io/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=3635781b1d39b3c2188c38f6917396d897b67003&table=sys_file&uid=' +
-      nodeId;
+    const url = window.typo3BackendUrl + '/context-menu?uid=' + nodeId;
     fetch(url)
       .then((response: Response) => {
         if (!response.ok) {

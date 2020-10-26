@@ -665,7 +665,6 @@ export class Typo3SvgTree extends LitElement {
         .attr('title', this._getNodeTitle)
         .attr('data-toggle', 'tooltip')
         .on('click', (_, node: Typo3Node) => {
-          console.log('clickOnIcon');
           this._clickOnIcon(node, this);
         });
 

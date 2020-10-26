@@ -80,8 +80,7 @@ export type Actions =
   | SelectTreeNode;
 
 export const fetchTree = () => {
-  const url =
-    'https://7cb51cd8-619b-460e-bea8-e4b2a771548c.mock.pstmn.io/filestorage/tree';
+  const url = window.typo3BackendUrl + '/filestorage/tree';
 
   return (dispatch: ThunkDispatch<Actions, any, any>) => {
     dispatch(new LoadTreeData());

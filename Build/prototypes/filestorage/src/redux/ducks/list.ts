@@ -133,9 +133,7 @@ export type Actions =
   | LoadListDataFailure;
 
 export const fetchListData = (id: string) => {
-  const url =
-    'https://7cb51cd8-619b-460e-bea8-e4b2a771548c.mock.pstmn.io/filestorage/folder/' +
-    id;
+  const url = window.typo3BackendUrl + '/filestorage/folder/' + id;
 
   return (dispatch: ThunkDispatch<Actions, any, any>) => {
     dispatch(new LoadListData());
