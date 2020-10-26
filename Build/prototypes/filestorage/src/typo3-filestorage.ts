@@ -82,8 +82,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
           <div class="topbar-wrapper"></div>
           <typo3-filetree
+            style="flex: 1;"
             .nodes="${this.state.tree.nodes}"
             @typo3-node-selected="${this._onSelectedNode}"
+            @typo3-node-context-menu="${this._onContextMenu}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone
@@ -359,6 +361,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new SelectTreeNode(event.detail));
     store.dispatch(fetchListData(event.detail.identifier));
+  }
+
+  _onContextMenu(event: CustomEvent<MouseEvent>): void {
+    event.detail.preventDefault();
+    console.log('on_context-menu');
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
