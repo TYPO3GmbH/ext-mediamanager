@@ -3,3 +3,5 @@
 /vendor
 /Build/node_modules
 .phpunit.result.cache
+public
+composer.lock

@@ -8,7 +8,9 @@
     },
     "require-dev": {
         "typo3/testing-framework": "^6.4.0",
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "symplify/easy-coding-standard": "^8.3",
+        "slevomat/coding-standard": "^6.4"
     },
     "authors": [
         {
@@ -20,9 +22,6 @@
         "psr-4": {
             "TYPO3\\CMS\\FilelistNg\\": "Classes",
             "TYPO3\\CMS\\FilelistNg\\Tests\\": "Tests"
-        },
-        "files": [
-            "Resources/Private/PHP/autoload-include.php"
-        ]
+        }
     }
 }
