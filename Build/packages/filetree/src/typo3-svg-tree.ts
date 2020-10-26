@@ -524,12 +524,7 @@ export class Typo3SvgTree extends LitElement {
         this._switchFocusNode(node);
       })
       .on('contextmenu', (event, node) => {
-        this.dispatchEvent(
-          new CustomEvent('typo3-node-context-menu', {
-            detail: event,
-          })
-        );
-        this.dispatch.call('nodeRightClick', node, this);
+        this._onContextmenu(event, node);
       });
   }
 
@@ -670,6 +665,7 @@ export class Typo3SvgTree extends LitElement {
         .attr('title', this._getNodeTitle)
         .attr('data-toggle', 'tooltip')
         .on('click', (_, node: Typo3Node) => {
+          console.log('clickOnIcon');
           this._clickOnIcon(node, this);
         });
 
@@ -762,6 +758,9 @@ export class Typo3SvgTree extends LitElement {
       })
       .on('mouseout', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOut(node, this);
+      })
+      .on('contextmenu', (event: MouseEvent, node: Typo3Node) => {
+        this._onContextmenu(event, node);
       });
 
     nodes
@@ -1137,5 +1136,17 @@ export class Typo3SvgTree extends LitElement {
       element.setAttribute('tabindex', '0');
       element.focus();
     }
+  }
+
+  _onContextmenu(event: MouseEvent, node: Typo3Node): void {
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-context-menu', {
+        detail: {
+          event: event,
+          node: node,
+        },
+      })
+    );
+    this.dispatch.call('nodeRightClick', node, this);
   }
 }

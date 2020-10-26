@@ -363,9 +363,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(fetchListData(event.detail.identifier));
   }
 
-  _onContextMenu(event: CustomEvent<MouseEvent>): void {
-    event.detail.preventDefault();
-    console.log('on_context-menu');
+  _onContextMenu(
+    event: CustomEvent<{ event: MouseEvent; node: Typo3Node }>
+  ): void {
+    event.detail.event.preventDefault();
+    console.log('on_context-menu', event);
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
