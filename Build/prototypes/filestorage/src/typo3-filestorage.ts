@@ -125,7 +125,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 </typo3-button>
               </div>
             </typo3-topbar>
-            <typo3-topbar></typo3-topbar>
+            <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
           </div>
           <typo3-filetree
             style="flex: 1;"
@@ -391,6 +391,23 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             </typo3-dropdown-item>
           `;
         })}
+      </typo3-dropdown>
+    `;
+  }
+
+  protected getStorageDropDown(): TemplateResult {
+    if (this.state.tree.nodes.length == 0) {
+      return html``;
+    }
+
+    return html`
+      <typo3-dropdown slot="left" activatable>
+        <typo3-dropdown-button slot="button" color="default">
+          ${this.state.tree.nodes[0].name}
+        </typo3-dropdown-button>
+        <typo3-dropdown-item activated selected="true">
+          <span>${this.state.tree.nodes[0].name}</span>
+        </typo3-dropdown-item>
       </typo3-dropdown>
     `;
   }
