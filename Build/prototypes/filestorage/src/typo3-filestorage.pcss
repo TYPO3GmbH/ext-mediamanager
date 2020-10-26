@@ -4,13 +4,20 @@
 }
 
 .topbar-wrapper {
-  height: var(--typo3-topbar-wrapper-height, 7rem); ;
   background-color: var(--typo3-topbar-wrapper-background-color, var(--typo3-global-gray-lighter));
+  padding-top: 2rem;
+  border-bottom: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
 }
 
 .content_right .topbar-wrapper {
   margin-bottom: var(--typo3-topbar-wrapper-margin-bottom, 1rem);
 }
+
+.topbar-wrapper typo3-topbar:last-child {
+  border-top: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
+  background-color: #F4F4F4;
+}
+
 .content_left {
   display: flex;
   flex-direction: column;

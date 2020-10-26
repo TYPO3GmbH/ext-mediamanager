@@ -80,7 +80,45 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           class="content_left"
           style="flex: 1 1 ${this.state.layout.sidebarWidth}%"
         >
-          <div class="topbar-wrapper"></div>
+          <div class="topbar-wrapper">
+            <typo3-topbar>
+              <div slot="left">
+                <typo3-button>
+                  <svg
+                    slot="icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                  >
+                    <g class="icon-color">
+                      <path
+                        d="M12.5 9H9v3.5c0 .3-.2.5-.5.5h-1c-.3 0-.5-.2-.5-.5V9H3.5c-.3 0-.5-.2-.5-.5v-1c0-.3.2-.5.5-.5H7V3.5c0-.3.2-.5.5-.5h1c.3 0 .5.2.5.5V7h3.5c.3 0 .5.2.5.5v1c0 .3-.2.5-.5.5z"
+                      />
+                    </g>
+                  </svg>
+                  New
+                </typo3-button>
+                <typo3-button>
+                  <svg
+                    slot="icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                  >
+                    <g class="icon-color">
+                      <path
+                        d="M10 11h1v1h-1zM12 11h1v1h-1zM11.27 6H4.73a.25.25 0 01-.188-.414l3.27-3.743a.244.244 0 01.377 0l3.27 3.743A.25.25 0 0111.27 6z"
+                      />
+                      <path
+                        d="M14.5 9H10v1h4v3H2v-3h4V9H1.5a.5.5 0 00-.5.5v4a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-4a.5.5 0 00-.5-.5z"
+                      />
+                      <path d="M7 6h2v4H7z" />
+                    </g>
+                  </svg>
+                  Upload
+                </typo3-button>
+              </div>
+            </typo3-topbar>
+            <typo3-topbar></typo3-topbar>
+          </div>
           <typo3-filetree
             style="flex: 1;"
             .nodes="${this.state.tree.nodes}"
@@ -93,7 +131,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           style="flex: 1 1 ${100 - this.state.layout.sidebarWidth}%"
         >
           <div class="topbar-wrapper">
-            <typo3-topbar style="padding-top: 2rem;">
+            <typo3-topbar>
               <div slot="left">
                 <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
                   <svg
