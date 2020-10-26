@@ -96,8 +96,9 @@ export class Typo3ContextMenu extends LitElement {
     this.currentContextMenuDetail = event.detail;
     const openEvent = new CustomEvent('typo3-context-menu-open');
     this.dispatchEvent(openEvent);
-    this.typo3Menu.x = event.detail.sourceEvent.offsetX;
-    this.typo3Menu.y = event.detail.sourceEvent.offsetY;
+    this.style.position = 'absolute';
+    this.style.top = event.detail.sourceEvent.offsetY + 'px';
+    this.style.left = event.detail.sourceEvent.offsetX + 10 + 'px';
     this.typo3Menu.show();
   };
 }
