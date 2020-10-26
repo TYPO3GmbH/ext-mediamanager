@@ -7,7 +7,6 @@ import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filetree.pcss';
 import { Typo3Node } from './lib/typo3-node';
 import { PropertyValues } from 'lit-element/lib/updating-element';
-import { isEqual } from 'lodash-es';
 
 interface Icon {
   identifier: string;
@@ -18,19 +17,7 @@ interface Icon {
  * @fires typo3-node-selected - Event fired on node selction
  */
 export class Typo3SvgTree extends LitElement {
-  @property({
-    type: Array,
-    hasChanged(newNodes: Typo3Node[], oldNodes: Typo3Node[]): boolean {
-      return (
-        typeof oldNodes === 'undefined' ||
-        !isEqual(
-          oldNodes.map(node => node.identifier),
-          newNodes.map(node => node.identifier)
-        )
-      );
-    },
-  })
-  nodes: Typo3Node[] = [];
+  @property({ type: Array }) nodes: Typo3Node[] = [];
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
@@ -45,7 +32,7 @@ export class Typo3SvgTree extends LitElement {
   protected nodesContainer!: Selection<SVGGElement, unknown, null, undefined>;
   protected exclusiveSelectedNode: Typo3Node | null = null;
 
-  protected _internalNodes: Typo3Node[] = [];
+  protected processedNodes: Typo3Node[] = [];
 
   protected viewportHeight!: number;
 
@@ -355,18 +342,18 @@ export class Typo3SvgTree extends LitElement {
       nodes[0].canToggle = false;
     }
 
-    this._internalNodes = nodes;
+    this.processedNodes = nodes;
   }
 
   _prepareDataForVisibleNodes(): void {
     const blacklist: { [key: string]: boolean } = {};
-    this._internalNodes.map((node, index) => {
+    this.processedNodes.map((node, index) => {
       if (!node.expanded) {
         blacklist[index] = true;
       }
     });
 
-    this.data.nodes = this._internalNodes.filter(node => {
+    this.data.nodes = this.processedNodes.filter(node => {
       return (
         node.hidden !== true &&
         !node.parents.some(index => {
@@ -389,7 +376,7 @@ export class Typo3SvgTree extends LitElement {
       n.y = i * this.settings.nodeHeight + pathAboveMounts;
       if (n.parents[0] !== undefined) {
         this.data.links.push({
-          source: this._internalNodes[n.parents[0]],
+          source: this.processedNodes[n.parents[0]],
           target: n,
         });
       }
@@ -536,7 +523,12 @@ export class Typo3SvgTree extends LitElement {
         // todo implement
         this._switchFocusNode(node);
       })
-      .on('contextmenu', (_, node) => {
+      .on('contextmenu', (event, node) => {
+        this.dispatchEvent(
+          new CustomEvent('typo3-node-context-menu', {
+            detail: event,
+          })
+        );
         this.dispatch.call('nodeRightClick', node, this);
       });
   }
@@ -999,7 +991,7 @@ export class Typo3SvgTree extends LitElement {
     ) {
       if (exclusiveKeys.indexOf('' + node.identifier) > -1) {
         // this key is exclusive, so uncheck all others
-        this._internalNodes.forEach(node => {
+        this.processedNodes.forEach(node => {
           if (node.checked === true) {
             node.checked = false;
             this.dispatch.call('nodeSelectedAfter', this, node);
@@ -1040,7 +1032,7 @@ export class Typo3SvgTree extends LitElement {
    * Returns an array of selected nodes
    */
   _getSelectedNodes(): Typo3Node[] {
-    return this._internalNodes.filter(node => {
+    return this.processedNodes.filter(node => {
       return node.checked;
     });
   }
@@ -1110,7 +1102,7 @@ export class Typo3SvgTree extends LitElement {
    * Expand all nodes and refresh view
    */
   expandAll(): void {
-    this._internalNodes.forEach(this._showChildren.bind(this));
+    this.processedNodes.forEach(this._showChildren.bind(this));
     this._prepareDataForVisibleNodes();
     this._update();
   }
@@ -1119,7 +1111,7 @@ export class Typo3SvgTree extends LitElement {
    * Collapse all nodes recursively and refresh view
    */
   collapseAll(): void {
-    this._internalNodes.forEach(this._hideChildren.bind(this));
+    this.processedNodes.forEach(this._hideChildren.bind(this));
     this._prepareDataForVisibleNodes();
     this._update();
   }
