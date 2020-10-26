@@ -12,8 +12,13 @@ import '../../../out-tsc/prototypes/filestorage/src/typo3-filestorage';
 <Preview>
     <Story name="Default View">
     {html`
-        <div style="height: 98vh; display:flex; overflow: hidden;">
-            <typo3-filestorage style="flex: 1"></typo3-filestorage>
+        <style>
+         body {
+            margin: 0;
+         }
+        </style>
+        <div style="height:100vh">
+            <typo3-filestorage></typo3-filestorage>
         </div>
     `}
     </Story>
