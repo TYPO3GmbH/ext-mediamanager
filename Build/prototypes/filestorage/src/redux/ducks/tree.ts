@@ -79,12 +79,10 @@ export type Actions =
   | LoadTreeDataFailure
   | SelectTreeNode;
 
-export const fetchTree = () => {
-  const url = window.typo3BackendUrl + '/filestorage/tree';
-
+export const fetchTree = (treeUrl: string) => {
   return (dispatch: ThunkDispatch<Actions, any, any>) => {
     dispatch(new LoadTreeData());
-    fetch(url)
+    fetch(treeUrl)
       .then((response: Response) => {
         if (!response.ok) {
           throw new Error(response.statusText);

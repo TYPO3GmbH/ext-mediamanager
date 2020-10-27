@@ -42,7 +42,9 @@ class FilelistController
     public function indexAction(): ResponseInterface
     {
         $storages = $this->getBackendUser()->getFileStorages();
+        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData');
         $this->view->assign('storages', $storages);
+        $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
 
         return new HtmlResponse($this->view->render());
     }

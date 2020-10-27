@@ -14,12 +14,12 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FilelistNg\Backend\Controller\FilelistController;
+use TYPO3\CMS\FilelistNg\Backend\Controller;
 
 return [
-    'filelist-ng_main' => [
-        'path' => '/filelist-ng/main',
-        'access' => 'public',
-        'target' => FilelistController::class . '::indexAction',
+    // Get data for page tree
+    'filelist_ng_tree_fetchData' => [
+        'path' => '/filelist_ng/tree/fetchData',
+        'target' => Controller\FiletreeController::class . '::fetchDataAction',
     ],
 ];

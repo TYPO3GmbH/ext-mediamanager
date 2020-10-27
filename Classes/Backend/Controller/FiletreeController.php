@@ -16,6 +16,15 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\JsonResponse;
+
 class FiletreeController
 {
+    public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $items = [''];
+        return new JsonResponse($items);
+    }
 }
