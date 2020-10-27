@@ -16,21 +16,35 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class FilelistController extends ActionController
+class FilelistController
 {
-    protected $defaultViewObjectName = StandaloneView::class;
+    private const DEFAULT_TEMPLATE_ROOT_PATHS = ['EXT:cms_filelist_ng/Resources/Private/Templates'];
 
-    protected function initializeView(ViewInterface $view): void
-    {
-        parent::initializeView($view);
+    /** @var StandaloneView */
+    private $view;
+
+    /** @var UriBuilder */
+    private $uriBuilder;
+
+    public function __construct(
+        ModuleTemplate  $moduleTemplate,
+        StandaloneView $view,
+        UriBuilder $uriBuilder
+    ) {
+        $this->view = $view;
+        $this->uriBuilder = $uriBuilder;
+        $this->view->setTemplateRootPaths(static::DEFAULT_TEMPLATE_ROOT_PATHS);
+        $this->view->getRequest()->setControllerExtensionName('cms_filelist_ng');
     }
 
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
-        $this->view->assign('headline', 'Hello World');
+        return new HtmlResponse($this->view->render());
     }
 }
