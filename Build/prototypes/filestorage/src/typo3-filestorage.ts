@@ -86,7 +86,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >
         <div
           class="content_left"
-          style="flex: 1 1 ${this.state.layout.sidebarWidth}%"
+          style="flex: 1 1 ${this.state.layout.sidebarWidth + '%'}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -136,7 +136,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         </div>
         <typo3-dropzone
           class="content_right"
-          style="flex: 1 1 ${100 - this.state.layout.sidebarWidth}%"
+          style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
