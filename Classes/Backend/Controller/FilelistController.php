@@ -18,29 +18,24 @@ namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
 {
-    private const DEFAULT_TEMPLATE_ROOT_PATHS = ['EXT:cms_filelist_ng/Resources/Private/Templates'];
-
-    /** @var StandaloneView */
+    /** @var BackendTemplateView */
     private $view;
 
     /** @var UriBuilder */
     private $uriBuilder;
 
     public function __construct(
-        ModuleTemplate  $moduleTemplate,
-        StandaloneView $view,
+        BackendTemplateView $view,
         UriBuilder $uriBuilder
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
-        $this->view->setTemplateRootPaths(static::DEFAULT_TEMPLATE_ROOT_PATHS);
-        $this->view->getRequest()->setControllerExtensionName('cms_filelist_ng');
+        $this->view->initializeView();
     }
 
     public function indexAction(): ResponseInterface

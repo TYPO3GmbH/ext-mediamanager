@@ -20,6 +20,6 @@ return [
     'filelist-ng_main' => [
         'path' => '/filelist-ng/main',
         'access' => 'public',
-        'target' => FilelistController::class . '::renderAction',
+        'target' => FilelistController::class . '::indexAction',
     ],
 ];
