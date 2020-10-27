@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
@@ -40,6 +41,14 @@ class FilelistController
 
     public function indexAction(): ResponseInterface
     {
+        $storages = $this->getBackendUser()->getFileStorages();
+        $this->view->assign('storages', $storages);
+
         return new HtmlResponse($this->view->render());
+    }
+
+    public function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }
