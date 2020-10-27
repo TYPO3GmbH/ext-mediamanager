@@ -1,5 +1,6 @@
 import './alert/src/typo3-alert';
 import './badge/src/typo3-badge';
+import './breadcrumb/src/typo3-breadcrumb-item';
 import './breadcrumb/src/typo3-breadcrumb';
 import './button/src/typo3-button';
 import './button/src/typo3-dropdown-button';
@@ -10,6 +11,7 @@ import './dropdown/src/typo3-dropdown-item';
 import './dropdown/src/typo3-dropdown';
 import './dropzone/src/typo3-dropzone';
 import './filetree/src/typo3-filetree';
+import './grid/src/typo3-grid';
 import './list/src/typo3-list-item';
 import './list/src/typo3-list';
 import './menu/src/typo3-menu';

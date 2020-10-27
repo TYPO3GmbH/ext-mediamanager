@@ -4,45 +4,56 @@ import postcssImport from 'postcss-import';
 import postcssNano from 'cssnano';
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
-import injectProcessEnv from 'rollup-plugin-inject-process-env';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import {terser} from 'rollup-plugin-terser';
+import minifyHTML from 'rollup-plugin-minify-html-literals';
 
-const config = {
-  context: 'window',
+import merge from 'deepmerge';
+// use createSpaConfig for bundling a Single Page App
+//import {createSpaConfig} from '@open-wc/building-rollup';
+// use createBasicConfig to do regular JS to JS bundling
+import {createBasicConfig} from '@open-wc/building-rollup';
+import injectProcessEnv from "rollup-plugin-inject-process-env";
+
+const baseConfig = createBasicConfig({
+  // use the outputdir option to modify where files are output
+  outputDir: '../Resources/Public/JavaScript',
+
+  // if you need to support older browsers, such as IE11, set the legacyBuild
+  // option to generate an additional build just for this browser
+  // legacyBuild: true,
+
+  // development mode creates a non-minified build for debugging or development
+  developmentMode: false,
+
+  // set to true to inject the service worker registration into your index.html
+  injectServiceWorker: false,
+});
+
+const plugins = [
+  minifyHTML(),
+  postcss({
+    plugins: [
+      postcssImport,
+      postcssNano
+    ]
+  }),
+  postcssLit(),
+  typescriptPlugin({
+    importHelpers: true,
+    typescript,
+  }),
+  injectProcessEnv({
+    NODE_ENV: 'development',
+  }),
+];
+
+baseConfig.plugins.unshift(...plugins);
+
+
+export default merge(baseConfig, {
   input: './bundle/index.ts',
   output: {
-    dir: './dist/es',
-    format: 'es',
-    sourcemap: true,
-    compact: true,
+    entryFileNames: 'es.js',
   },
-  plugins: [
-    postcss({
-      plugins: [
-        postcssImport,
-        postcssNano
-      ]
-    }),
-    postcssLit(),
-    typescriptPlugin({
-      importHelpers: false,
-      typescript,
-    }),
-    injectProcessEnv({
-      NODE_ENV: 'production',
-    }),
-    resolve({
-      mainfields: ['module', 'browser', 'main', 'jsnext']
-    }),
-    commonjs({
-      include: 'node_modules/**',
-    }),
-    terser()
-  ],
-  treeshake: true,
-};
+});
 
-export default config;
 
