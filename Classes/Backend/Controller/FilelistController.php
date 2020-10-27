@@ -16,20 +16,18 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
-use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class FilelistController extends ActionController
 {
-    protected $defaultViewObjectName = BackendTemplateView::class;
+    protected $defaultViewObjectName = StandaloneView::class;
 
     protected function initializeView(ViewInterface $view): void
     {
-        /** @var BackendTemplateView $view */
         parent::initializeView($view);
     }
-
 
     public function indexAction(): void
     {
