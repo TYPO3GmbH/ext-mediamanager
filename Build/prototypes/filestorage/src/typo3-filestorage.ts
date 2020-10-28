@@ -42,7 +42,12 @@ import { orderBy } from 'lodash-es';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
+  /**
+   * todo: remove mockoon routes
+   */
   @property({ type: String }) typo3BackendUrl = 'http://localhost:3001';
+  @property({ type: String }) treeUrl =
+    'http://localhost:3001/filestorage/tree';
 
   @internalProperty() private state!: RootState;
 
@@ -74,8 +79,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-
-    store.dispatch(fetchTree());
+    store.dispatch(fetchTree(this.treeUrl));
   }
 
   protected render(): TemplateResult {
@@ -86,7 +90,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >
         <div
           class="content_left"
-          style="flex: 1 1 ${this.state.layout.sidebarWidth}%"
+          style="flex: 1 1 ${this.state.layout.sidebarWidth + '%'}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -136,7 +140,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         </div>
         <typo3-dropzone
           class="content_right"
-          style="flex: 1 1 ${100 - this.state.layout.sidebarWidth}%"
+          style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
