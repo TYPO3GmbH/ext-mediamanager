@@ -4,7 +4,7 @@ resources:
     type: git
     icon: gitty
     source:
-      uri: https://code.dfau.de/dfau/filelist-ng.git
+      uri: git@git.dfau.de:dfau/filelist-ng.git
 
 jobs:
   - name: test
