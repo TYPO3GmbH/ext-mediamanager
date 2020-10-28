@@ -13,13 +13,15 @@ jobs:
     plan:
       - get: filelist-ng-git
         trigger: true
-      - task: run-tests
+      - task: run-build
         config:
           platform: linux
           image_resource:
             type: registry-image
             source: { repository: php, tag: 7.3-cli }
           inputs:
+            - name: filelist-ng-git
+          outputs:
             - name: filelist-ng-git
           params:
             COMPOSER_ALLOW_SUPERUSER: 1
@@ -40,6 +42,34 @@ jobs:
 
                 composer install
 
-                etc/scripts/checkCodingStandards.sh
+      - task: run-codingstandards
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: php, tag: 7.3-cli }
+          inputs:
+            - name: filelist-ng-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                cd filelist-ng-git
+                ./etc/scripts/checkCodingStandards.sh
 
+      - task: run-tests
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: php, tag: 7.3-cli }
+          inputs:
+            - name: filelist-ng-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                cd filelist-ng-git
                 ./.Build/bin/phpunit Tests/Unit
