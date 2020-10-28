@@ -40,6 +40,6 @@ jobs:
 
                 composer install
 
-
+                etc/scripts/checkCodingStandards.sh
 
                 ./.Build/bin/phpunit Tests/Unit

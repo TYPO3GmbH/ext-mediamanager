@@ -7,3 +7,4 @@
 public
 composer.lock
 etc/testing-docker/.env
+var
