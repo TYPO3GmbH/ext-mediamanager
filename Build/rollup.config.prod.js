@@ -22,7 +22,7 @@ const baseConfig = createBasicConfig({
   // legacyBuild: true,
 
   // development mode creates a non-minified build for debugging or development
-  developmentMode: false,
+  developmentMode: true,
 
   // set to true to inject the service worker registration into your index.html
   injectServiceWorker: false,
@@ -52,7 +52,8 @@ baseConfig.plugins.unshift(...plugins);
 export default merge(baseConfig, {
   input: './bundle/index.ts',
   output: {
-    entryFileNames: 'es.js',
+    sourcemap: true,
+    entryFileNames: 'es.js'
   },
 });
 

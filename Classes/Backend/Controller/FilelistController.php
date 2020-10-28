@@ -18,8 +18,8 @@ namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
@@ -30,27 +30,29 @@ class FilelistController
     /** @var UriBuilder */
     private $uriBuilder;
 
+    /** @var BackendUserProvider */
+    private $backendUserProvider;
+
     public function __construct(
         BackendTemplateView $view,
-        UriBuilder $uriBuilder
+        UriBuilder $uriBuilder,
+        BackendUserProvider $backendUserProvider
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
+        $this->backendUserProvider = $backendUserProvider;
         $this->view->initializeView();
     }
 
     public function indexAction(): ResponseInterface
     {
-        $storages = $this->getBackendUser()->getFileStorages();
-        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData');
+        $storages = $this->backendUserProvider->getBackendUser()->getFileStorages();
+        $storageId = \current($storages)->getUid();
+
+        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['storageId' => $storageId]);
         $this->view->assign('storages', $storages);
         $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
 
         return new HtmlResponse($this->view->render());
-    }
-
-    public function getBackendUser(): BackendUserAuthentication
-    {
-        return $GLOBALS['BE_USER'];
     }
 }

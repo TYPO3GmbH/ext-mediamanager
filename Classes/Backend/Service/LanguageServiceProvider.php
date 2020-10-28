@@ -14,17 +14,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Controller;
+namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Localization\LanguageService;
 
-class FiletreeController
+class LanguageServiceProvider
 {
-    public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
+    public function getLanguageService(): LanguageService
     {
-        $items = [''];
-        return new JsonResponse($items);
+        return $GLOBALS['LANG'];
     }
 }
