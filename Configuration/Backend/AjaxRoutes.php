@@ -22,4 +22,8 @@ return [
         'path' => '/filelist_ng/tree/fetchData',
         'target' => Controller\FolderTreeController::class . '::fetchDataAction',
     ],
+    'filelist_ng_folder_fetchData' => [
+        'path' => '/filelist_ng/folder/fetchData',
+        'target' => Controller\FolderDetailController::class . '::fetchDataAction',
+    ],
 ];

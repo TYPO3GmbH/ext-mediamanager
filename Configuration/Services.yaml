@@ -8,7 +8,7 @@ services:
     resource: '../Classes/*'
 
   TYPO3\CMS\FilelistNg\Backend\Controller\:
-    resource: '../Classes/Backend/Controller'
+    resource: '../Classes/Backend/Controller/*'
     public: true
 
   TYPO3\CMS\FilelistNg\Backend\Controller\FilelistController:

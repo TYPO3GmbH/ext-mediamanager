@@ -91,9 +91,9 @@ class FolderTreeGenerator
 
             $items[] = [
                 'stateIdentifier' => $stateIdentifier,
-                'identifier' => $folderHashSpecUID,
+                'identifier' => $rootLevelFolder->getCombinedIdentifier(),
                 'depth' => $depth,
-                'icon' => $icon->getMarkup(),
+                'icon' => $icon->getIdentifier(),
                 'name' => $rootLevelFolderName,
                 'nameSourceField' => 'title',
                 'siblingsCount' => \count($rootLevelFolders) - 1,
@@ -142,9 +142,9 @@ class FolderTreeGenerator
 
             $items[] = [
                 'stateIdentifier' => $stateIdentifier,
-                'identifier' => $folderHashSpecUID,
+                'identifier' => $subFolder->getCombinedIdentifier(),
                 'depth' => $depth,
-                'icon' => $icon->getMarkup(),
+                'icon' => $icon->getIdentifier(),
                 'name' => $subFolderName,
                 'nameSourceField' => 'title',
                 'siblingsCount' => \count($subFolders) - 1,

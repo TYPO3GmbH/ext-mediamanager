@@ -50,8 +50,10 @@ class FilelistController
         $storageId = \current($storages)->getUid();
 
         $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['storageId' => $storageId]);
+        $ajaxFolderListUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData');
         $this->view->assign('storages', $storages);
         $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
+        $this->view->assign('folderUrl', (string) $ajaxFolderListUrl);
 
         return new HtmlResponse($this->view->render());
     }
