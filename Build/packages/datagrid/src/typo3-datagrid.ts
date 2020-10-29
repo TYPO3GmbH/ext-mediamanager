@@ -36,11 +36,15 @@ export class Typo3Datagrid extends LitElement {
 
   public static styles = [themeStyles, styles];
 
+  protected imageBuffer: { [key: string]: HTMLImageElement } = {};
+
   render(): TemplateResult {
     return html`
       <canvas-datagrid
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
+        @afterrendercell="${this._onAfterRendercell}"
+        @rendertext="${this._onRenderText}"
         @renderorderbyarrow="${this._onRenderOrderByArrow}"
         @selectionchanged="${this._onSelectionChanged}"
         selectionmode="row"
@@ -67,6 +71,68 @@ export class Typo3Datagrid extends LitElement {
       if (_.xor(expectedRowNumbers, currentSelectedRowNumbers).length != 0) {
         this.canvasGrid.selectNone();
         expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
+      }
+    }
+  }
+
+  _onRenderText(e: RenderCellEvent): void {
+    if (
+      e.cell.type === 'html' &&
+      e.cell.value &&
+      e.cell.rowIndex > -1 &&
+      /img/.test(e.cell.value)
+    ) {
+      e.cell.formattedValue = '';
+    }
+  }
+
+  _onAfterRendercell(e: RenderCellEvent): void {
+    if (
+      e.cell.type === 'html' &&
+      e.cell.value &&
+      e.cell.rowIndex > -1 &&
+      /img/.test(e.cell.value)
+    ) {
+      if (!this.imageBuffer[e.cell.value]) {
+        const domElement = new DOMParser().parseFromString(
+          e.cell.value,
+          'text/html'
+        );
+        const imageElement = domElement.querySelector(
+          'img'
+        ) as HTMLImageElement;
+        const src = imageElement.src;
+
+        const image = new Image();
+        this.imageBuffer[e.cell.value] = image;
+        image.src = src;
+        if (imageElement.width > 0) {
+          image.setAttribute('targetWidth', '' + imageElement.width);
+        }
+        if (imageElement.height > 0) {
+          image.setAttribute('targetHeight', '' + imageElement.height);
+        }
+
+        image.onload = () => {
+          this.canvasGrid.draw();
+        };
+        return;
+      }
+
+      const image = this.imageBuffer[e.cell.value];
+      if (image && image.width !== 0) {
+        const targetWidth = parseInt(
+          (image.getAttribute('targetWidth') as string) ?? e.cell.height
+        );
+        const targetHeight = parseInt(
+          (image.getAttribute('targetHeight') as string) ??
+            e.cell.height * (image.width / image.height)
+        );
+
+        const x = e.cell.x + (e.cell.width - targetWidth) / 2;
+        const y = e.cell.y + (e.cell.height - targetHeight) / 2;
+
+        e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }
     }
   }

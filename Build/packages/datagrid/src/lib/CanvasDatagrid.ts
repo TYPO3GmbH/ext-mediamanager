@@ -18,4 +18,5 @@ export interface CanvasDatagrid extends HTMLElement {
 
   selectNone(): void;
   selectRow(rowIndex: number): void;
+  draw(): void;
 }
