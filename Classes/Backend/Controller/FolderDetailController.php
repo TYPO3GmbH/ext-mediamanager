@@ -18,40 +18,25 @@ namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
-use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
 
 class FolderDetailController
 {
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    /** @var \TYPO3\CMS\Core\Localization\LanguageService */
-    private $languageService;
-
-    /** @var IconFactory */
-    private $iconFactory;
-
-    /** @var LanguageServiceProvider */
-    private $languageServiceProvider;
+    /** @var FolderListGenerator */
+    private $folderListGenerator;
 
     public function __construct(
-        LanguageServiceProvider $languageServiceProvider,
         ResourceFactory $resourceFactory,
-        IconFactory $iconFactory
+        FolderListGenerator $folderListGenerator
     ) {
         $this->resourceFactory = $resourceFactory;
-        $this->languageService = $languageServiceProvider->getLanguageService();
-        $this->iconFactory = $iconFactory;
-        $this->languageServiceProvider = $languageServiceProvider;
+        $this->folderListGenerator = $folderListGenerator;
     }
 
     public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
@@ -64,73 +49,27 @@ class FolderDetailController
 
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($combinedIdentifier);
 
+        if (null === $storage) {
+            return new HtmlResponse(\sprintf('Storage for  "%s" is missing', $combinedIdentifier), 404);
+        }
+
         $folderId = \substr($combinedIdentifier, \strpos($combinedIdentifier, ':') + 1);
 
-        if (!$storage->hasFolder($folderId)) {
-            return new HtmlResponse(\sprintf('Folder "%s" is missing', $folderId), 400);
+        if (false === $storage->hasFolder($folderId)) {
+            return new HtmlResponse(\sprintf('Folder "%s" is missing', $folderId), 404);
         }
 
         if (0 === $storage->getUid()) {
-            throw new InsufficientFolderAccessPermissionsException(
-                'You are not allowed to access files outside your storages',
-                1603901426
-            );
+            return new HtmlResponse('You are not allowed to access files outside your storages', 405);
         }
 
         $folderObject = $this->resourceFactory->getFolderObjectFromCombinedIdentifier($combinedIdentifier);
+        $items = $this->folderListGenerator->getFolderItems($folderObject);
 
-        $folders = $storage->getFoldersInFolder($folderObject);
-        $files = $folderObject->getFiles();
+        $response = new JsonResponse();
+        // use set payload to bypass  if (!empty($data)) check in JsonResponse constructor and return empty array
+        $response->setPayload($items);
 
-        $test1 = $this->languageService->getLL('folder');
-        $test2 = $this->languageServiceProvider->getLanguageService()->getLL('folder');
-
-        $items = [];
-
-        foreach ($folders as $folder) {
-            if (FolderInterface::ROLE_PROCESSING === $folder->getRole()) {
-                // don't show processing-folder
-                continue;
-            }
-            try {
-                $numFiles = $folder->getFileCount();
-            } catch (InsufficientFolderAccessPermissionsException $e) {
-                $numFiles = 0;
-            }
-
-            $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
-            $isWritable = $folderObject->checkActionPermission('write');
-
-            $items[] = [
-                'id' => $folder->getCombinedIdentifier(),
-                'icon' => $icon->getMarkup(),
-                'name' => $folder->getName(),
-                'modified' => BackendUtility::date($folder->getModificationTime()),
-                'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
-                'type' => $this->languageService->getLL('folder'),
-                //todo detect variants & references
-                'variants' => '-',
-                'references' => '0',
-                'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            ];
-        }
-
-        foreach ($files as $file) {
-            $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
-
-            $items[] = [
-                'id' => $file->getCombinedIdentifier(),
-                'icon' => $icon->getMarkup(),
-                'name' => $file->getName(),
-                'modified' => BackendUtility::date($file->getModificationTime()),
-                'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
-                'type' => \strtoupper($file->getExtension()),
-                //todo detect variants & references
-                'variants' => '-',
-                'references' => '0',
-                'rw' => 'r' . $folderObject->checkActionPermission('write') ? 'w' : '',
-            ];
-        }
-        return new JsonResponse($items);
+        return $response;
     }
 }
