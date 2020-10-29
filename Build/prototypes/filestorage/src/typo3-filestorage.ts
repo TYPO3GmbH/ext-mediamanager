@@ -262,6 +262,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
     return html`<typo3-grid>
       ${orderedData.map(listData => {
+        let rawIcon = listData.icon;
+        rawIcon = rawIcon.replace('<svg ', '<svg slot="image" ');
+        rawIcon = rawIcon.replace('<img ', '<img slot="image" ');
+
         return html` <typo3-card
           ?selected="${itemIsSelected(this.state.list)(listData.id)}"
           value="${listData.id}"
@@ -270,7 +274,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           selectable
           title="${listData.name}"
           subtitle="${listData.modified}"
-          ><div slot="image">${unsafeHTML(listData.icon)}</div>
+          >${unsafeHTML(rawIcon)}
         </typo3-card>`;
       })}
     </typo3-grid>`;
