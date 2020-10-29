@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\InaccessibleFolder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
@@ -35,11 +36,11 @@ class FolderTreeGenerator
     /** @var array */
     public $stored = [];
 
-    /** @var LanguageServiceProvider */
-    private $languageServiceProvider;
-
     /** @var IconFactory */
     private $iconFactory;
+
+    /** @var LanguageService */
+    private $languageService;
 
     public function __construct(
         BackendUserProvider $backendUserProvider,
@@ -47,17 +48,14 @@ class FolderTreeGenerator
         IconFactory $iconFactory
     ) {
         $this->backendUserProvider = $backendUserProvider;
-        $this->languageServiceProvider = $languageServiceProvider;
         $this->iconFactory = $iconFactory;
+        $this->languageService = $languageServiceProvider->getLanguageService();
     }
 
     public function getNodes(ResourceStorage $resourceStorage): array
     {
         $rootLevelFolders = $this->getRootLevelFolders($resourceStorage);
-        $languageService = $this->languageServiceProvider->getLanguageService();
-
         $items = [];
-
         $depth = 0;
         foreach ($rootLevelFolders as $i => $rootLevelFolderInfo) {
             /** @var Folder $rootLevelFolder */
@@ -67,24 +65,11 @@ class FolderTreeGenerator
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
 
             $this->specUIDmap[$folderHashSpecUID] = $rootLevelFolder->getCombinedIdentifier();
-            // Hash key
-//            $storageHashNumber = $this->getShortHashNumberForStorage($resourceStorage, $rootLevelFolder);
-            // Set first:
-//            $this->bank = $storageHashNumber;
-//            $isOpen = $this->stored[$storageHashNumber][$folderHashSpecUID] || $this->expandFirst;
+
             $isOpen = true;
-            // Set PM icon:
-//            $cmd = $this->generateExpandCollapseParameter($this->bank, !$isOpen, $rootLevelFolder);
-//            // Only show and link icon if storage is browseable
-//            if (!$resourceStorage->isBrowsable() || $this->getNumberOfSubfolders($rootLevelFolder) === 0) {
-//                $firstHtml = '';
-//            } else {
-//                $firstHtml = $this->renderPMIconAndLink($cmd, $isOpen);
-//            }
-            // Mark a storage which is not online, as offline
-            // maybe someday there will be a special icon for this
+
             if (false === $resourceStorage->isOnline()) {
-                $rootLevelFolderName .= ' (' . $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_file.xlf:sys_file_storage.isOffline') . ')';
+                $rootLevelFolderName .= ' (' . $this->languageService->sL('sys_file_storage.isOffline') . ')';
             }
             // Preparing rootRec for the mount
             $icon = $this->iconFactory->getIconForResource($rootLevelFolder, Icon::SIZE_SMALL, null, ['mount-root' => true]);

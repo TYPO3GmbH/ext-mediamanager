@@ -28,6 +28,7 @@ class LanguageServiceProvider
         $languageService->includeLLFile('EXT:filelist/Resources/Private/Language/locallang_mod_file_list.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_misc.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_common.xlf');
+        $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_mod_file.xlf');
 
         return $languageService;
     }

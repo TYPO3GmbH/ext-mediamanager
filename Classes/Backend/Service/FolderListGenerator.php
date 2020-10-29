@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -43,58 +44,65 @@ class FolderListGenerator
 
     public function getFolderItems(Folder $folderObject): array
     {
-        $items = [];
         $storage = $folderObject->getStorage();
 
-        $folders = $storage->getFoldersInFolder($folderObject);
-        $files = $folderObject->getFiles();
+        $folders = \array_filter($storage->getFoldersInFolder($folderObject), function (Folder $folder) {
+            return FolderInterface::ROLE_PROCESSING !== $folder->getRole();
+        });
 
-        foreach ($folders as $folder) {
-            if (FolderInterface::ROLE_PROCESSING === $folder->getRole()) {
-                // don't show processing-folder
-                continue;
-            }
-            try {
-                $numFiles = $folder->getFileCount();
-            } catch (InsufficientFolderAccessPermissionsException $e) {
-                $numFiles = 0;
-            }
+        $folderItems = \array_map([$this, 'formatFolder'], $folders);
+        $fileItems = \array_map([$this, 'formatFile'], $folderObject->getFiles());
 
-            $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
-            $isWritable = $folderObject->checkActionPermission('write');
+        return \array_merge(\array_values($folderItems), \array_values($fileItems));
+    }
 
-            $items[] = [
-                'id' => $folder->getCombinedIdentifier(),
-                'icon' => $icon->getMarkup(),
-                'name' => $folder->getName(),
-                'modified' => BackendUtility::date($folder->getModificationTime()),
-                'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
-                'type' => $this->languageService->getLL('folder'),
-                //todo detect variants & references
-                'variants' => '-',
-                'references' => '0',
-                'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            ];
+    /**
+     * @return array[string]string
+     */
+    protected function formatFolder(Folder $folder): array
+    {
+        try {
+            $numFiles = $folder->getFileCount();
+        } catch (InsufficientFolderAccessPermissionsException $e) {
+            $numFiles = 0;
         }
 
-        foreach ($files as $file) {
-            $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
-            $isWritable = $file->checkActionPermission('write');
+        $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
+        $isWritable = $folder->checkActionPermission('write');
 
-            $items[] = [
-                'id' => $file->getCombinedIdentifier(),
-                'icon' => $icon->getMarkup(),
-                'name' => $file->getName(),
-                'modified' => BackendUtility::date($file->getModificationTime()),
-                'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
-                'type' => \strtoupper($file->getExtension()),
-                //todo detect variants & references
-                'variants' => '-',
-                'references' => '0',
-                'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            ];
-        }
+        return [
+            'id' => $folder->getCombinedIdentifier(),
+            'icon' => $icon->getMarkup(),
+            'name' => $folder->getName(),
+            'modified' => BackendUtility::date($folder->getModificationTime()),
+            'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
+            'type' => $this->languageService->getLL('folder'),
+            //todo detect variants & references
+            'variants' => '-',
+            'references' => '0',
+            'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
+        ];
+    }
 
-        return $items;
+    /**
+     * @return array[string]string
+     */
+    protected function formatFile(File $file): array
+    {
+        $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
+        $isWritable = $file->checkActionPermission('write');
+
+        return [
+            'id' => $file->getCombinedIdentifier(),
+            'icon' => $icon->getMarkup(),
+            'name' => $file->getName(),
+            'modified' => BackendUtility::date($file->getModificationTime()),
+            'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
+            'type' => \strtoupper($file->getExtension()),
+            //todo detect variants & references
+            'variants' => '-',
+            'references' => '0',
+            'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
+        ];
     }
 }
