@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -42,14 +43,19 @@ class FolderTreeGenerator
     /** @var LanguageService */
     private $languageService;
 
+    /** @var UriBuilder */
+    private $uriBuilder;
+
     public function __construct(
         BackendUserProvider $backendUserProvider,
         LanguageServiceProvider $languageServiceProvider,
-        IconFactory $iconFactory
+        IconFactory $iconFactory,
+        UriBuilder $uriBuilder
     ) {
         $this->backendUserProvider = $backendUserProvider;
         $this->iconFactory = $iconFactory;
         $this->languageService = $languageServiceProvider->getLanguageService();
+        $this->uriBuilder = $uriBuilder;
     }
 
     public function getNodes(ResourceStorage $resourceStorage): array
@@ -61,10 +67,10 @@ class FolderTreeGenerator
             /** @var Folder $rootLevelFolder */
             $rootLevelFolder = $rootLevelFolderInfo['folder'];
             $rootLevelFolderName = $rootLevelFolderInfo['name'];
-            $folderHashSpecUID = GeneralUtility::md5int($rootLevelFolder->getCombinedIdentifier());
+            $combinedIdentifier = $rootLevelFolder->getCombinedIdentifier();
+            $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
-
-            $this->specUIDmap[$folderHashSpecUID] = $rootLevelFolder->getCombinedIdentifier();
+            $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
 
             $isOpen = true;
 
@@ -76,7 +82,7 @@ class FolderTreeGenerator
 
             $items[] = [
                 'stateIdentifier' => $stateIdentifier,
-                'identifier' => $rootLevelFolder->getCombinedIdentifier(),
+                'identifier' => $combinedIdentifier,
                 'depth' => $depth,
                 'icon' => $icon->getIdentifier(),
                 'name' => $rootLevelFolderName,
@@ -85,6 +91,7 @@ class FolderTreeGenerator
                 'siblingsPosition' =>  $i,
                 'hasChildren' => \count($rootLevelFolder->getSubfolders()) > 0,
                 'expanded' => $isOpen,
+                'folderLink' => $this->buildFolderLink($combinedIdentifier),
             ];
 
             // If the mount is expanded, go down:
@@ -115,14 +122,16 @@ class FolderTreeGenerator
             ++$subFolderCounter;
 
             $isLocked = $subFolder instanceof InaccessibleFolder;
-            $specUID = GeneralUtility::md5int($subFolder->getCombinedIdentifier());
-            $this->specUIDmap[$specUID] = $subFolder->getCombinedIdentifier();
+
+            $combinedIdentifier = $subFolder->getCombinedIdentifier();
+            $specUID = GeneralUtility::md5int($combinedIdentifier);
+            $this->specUIDmap[$specUID] = $combinedIdentifier;
 
             $isOpen = \count($subFolder->getSubfolders()) > 0;
 
             $icon = $this->iconFactory->getIconForResource($subFolder, Icon::SIZE_SMALL, null, ['folder-open' => (bool) $isOpen]);
 
-            $folderHashSpecUID = GeneralUtility::md5int($subFolder->getCombinedIdentifier());
+            $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $subFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
 
             $items[] = [
@@ -135,6 +144,7 @@ class FolderTreeGenerator
                 'siblingsCount' => \count($subFolders) - 1,
                 'siblingsPosition' => $subFolderCounter + 1,
                 'hasChildren' => \count($subFolder->getSubfolders()) > 0,
+                'folderLink' => $this->buildFolderLink($combinedIdentifier),
             ];
 
             if (\count($subFolder->getSubfolders()) > 0) {
@@ -165,5 +175,10 @@ class FolderTreeGenerator
         }
 
         return [];
+    }
+
+    protected function buildFolderLink(string $combinedIdentifier): string
+    {
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['id' => $combinedIdentifier]);
     }
 }

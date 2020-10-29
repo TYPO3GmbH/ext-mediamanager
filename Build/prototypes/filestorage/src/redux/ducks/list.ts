@@ -132,9 +132,7 @@ export type Actions =
   | LoadListDataSuccess
   | LoadListDataFailure;
 
-export const fetchListData = (id: string) => {
-  const url = window.typo3BackendUrl + '/filestorage/folder/' + id;
-
+export const fetchListData = (url: string) => {
   return (dispatch: ThunkDispatch<Actions, any, any>) => {
     dispatch(new LoadListData());
     dispatch(new ClearSelection());

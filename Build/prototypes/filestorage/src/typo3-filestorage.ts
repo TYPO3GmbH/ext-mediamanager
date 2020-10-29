@@ -20,7 +20,6 @@ import {
   ViewMode,
 } from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
-import { unsafeSVG } from 'lit-html/directives/unsafe-svg';
 import { SetSidebarWidth } from './redux/ducks/layout';
 import {
   AddSelectionItem,
@@ -39,6 +38,7 @@ import {
 } from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -262,9 +262,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
     return html`<typo3-grid>
       ${orderedData.map(listData => {
-        // hack for displaying svg for elements
-        let rawSVG = listData.icon;
-        rawSVG = rawSVG.replace('<svg ', '<svg slot="image" ');
         return html` <typo3-card
           ?selected="${itemIsSelected(this.state.list)(listData.id)}"
           value="${listData.id}"
@@ -273,7 +270,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           selectable
           title="${listData.name}"
           subtitle="${listData.modified}"
-          >${unsafeSVG(rawSVG)}
+          ><div slot="image">${unsafeHTML(listData.icon)}</div>
         </typo3-card>`;
       })}
     </typo3-grid>`;
@@ -427,7 +424,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new SelectTreeNode(event.detail));
-    store.dispatch(fetchListData(event.detail.identifier));
+    store.dispatch(fetchListData(event.detail.folderLink));
   }
 
   _onContextMenu(

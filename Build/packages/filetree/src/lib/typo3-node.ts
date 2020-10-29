@@ -5,6 +5,7 @@ export interface Typo3Node {
   hasChildren: boolean;
   icon: string;
   identifier: number | string;
+  folderLink: string;
   loaded: boolean;
   mountPoint: number;
   name: string;
