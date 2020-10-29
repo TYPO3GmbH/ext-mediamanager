@@ -25,7 +25,7 @@ class LanguageServiceProvider
         $languageService = $GLOBALS['LANG'];
         \assert($languageService instanceof LanguageService);
 
-        $languageService->includeLLFile('EXT:filelist/Resources/Private/Language/locallang_mod_file_list.xlf');
+        $languageService->includeLLFile('EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_misc.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_common.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_mod_file.xlf');
