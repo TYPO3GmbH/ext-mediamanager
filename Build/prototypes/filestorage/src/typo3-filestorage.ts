@@ -132,7 +132,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
           </div>
           <typo3-filetree
-            style="flex: 1;"
             .nodes="${this.state.tree.nodes}"
             @typo3-node-selected="${this._onSelectedNode}"
             @typo3-node-context-menu="${this._onContextMenu}"

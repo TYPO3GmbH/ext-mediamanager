@@ -82,6 +82,7 @@
   "author": "typo3-filelist",
   "license": "MIT",
   "dependencies": {
+    "@fristys/masonry": "^1.1.4",
     "@material/mwc-menu": "^0.18.0",
     "@types/d3": "^5.16.3",
     "@types/lodash-es": "^4.17.3",

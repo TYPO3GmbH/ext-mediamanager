@@ -9,10 +9,6 @@
   border-bottom: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
 }
 
-.content_right .topbar-wrapper {
-  margin-bottom: var(--typo3-topbar-wrapper-margin-bottom, 1rem);
-}
-
 .topbar-wrapper typo3-topbar:last-child {
   border-top: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
   background-color: #F4F4F4;
@@ -22,6 +18,13 @@
 .content_left, .content_right {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+typo3-filetree {
+  overflow: auto;
+  flex: 1;
 }
 
 .loading {
@@ -43,4 +46,6 @@
 typo3-datagrid, typo3-grid {
   background-color: #FFFFFF;
   flex: 1;
+  overflow: auto;
+  padding: 1rem;
 }
