@@ -93,8 +93,14 @@ class FolderListGenerator
         $isWritable = $file->checkActionPermission('write');
 
         $thumbnailUrl = null;
+        $thumbnailWidth = 190;
         if ($file->isImage() || $file->isMediaFile()) {
-            $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => 300, 'width' => 500]);
+            $thumbnailHeight = 200;
+            if ($file->getProperty('width') > 0 && $file->getProperty('height') > 0) {
+                $aspectRatio = $file->getProperty('width') / $file->getProperty('height');
+                $thumbnailWidth = (int) (300 * $aspectRatio);
+            }
+            $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
         }
 
         return [
@@ -108,7 +114,8 @@ class FolderListGenerator
             'variants' => '-',
             'references' => '0',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'thumbnailUrl' => $thumbnailUrl
+            'thumbnailUrl' => $thumbnailUrl,
+            'thumbnailWidth' => $thumbnailWidth
         ];
     }
 }

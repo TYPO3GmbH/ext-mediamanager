@@ -9,4 +9,5 @@ interface ListItem {
   references: string;
   rw: string;
   thumbnailUrl?: string;
+  thumbnailWidth?: string;
 }

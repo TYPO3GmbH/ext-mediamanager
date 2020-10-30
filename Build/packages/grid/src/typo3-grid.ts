@@ -1,4 +1,10 @@
-import { customElement, html, LitElement, TemplateResult } from 'lit-element';
+import {
+  customElement,
+  html,
+  LitElement,
+  query,
+  TemplateResult,
+} from 'lit-element';
 
 import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
@@ -7,7 +13,11 @@ import themeStyles from '../../../theme/index.pcss';
 export class Typo3Grid extends LitElement {
   public static styles = [themeStyles, styles];
 
+  @query('.grid') grid!: HTMLElement;
+
   render(): TemplateResult {
-    return html` <slot></slot> `;
+    return html` <div class="grid">
+      <slot></slot>
+    </div>`;
   }
 }

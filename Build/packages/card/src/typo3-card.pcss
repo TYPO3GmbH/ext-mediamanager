@@ -1,13 +1,18 @@
-.card {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  box-sizing: border-box;
+:host {
   width: var(--typo3-card-width, 12rem);
+}
+
+.card {
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
   border: var(--typo3-card-border-size, 0.125rem) solid var(--typo3-card-border-color, #eaeaea);
   border-radius: var(--typo3-card-border-radius, 0.25rem);
+  position: relative;
+  flex-direction: column;
   text-decoration: none;
   background-color: var(--typo3-card-background-color, #fff);
+  overflow: hidden;
 }
 
 .card[selected] {

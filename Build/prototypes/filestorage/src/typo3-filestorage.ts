@@ -271,6 +271,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     rawIcon = rawIcon.replace('<img ', '<img slot="image" ');
     let imageSlot = html`${unsafeHTML(rawIcon)}`;
 
+    let styles = '';
+
     if (listData.thumbnailUrl) {
       imageSlot = html`<img
         slot="image"
@@ -278,6 +280,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         src="${listData.thumbnailUrl}"
         alt="${listData.name}"
       />`;
+      styles = 'width:' + Math.min(500, listData.thumbnailWidth) + 'px';
     }
 
     let badge = html``;
@@ -291,6 +294,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     return html` <typo3-card
+      style="${styles}"
       ?selected="${itemIsSelected(this.state.list)(listData.id)}"
       value="${listData.id}"
       @typo3-card-selected="${this._onAddSelectionItem}"

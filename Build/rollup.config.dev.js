@@ -19,7 +19,6 @@ const baseConfig = createBasicConfig({
     resolveOnly: [/masonry/],
   },
 
-
   // if you need to support older browsers, such as IE11, set the legacyBuild
   // option to generate an additional build just for this browser
   // legacyBuild: true,
