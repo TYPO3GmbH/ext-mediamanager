@@ -92,6 +92,11 @@ class FolderListGenerator
         $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
         $isWritable = $file->checkActionPermission('write');
 
+        $thumbnailUrl = null;
+        if ($file->isImage() || $file->isMediaFile()) {
+            $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => 300, 'width' => 500]);
+        }
+
         return [
             'id' => $file->getCombinedIdentifier(),
             'icon' => $icon->getMarkup(),
@@ -103,6 +108,7 @@ class FolderListGenerator
             'variants' => '-',
             'references' => '0',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
+            'thumbnailUrl' => $thumbnailUrl
         ];
     }
 }

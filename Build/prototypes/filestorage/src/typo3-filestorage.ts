@@ -261,23 +261,46 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       [this.state.viewMode.order.direction]
     );
     return html`<typo3-grid>
-      ${orderedData.map(listData => {
-        let rawIcon = listData.icon;
-        rawIcon = rawIcon.replace('<svg ', '<svg slot="image" ');
-        rawIcon = rawIcon.replace('<img ', '<img slot="image" ');
-
-        return html` <typo3-card
-          ?selected="${itemIsSelected(this.state.list)(listData.id)}"
-          value="${listData.id}"
-          @typo3-card-selected="${this._onAddSelectionItem}"
-          @typo3-card-unselected="${this._onRemoveSelectionItem}"
-          selectable
-          title="${listData.name}"
-          subtitle="${listData.modified}"
-          >${unsafeHTML(rawIcon)}
-        </typo3-card>`;
-      })}
+      ${orderedData.map(listData => this.getCardContent(listData))}
     </typo3-grid>`;
+  }
+
+  protected getCardContent(listData: ListItem): TemplateResult {
+    let rawIcon = listData.icon;
+    rawIcon = rawIcon.replace('<svg ', '<svg slot="image" ');
+    rawIcon = rawIcon.replace('<img ', '<img slot="image" ');
+    let imageSlot = html`${unsafeHTML(rawIcon)}`;
+
+    if (listData.thumbnailUrl) {
+      imageSlot = html`<img
+        slot="image"
+        loading="lazy"
+        src="${listData.thumbnailUrl}"
+        alt="${listData.name}"
+      />`;
+    }
+
+    let badge = html``;
+
+    if (listData.type === 'Folder') {
+      const sizeNumeric = parseInt(listData.size.replace(/^\D+/g, ''));
+      badge = html`<typo3-badge
+        slot="badge"
+        title="${sizeNumeric}"
+      ></typo3-badge>`;
+    }
+
+    return html` <typo3-card
+      ?selected="${itemIsSelected(this.state.list)(listData.id)}"
+      value="${listData.id}"
+      @typo3-card-selected="${this._onAddSelectionItem}"
+      @typo3-card-unselected="${this._onRemoveSelectionItem}"
+      selectable
+      title="${listData.name}"
+      subtitle="${listData.modified}"
+      variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
+      >${imageSlot} ${badge}
+    </typo3-card>`;
   }
 
   protected getViewModeDropDown(): TemplateResult {

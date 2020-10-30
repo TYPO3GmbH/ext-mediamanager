@@ -8,4 +8,5 @@ interface ListItem {
   variants: string;
   references: string;
   rw: string;
+  thumbnailUrl?: string;
 }

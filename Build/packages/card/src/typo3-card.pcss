@@ -77,12 +77,14 @@
 }
 
 :host([variant='preview']) .body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  text-align: left;
+  padding: 0.5rem;
+  margin-top: -3.75rem;
+  z-index: 1;
 }
 
 :host([variant='preview']) .title,
 :host([variant='preview']) .subtitle {
   color: white;
+  text-shadow: 0 0 0.1875em rgba(0, 0, 0, 1);
 }
