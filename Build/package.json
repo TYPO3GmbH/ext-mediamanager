@@ -11,6 +11,7 @@
     "storybook": "concurrently --kill-others --names rollup,storybook \"npm run rollup:dev-watch\"  \"start-storybook --node-resolve --watch --open\"",
     "storybook:build": "build-storybook",
     "build": "rimraf dist && rollup -c rollup.config.prod.js",
+    "build:watch": "rollup -c rollup.config.prod.js --w",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
     "start": "concurrently --kill-others --names rollup,es-dev-server \"npm run rollup:dev-watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
     "rollup:dev": "rollup -c rollup.config.dev.js",

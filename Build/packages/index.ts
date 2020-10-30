@@ -14,6 +14,7 @@ import './filetree/src/typo3-filetree';
 import './grid/src/typo3-grid';
 import './list/src/typo3-list-item';
 import './list/src/typo3-list';
+import './menu/src/typo3-context-menu';
 import './menu/src/typo3-menu';
 import './menu/src/typo3-menu-item';
 import './modal/src/typo3-modal';

@@ -5,7 +5,7 @@ export interface Typo3Node {
   hasChildren: boolean;
   icon: string;
   identifier: number | string;
-  folderLink: string;
+  folderUrl: string;
   loaded: boolean;
   mountPoint: number;
   name: string;
@@ -36,4 +36,5 @@ export interface Typo3Node {
   firstChild?: boolean;
   lastChild?: boolean;
   class: any;
+  contextMenuUrl: string;
 }

@@ -454,16 +454,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new SelectTreeNode(event.detail));
-    store.dispatch(fetchListData(event.detail.folderLink));
+    store.dispatch(fetchListData(event.detail.folderUrl));
   }
 
   _onContextMenu(
     event: CustomEvent<{ event: MouseEvent; node: Typo3Node }>
   ): void {
     event.detail.event.preventDefault();
-    const nodeId = event.detail.node.identifier;
-    const url = window.typo3BackendUrl + '/context-menu?uid=' + nodeId;
-    fetch(url)
+    fetch(event.detail.node.contextMenuUrl)
       .then((response: Response) => {
         if (!response.ok) {
           throw new Error(response.statusText);

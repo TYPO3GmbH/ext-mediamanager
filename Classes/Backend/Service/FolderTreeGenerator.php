@@ -91,7 +91,8 @@ class FolderTreeGenerator
                 'siblingsPosition' =>  $i,
                 'hasChildren' => \count($rootLevelFolder->getSubfolders()) > 0,
                 'expanded' => $isOpen,
-                'folderLink' => $this->buildFolderLink($combinedIdentifier),
+                'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
+                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             ];
 
             // If the mount is expanded, go down:
@@ -144,7 +145,8 @@ class FolderTreeGenerator
                 'siblingsCount' => \count($subFolders) - 1,
                 'siblingsPosition' => $subFolderCounter + 1,
                 'hasChildren' => \count($subFolder->getSubfolders()) > 0,
-                'folderLink' => $this->buildFolderLink($combinedIdentifier),
+                'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
+                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             ];
 
             if (\count($subFolder->getSubfolders()) > 0) {
@@ -177,8 +179,13 @@ class FolderTreeGenerator
         return [];
     }
 
-    protected function buildFolderLink(string $combinedIdentifier): string
+    protected function buildFolderUrl(string $combinedIdentifier): string
     {
         return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['id' => $combinedIdentifier]);
+    }
+
+    protected function buildContextMenuUrl(string $combinedIdentifier): string
+    {
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
     }
 }
