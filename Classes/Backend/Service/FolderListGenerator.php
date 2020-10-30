@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -34,12 +35,17 @@ class FolderListGenerator
     /** @var IconFactory */
     private $iconFactory;
 
+    /** @var UriBuilder */
+    private $uriBuilder;
+
     public function __construct(
         LanguageServiceProvider $languageServiceProvider,
-        IconFactory $iconFactory
+        IconFactory $iconFactory,
+        UriBuilder $uriBuilder
     ) {
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->iconFactory = $iconFactory;
+        $this->uriBuilder = $uriBuilder;
     }
 
     public function getFolderItems(Folder $folderObject): array
@@ -69,9 +75,10 @@ class FolderListGenerator
 
         $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
         $isWritable = $folder->checkActionPermission('write');
+        $combinedIdentifier = $folder->getCombinedIdentifier();
 
         return [
-            'id' => $folder->getCombinedIdentifier(),
+            'id' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
             'name' => $folder->getName(),
             'modified' => BackendUtility::date($folder->getModificationTime()),
@@ -81,6 +88,7 @@ class FolderListGenerator
             'variants' => '-',
             'references' => '0',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
+            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
         ];
     }
 
@@ -91,9 +99,11 @@ class FolderListGenerator
     {
         $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
         $isWritable = $file->checkActionPermission('write');
+        $combinedIdentifier = $file->getCombinedIdentifier();
 
         $thumbnailUrl = null;
         $thumbnailWidth = 190;
+
         if ($file->isImage() || $file->isMediaFile()) {
             $thumbnailHeight = 200;
             if ($file->getProperty('width') > 0 && $file->getProperty('height') > 0) {
@@ -104,7 +114,7 @@ class FolderListGenerator
         }
 
         return [
-            'id' => $file->getCombinedIdentifier(),
+            'id' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
             'name' => $file->getName(),
             'modified' => BackendUtility::date($file->getModificationTime()),
@@ -115,7 +125,13 @@ class FolderListGenerator
             'references' => '0',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'thumbnailUrl' => $thumbnailUrl,
-            'thumbnailWidth' => $thumbnailWidth
+            'thumbnailWidth' => $thumbnailWidth,
+            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
         ];
+    }
+
+    protected function buildContextMenuUrl(string $combinedIdentifier): string
+    {
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
     }
 }

@@ -10,4 +10,5 @@ interface ListItem {
   rw: string;
   thumbnailUrl?: string;
   thumbnailWidth?: string;
+  contextMenuUrl: string;
 }

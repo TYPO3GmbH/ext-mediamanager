@@ -292,6 +292,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ></typo3-badge>`;
     }
 
+    const contextMenuCallback = (e: MouseEvent) => {
+      this._onContextMenu(
+        new CustomEvent('typo3-card-context-menu', {
+          detail: { event: e, node: listData },
+        })
+      );
+    };
+
     return html` <typo3-card
       style="${styles}"
       ?selected="${itemIsSelected(this.state.list)(listData.id)}"
@@ -302,6 +310,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
+      @contextmenu="${contextMenuCallback}"
       >${imageSlot} ${badge}
     </typo3-card>`;
   }
@@ -458,7 +467,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onContextMenu(
-    event: CustomEvent<{ event: MouseEvent; node: Typo3Node }>
+    event: CustomEvent<{ event: MouseEvent; node: Typo3Node | ListItem }>
   ): void {
     event.detail.event.preventDefault();
     fetch(event.detail.node.contextMenuUrl)
