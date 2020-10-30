@@ -12,6 +12,7 @@ import merge from 'deepmerge';
 // use createBasicConfig to do regular JS to JS bundling
 import {createBasicConfig} from '@open-wc/building-rollup';
 import injectProcessEnv from "rollup-plugin-inject-process-env";
+import commonjs from "rollup-plugin-commonjs";
 
 const baseConfig = createBasicConfig({
   // use the outputdir option to modify where files are output
@@ -37,6 +38,7 @@ const plugins = [
     ]
   }),
   postcssLit(),
+  commonjs(),
   typescriptPlugin({
     importHelpers: true,
     typescript,
