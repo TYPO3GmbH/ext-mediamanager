@@ -78,6 +78,16 @@ export class Typo3SvgTree extends LitElement {
 
   public static styles = [themeStyles, styles];
 
+  public connectedCallback(): void {
+    super.connectedCallback();
+    window.addEventListener('resize', this._setWrapperHeight);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this._setWrapperHeight);
+  }
+
   firstUpdated(): void {
     this._setWrapperHeight();
     this.dispatch = d3.dispatch(
@@ -160,9 +170,9 @@ export class Typo3SvgTree extends LitElement {
     `;
   }
 
-  _setWrapperHeight(): void {
+  _setWrapperHeight = (): void => {
     this.wrapper.style.height = this.offsetHeight + 'px';
-  }
+  };
 
   /**
    * Updates variables used for visible nodes calculation
