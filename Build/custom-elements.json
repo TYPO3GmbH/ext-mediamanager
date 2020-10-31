@@ -311,12 +311,6 @@
           "attribute": "subtitle"
         },
         {
-          "name": "selectable",
-          "attribute": "selectable",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
           "name": "selected",
           "attribute": "selected",
           "type": "boolean",
@@ -328,16 +322,7 @@
           "type": "string | undefined"
         }
       ],
-      "events": [
-        {
-          "name": "typo3-card-selected",
-          "description": "Dispatched when card is selected"
-        },
-        {
-          "name": "typo3-card-unselected",
-          "description": "Dispatched when card is unselected"
-        }
-      ],
+      "events": [],
       "slots": [
         {
           "image": ""
@@ -409,11 +394,24 @@
     {
       "name": "typo3-grid",
       "description": "Grid (e.g. for displaying card)",
-      "properties": [],
-      "events": [],
+      "properties": [
+        {
+          "name": "selectable",
+          "attribute": "selectable",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-grid-selection-changed",
+          "description": "Dispatched when selection has changed"
+        }
+      ],
       "slots": [
         {
-          "description": "Grid cell"
+          "name": "",
+          "description": "Grid items"
         }
       ],
       "cssProperties": [

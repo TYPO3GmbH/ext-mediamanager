@@ -39,15 +39,15 @@ import {
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { Typo3Card } from '../../../packages/card/src/typo3-card';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
   /**
    * todo: remove mockoon routes
    */
-  @property({ type: String }) typo3BackendUrl = 'http://localhost:3001';
-  @property({ type: String }) treeUrl =
-    'http://localhost:3001/filestorage/tree';
+  @property({ type: String })
+  treeUrl = 'http://localhost:3001/filestorage/tree';
 
   @internalProperty() private state!: RootState;
 
@@ -250,7 +250,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
         .selectedRows="${selectedRows(this.state.list)}"
-        @typo3-datagrid-selection-change="${this._onSelectionChange}"
+        @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
       ></typo3-datagrid>`;
     }
 
@@ -259,7 +259,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       [this.state.viewMode.order.field],
       [this.state.viewMode.order.direction]
     );
-    return html`<typo3-grid>
+    return html`<typo3-grid
+      @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
+    >
       ${orderedData.map(listData => this.getCardContent(listData))}
     </typo3-grid>`;
   }
@@ -304,9 +306,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       style="${styles}"
       ?selected="${itemIsSelected(this.state.list)(listData.id)}"
       value="${listData.id}"
-      @typo3-card-selected="${this._onAddSelectionItem}"
-      @typo3-card-unselected="${this._onRemoveSelectionItem}"
-      selectable
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
@@ -504,19 +503,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new SetSortOrderDirection(direction));
   }
 
-  _onAddSelectionItem(event: CustomEvent): void {
-    store.dispatch(new AddSelectionItem(event.detail.value));
-  }
-
-  _onRemoveSelectionItem(event: CustomEvent): void {
-    store.dispatch(new RemoveSelectionItem(event.detail.value));
-  }
-
   _onClearSelection(): void {
     store.dispatch(new ClearSelection());
   }
 
-  _onSelectionChange(event: CustomEvent<ListItem[]>): void {
+  _onDatagridSelectionChange(event: CustomEvent<ListItem[]>): void {
     store.dispatch(new SetSelection(event.detail.map(row => row.id)));
+  }
+
+  _onCardgridSelectionChange(event: CustomEvent<HTMLElement[]>): void {
+    store.dispatch(
+      new SetSelection(
+        event.detail.map((element: HTMLElement) => element.value)
+      )
+    );
   }
 }
