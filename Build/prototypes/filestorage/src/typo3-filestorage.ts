@@ -442,10 +442,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       return html``;
     }
 
+    const selectedStorage = this.storages.find(
+      storage => storage.uid === this.selectedStorageUid
+    );
+
     return html`
       <typo3-dropdown slot="left" activatable>
         <typo3-dropdown-button slot="button" color="default">
-          ${this.state.tree.nodes[0].name}
+          ${selectedStorage!.name}
         </typo3-dropdown-button>
         <typo3-dropdown-item activated selected="true">
           <span>${this.state.tree.nodes[0].name}</span>

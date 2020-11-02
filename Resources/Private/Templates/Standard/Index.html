@@ -1,4 +1,26 @@
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
-<div style="height:100vh">
-    <typo3-filestorage treeUrl="{treeUrl}"></typo3-filestorage>
+<style type="text/css">
+    body {
+        margin: 0;
+    }
+</style>
+
+<div style="height: 100vh;padding: 1rem;background-color:white;">
+
+    <typo3-alert color="info">Select as storage to start browsing your assets</typo3-alert>
+
+    <typo3-grid>
+        <f:for each="{storages}" as="storage">
+            <a href="{storage.storageUrl}"  slot="item">
+                <typo3-card
+                    title="{storage.name}"
+                    href="{storage.storageUrl}"
+                >
+                    <f:format.raw>{storage.icon}</f:format.raw>
+                </typo3-card>
+            </a>
+        </f:for>
+    </typo3-grid>
 </div>
+
+
