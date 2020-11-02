@@ -16,7 +16,7 @@
     "start": "concurrently --kill-others --names rollup,es-dev-server \"npm run rollup:dev-watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
     "rollup:dev": "rollup -c rollup.config.dev.js",
     "rollup:dev-watch": "npm run rollup:dev -- --w",
-    "testoi": "tsc node_modules/macy/dist/macy.js --declaration --allowJS --emitDeclarationOnly --outDir types"
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^1.9.4",
@@ -24,6 +24,7 @@
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/testing": "^2.5.32",
     "@open-wc/testing-karma": "^3.0.0",
+    "@storybook/storybook-deployer": "^2.8.7",
     "@types/node": "13.11.1",
     "@types/redux": "^3.6.0",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
