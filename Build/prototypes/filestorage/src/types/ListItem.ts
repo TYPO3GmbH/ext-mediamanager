@@ -1,5 +1,5 @@
 interface ListItem {
-  id: string;
+  uid: string;
   icon: string;
   name: string;
   modified: string;

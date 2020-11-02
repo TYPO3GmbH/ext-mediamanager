@@ -22,11 +22,9 @@ import {
 import { RootState } from './redux/ducks';
 import { SetSidebarWidth } from './redux/ducks/layout';
 import {
-  AddSelectionItem,
   ClearSelection,
   fetchListData,
   itemIsSelected,
-  RemoveSelectionItem,
   selectedRows,
   selectionIsEmpty,
   SetSelection,
@@ -39,6 +37,7 @@ import {
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { addSlotToRawHtml } from './lib/utils';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -48,6 +47,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: String })
   treeUrl = 'http://localhost:3001/filestorage/tree';
 
+  @property({ type: Array }) private storages: {
+    storageUrl: string;
+    name: string;
+    uid: number;
+    icon: string;
+  }[] = [];
+
+  @property({ type: Number }) private selectedStorageUid = 0;
+
   @internalProperty() private state!: RootState;
 
   @query('.content_left') contentLeft!: HTMLElement;
@@ -56,7 +64,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   public static styles = [themeStyles, styles];
 
   protected listHeader = [
-    { name: 'id', type: 'text', title: ' ', hidden: true },
+    { name: 'uid', type: 'text', title: ' ', hidden: true },
     { name: 'icon', type: 'html', title: ' ', width: '24' },
     { name: 'name', title: 'Name', sortable: true },
     { name: 'modified', title: 'Modified', width: '150', sortable: true },
@@ -269,9 +277,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected getCardContent(listData: ListItem): TemplateResult {
-    let rawIcon = listData.icon;
-    rawIcon = rawIcon.replace('<svg ', '<svg slot="image" ');
-    rawIcon = rawIcon.replace('<img ', '<img slot="image" ');
+    const rawIcon = addSlotToRawHtml(listData.icon, 'image');
     let imageSlot = html`${unsafeHTML(rawIcon)}`;
 
     let styles = '';
@@ -307,8 +313,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return html` <typo3-card
       slot="item"
       style="${styles}"
-      ?selected="${itemIsSelected(this.state.list)(listData.id)}"
-      value="${listData.id}"
+      ?selected="${itemIsSelected(this.state.list)(listData.uid)}"
+      value="${listData.uid}"
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
@@ -438,7 +444,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected getStorageDropDown(): TemplateResult {
-    if (this.state.tree.nodes.length == 0) {
+    if (this.storages.length == 0) {
       return html``;
     }
 
@@ -449,11 +455,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return html`
       <typo3-dropdown slot="left" activatable>
         <typo3-dropdown-button slot="button" color="default">
+          ${unsafeHTML(addSlotToRawHtml(selectedStorage!.icon, 'icon'))}
           ${selectedStorage!.name}
         </typo3-dropdown-button>
-        <typo3-dropdown-item activated selected="true">
-          <span>${this.state.tree.nodes[0].name}</span>
-        </typo3-dropdown-item>
+        ${this.storages.map(
+          storage => html`
+            <typo3-dropdown-item
+              ?selected="${storage.uid === this.selectedStorageUid}"
+            >
+              ${unsafeHTML(addSlotToRawHtml(storage!.icon, 'icon'))}
+              <a href="${storage.storageUrl}"> ${storage.name} </a>
+            </typo3-dropdown-item>
+          `
+        )}
       </typo3-dropdown>
     `;
   }
@@ -517,7 +531,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDatagridSelectionChange(event: CustomEvent<ListItem[]>): void {
-    store.dispatch(new SetSelection(event.detail.map(row => row.id)));
+    store.dispatch(new SetSelection(event.detail.map(row => row.uid)));
   }
 
   _onCardgridSelectionChange(event: CustomEvent<HTMLElement[]>): void {

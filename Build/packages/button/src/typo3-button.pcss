@@ -272,7 +272,7 @@
   opacity: var(--typo3-global-btn-disabled-opacity);
 }
 
-slot[name='icon']::slotted(svg) {
+slot[name='icon']::slotted(*) {
   fill: currentColor;
   width: var(--typo3-btn-icon-size, var(--typo3-global-btn-icon-size));
   height: var(--typo3-btn-icon-size, var(--typo3-global-btn-icon-size));

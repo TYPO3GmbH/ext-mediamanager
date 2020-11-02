@@ -120,7 +120,7 @@ export const selectionIsEmpty = createSelector(
 
 export const selectedRows = createSelector(
   (state: ListState) => state,
-  state => state.items.filter(item => state.selectedItemIds.includes(item.id))
+  state => state.items.filter(item => state.selectedItemIds.includes(item.uid))
 );
 
 export type Actions =

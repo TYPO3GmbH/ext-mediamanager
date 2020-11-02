@@ -53,12 +53,11 @@ class FilelistController
 
     public function indexAction(): ResponseInterface
     {
-        $storages = \array_map(function ($storage) {
-            $data = $storage->getStorageRecord();
-            $data['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]);
-            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
+        $storages = array_map(function(array $data) {
+            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $data['icon']);
             return $data;
-        }, $this->backendUserProvider->getBackendUser()->getFileStorages());
+
+        }, $this->getStoragesData());
 
         $this->view->assign('storages', $storages);
 
@@ -74,12 +73,7 @@ class FilelistController
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
-        $storages = \array_map(function ($storage) {
-            $data = $storage->getStorageRecord();
-            $data['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]);
-            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
-            return $data;
-        }, $this->backendUserProvider->getBackendUser()->getFileStorages());
+        $storages = $this->getStoragesData();
 
         $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
         $ajaxFolderListUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData');
@@ -90,5 +84,21 @@ class FilelistController
         $this->view->assign('folderUrl', (string) $ajaxFolderListUrl);
 
         return new HtmlResponse($this->view->render());
+    }
+
+
+    /**
+     * @return mixed[]
+     */
+    private function getStoragesData(): array
+    {
+        return \array_map(function ($storage) {
+            return [
+                'uid' => $storage->getUid(),
+                'name' => $storage->getName(),
+                'storageUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]),
+                'icon' => $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup(),
+            ];
+        }, $this->backendUserProvider->getBackendUser()->getFileStorages());
     }
 }
