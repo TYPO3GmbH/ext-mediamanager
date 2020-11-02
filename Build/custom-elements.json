@@ -410,7 +410,7 @@
       ],
       "slots": [
         {
-          "name": "",
+          "name": "item",
           "description": "Grid items"
         }
       ],

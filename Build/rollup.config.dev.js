@@ -16,7 +16,7 @@ const baseConfig = createBasicConfig({
   inlineDynamicImports: true,
 
   nodeResolve: {
-    resolveOnly: [/masonry/],
+    resolveOnly: [/macy/],
   },
 
   // if you need to support older browsers, such as IE11, set the legacyBuild

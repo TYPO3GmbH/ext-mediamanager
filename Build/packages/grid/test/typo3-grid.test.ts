@@ -17,8 +17,8 @@ describe('Typo3Grid', () => {
   beforeEach(async () => {
     element = await fixture(html`
       <typo3-grid selectable>
-        <typo3-card id="card-1"></typo3-card>
-        <typo3-card id="card-2"></typo3-card>
+        <typo3-card slot="item" id="card-1"></typo3-card>
+        <typo3-card slot="item" id="card-2"></typo3-card>
       </typo3-grid>
     `);
     cardItemOne = element.querySelector('#card-1') as Typo3Card;

@@ -84,10 +84,11 @@ export class Typo3ContextMenu extends LitElement {
   }
 
   dispatchContextMenuItemClick(option: Typo3ContextMenuOption): void {
+    console.log('item clicked');
     const actionEvent = new CustomEvent('typo3-context-menu-item-click', {
       detail: option,
     });
-    this.dispatchEvent(actionEvent);
+    window.dispatchEvent(actionEvent);
   }
 
   _handleShowContextMenu = (

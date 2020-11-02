@@ -3,14 +3,13 @@ import {
   html,
   LitElement,
   property,
-  PropertyValues,
   query,
-  queryAssignedNodes,
   TemplateResult,
 } from 'lit-element';
 
 import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
+import Macy from 'macy';
 
 /**
  * @fires typo3-grid-selection-changed - Dispatched when selection has changed
@@ -25,10 +24,36 @@ export class Typo3Grid extends LitElement {
 
   @property({ type: Boolean, reflect: true }) selectable = false;
 
+  private _macy!: Macy;
+
   render(): TemplateResult {
-    return html` <div class="grid">
-      <slot @click="${this._onItemClick}"></slot>
-    </div>`;
+    return html` <slot name="item" @click="${this._onItemClick}"></slot> `;
+  }
+
+  firstUpdated(): void {
+    this._macy = Macy({
+      container: this,
+      trueOrder: true,
+      waitForImages: false,
+      margin: 24,
+      columns: 6,
+      breakAt: {
+        1200: 5,
+        940: 3,
+        520: 2,
+        400: 1,
+      },
+      useContainerForBreakpoints: true,
+    });
+
+    // todo observe changed content
+    this.slotElement.addEventListener('slotchange', e => {
+      this.reload();
+    });
+  }
+
+  reload(): void {
+    this._macy.recalculate();
   }
 
   get items(): HTMLElement[] {

@@ -39,7 +39,6 @@ import {
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
-import { Typo3Card } from '../../../packages/card/src/typo3-card';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -246,6 +245,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     if (this.state.viewMode.mode === ViewMode.LIST) {
       return html` <typo3-datagrid
+        class="main-content"
         style="width: 100%; overflow: scroll"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
@@ -260,6 +260,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       [this.state.viewMode.order.direction]
     );
     return html`<typo3-grid
+      class="main-content"
+      selectable
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
       ${orderedData.map(listData => this.getCardContent(listData))}
@@ -303,6 +305,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     };
 
     return html` <typo3-card
+      slot="item"
       style="${styles}"
       ?selected="${itemIsSelected(this.state.list)(listData.id)}"
       value="${listData.id}"
@@ -452,6 +455,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSplitterDragend(): void {
+    window.dispatchEvent(new Event('resize'));
+
     const width = this.contentLeft.offsetWidth + this.contentRight.offsetWidth;
     store.dispatch(
       new SetSidebarWidth(
