@@ -66,7 +66,7 @@ class FolderDetailControllerTest extends UnitTestCase
     public function it_returns_a_404_status_code_on_missing_storage(): void
     {
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['id' => '1:/introduction/']);
+        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
 
         $this->resourceFactory->expects($this->once())
             ->method('getStorageObjectFromCombinedIdentifier')
@@ -95,7 +95,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($storage);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['id' => '1:/introduction/']);
+        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
         $this->assertEquals(404, $response->getStatusCode());
@@ -123,7 +123,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($storage);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['id' => '1:/introduction/']);
+        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
         $this->assertEquals(405, $response->getStatusCode());
@@ -163,7 +163,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($sampleData);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['id' => '1:/introduction/']);
+        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
 

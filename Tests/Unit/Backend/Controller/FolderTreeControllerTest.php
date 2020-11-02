@@ -80,7 +80,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->willReturn($backendUserMock);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['storageId' => '123']);
+        $request = $request->withQueryParams(['uid' => '123']);
         $response = $this->controller->fetchDataAction($request);
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -115,7 +115,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->willReturn([]);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['storageId' => '123']);
+        $request = $request->withQueryParams(['uid' => '123']);
         $response = $this->controller->fetchDataAction($request);
 
         $this->assertEquals(200, $response->getStatusCode());

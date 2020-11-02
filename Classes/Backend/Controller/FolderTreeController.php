@@ -39,10 +39,10 @@ class FolderTreeController
 
     public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
     {
-        $storageId = $request->getQueryParams()['storageId'] ?? null;
+        $storageId = $request->getQueryParams()['uid'] ?? null;
 
         if (null === $storageId) {
-            return new HtmlResponse('Parameter "storageId" is missing', 400);
+            return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
         $storages = $this->backendUserProvider->getBackendUser()->getFileStorages();

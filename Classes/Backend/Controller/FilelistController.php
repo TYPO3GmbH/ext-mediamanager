@@ -21,7 +21,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
@@ -54,10 +53,10 @@ class FilelistController
 
     public function indexAction(): ResponseInterface
     {
-        $storages = array_map(function($storage) {
+        $storages = \array_map(function ($storage) {
             $data = $storage->getStorageRecord();
             $data['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]);
-            $data['icon'] = preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
+            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
             return $data;
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
 
@@ -75,17 +74,16 @@ class FilelistController
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
-        $storages = array_map(function($storage) {
+        $storages = \array_map(function ($storage) {
             $data = $storage->getStorageRecord();
             $data['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]);
-            $data['icon'] = preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
+            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup());
             return $data;
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
 
-
-        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['storageId' => $storageUid]);
+        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
         $ajaxFolderListUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData');
-        $this->view->assign('storagesJson', json_encode(array_values($storages)));
+        $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
 
         $this->view->assign('treeUrl', (string) $ajaxTreeUrl);

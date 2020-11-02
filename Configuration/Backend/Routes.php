@@ -20,6 +20,6 @@ return [
     'filelist_ng_storage' => [
         'path' => '/filelist_ng/storage',
         'access' => 'public',
-        'target' =>  Controller\FilelistController::class . '::storageAction'
+        'target' =>  Controller\FilelistController::class . '::storageAction',
     ],
 ];
