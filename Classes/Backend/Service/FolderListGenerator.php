@@ -52,7 +52,7 @@ class FolderListGenerator
     {
         $storage = $folderObject->getStorage();
 
-        $folders = \array_filter($storage->getFoldersInFolder($folderObject), function (Folder $folder) {
+        $folders = \array_filter($storage->getFoldersInFolder($folderObject), static function (Folder $folder) {
             return FolderInterface::ROLE_PROCESSING !== $folder->getRole();
         });
 

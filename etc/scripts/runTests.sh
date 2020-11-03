@@ -166,6 +166,9 @@ else
         unit)
             TEST_FILE="Web/typo3conf/ext/cms_filelist_ng/Tests/Unit"
             ;;
+        functional)
+            TEST_FILE="Web/typo3conf/ext/cms_filelist_ng/Tests/Functional"
+            ;;
     esac
 fi
 
@@ -196,6 +199,13 @@ case ${TEST_SUITE} in
     unit)
         setUpDockerComposeDotEnv
         docker-compose run unit
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
+
+    functional)
+        setUpDockerComposeDotEnv
+        docker-compose run functional_mariadb10
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
