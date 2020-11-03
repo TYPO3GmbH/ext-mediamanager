@@ -94,7 +94,7 @@ describe('Typo3ContextMenu', () => {
     window.dispatchEvent(showContextMenuEvent);
     await elementUpdated(element);
 
-    const listener = oneEvent(element, 'typo3-context-menu-item-click');
+    const listener = oneEvent(window, 'typo3-context-menu-item-click');
 
     const firstItem = element.shadowRoot!.querySelector('typo3-menu-item')!;
     (firstItem as HTMLElement).click();
