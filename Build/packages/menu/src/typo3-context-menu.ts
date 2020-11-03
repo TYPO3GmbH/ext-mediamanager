@@ -14,6 +14,7 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 interface OpenContextMenuDetail {
   options: { [key: string]: Typo3ContextMenuOption };
   sourceEvent: MouseEvent;
+  contextItem: {};
 }
 
 /**
@@ -85,9 +86,12 @@ export class Typo3ContextMenu extends LitElement {
 
   dispatchContextMenuItemClick(option: Typo3ContextMenuOption): void {
     const actionEvent = new CustomEvent('typo3-context-menu-item-click', {
-      detail: option,
+      detail: {
+        option: option,
+        contextItem: this.currentContextMenuDetail?.contextItem,
+      },
     });
-    this.dispatchEvent(actionEvent);
+    window.dispatchEvent(actionEvent);
   }
 
   _handleShowContextMenu = (

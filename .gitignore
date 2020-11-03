@@ -4,7 +4,8 @@
 /vendor
 /Build/node_modules
 .phpunit.result.cache
-public
 composer.lock
 etc/testing-docker/.env
 var
+/Resources/Public/JavaScript/es.js
+/Resources/Public/JavaScript/es.js.map
