@@ -1,6 +1,19 @@
 <?php
 declare(strict_types=1);
 
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 namespace Functional\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -35,7 +48,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $this->iconFactoryMock = $this->createMock(IconFactory::class);
 
         $GLOBALS['LANG'] = LanguageService::create('default');
-        $this->generator = New FolderListGenerator(
+        $this->generator = new FolderListGenerator(
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
             GeneralUtility::makeInstance(UriBuilder::class)
@@ -87,7 +100,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $result = $this->generator->getFolderItems($folderObject);
 
-        $this->assertEquals( [[
+        $this->assertEquals([[
             'uid' => '1:/test-folder',
             'icon' => 'icon',
             'name' => 'TestFolder',
@@ -168,7 +181,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $result = $this->generator->getFolderItems($folderObject);
 
-        $this->assertEquals( [[
+        $this->assertEquals([[
             'uid' => '1:/test-file',
             'icon' => 'icon',
             'name' => 'Test-file',
@@ -180,7 +193,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
             'thumbnailUrl' => null,
-            'thumbnailWidth' => 190
+            'thumbnailWidth' => 190,
         ]], $result);
     }
 }

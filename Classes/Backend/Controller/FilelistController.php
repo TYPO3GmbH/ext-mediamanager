@@ -53,10 +53,9 @@ class FilelistController
 
     public function indexAction(): ResponseInterface
     {
-        $storages = array_map(function(array $data) {
+        $storages = \array_map(function (array $data) {
             $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $data['icon']);
             return $data;
-
         }, $this->getStoragesData());
 
         $this->view->assign('storages', $storages);
@@ -85,7 +84,6 @@ class FilelistController
 
         return new HtmlResponse($this->view->render());
     }
-
 
     /**
      * @return mixed[]
