@@ -1,4 +1,5 @@
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
+
 <style type="text/css">
     body {
         margin: 0;
@@ -12,7 +13,15 @@
 
 <script type="text/javascript">
     window.addEventListener('typo3-context-menu-item-click', function(e) {
-        top.TYPO3.InfoWindow.showItem('_FILE', '1:/introduction/images/streets/adrian-207619.jpg');
+        const contextItem = e.detail.contextItem;
+        const type = contextItem.hasOwnProperty('type') && contextItem.type !== 'folder' ? '_FILE' : '_FOLDER';
+        const uid = contextItem.hasOwnProperty('identifier') ? contextItem.identifier : contextItem.uid;
+        const option = e.detail.option;
+
+        if (option.callbackAction === 'openInfoPopUp') {
+            top.TYPO3.InfoWindow.showItem(type, uid);
+        }
+
     });
 </script>
 
