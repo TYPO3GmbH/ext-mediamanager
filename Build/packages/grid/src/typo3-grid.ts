@@ -9,7 +9,8 @@ import {
 
 import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
-import Macy from 'macy';
+import { Masonry } from '@fristys/masonry';
+import { PropertyValues } from 'lit-element/lib/updating-element';
 
 /**
  * @fires typo3-grid-selection-changed - Dispatched when selection has changed
@@ -24,36 +25,34 @@ export class Typo3Grid extends LitElement {
 
   @property({ type: Boolean, reflect: true }) selectable = false;
 
-  private _macy!: Macy;
+  @property({ type: String }) hash = '';
+
+  private _masonry!: Masonry;
 
   render(): TemplateResult {
     return html` <slot name="item" @click="${this._onItemClick}"></slot> `;
   }
 
+  protected updated(_changedProperties: PropertyValues): void {
+    this._masonry.init();
+  }
+
   firstUpdated(): void {
-    this._macy = Macy({
-      container: this,
-      trueOrder: true,
-      waitForImages: false,
-      margin: 24,
-      columns: 6,
-      breakAt: {
-        1200: 5,
+    this._masonry = new Masonry(this, {
+      useContainerWidth: true,
+      columnBreakpoints: {
+        1400: 5,
+        1200: 4,
         940: 3,
         520: 2,
         400: 1,
       },
-      useContainerForBreakpoints: true,
-    });
-
-    // todo observe changed content
-    this.slotElement.addEventListener('slotchange', e => {
-      this.reload();
+      trackItemSizeChanges: true,
     });
   }
 
   reload(): void {
-    this._macy.recalculate();
+    this._masonry.init();
   }
 
   get items(): HTMLElement[] {

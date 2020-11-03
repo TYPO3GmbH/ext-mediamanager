@@ -267,8 +267,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       [this.state.viewMode.order.field],
       [this.state.viewMode.order.direction]
     );
+    const hash = orderedData.map(item => item.uid).join(',');
+
     return html`<typo3-grid
       class="main-content"
+      hash="${hash}"
       selectable
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
@@ -505,6 +508,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             detail: {
               sourceEvent: event.detail.event,
               options: data,
+              contextItem: event.detail.node,
             },
           })
         );

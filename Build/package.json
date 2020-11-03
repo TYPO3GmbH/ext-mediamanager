@@ -85,6 +85,7 @@
   "author": "typo3-filelist",
   "license": "MIT",
   "dependencies": {
+    "@fristys/masonry": "^1.1.4",
     "@material/mwc-menu": "^0.18.0",
     "@types/d3": "^5.16.3",
     "@types/lodash-es": "^4.17.3",
@@ -94,7 +95,6 @@
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0",
     "lodash-es": "^4.17.15",
-    "macy": "^2.5.1",
     "pwa-helpers": "^0.9.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
