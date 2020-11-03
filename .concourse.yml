@@ -42,7 +42,7 @@ jobs:
 
                 composer install
 
-      - task: run-tests
+      - task: unit-tests
         privileged: true
         config:
           platform: linux
@@ -52,18 +52,34 @@ jobs:
           inputs:
             - name: filelist-ng-git
           run:
-            path: bash
+            path: /bin/sh
             args:
-              - -exc
+              - -c
               - |
+                source /docker-lib.sh
+                start_docker
                 cd filelist-ng-git
-                ls -alth
-                cd .Build
-                ls -alth
-                cd Web
-                ls -alth
-                cd typo3conf/ext
-                ls -alth
-                cd cms_filelist_ng
-                ls -alth
-                ./etc/scripts/runTests.sh
+                rm .Build/Web/typo3conf/ext/cms_filelist_ng
+                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
+                ./etc/scripts/runTests.sh -s unit
+
+      - task: functional-tests
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: amidos/dcind}
+          inputs:
+            - name: filelist-ng-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                source /docker-lib.sh
+                start_docker
+                cd filelist-ng-git
+                rm .Build/Web/typo3conf/ext/cms_filelist_ng
+                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
+                ./etc/scripts/runTests.sh -s functional
