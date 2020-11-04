@@ -41,6 +41,21 @@ jobs:
                 cd filelist-ng-git
 
                 composer install
+      - task: run-codingstandards
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: php, tag: 7.3-cli }
+          inputs:
+            - name: filelist-ng-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                cd filelist-ng-git
+                ./etc/scripts/checkCodingStandards.sh
 
       - task: unit-tests
         privileged: true
