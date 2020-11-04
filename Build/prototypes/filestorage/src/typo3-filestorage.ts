@@ -89,6 +89,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(fetchTree(this.treeUrl));
   }
 
+  refresh(): void {
+    store.dispatch(fetchListData(this.state.tree.selected?.folderUrl));
+  }
+
   protected render(): TemplateResult {
     return html`
       <typo3-splitpane
@@ -169,7 +173,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Download
                 </typo3-button>
-                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
+                <typo3-button
+                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  @click="${this._onDeleteClicked}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -543,6 +550,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       new SetSelection(
         event.detail.map((element: HTMLElement) => element.value)
       )
+    );
+  }
+
+  _onDeleteClicked(event: MouseEvent): void {
+    this.dispatchEvent(
+      new CustomEvent('typo3-action-button-click', {
+        detail: {
+          action: 'delete',
+          items: selectedRows(this.state.list),
+        },
+      })
     );
   }
 }
