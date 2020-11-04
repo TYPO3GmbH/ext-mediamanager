@@ -17,7 +17,11 @@ module.exports = config => {
       esm: {
         nodeResolve: true,
       },
-      // you can overwrite/extend the config further
+      captureTimeout: 210000,
+      browserDisconnectTolerance: 3,
+      browserDisconnectTimeout : 210000,
+      browserNoActivityTimeout : 210000,
+      restartOnFileChange: true
     }),
   );
   return config;

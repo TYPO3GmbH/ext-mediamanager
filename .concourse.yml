@@ -8,7 +8,7 @@ resources:
       private_key: ((ssh-key.id_rsa))
 
 jobs:
-  - name: test
+  - name: test-backend
     public: true
     plan:
       - get: filelist-ng-git
@@ -98,3 +98,55 @@ jobs:
                 rm .Build/Web/typo3conf/ext/cms_filelist_ng
                 ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
                 ./etc/scripts/runTests.sh -s functional
+
+  - name: test-frontend
+    public: true
+    plan:
+      - get: filelist-ng-git
+        trigger: true
+      - task: run-build
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: node, tag: 14-alpine }
+          inputs:
+            - name: filelist-ng-git
+          outputs:
+            - name: filelist-ng-git
+          caches:
+            - path: filelist-ng-git/Builde/node_modules
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                apk add --no-progress git
+
+                echo "Node Version: $(node --version)"
+                echo "NPM Version: $(npm --version)"
+
+                cd filelist-ng-git/Build
+                npm install
+                npm run rollup:dev
+
+      - task: test-karma
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: weboaks/node-karma-protractor-chrome, tag: alpine-node14 }
+          inputs:
+            - name: filelist-ng-git
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                echo "Node Version: $(node --version)"
+                echo "NPM Version: $(npm --version)"
+
+                cd filelist-ng-git/Build
+                npm rebuild --quiet
+                npm run test:ci
