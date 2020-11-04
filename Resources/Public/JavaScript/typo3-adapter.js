@@ -16,23 +16,26 @@ Typo3FileStorageAdapter.init = function(fileActionUrl) {
         if (option.callbackAction === 'openInfoPopUp') {
             top.TYPO3.InfoWindow.showItem(type, uid);
         }
+
+        if (option.callbackAction === 'deleteFile') {
+            self.onDelete([uid]);
+        }
     });
 
     this.fileStorageElement = document.querySelector('typo3-filestorage');
 
-    this.fileStorageElement.addEventListener('typo3-action-button-click', function(e) {
-
-        if (e.detail.action === 'delete') {
-            self.onDelete(e);
-
+    this.fileStorageElement.addEventListener('typo3-action-button-click', function(event) {
+        const uids = event.detail.items.map(item => item.uid);
+        if (event.detail.action === 'delete') {
+            self.onDelete(uids);
         }
     });
 };
 
-Typo3FileStorageAdapter.onDelete = function(event) {
+Typo3FileStorageAdapter.onDelete = function(uids) {
     const self = this;
-    const deleteData =event.detail.items.map(item => {
-        return {data: item.uid};
+    const deleteData = uids.map(uid => {
+        return {data: uid};
     });
 
     const data = {'data': {'delete': deleteData}};
