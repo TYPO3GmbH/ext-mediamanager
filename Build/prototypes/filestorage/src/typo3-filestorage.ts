@@ -29,11 +29,7 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
-import {
-  fetchTree,
-  selectedTreeNodes,
-  SelectTreeNode,
-} from './redux/ducks/tree';
+import * as TreeActions from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
@@ -75,18 +71,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     { name: 'rw', title: 'RW', width: '50' },
   ];
 
-  constructor() {
-    super();
-    (window as any).typo3BackendUrl = this.typo3BackendUrl;
-  }
-
   stateChanged(state: RootState): void {
     this.state = state;
   }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    store.dispatch(fetchTree(this.treeUrl));
+    store.dispatch(TreeActions.fetchTree(this.treeUrl));
   }
 
   refresh(): void {
@@ -146,6 +137,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             .nodes="${this.state.tree.nodes}"
             @typo3-node-select="${this._onSelectedNode}"
             @typo3-node-contextmenu="${this._onContextMenu}"
+            @typo3-node-expand="${this._onNodeExpand}"
+            @typo3-node-collapse="${this._onNodeCollapse}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone
@@ -245,7 +238,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get breadcrumbContent(): TemplateResult[] {
-    const nodes = selectedTreeNodes(this.state.tree) as Typo3Node[];
+    const nodes = TreeActions.selectedTreeNodes(this.state.tree) as Typo3Node[];
     return nodes.map(
       node =>
         html` <typo3-breadcrumb-item slot="item" title="${node.name}">
@@ -494,7 +487,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new SelectTreeNode(event.detail));
+    store.dispatch(new TreeActions.SelectTreeNode(event.detail));
     store.dispatch(fetchListData(event.detail.folderUrl));
   }
 
@@ -553,7 +546,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onDeleteClicked(event: MouseEvent): void {
+  _onDeleteClicked(): void {
     this.dispatchEvent(
       new CustomEvent('typo3-action-button-click', {
         detail: {
@@ -562,5 +555,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         },
       })
     );
+  }
+
+  _onNodeExpand(event: CustomEvent<Typo3Node>): void {
+    store.dispatch(new TreeActions.ExpandTreeNode(event.detail));
+  }
+
+  _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
+    store.dispatch(new TreeActions.CollapseTreeNode(event.detail));
   }
 }
