@@ -101,7 +101,7 @@ class FolderTreeGenerator
         return $items;
     }
 
-    public function getFolderTree(Folder $folderObject, $depth = 999, $type = '')
+    protected function getFolderTree(Folder $folderObject, $depth = 999, $type = '')
     {
         $items = [];
         // This generates the directory tree
