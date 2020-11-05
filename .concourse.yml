@@ -57,7 +57,7 @@ jobs:
                 cd filelist-ng-git
                 ./etc/scripts/checkCodingStandards.sh
 
-      - task: unit-tests
+      - task: run-unit-tests
         privileged: true
         config:
           platform: linux
@@ -78,7 +78,7 @@ jobs:
                 ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
                 ./etc/scripts/runTests.sh -s unit
 
-      - task: functional-tests
+      - task: run-functional-tests
         privileged: true
         config:
           platform: linux
@@ -128,9 +128,27 @@ jobs:
 
                 cd filelist-ng-git/Build
                 npm install
-                npm run rollup:dev
+                npm run build:dev
 
-      - task: test-karma
+      - task: run-lint
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: node, tag: 14-alpine }
+          inputs:
+            - name: filelist-ng-git
+          caches:
+            - path: filelist-ng-git/Builde/node_modules
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                cd filelist-ng-git/Build
+                npm run lint
+
+      - task: run-karma
         privileged: true
         config:
           platform: linux
