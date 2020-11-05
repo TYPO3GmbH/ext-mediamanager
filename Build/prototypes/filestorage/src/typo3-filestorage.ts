@@ -144,8 +144,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           </div>
           <typo3-filetree
             .nodes="${this.state.tree.nodes}"
-            @typo3-node-selected="${this._onSelectedNode}"
-            @typo3-node-context-menu="${this._onContextMenu}"
+            @typo3-node-select="${this._onSelectedNode}"
+            @typo3-node-contextmenu="${this._onContextMenu}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone

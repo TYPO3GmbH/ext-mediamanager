@@ -4,7 +4,7 @@ export interface Typo3Node {
   depth: number;
   hasChildren: boolean;
   icon: string;
-  identifier: number | string;
+  identifier: string;
   folderUrl: string;
   loaded: boolean;
   mountPoint: number;

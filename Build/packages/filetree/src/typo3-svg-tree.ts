@@ -14,7 +14,10 @@ interface Icon {
 }
 
 /**
- * @fires typo3-node-selected - Event fired on node selction
+ * @fires typo3-node-select - Event fired on node selection
+ * @fires typo3-node-expand - Event fired on node expand
+ * @fires typo3-node-collapse - Event fired on node expand
+ * @fires typo3-node-contextmenu - Event fired on contextmenu for node
  */
 export class Typo3SvgTree extends LitElement {
   @property({ type: Array }) nodes: Typo3Node[] = [];
@@ -895,7 +898,7 @@ export class Typo3SvgTree extends LitElement {
     node.checked = !checked;
 
     this.dispatchEvent(
-      new CustomEvent('typo3-node-selected', {
+      new CustomEvent('typo3-node-select', {
         detail: node,
       })
     );
@@ -996,6 +999,10 @@ export class Typo3SvgTree extends LitElement {
    */
   _hideChildren(node: Typo3Node): void {
     node.expanded = false;
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-collapse', { detail: node })
+    );
+
     this._setExpandedState(node);
   }
 
@@ -1004,6 +1011,7 @@ export class Typo3SvgTree extends LitElement {
    */
   _showChildren(node: Typo3Node): void {
     node.expanded = true;
+    this.dispatchEvent(new CustomEvent('typo3-node-expand', { detail: node }));
     this._setExpandedState(node);
   }
 
@@ -1067,7 +1075,7 @@ export class Typo3SvgTree extends LitElement {
 
   _onContextmenu(event: MouseEvent, node: Typo3Node): void {
     this.dispatchEvent(
-      new CustomEvent('typo3-node-context-menu', {
+      new CustomEvent('typo3-node-contextmenu', {
         detail: {
           event: event,
           node: node,

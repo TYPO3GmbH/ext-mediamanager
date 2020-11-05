@@ -1088,6 +1088,37 @@
           "name": "--typo3-spinner-danger-color"
         }
       ]
+    },
+    {
+      "name": "typo3-filetree",
+      "properties": [
+        {
+          "name": "nodes",
+          "attribute": "nodes",
+          "type": "Typo3Node[]",
+          "default": "[]"
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-node-select",
+          "description": "Event fired on node selection"
+        },
+        {
+          "name": "typo3-node-expand",
+          "description": "Event fired on node expand"
+        },
+        {
+          "name": "typo3-node-collapse",
+          "description": "Event fired on node expand"
+        },
+        {
+          "name": "typo3-node-contextmenu",
+          "description": "Event fired on contextmenu for node"
+        }
+      ]
     }
+
+
   ]
 }
