@@ -268,7 +268,6 @@ export class Typo3SvgTree extends LitElement {
     });
 
     if (nodeDepths.length === 1) {
-      nodes[0].expanded = true;
       nodes[0].canToggle = false;
     }
 

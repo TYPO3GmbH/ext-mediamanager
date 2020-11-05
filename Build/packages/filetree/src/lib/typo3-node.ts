@@ -16,7 +16,6 @@ export interface Typo3Node {
   tip: string;
   workspaceId: number;
   command: undefined | string;
-  expanded: boolean;
   parents: number[];
   parentsStateIdentifier: string[];
   _isDragged: boolean;

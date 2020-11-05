@@ -18,7 +18,6 @@ export class Typo3Filetree extends Typo3SvgTree {
       loaded: false,
       overlayIcon: '',
       selectable: true,
-      expanded: false,
       checked: false,
       backgroundColor: '',
       stopPageTree: false,

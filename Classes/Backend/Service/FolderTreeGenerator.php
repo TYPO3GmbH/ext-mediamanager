@@ -72,8 +72,6 @@ class FolderTreeGenerator
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
 
-            $isOpen = true;
-
             if (false === $resourceStorage->isOnline()) {
                 $rootLevelFolderName .= ' (' . $this->languageService->sL('sys_file_storage.isOffline') . ')';
             }
@@ -90,13 +88,12 @@ class FolderTreeGenerator
                 'siblingsCount' => \count($rootLevelFolders) - 1,
                 'siblingsPosition' =>  $i,
                 'hasChildren' => \count($rootLevelFolder->getSubfolders()) > 0,
-                'expanded' => $isOpen,
                 'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
-                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
+                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, 'sys_file_storage'),
             ];
 
             // If the mount is expanded, go down:
-            if ($isOpen && $resourceStorage->isBrowsable()) {
+            if ($resourceStorage->isBrowsable()) {
                 $childItems = $this->getFolderTree($rootLevelFolder, $depth + 1);
                 \array_push($items, ...$childItems);
             }
@@ -127,10 +124,7 @@ class FolderTreeGenerator
             $combinedIdentifier = $subFolder->getCombinedIdentifier();
             $specUID = GeneralUtility::md5int($combinedIdentifier);
             $this->specUIDmap[$specUID] = $combinedIdentifier;
-
-            $isOpen = \count($subFolder->getSubfolders()) > 0;
-
-            $icon = $this->iconFactory->getIconForResource($subFolder, Icon::SIZE_SMALL, null, ['folder-open' => (bool) $isOpen]);
+            $icon = $this->iconFactory->getIconForResource($subFolder, Icon::SIZE_SMALL, null);
 
             $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $subFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
@@ -184,8 +178,8 @@ class FolderTreeGenerator
         return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['uid' => $combinedIdentifier]);
     }
 
-    protected function buildContextMenuUrl(string $combinedIdentifier): string
+    protected function buildContextMenuUrl(string $combinedIdentifier, string $type = 'sys_file'): string
     {
-        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => $type, 'uid' => $combinedIdentifier]);
     }
 }

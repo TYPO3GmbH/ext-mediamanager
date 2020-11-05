@@ -1095,7 +1095,13 @@
         {
           "name": "nodes",
           "attribute": "nodes",
-          "type": "Typo3Node[]",
+          "type": "Array",
+          "default": "[]"
+        },
+        {
+          "name": "expandedNodeIds",
+          "attribute": "expandedNodeIds",
+          "type": "Array",
           "default": "[]"
         }
       ],
