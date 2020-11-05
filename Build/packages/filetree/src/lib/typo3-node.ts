@@ -29,11 +29,11 @@ export interface Typo3Node {
   y: number;
   readableRootline: boolean;
   isOver: boolean;
-  owns: any;
+  owns?: string[];
   prefix?: string;
   suffix?: string;
   firstChild?: boolean;
   lastChild?: boolean;
-  class: any;
+  class?: string;
   contextMenuUrl: string;
 }

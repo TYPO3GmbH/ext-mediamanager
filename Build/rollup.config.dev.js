@@ -6,9 +6,9 @@ import postcssImport from 'postcss-import';
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
-import commonjs from "rollup-plugin-commonjs";
-import {createBasicConfig} from "@open-wc/building-rollup";
-import merge from "deepmerge";
+import commonjs from 'rollup-plugin-commonjs';
+import { createBasicConfig } from '@open-wc/building-rollup';
+import merge from 'deepmerge';
 
 const globby = require('globby');
 
@@ -32,9 +32,7 @@ const baseConfig = createBasicConfig({
 
 const plugins = [
   postcss({
-    plugins: [
-      postcssImport,
-    ]
+    plugins: [postcssImport],
   }),
   postcssLit(),
   commonjs(),
@@ -49,19 +47,19 @@ const plugins = [
 
 baseConfig.plugins.unshift(...plugins);
 
-const configs = globby.sync('(packages|prototypes)/**/(src|test)/*.ts').map(inputFile => {
-
-  return merge(baseConfig, {
-    input: inputFile,
-    inlineDynamicImports: true,
-    output: {
-      file: 'out-tsc/' + inputFile.replace('.ts', '.js'),
-      dir: null,
-      format: 'esm',
-      sourcemap: false
-    },
+const configs = globby
+  .sync('(packages|prototypes)/**/(src|test)/*.ts')
+  .map(inputFile => {
+    return merge(baseConfig, {
+      input: inputFile,
+      inlineDynamicImports: true,
+      output: {
+        file: 'out-tsc/' + inputFile.replace('.ts', '.js'),
+        dir: null,
+        format: 'esm',
+        sourcemap: false,
+      },
+    });
   });
-
-});
 
 module.exports = configs;

@@ -25,6 +25,7 @@ export class Typo3Grid extends LitElement {
 
   @property({ type: Boolean, reflect: true }) selectable = false;
 
+  // used for triggering updates
   @property({ type: String }) hash = '';
 
   private _masonry!: Masonry;
@@ -34,7 +35,9 @@ export class Typo3Grid extends LitElement {
   }
 
   protected updated(_changedProperties: PropertyValues): void {
-    this._masonry.init();
+    if (_changedProperties.has('hash')) {
+      this._masonry.init();
+    }
   }
 
   firstUpdated(): void {

@@ -13,9 +13,9 @@ module.exports = {
     // disable the rule for all files
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    "@typescript-eslint/ban-ts-ignore": "off",
+    '@typescript-eslint/ban-ts-ignore': 'off',
     'import/named': 'off',
     'import/no-unresolved': 'off',
-    'import/extensions': 'off'
+    'import/extensions': 'off',
   },
 };

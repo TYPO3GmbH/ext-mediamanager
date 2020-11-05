@@ -34,6 +34,7 @@ import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
+import { Typo3Card } from '../../../packages/card/src/typo3-card';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -284,9 +285,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected getCardContent(listData: ListItem): TemplateResult {
     const rawIcon = addSlotToRawHtml(listData.icon, 'image');
     let imageSlot = html`${unsafeHTML(rawIcon)}`;
-
-    let styles = '';
-
     if (listData.thumbnailUrl) {
       imageSlot = html`<img
         slot="image"
@@ -294,7 +292,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         src="${listData.thumbnailUrl}"
         alt="${listData.name}"
       />`;
-      styles = 'width:' + Math.min(500, listData.thumbnailWidth) + 'px';
     }
 
     let badge = html``;
@@ -317,7 +314,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     return html` <typo3-card
       slot="item"
-      style="${styles}"
       ?selected="${itemIsSelected(this.state.list)(listData.uid)}"
       value="${listData.uid}"
       title="${listData.name}"
@@ -516,7 +512,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
       })
       .catch((error: Error) => {
-        console.log('todo: handle error on loading context-menu options');
+        console.log(
+          'todo: handle error on loading context-menu options',
+          error
+        );
       });
   }
 
@@ -540,10 +539,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new SetSelection(event.detail.map(row => row.uid)));
   }
 
-  _onCardgridSelectionChange(event: CustomEvent<HTMLElement[]>): void {
+  _onCardgridSelectionChange(event: CustomEvent<Typo3Card[]>): void {
     store.dispatch(
       new SetSelection(
-        event.detail.map((element: HTMLElement) => element.value)
+        event.detail.map((element: Typo3Card) => '' + element.value)
       )
     );
   }

@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
-import { ThunkDispatch } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export const ADD_SELECTION_ITEM = '[LIST] ADD ITEM TO SELECTION';
 export const REMOVE_SELECTION_ITEM = '[LIST] REMOVE ITEM FROM SELECTION';
@@ -132,11 +132,13 @@ export type Actions =
   | LoadListDataSuccess
   | LoadListDataFailure;
 
-export const fetchListData = (url: string) => {
-  return (dispatch: ThunkDispatch<Actions, any, any>) => {
+export const fetchListData = (
+  url: string
+): ThunkAction<Promise<void>, {}, {}, Action> => {
+  return (dispatch: ThunkDispatch<Action, {}, Action>): Promise<void> => {
     dispatch(new LoadListData());
     dispatch(new ClearSelection());
-    fetch(url)
+    return fetch(url)
       .then((response: Response) => {
         if (!response.ok) {
           throw new Error(response.statusText);

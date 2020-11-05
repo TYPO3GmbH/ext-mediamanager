@@ -13,6 +13,8 @@ interface Icon {
   icon: string;
 }
 
+/* eslint-disable */
+
 /**
  * @fires typo3-node-select - Event fired on node selection
  * @fires typo3-node-expand - Event fired on node expand
@@ -64,12 +66,12 @@ export class Typo3SvgTree extends LitElement {
     width: 300,
     duration: 400,
     dataUrl: '',
-    nodeOver: {} as any,
+    nodeOver: {} as Typo3Node,
     validation: {
       maxItems: Number.MAX_VALUE,
     },
     defaultProperties: {},
-    unselectableElements: [] as any,
+    unselectableElements: [] as string[],
     expandUpToLevel: null,
     readOnlyMode: false,
     /**
@@ -224,7 +226,6 @@ export class Typo3SvgTree extends LitElement {
       if (typeof node.command === 'undefined') {
         node = Object.assign({}, this.settings.defaultProperties, node);
       }
-      node.expanded = Boolean(this._isNodeExpanded(node));
       node.parents = [];
       node.parentsStateIdentifier = [];
       node._isDragged = false;

@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 
@@ -108,10 +108,13 @@ export type Actions =
   | ExpandTreeNode
   | CollapseTreeNode;
 
-export const fetchTree = (treeUrl: string, init = true) => {
-  return (dispatch: ThunkDispatch<Actions, any, any>) => {
+export const fetchTree = (
+  treeUrl: string,
+  init = true
+): ThunkAction<Promise<void>, {}, {}, Action> => {
+  return (dispatch: ThunkDispatch<Action, {}, Action>): Promise<void> => {
     dispatch(new LoadTreeData());
-    fetch(treeUrl)
+    return fetch(treeUrl)
       .then((response: Response) => {
         if (!response.ok) {
           throw new Error(response.statusText);

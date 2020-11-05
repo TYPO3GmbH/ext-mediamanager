@@ -11,7 +11,12 @@ module.exports = config => {
         //
         // npm run test -- --grep test/foo/bar.test.js
         // npm run test -- --grep test/bar/*
-        { pattern: config.grep ? config.grep : 'out-tsc/**/packages/**/*.test.js', type: 'module' }
+        {
+          pattern: config.grep
+            ? config.grep
+            : 'out-tsc/**/packages/**/*.test.js',
+          type: 'module',
+        },
       ],
 
       esm: {
@@ -19,10 +24,10 @@ module.exports = config => {
       },
       captureTimeout: 210000,
       browserDisconnectTolerance: 3,
-      browserDisconnectTimeout : 210000,
-      browserNoActivityTimeout : 210000,
-      restartOnFileChange: true
-    }),
+      browserDisconnectTimeout: 210000,
+      browserNoActivityTimeout: 210000,
+      restartOnFileChange: true,
+    })
   );
   return config;
 };

@@ -26,7 +26,7 @@ export class Typo3breadcrumb extends LitElement {
 
   public static styles = [themeStyles, styles];
 
-  private resizeAction: any;
+  private resizeAction!: number;
 
   public connectedCallback(): void {
     super.connectedCallback();

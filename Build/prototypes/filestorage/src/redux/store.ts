@@ -4,23 +4,23 @@ import {
   compose,
   createStore,
   Middleware,
-  Store,
 } from 'redux';
 import { rootReducer } from './ducks';
 import thunk from 'redux-thunk';
 
-// @ts-ignore
-const allowCustomActionObjectsMiddleWare: Middleware = (
-  store: Store
-) => next => (action: Action) => {
+const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
+  action: Action
+) => {
   next({ ...action });
 };
 
 const enhancer = [];
 if (
   process.env.NODE_ENV === 'development' &&
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).__REDUX_DEVTOOLS_EXTENSION__
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   enhancer.push((window as any).__REDUX_DEVTOOLS_EXTENSION__());
 }
 
