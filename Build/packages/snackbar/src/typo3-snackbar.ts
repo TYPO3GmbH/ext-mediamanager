@@ -13,32 +13,20 @@ import { SnackbarValues } from './lib/snackbar-values';
 import { SnackbarVariants } from './lib/snackbar-variants';
 
 /**
- * @cssprop --typo3-snackbar-bg-color
- * @cssprop --typo3-snackbar-border
- * @cssprop --typo3-snackbar-border-radius
  * @cssprop --typo3-snackbar-bottom
  * @cssprop --typo3-snackbar-display
- * @cssprop --typo3-snackbar-error-border
- * @cssprop --typo3-snackbar-error-message-color
- * @cssprop --typo3-snackbar-info-border
- * @cssprop --typo3-snackbar-info-message-color
  * @cssprop --typo3-snackbar-left
  * @cssprop --typo3-snackbar-max-width
- * @cssprop --typo3-snackbar-message-grow
  * @cssprop --typo3-snackbar-message-margin
  * @cssprop --typo3-snackbar-message-padding
  * @cssprop --typo3-snackbar-opacity
  * @cssprop --typo3-snackbar-padding
  * @cssprop --typo3-snackbar-position
  * @cssprop --typo3-snackbar-right
- * @cssprop --typo3-snackbar-success-border
- * @cssprop --typo3-snackbar-success-message-color
  * @cssprop --typo3-snackbar-transform
  * @cssprop --typo3-snackbar-transition
  * @cssprop --typo3-snackbar-visible-opacity
  * @cssprop --typo3-snackbar-visible-transform
- * @cssprop --typo3-snackbar-warning-border
- * @cssprop --typo3-snackbar-warning-message-color
  * @cssprop --typo3-snackbar-width
  * @cssprop --typo3-snackbar-z-index
  */
@@ -47,6 +35,8 @@ export class Typo3Snackbar extends LitElement {
   @property({ type: Boolean, reflect: true }) visible = false;
 
   @property({ type: String, reflect: true }) message: string | null = null;
+
+  @property({ type: String, reflect: true }) messageTitle: string | null = null;
 
   @property({ type: String, reflect: true }) buttonText: string | null = null;
 
@@ -67,15 +57,25 @@ export class Typo3Snackbar extends LitElement {
 
   render() {
     return html`
-      <p class="snackbar__message">${this.message}</p>
-      ${this.dismissible
-        ? html`<typo3-button
-            color="${this.variant}"
-            class="snackbar__button"
-            @click="${this._handleButtonClick}"
-            >${this.buttonText}</typo3-button
-          >`
-        : html``}
+      <typo3-alert
+        color="${this.variant}"
+        style="--typo3-alert-margin-bottom:0;"
+      >
+        <div class="snackbar__body">
+          ${this.messageTitle
+            ? html`<h4 class="snackbar__title">${this.messageTitle}</h4>`
+            : html``}
+          <p class="snackbar__message">${this.message}</p>
+        </div>
+        ${this.dismissible
+          ? html`<typo3-button
+              color="${this.variant}"
+              class="snackbar__button"
+              @click="${this._handleButtonClick}"
+              >${this.buttonText}</typo3-button
+            >`
+          : html``}
+      </typo3-alert>
     `;
   }
 
@@ -167,6 +167,9 @@ export class Typo3Snackbar extends LitElement {
   _setSnackbarValues(element: SnackbarValues) {
     if (element.message) {
       this.message = element.message;
+    }
+    if (element.title) {
+      this.messageTitle = element.title;
     }
 
     this.dismissible = element.dismissible;

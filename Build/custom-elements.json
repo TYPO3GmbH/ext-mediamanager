@@ -615,9 +615,6 @@
           "name": "--typo3-alert-padding-x"
         },
         {
-          "name": "--typo3-alert-margin-bottom"
-        },
-        {
           "name": "--typo3-alert-success-color",
           "type": "Color"
         },
@@ -953,12 +950,6 @@
       ],
       "cssProperties": [
         {
-          "name": "--typo3-snackbar-bg-color"
-        },
-        {
-          "name": "--typo3-snackbar-border"
-        },
-        {
           "name": "--typo3-snackbar-display"
         },
         {
@@ -978,9 +969,6 @@
         },
         {
           "name": "--typo3-snackbar-padding"
-        },
-        {
-          "name": "--typo3-snackbar-border-radius"
         },
         {
           "name": "--typo3-snackbar-z-index"
@@ -1004,37 +992,10 @@
           "name": "--typo3-snackbar-visible-opacity"
         },
         {
-          "name": "--typo3-snackbar-message-grow"
-        },
-        {
           "name": "--typo3-snackbar-message-margin"
         },
         {
           "name": "--typo3-snackbar-message-padding"
-        },
-        {
-          "name": "--typo3-snackbar-success-border"
-        },
-        {
-          "name": "--typo3-snackbar-success-message-color"
-        },
-        {
-          "name": "--typo3-snackbar-warning-border"
-        },
-        {
-          "name": "--typo3-snackbar-warning-message-color"
-        },
-        {
-          "name": "--typo3-snackbar-error-border"
-        },
-        {
-          "name": "--typo3-snackbar-error-message-color"
-        },
-        {
-          "name": "--typo3-snackbar-info-border"
-        },
-        {
-          "name": "--typo3-snackbar-info-message-color"
         }
       ]
     },

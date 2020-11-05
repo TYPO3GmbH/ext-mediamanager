@@ -1,10 +1,16 @@
+/**
+ * TODO: Move logic into typo3-filestorage element
+ */
 var Typo3FileStorageAdapter = {
     fileActionUrl: '',
+    flashMessagesUrl: '',
     fileStorageElement: null
 };
 
-Typo3FileStorageAdapter.init = function(fileActionUrl) {
+Typo3FileStorageAdapter.init = function(fileActionUrl, flashMessagesUrl) {
     this.fileActionUrl = fileActionUrl;
+    this.flashMessagesUrl = flashMessagesUrl;
+
     const self = this;
     window.addEventListener('typo3-context-menu-item-click', function(e) {
         const contextItem = e.detail.contextItem;
@@ -32,6 +38,26 @@ Typo3FileStorageAdapter.init = function(fileActionUrl) {
     });
 };
 
+Typo3FileStorageAdapter.loadFlashMessages = function() {
+    fetch(this.flashMessagesUrl).then(response => {
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        return response.json();
+    }).then(messages => {
+
+        messages.forEach(messageData => {
+            window.dispatchEvent(new CustomEvent('typo3-add-snackbar', {
+                detail: {
+                    message: messageData.message,
+                    title: messageData.title,
+                    variant: messageData.severity === 0 ? 'success' : 'danger'
+                }
+            }));
+        });
+    });
+}
+
 Typo3FileStorageAdapter.onDelete = function(uids) {
     const self = this;
     const deleteData = uids.map(uid => {
@@ -47,9 +73,20 @@ Typo3FileStorageAdapter.onDelete = function(uids) {
     fetch(this.fileActionUrl, {
         method: 'POST',
         body: formData
-    }).then(res => {
-        console.log("Request complete! Trigger refresh.. response:", res);
-        self.fileStorageElement.refresh();
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        return response.json();
+    }).then(data => {
+        const hasDeletedentries = data.delete.filter(value => value === true).length > 0;
+        if (hasDeletedentries) {
+            self.fileStorageElement.refresh();
+        }
+    }).catch((error) => {
+        console.warn('todo: handle error. catched error');
+    }).then(data => {
+        self.loadFlashMessages();
     });
 }
 

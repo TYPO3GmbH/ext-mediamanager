@@ -75,12 +75,12 @@ class FilelistController
         $storages = $this->getStoragesData();
 
         $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
-        $ajaxFolderListUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData');
+
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
-
+        $this->view->assign('fileActionUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'));
         $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
-        $this->view->assign('folderUrl', (string) $ajaxFolderListUrl);
+        $this->view->assign('flashMessagesUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'));
 
         return new HtmlResponse($this->view->render());
     }

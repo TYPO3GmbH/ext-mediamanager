@@ -11,12 +11,13 @@
 
 <div style="height:100vh">
     <typo3-filestorage treeUrl="{treeUrl}" storages="{storagesJson}" selectedStorageUid="{selectedStorageUid}"></typo3-filestorage>
+    <typo3-snackbar placement="right"></typo3-snackbar>
 </div>
 
 
 <script type="text/javascript">
     window.addEventListener('load', function() {
-        Typo3FileStorageAdapter.init("<f:format.raw>{fileActionUrl}</f:format.raw>");
+        Typo3FileStorageAdapter.init("<f:format.raw>{fileActionUrl}</f:format.raw>", "<f:format.raw>{flashMessagesUrl}</f:format.raw>");
     });
 </script>
 
