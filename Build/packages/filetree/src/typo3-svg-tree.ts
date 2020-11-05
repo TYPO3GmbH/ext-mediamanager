@@ -22,6 +22,8 @@ interface Icon {
 export class Typo3SvgTree extends LitElement {
   @property({ type: Array }) nodes: Typo3Node[] = [];
 
+  @property({ type: Array }) expandedNodeIds: string[] = [];
+
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
   @query('.svg-tree-loader') svgTreeLoader!: HTMLElement;
@@ -222,10 +224,7 @@ export class Typo3SvgTree extends LitElement {
       if (typeof node.command === 'undefined') {
         node = Object.assign({}, this.settings.defaultProperties, node);
       }
-      node.expanded =
-        this.settings.expandUpToLevel !== null
-          ? node.depth < (this.settings.expandUpToLevel ?? 0)
-          : Boolean(node.expanded);
+      node.expanded = Boolean(this._isNodeExpanded(node));
       node.parents = [];
       node.parentsStateIdentifier = [];
       node._isDragged = false;
@@ -279,7 +278,7 @@ export class Typo3SvgTree extends LitElement {
   _prepareDataForVisibleNodes(): void {
     const blacklist: { [key: string]: boolean } = {};
     this.processedNodes.map((node, index) => {
-      if (!node.expanded) {
+      if (!this._isNodeExpanded(node)) {
         blacklist[index] = true;
       }
     });
@@ -409,11 +408,13 @@ export class Typo3SvgTree extends LitElement {
 
     nodes
       .select('.chevron')
-      .attr('transform', this._getChevronTransform)
-      .style('fill', this._getChevronColor)
-      .attr('class', this._getChevronClass);
+      .attr('transform', node => this._getChevronTransform(node))
+      .style('fill', node => this._getChevronColor(node))
+      .attr('class', node => this._getChevronClass(node));
 
-    nodes.select('.toggle').attr('visibility', this._getToggleVisibility);
+    nodes
+      .select('.toggle')
+      .attr('visibility', node => this._getToggleVisibility(node));
 
     if (this.settings.showIcons) {
       nodes.select('use.node-icon').attr('xlink:href', this._getIconId);
@@ -678,7 +679,7 @@ export class Typo3SvgTree extends LitElement {
       .attr('aria-setsize', this._getNodeSetsize)
       .attr('aria-posinset', this._getNodePositionInSet)
       .attr('aria-expanded', (node: Typo3Node) => {
-        return node.hasChildren ? node.expanded : null;
+        return node.hasChildren ? this._isNodeExpanded(node) : null;
       })
       .attr('transform', this._getNodeTransform)
       .attr('data-state-id', this._getNodeStateIdentifier)
@@ -802,14 +803,16 @@ export class Typo3SvgTree extends LitElement {
    * Returns chevron 'transform' attribute value
    */
   _getChevronTransform(node: Typo3Node): string {
-    return node.expanded ? 'translate(16,0) rotate(90)' : ' rotate(0)';
+    return this._isNodeExpanded(node)
+      ? 'translate(16,0) rotate(90)'
+      : ' rotate(0)';
   }
 
   /**
    * Returns chevron class
    */
   _getChevronColor(node: Typo3Node): string {
-    return node.expanded ? '#000' : '#8e8e8e';
+    return this._isNodeExpanded(node) ? '#000' : '#8e8e8e';
   }
 
   /**
@@ -823,7 +826,7 @@ export class Typo3SvgTree extends LitElement {
    * Computes chevron 'class' attribute value
    */
   _getChevronClass(node: Typo3Node): string {
-    return 'chevron ' + (node.expanded ? 'expanded' : 'collapsed');
+    return 'chevron ' + (this._isNodeExpanded(node) ? 'expanded' : 'collapsed');
   }
 
   /**
@@ -957,6 +960,10 @@ export class Typo3SvgTree extends LitElement {
     );
   }
 
+  _isNodeExpanded(node: Typo3Node): boolean {
+    return this.expandedNodeIds.indexOf(node.identifier) != -1;
+  }
+
   /**
    * Returns an array of selected nodes
    */
@@ -984,7 +991,7 @@ export class Typo3SvgTree extends LitElement {
    * Event handler for click on a chevron
    */
   _chevronClick(node: Typo3Node): void {
-    if (node.expanded) {
+    if (this._isNodeExpanded(node)) {
       this._hideChildren(node);
     } else {
       this._showChildren(node);
@@ -998,7 +1005,10 @@ export class Typo3SvgTree extends LitElement {
    * Updates node's data to hide/collapse children
    */
   _hideChildren(node: Typo3Node): void {
-    node.expanded = false;
+    this.expandedNodeIds = this.expandedNodeIds.filter(
+      nodeId => nodeId != node.identifier
+    );
+
     this.dispatchEvent(
       new CustomEvent('typo3-node-collapse', { detail: node })
     );
@@ -1010,7 +1020,7 @@ export class Typo3SvgTree extends LitElement {
    * Updates node's data to show/expand children
    */
   _showChildren(node: Typo3Node): void {
-    node.expanded = true;
+    this.expandedNodeIds.push(node.identifier);
     this.dispatchEvent(new CustomEvent('typo3-node-expand', { detail: node }));
     this._setExpandedState(node);
   }
@@ -1027,7 +1037,7 @@ export class Typo3SvgTree extends LitElement {
     if (nodeElement) {
       nodeElement.toggleAttribute(
         'aria-expanded',
-        node.hasChildren ? node.expanded : false
+        node.hasChildren ? this._isNodeExpanded(node) : false
       );
     }
   }

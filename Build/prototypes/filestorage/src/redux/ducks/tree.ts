@@ -108,7 +108,7 @@ export type Actions =
   | ExpandTreeNode
   | CollapseTreeNode;
 
-export const fetchTree = (treeUrl: string) => {
+export const fetchTree = (treeUrl: string, init = true) => {
   return (dispatch: ThunkDispatch<Actions, any, any>) => {
     dispatch(new LoadTreeData());
     fetch(treeUrl)
@@ -119,7 +119,11 @@ export const fetchTree = (treeUrl: string) => {
 
         return response.json();
       })
-      .then(data => {
+      .then((data: Typo3Node[]) => {
+        if (init && data.length > 0) {
+          // expand first level nodes
+          dispatch(new ExpandTreeNode(data[0]));
+        }
         dispatch(new LoadTreeDataSuccess(data));
       })
       .catch((error: Error) => {

@@ -82,6 +82,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   refresh(): void {
     store.dispatch(fetchListData(this.state.tree.selected?.folderUrl));
+    store.dispatch(TreeActions.fetchTree(this.treeUrl, false));
   }
 
   protected render(): TemplateResult {
@@ -135,6 +136,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           </div>
           <typo3-filetree
             .nodes="${this.state.tree.nodes}"
+            .expandedNodeIds="${this.state.tree.expandedNodeIds}"
             @typo3-node-select="${this._onSelectedNode}"
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"
