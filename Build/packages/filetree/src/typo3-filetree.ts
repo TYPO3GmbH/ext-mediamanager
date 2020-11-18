@@ -122,7 +122,6 @@ export class Typo3Filetree extends Typo3SvgTree {
         }
       })
       .on('blur', function () {
-        console.log('blur?...');
         if (self.nodeIsEdit) {
           const newName = this.value.trim();
 
