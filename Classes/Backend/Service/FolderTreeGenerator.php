@@ -90,6 +90,7 @@ class FolderTreeGenerator
                 'hasChildren' => \count($rootLevelFolder->getSubfolders()) > 0,
                 'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
                 'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, 'sys_file_storage'),
+                'allowEdit' => $rootLevelFolder->checkActionPermission('rename'),
             ];
 
             // If the mount is expanded, go down:
@@ -141,6 +142,7 @@ class FolderTreeGenerator
                 'hasChildren' => \count($subFolder->getSubfolders()) > 0,
                 'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
                 'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
+                'allowEdit' => $subFolder->checkActionPermission('rename'),
             ];
 
             if (\count($subFolder->getSubfolders()) > 0) {
