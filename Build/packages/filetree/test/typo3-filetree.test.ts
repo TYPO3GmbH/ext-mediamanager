@@ -56,4 +56,15 @@ describe('Typo3Filetree', () => {
     expect(detail['node']).to.be.eql(node);
     expect(detail['event']).to.be.eql(mouseEvent);
   });
+
+  it('it fires `typo3-node-rename` on node rename', async () => {
+    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const listener = oneEvent(element, 'typo3-node-rename');
+
+    element._sendEditNodeLabelCommand(node, 'New Name');
+
+    const { detail } = await listener;
+    expect(detail['node']).to.be.eql(node);
+    expect(detail['name']).to.be.eql('New Name');
+  });
 });

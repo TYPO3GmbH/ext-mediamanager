@@ -80,8 +80,8 @@ export class Typo3SvgTree extends LitElement {
     exclusiveNodesIdentifiers: '',
   };
 
-  private textPosition!: number;
-  private scrollBottom!: number;
+  protected textPosition!: number;
+  protected scrollBottom!: number;
 
   public static styles = [themeStyles, styles];
 
