@@ -14,5 +14,6 @@ export interface CanvasDataGridEvent extends Event {
     header: {
       name: string;
     };
+    data: {};
   };
 }
