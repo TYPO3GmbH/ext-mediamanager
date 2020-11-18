@@ -320,12 +320,24 @@
           "name": "value",
           "attribute": "value",
           "type": "string | undefined"
+        },
+        {
+          "name": "titleEditable",
+          "attribute": "titleEditable",
+          "type": "boolean",
+          "default": "false"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "typo3-card-title-rename",
+          "description": "Event fired on title rename"
+        }
+      ],
       "slots": [
         {
-          "image": ""
+          "name": "image",
+          "description": "Icon or Preview Image"
         }
       ],
       "cssProperties": [
