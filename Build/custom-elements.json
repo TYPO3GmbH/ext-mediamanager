@@ -1082,10 +1082,12 @@
         {
           "name": "typo3-node-contextmenu",
           "description": "Event fired on contextmenu for node"
+        },
+        {
+          "name": "typo3-node-rename",
+          "description": "Event fired on node rename"
         }
       ]
     }
-
-
   ]
 }
