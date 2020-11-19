@@ -1,6 +1,5 @@
 <script type="text/javascript" src="{f:uri.resource(path: 'JavaScript/Contrib/require.js', extensionName: 'core')}"></script>
 <script type="text/javascript" src="{f:uri.resource(path: 'JavaScript/requirejs-loader.js', extensionName: 'core')}"></script>
-<script type="text/javascript" src="{f:uri.resource(path: 'JavaScript/typo3-adapter.js')}"></script>
 
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
 <style type="text/css">
@@ -21,9 +20,5 @@
 
 <script type="text/javascript">
     window.flashMessagesUrl = "<f:format.raw>{flashMessagesUrl}</f:format.raw>";
-
-    window.addEventListener('load', function() {
-        Typo3FileStorageAdapter.init("<f:format.raw>{fileActionUrl}</f:format.raw>", "<f:format.raw>{flashMessagesUrl}</f:format.raw>");
-    });
 </script>
 

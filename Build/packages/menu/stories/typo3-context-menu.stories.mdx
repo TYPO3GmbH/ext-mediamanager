@@ -1,4 +1,4 @@
-import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs, action} from '@open-wc/demoing-storybook';
 import {html} from 'lit-html';
 import '../../../out-tsc/packages/menu/src/typo3-context-menu';
 
@@ -28,7 +28,12 @@ import '../../../out-tsc/packages/menu/src/typo3-context-menu';
             )); return false;'>
           Open the context menu with a right click
         </button>
-        <typo3-context-menu id="contextMenu"></typo3-context-menu>
+        <typo3-context-menu
+            id="contextMenu"
+            @typo3-context-menu-item-click="${(e) => action(`typo3-context-menu-item-click`)(e.detail)}"
+            @typo3-context-menu-open="${(e) => action(`typo3-context-menu-open`)(e.detail)}"
+            @ypo3-context-menu-close="${(e) => action(`typo3-context-menu-close`)(e.detail)}"
+        ></typo3-context-menu>
       </div>
     `}
     </Story>

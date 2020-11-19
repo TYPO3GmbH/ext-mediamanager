@@ -1,7 +1,13 @@
 import { ActionsObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
-import { catchError, finalize, map, mergeMap, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  ignoreElements,
+  mergeMap,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
 import { Observable, of } from 'rxjs';
@@ -23,5 +29,37 @@ export const renameFile = (
       new fromGlobal.Reload(),
       new fromGlobal.LoadFlashMessages(),
     ])
+  );
+};
+
+export const deleteFiles = (
+  action$: ActionsObservable<fromActions.DeleteFiles>
+): Observable<Action> => {
+  return action$.ofType(fromActions.DELETE_FILES).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      action.uids.forEach((uid, index) => {
+        formData.append('data[delete][' + index + '][data]', uid);
+      });
+      return ajax.post(action.fileActionUrl, formData).pipe(
+        mergeMap(() => [
+          new fromGlobal.Reload(),
+          new fromGlobal.LoadFlashMessages(),
+        ]),
+        catchError(() => of(new fromGlobal.LoadFlashMessages()))
+      );
+    })
+  );
+};
+
+export const showFileInfo = (
+  action$: ActionsObservable<fromActions.ShowFileInfo>
+): Observable<Action> => {
+  return action$.ofType(fromActions.SHOW_FILE_INFO).pipe(
+    tap(action => {
+      // @ts-ignore
+      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.uid);
+    }),
+    ignoreElements()
   );
 };

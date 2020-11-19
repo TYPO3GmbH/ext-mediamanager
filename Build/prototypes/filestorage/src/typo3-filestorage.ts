@@ -38,6 +38,7 @@ import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import * as FileActions from './redux/ducks/file-actions';
 import * as GlobalActions from './redux/ducks/global-actions';
+import { Action } from 'redux';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -237,7 +238,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           ${this.mainContent}
         </typo3-dropzone>
       </typo3-splitpane>
-      <typo3-context-menu></typo3-context-menu>
+      <typo3-context-menu
+        @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
+      ></typo3-context-menu>
     `;
   }
 
@@ -556,13 +559,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDeleteClicked(): void {
-    this.dispatchEvent(
-      new CustomEvent('typo3-action-button-click', {
-        detail: {
-          action: 'delete',
-          items: selectedRows(this.state.list),
-        },
-      })
+    store.dispatch(
+      new FileActions.DeleteFiles(
+        selectedRows(this.state.list).map(data => data.uid),
+        this.fileActionUrl
+      )
     );
   }
 
@@ -576,5 +577,37 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onRename(uid: string, name: string): void {
     store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
+  }
+
+  _onContextMenuItemClick(
+    event: CustomEvent<{
+      contextItem: ListItem | Typo3Node;
+      option: { callbackAction: string };
+    }>
+  ): void {
+    const contextItem = event.detail.contextItem;
+    const type =
+      Object.prototype.hasOwnProperty.call(contextItem, 'type') &&
+      contextItem.type !== 'Folder'
+        ? '_FILE'
+        : '_FOLDER';
+    const uid = Object.prototype.hasOwnProperty.call(contextItem, 'identifier')
+      ? contextItem.identifier
+      : contextItem.uid;
+
+    let storeAction: Action | null = null;
+
+    switch (event.detail.option.callbackAction) {
+      case 'openInfoPopUp':
+        storeAction = new FileActions.ShowFileInfo(uid, type);
+        break;
+      case 'deleteFile':
+        storeAction = new FileActions.DeleteFiles([uid], this.fileActionUrl);
+        break;
+    }
+
+    if (null !== storeAction) {
+      store.dispatch(storeAction);
+    }
   }
 }

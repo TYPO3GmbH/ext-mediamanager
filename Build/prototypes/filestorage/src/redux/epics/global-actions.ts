@@ -39,7 +39,7 @@ export const loadFlashMessages = (
   const flashMessagesUrl: string = window.flashMessagesUrl;
 
   return action$.ofType(fromActions.LOAD_FLASH_MESSAGES).pipe(
-    switchMap(_ => {
+    switchMap(() => {
       return ajax
         .getJSON<
           {
