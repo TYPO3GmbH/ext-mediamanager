@@ -37,6 +37,7 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import * as FileActions from './redux/ducks/file-actions';
+import * as GlobalActions from './redux/ducks/global-actions';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -81,12 +82,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   refresh(): void {
-    if (this.state.tree.selected) {
-      store.dispatch(
-        new ListActions.LoadListData(this.state.tree.selected.folderUrl)
-      );
-    }
-    store.dispatch(new TreeActions.LoadTreeData(this.treeUrl, false));
+    store.dispatch(new GlobalActions.Reload());
   }
 
   protected render(): TemplateResult {

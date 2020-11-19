@@ -11,6 +11,7 @@ export const EXPAND_TREE_NODE = '[TREE] EXPAND NODE';
 export const COLLAPSE_TREE_NODE = '[TREE] COLLAPSE NODE';
 
 export type TreeState = Readonly<{
+  url: string;
   nodes: Typo3Node[];
   loading: boolean;
   error: string | null;
@@ -19,6 +20,7 @@ export type TreeState = Readonly<{
 }>;
 
 const initialState: TreeState = {
+  url: '',
   loading: false,
   error: null,
   nodes: [],
@@ -35,6 +37,7 @@ export const treeReducer = (
       return {
         ...state,
         loading: true,
+        url: action.url,
       };
     case LOAD_TREE_DATA_SUCCESS:
       return {
