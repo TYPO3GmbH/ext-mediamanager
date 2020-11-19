@@ -35,14 +35,12 @@ import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
+import { renameItem } from './redux/ducks/actions';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
-  /**
-   * todo: remove mockoon routes
-   */
-  @property({ type: String })
-  treeUrl = 'http://localhost:3001/filestorage/tree';
+  @property({ type: String }) treeUrl!: string;
+  @property({ type: String }) fileActionUrl!: string;
 
   @property({ type: Array }) private storages: {
     storageUrl: string;
@@ -142,6 +140,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"
             @typo3-node-collapse="${this._onNodeCollapse}"
+            @typo3-node-rename="${(e: CustomEvent) =>
+              this._onRename(e.detail.node.identifier, e.detail.name)}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone
@@ -260,8 +260,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         style="width: 100%; overflow: scroll"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
+        editableColumns='["name"]'
         .selectedRows="${selectedRows(this.state.list)}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
+        ,
+        @typo3-datagrid-value-change="${(e: CustomEvent) =>
+          this._onRename(e.detail.data.uid, e.detail.data.name)}"
       ></typo3-datagrid>`;
     }
 
@@ -319,7 +323,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
+      ?titleEditable="${true}"
       @contextmenu="${contextMenuCallback}"
+      @typo3-card-title-rename="${(e: CustomEvent) =>
+        this._onRename(listData.uid, e.detail)}"
       >${imageSlot} ${badge}
     </typo3-card>`;
   }
@@ -564,5 +571,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new TreeActions.CollapseTreeNode(event.detail));
+  }
+
+  _onRename(uid: string, name: string): void {
+    console.log('on Rename triggered');
+
+    store.dispatch(renameItem(this.fileActionUrl, uid, name));
   }
 }
