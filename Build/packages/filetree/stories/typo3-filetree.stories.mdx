@@ -1,4 +1,4 @@
-import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs, action} from '@open-wc/demoing-storybook';
 import {html} from 'lit-html';
 import '../../../out-tsc/packages/filetree/src/typo3-filetree';
 import '../../../out-tsc/packages/button/src/typo3-button';
@@ -14,7 +14,15 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 <Preview>
     <Story name="Filetree" height="220px">
     {html`
-      <typo3-filetree style="height:100px;" expandedNodeIds='[0]' nodes='
+      <typo3-filetree
+        style="height:100px;"
+        expandedNodeIds="[0]"
+        @typo3-node-select="${(e) => action(`typo3-node-select`)(e.detail)}"
+        @typo3-node-expand="${(e) => action(`typo3-node-expand`)(e.detail)}"
+        @typo3-node-collapse="${(e) => action(`typo3-node-collapse`)(e.detail)}"
+        @typo3-node-contextmenu="${(e) => action(`typo3-node-contextmenu`)(e.detail)}"
+        @typo3-node-rename="${(e) => action(`typo3-node-rename`)(e.detail)}"
+        nodes='
         [
           {
             "stateIdentifier": "0_0",
