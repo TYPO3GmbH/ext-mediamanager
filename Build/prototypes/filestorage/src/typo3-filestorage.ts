@@ -23,19 +23,20 @@ import { RootState } from './redux/ducks';
 import { SetSidebarWidth } from './redux/ducks/layout';
 import {
   ClearSelection,
-  fetchListData,
   itemIsSelected,
   selectedRows,
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
+import * as ListActions from './redux/ducks/list';
+
 import * as TreeActions from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
-import { renameItem } from './redux/ducks/actions';
+import * as FileActions from './redux/ducks/file-actions';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -76,12 +77,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    store.dispatch(TreeActions.fetchTree(this.treeUrl));
+    store.dispatch(new TreeActions.LoadTreeData(this.treeUrl));
   }
 
   refresh(): void {
-    store.dispatch(fetchListData(this.state.tree.selected?.folderUrl));
-    store.dispatch(TreeActions.fetchTree(this.treeUrl, false));
+    if (this.state.tree.selected) {
+      store.dispatch(
+        new ListActions.LoadListData(this.state.tree.selected.folderUrl)
+      );
+    }
+    store.dispatch(new TreeActions.LoadTreeData(this.treeUrl, false));
   }
 
   protected render(): TemplateResult {
@@ -493,7 +498,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new TreeActions.SelectTreeNode(event.detail));
-    store.dispatch(fetchListData(event.detail.folderUrl));
+    store.dispatch(new ListActions.LoadListData(event.detail.folderUrl));
   }
 
   _onContextMenu(
@@ -574,8 +579,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onRename(uid: string, name: string): void {
-    console.log('on Rename triggered');
-
-    store.dispatch(renameItem(this.fileActionUrl, uid, name));
+    store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
   }
 }
