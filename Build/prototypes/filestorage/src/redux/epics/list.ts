@@ -10,8 +10,11 @@ export const fetchListData = (
   action$: ActionsObservable<fromList.LoadListData>
 ): Observable<Action> => {
   return action$.ofType(fromList.LOAD_LIST_DATA).pipe(
-    switchMap(action => ajax.getJSON<ListItem[]>(action.url)),
-    map(data => new fromList.LoadListDataSuccess(data)),
-    catchError(error => of(new fromList.LoadListDataFailure(error.message)))
+    switchMap(action =>
+      ajax.getJSON<ListItem[]>(action.url).pipe(
+        map(data => new fromList.LoadListDataSuccess(data)),
+        catchError(error => of(new fromList.LoadListDataFailure(error.message)))
+      )
+    )
   );
 };

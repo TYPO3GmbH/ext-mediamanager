@@ -12,15 +12,17 @@ export const fetchTreeData = (
   let isInit = false;
   return action$.ofType(fromTree.LOAD_TREE_DATA).pipe(
     tap(action => (isInit = action.init)),
-    switchMap(action => ajax.getJSON<Typo3Node[]>(action.url)),
-
-    mergeMap(data => {
-      const actions: Action[] = [new fromTree.LoadTreeDataSuccess(data)];
-      if (isInit && data.length > 0) {
-        actions.push(new fromTree.ExpandTreeNode(data[0]));
-      }
-      return actions;
-    }),
-    catchError(error => of(new fromTree.LoadTreeDataFailure(error.message)))
+    switchMap(action =>
+      ajax.getJSON<Typo3Node[]>(action.url).pipe(
+        mergeMap(data => {
+          const actions: Action[] = [new fromTree.LoadTreeDataSuccess(data)];
+          if (isInit && data.length > 0) {
+            actions.push(new fromTree.ExpandTreeNode(data[0]));
+          }
+          return actions;
+        }),
+        catchError(error => of(new fromTree.LoadTreeDataFailure(error.message)))
+      )
+    )
   );
 };
