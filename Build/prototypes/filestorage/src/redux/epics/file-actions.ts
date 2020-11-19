@@ -15,12 +15,13 @@ export const renameFile = (
       const formData = new FormData();
       formData.append('data[rename][0][data]', action.identifier);
       formData.append('data[rename][0][target]', action.name);
-      return ajax.post(action.fileActionUrl, formData);
+      return ajax
+        .post(action.fileActionUrl, formData)
+        .pipe(catchError(error => of(error)));
     }),
     mergeMap(() => [
       new fromGlobal.Reload(),
       new fromGlobal.LoadFlashMessages(),
-    ]),
-    catchError(() => of(new fromGlobal.LoadFlashMessages()))
+    ])
   );
 };
