@@ -23,26 +23,27 @@ import { RootState } from './redux/ducks';
 import { SetSidebarWidth } from './redux/ducks/layout';
 import {
   ClearSelection,
-  fetchListData,
   itemIsSelected,
   selectedRows,
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
+import * as ListActions from './redux/ducks/list';
+
 import * as TreeActions from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
+import * as FileActions from './redux/ducks/file-actions';
+import * as GlobalActions from './redux/ducks/global-actions';
+import { Action } from 'redux';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
-  /**
-   * todo: remove mockoon routes
-   */
-  @property({ type: String })
-  treeUrl = 'http://localhost:3001/filestorage/tree';
+  @property({ type: String }) treeUrl!: string;
+  @property({ type: String }) fileActionUrl!: string;
 
   @property({ type: Array }) private storages: {
     storageUrl: string;
@@ -78,12 +79,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    store.dispatch(TreeActions.fetchTree(this.treeUrl));
+    store.dispatch(new TreeActions.LoadTreeData(this.treeUrl));
   }
 
   refresh(): void {
-    store.dispatch(fetchListData(this.state.tree.selected?.folderUrl));
-    store.dispatch(TreeActions.fetchTree(this.treeUrl, false));
+    store.dispatch(new GlobalActions.Reload());
   }
 
   protected render(): TemplateResult {
@@ -142,6 +142,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"
             @typo3-node-collapse="${this._onNodeCollapse}"
+            @typo3-node-rename="${(e: CustomEvent) =>
+              this._onRename(e.detail.node.identifier, e.detail.name)}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone
@@ -236,7 +238,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           ${this.mainContent}
         </typo3-dropzone>
       </typo3-splitpane>
-      <typo3-context-menu></typo3-context-menu>
+      <typo3-context-menu
+        @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
+      ></typo3-context-menu>
     `;
   }
 
@@ -260,8 +264,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         style="width: 100%; overflow: scroll"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
+        editableColumns='["name"]'
         .selectedRows="${selectedRows(this.state.list)}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
+        ,
+        @typo3-datagrid-value-change="${(e: CustomEvent) =>
+          this._onRename(e.detail.data.uid, e.detail.data.name)}"
       ></typo3-datagrid>`;
     }
 
@@ -319,7 +327,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
+      ?titleEditable="${true}"
       @contextmenu="${contextMenuCallback}"
+      @typo3-card-title-rename="${(e: CustomEvent) =>
+        this._onRename(listData.uid, e.detail)}"
       >${imageSlot} ${badge}
     </typo3-card>`;
   }
@@ -486,7 +497,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new TreeActions.SelectTreeNode(event.detail));
-    store.dispatch(fetchListData(event.detail.folderUrl));
+    store.dispatch(new ListActions.LoadListData(event.detail.folderUrl));
   }
 
   _onContextMenu(
@@ -548,13 +559,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDeleteClicked(): void {
-    this.dispatchEvent(
-      new CustomEvent('typo3-action-button-click', {
-        detail: {
-          action: 'delete',
-          items: selectedRows(this.state.list),
-        },
-      })
+    store.dispatch(
+      new FileActions.DeleteFiles(
+        selectedRows(this.state.list).map(data => data.uid),
+        this.fileActionUrl
+      )
     );
   }
 
@@ -564,5 +573,41 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new TreeActions.CollapseTreeNode(event.detail));
+  }
+
+  _onRename(uid: string, name: string): void {
+    store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
+  }
+
+  _onContextMenuItemClick(
+    event: CustomEvent<{
+      contextItem: ListItem | Typo3Node;
+      option: { callbackAction: string };
+    }>
+  ): void {
+    const contextItem = event.detail.contextItem;
+    const type =
+      Object.prototype.hasOwnProperty.call(contextItem, 'type') &&
+      contextItem.type !== 'Folder'
+        ? '_FILE'
+        : '_FOLDER';
+    const uid = Object.prototype.hasOwnProperty.call(contextItem, 'identifier')
+      ? contextItem.identifier
+      : contextItem.uid;
+
+    let storeAction: Action | null = null;
+
+    switch (event.detail.option.callbackAction) {
+      case 'openInfoPopUp':
+        storeAction = new FileActions.ShowFileInfo(uid, type);
+        break;
+      case 'deleteFile':
+        storeAction = new FileActions.DeleteFiles([uid], this.fileActionUrl);
+        break;
+    }
+
+    if (null !== storeAction) {
+      store.dispatch(storeAction);
+    }
   }
 }

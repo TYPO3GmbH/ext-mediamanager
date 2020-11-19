@@ -88,6 +88,10 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
         $subFolder->method('getStorage')
             ->willReturn($storage);
 
+        $subFolder->method('checkActionPermission')
+            ->with('rename')
+            ->willReturn(true);
+
         $rootFolder->method('getStorage')
             ->willReturn($storage);
 
@@ -96,6 +100,10 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
 
         $rootFolder->method('getFileCount')
             ->willReturn(0);
+
+        $rootFolder->method('checkActionPermission')
+            ->with('rename')
+            ->willReturn(false);
 
         $rootFolder->method('getSubfolders')
             ->willReturn([$subFolder]);
@@ -136,6 +144,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'hasChildren' => true,
                 'folderUrl' => '/typo3/index.php?route=%2Fajax%2Ffilelist_ng%2Ffolder%2FfetchData&token=dummyToken&uid=1%3A%2Ftest-folder',
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file_storage&uid=1%3A%2Ftest-folder',
+                'allowEdit' => false,
             ],
             [
                 'stateIdentifier' => '_230043429',
@@ -149,6 +158,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'hasChildren' => false,
                 'folderUrl' => '/typo3/index.php?route=%2Fajax%2Ffilelist_ng%2Ffolder%2FfetchData&token=dummyToken&uid=1%3A%2Ftest-folder-sub',
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder-sub',
+                'allowEdit' => true,
             ],
         ], $result);
     }

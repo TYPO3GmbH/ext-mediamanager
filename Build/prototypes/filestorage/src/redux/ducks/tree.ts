@@ -1,17 +1,17 @@
 import { Action } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 
-const LOAD_TREE_DATA = '[TREE] LOAD DATA';
-const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
-const LOAD_TREE_DATA_FAILURE = '[TREE] LOAD DATA FAILURE';
-const SELECT_TREE_NODE = '[TREE] SELECT NODE';
+export const LOAD_TREE_DATA = '[TREE] LOAD DATA';
+export const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
+export const LOAD_TREE_DATA_FAILURE = '[TREE] LOAD DATA FAILURE';
+export const SELECT_TREE_NODE = '[TREE] SELECT NODE';
 
-const EXPAND_TREE_NODE = '[TREE] EXPAND NODE';
-const COLLAPSE_TREE_NODE = '[TREE] COLLAPSE NODE';
+export const EXPAND_TREE_NODE = '[TREE] EXPAND NODE';
+export const COLLAPSE_TREE_NODE = '[TREE] COLLAPSE NODE';
 
 export type TreeState = Readonly<{
+  url: string;
   nodes: Typo3Node[];
   loading: boolean;
   error: string | null;
@@ -20,6 +20,7 @@ export type TreeState = Readonly<{
 }>;
 
 const initialState: TreeState = {
+  url: '',
   loading: false,
   error: null,
   nodes: [],
@@ -36,6 +37,7 @@ export const treeReducer = (
       return {
         ...state,
         loading: true,
+        url: action.url,
       };
     case LOAD_TREE_DATA_SUCCESS:
       return {
@@ -73,6 +75,7 @@ export const treeReducer = (
 
 export class LoadTreeData implements Action {
   readonly type = LOAD_TREE_DATA;
+  constructor(public url: string, public init = true) {}
 }
 
 export class LoadTreeDataSuccess implements Action {
@@ -107,33 +110,6 @@ export type Actions =
   | SelectTreeNode
   | ExpandTreeNode
   | CollapseTreeNode;
-
-export const fetchTree = (
-  treeUrl: string,
-  init = true
-): ThunkAction<Promise<void>, {}, {}, Action> => {
-  return (dispatch: ThunkDispatch<Action, {}, Action>): Promise<void> => {
-    dispatch(new LoadTreeData());
-    return fetch(treeUrl)
-      .then((response: Response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-
-        return response.json();
-      })
-      .then((data: Typo3Node[]) => {
-        if (init && data.length > 0) {
-          // expand first level nodes
-          dispatch(new ExpandTreeNode(data[0]));
-        }
-        dispatch(new LoadTreeDataSuccess(data));
-      })
-      .catch((error: Error) => {
-        dispatch(new LoadTreeDataFailure(error.message));
-      });
-  };
-};
 
 export const selectedTreeNodes = createSelector(
   (state: TreeState) => state,

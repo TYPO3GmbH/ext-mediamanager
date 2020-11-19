@@ -1,6 +1,13 @@
-import { expect, fixture, html } from '@open-wc/testing';
+import {
+  elementUpdated,
+  expect,
+  fixture,
+  html,
+  oneEvent,
+} from '@open-wc/testing';
 import '../src/typo3-datagrid.js';
 import { Typo3Datagrid } from '../src/typo3-datagrid';
+import { EndEditEvent } from '../src/lib/event/EndEditEvent';
 
 describe('Typo3Datagrid', () => {
   let element: Typo3Datagrid;
@@ -27,5 +34,78 @@ describe('Typo3Datagrid', () => {
   it('will fire a `typo3-datagrid-selection-change` on selection change', async () => {
     const button = element.shadowRoot!.querySelector('canvas-datagrid')!;
     expect(button).to.exist;
+  });
+
+  it('will fire a `typo3-datagrid-value-change` on end edit', async () => {
+    const event: EndEditEvent | {} = {
+      abort: false,
+      value: 'New value',
+      cell: {
+        header: {
+          name: 'fieldA',
+        },
+        value: 'OldValue',
+        data: { uid: 1 },
+      },
+    };
+
+    const listener = oneEvent(element, 'typo3-datagrid-value-change');
+
+    element._onEndEdit(event);
+
+    const { detail } = await listener;
+    expect(detail.value).to.be.eq('New value');
+    expect(detail.data).to.be.eql({ uid: 1 });
+    expect(detail.field).to.be.eq('fieldA');
+  });
+
+  it('wont fire a `typo3-datagrid-value-change` on end edit if value have not changed', async () => {
+    let valueChangedEvents = 0;
+
+    element.addEventListener('typo3-datagrid-value-change', () => {
+      valueChangedEvents += 1;
+    });
+
+    const event: EndEditEvent | {} = {
+      abort: false,
+      value: 'Old value',
+      cell: {
+        header: {
+          name: 'fieldA',
+        },
+        value: 'Old value',
+        data: { uid: 1 },
+      },
+    };
+
+    element._onEndEdit(event);
+    await elementUpdated(element);
+
+    expect(valueChangedEvents).to.equal(0);
+  });
+
+  it('wont fire a `typo3-datagrid-value-change` on end edit if abort is true', async () => {
+    let valueChangedEvents = 0;
+
+    element.addEventListener('typo3-datagrid-value-change', () => {
+      valueChangedEvents += 1;
+    });
+
+    const event: EndEditEvent | {} = {
+      abort: true,
+      value: 'New value',
+      cell: {
+        header: {
+          name: 'fieldA',
+        },
+        value: 'Old value',
+        data: { uid: 1 },
+      },
+    };
+
+    element._onEndEdit(event);
+    await elementUpdated(element);
+
+    expect(valueChangedEvents).to.equal(0);
   });
 });

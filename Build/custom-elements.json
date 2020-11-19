@@ -320,12 +320,24 @@
           "name": "value",
           "attribute": "value",
           "type": "string | undefined"
+        },
+        {
+          "name": "titleEditable",
+          "attribute": "titleEditable",
+          "type": "boolean",
+          "default": "false"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "typo3-card-title-rename",
+          "description": "Event fired on title rename"
+        }
+      ],
       "slots": [
         {
-          "image": ""
+          "name": "image",
+          "description": "Icon or Preview Image"
         }
       ],
       "cssProperties": [
@@ -489,9 +501,29 @@
           "type": "String"
         },
         {
-          "name": "editable",
-          "type": "boolean",
-          "default": "false"
+          "name": "editableColumns",
+          "type": "string[]",
+          "default": "[]"
+        },
+        {
+          "name": "selectedRows",
+          "type": "{ [key: string]: string; }[]",
+          "default": "[]"
+        },
+        {
+          "name": "rowIdentifier",
+          "type": "string",
+          "default": "\"uid\""
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-datagrid-selection-change",
+          "description": "Dispatched on change of selection"
+        },
+        {
+          "name": "typo3-datagrid-value-change",
+          "description": "Dispatched on change of a cell value"
         }
       ]
     },
@@ -1082,10 +1114,12 @@
         {
           "name": "typo3-node-contextmenu",
           "description": "Event fired on contextmenu for node"
+        },
+        {
+          "name": "typo3-node-rename",
+          "description": "Event fired on node rename"
         }
       ]
     }
-
-
   ]
 }

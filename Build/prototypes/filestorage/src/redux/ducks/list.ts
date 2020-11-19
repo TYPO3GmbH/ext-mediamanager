@@ -1,7 +1,6 @@
 import { Action } from 'redux';
 import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export const ADD_SELECTION_ITEM = '[LIST] ADD ITEM TO SELECTION';
 export const REMOVE_SELECTION_ITEM = '[LIST] REMOVE ITEM FROM SELECTION';
@@ -35,6 +34,7 @@ export const listReducer = (
       return {
         ...state,
         loading: true,
+        items: [],
       };
     case LOAD_LIST_DATA_SUCCESS:
       return {
@@ -96,6 +96,7 @@ export class SetSelection implements Action {
 
 export class LoadListData implements Action {
   readonly type = LOAD_LIST_DATA;
+  constructor(public url: string) {}
 }
 
 export class LoadListDataSuccess implements Action {
@@ -131,26 +132,3 @@ export type Actions =
   | LoadListData
   | LoadListDataSuccess
   | LoadListDataFailure;
-
-export const fetchListData = (
-  url: string
-): ThunkAction<Promise<void>, {}, {}, Action> => {
-  return (dispatch: ThunkDispatch<Action, {}, Action>): Promise<void> => {
-    dispatch(new LoadListData());
-    dispatch(new ClearSelection());
-    return fetch(url)
-      .then((response: Response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-
-        return response.json();
-      })
-      .then(data => {
-        dispatch(new LoadListDataSuccess(data));
-      })
-      .catch((error: Error) => {
-        dispatch(new LoadListDataFailure(error.message));
-      });
-  };
-};

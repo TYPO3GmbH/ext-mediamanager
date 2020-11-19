@@ -98,7 +98,8 @@
     "lodash-es": "^4.17.15",
     "pwa-helpers": "^0.9.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "redux-observable": "^1.2.0",
+    "reselect": "^4.0.0",
+    "rxjs": "^6.6.3"
   }
 }

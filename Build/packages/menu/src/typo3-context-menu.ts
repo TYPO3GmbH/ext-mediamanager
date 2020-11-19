@@ -20,7 +20,7 @@ interface OpenContextMenuDetail {
 /**
  * @fires typo3-context-menu-open - Dispatched when context menu is opened
  * @fires typo3-context-menu-close - Dispatched when context menu is closed
- * @fires typo3-context-menu-item-click - Dispatched when a context menu option is clicked (target: window)
+ * @fires typo3-context-menu-item-click - Dispatched when a context menu option is clicked
  */
 @customElement('typo3-context-menu')
 export class Typo3ContextMenu extends LitElement {
@@ -91,7 +91,7 @@ export class Typo3ContextMenu extends LitElement {
         contextItem: this.currentContextMenuDetail?.contextItem,
       },
     });
-    window.dispatchEvent(actionEvent);
+    this.dispatchEvent(actionEvent);
   }
 
   _handleShowContextMenu = (

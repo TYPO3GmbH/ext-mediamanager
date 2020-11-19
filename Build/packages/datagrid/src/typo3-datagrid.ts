@@ -16,9 +16,12 @@ import { CanvasDatagrid } from './lib/CanvasDatagrid';
 import 'canvas-datagrid';
 import { PropertyValues } from 'lit-element/lib/updating-element';
 import * as _ from 'lodash-es';
+import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
+import { EndEditEvent } from './lib/event/EndEditEvent';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
+ *@fires typo3-datagrid-value-change - Dispatched on change of a cell value
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
@@ -26,7 +29,7 @@ export class Typo3Datagrid extends LitElement {
 
   @property({ type: String }) data = '';
 
-  @property({ type: Boolean }) editable = false;
+  @property({ type: Array }) editableColumns: string[] = [];
 
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
 
@@ -47,11 +50,13 @@ export class Typo3Datagrid extends LitElement {
         @rendertext="${this._onRenderText}"
         @renderorderbyarrow="${this._onRenderOrderByArrow}"
         @selectionchanged="${this._onSelectionChanged}"
+        @beforebeginedit="${this._onBeforeBeginEdit}"
+        @endedit="${this._onEndEdit}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
         data="${this.data}"
-        editable="${this.editable}"
+        editable="${this.editableColumns.length > 0}"
       ></canvas-datagrid>
     `;
   }
@@ -207,5 +212,26 @@ export class Typo3Datagrid extends LitElement {
         detail: selectedData,
       })
     );
+  }
+  _onBeforeBeginEdit(event: CanvasDataGridEvent): void {
+    if (this.editableColumns.indexOf(event.cell.header.name) === -1) {
+      event.preventDefault();
+    }
+  }
+  _onEndEdit(event: EndEditEvent): void {
+    if (event.abort === true) {
+      return;
+    }
+
+    if (event.value !== event.cell.value) {
+      const changeEvent = new CustomEvent('typo3-datagrid-value-change', {
+        detail: {
+          field: event.cell.header.name,
+          value: event.value,
+          data: event.cell.data,
+        },
+      });
+      this.dispatchEvent(changeEvent);
+    }
   }
 }

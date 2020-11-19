@@ -6,13 +6,16 @@ import {
   Middleware,
 } from 'redux';
 import { rootReducer } from './ducks';
-import thunk from 'redux-thunk';
+import { createEpicMiddleware } from 'redux-observable';
+import { rootEpic } from './epics';
 
 const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   action: Action
 ) => {
   next({ ...action });
 };
+
+const epicMiddleware = createEpicMiddleware();
 
 const enhancer = [];
 if (
@@ -27,7 +30,9 @@ if (
 export const store = createStore(
   rootReducer,
   compose(
-    applyMiddleware(thunk, allowCustomActionObjectsMiddleWare),
+    applyMiddleware(allowCustomActionObjectsMiddleWare, epicMiddleware),
     ...enhancer
   )
 );
+
+epicMiddleware.run(rootEpic);
