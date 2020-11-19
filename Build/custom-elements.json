@@ -501,9 +501,29 @@
           "type": "String"
         },
         {
-          "name": "editable",
-          "type": "boolean",
-          "default": "false"
+          "name": "editableColumns",
+          "type": "string[]",
+          "default": "[]"
+        },
+        {
+          "name": "selectedRows",
+          "type": "{ [key: string]: string; }[]",
+          "default": "[]"
+        },
+        {
+          "name": "rowIdentifier",
+          "type": "string",
+          "default": "\"uid\""
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-datagrid-selection-change",
+          "description": "Dispatched on change of selection"
+        },
+        {
+          "name": "typo3-datagrid-value-change",
+          "description": "Dispatched on change of a cell value"
         }
       ]
     },

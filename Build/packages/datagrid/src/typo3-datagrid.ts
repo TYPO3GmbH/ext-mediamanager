@@ -21,6 +21,7 @@ import { EndEditEvent } from './lib/event/EndEditEvent';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
+ *@fires typo3-datagrid-value-change - Dispatched on change of a cell value
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
