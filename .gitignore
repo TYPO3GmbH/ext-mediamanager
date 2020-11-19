@@ -9,3 +9,4 @@ etc/testing-docker/.env
 var
 /Resources/Public/JavaScript/es.js
 /Resources/Public/JavaScript/es.js.map
+/public/
