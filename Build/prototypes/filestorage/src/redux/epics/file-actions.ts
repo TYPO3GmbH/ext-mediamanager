@@ -1,10 +1,10 @@
 import { ActionsObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
-import { map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Action } from 'redux';
 
 export const renameFile = (
@@ -17,6 +17,10 @@ export const renameFile = (
       formData.append('data[rename][0][target]', action.name);
       return ajax.post(action.fileActionUrl, formData);
     }),
-    map(() => new fromGlobal.Reload())
+    mergeMap(() => [
+      new fromGlobal.Reload(),
+      new fromGlobal.LoadFlashMessages(),
+    ]),
+    catchError(() => of(new fromGlobal.LoadFlashMessages()))
   );
 };
