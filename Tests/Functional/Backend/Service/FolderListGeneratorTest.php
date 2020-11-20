@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Functional\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -51,7 +52,8 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $this->generator = new FolderListGenerator(
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
-            GeneralUtility::makeInstance(UriBuilder::class)
+            GeneralUtility::makeInstance(UriBuilder::class),
+            GeneralUtility::makeInstance(ConnectionPool::class)
         );
     }
 
@@ -108,7 +110,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'size' => '0 Files',
             'type' => 'Folder',
             'variants' => '-',
-            'references' => '0',
+            'references' => '-',
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder',
         ]], $result);
@@ -189,7 +191,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'size' => '0 B',
             'type' => 'XLS',
             'variants' => '-',
-            'references' => '0',
+            'references' => '-',
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
             'thumbnailUrl' => null,

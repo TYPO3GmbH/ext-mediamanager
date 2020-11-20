@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -38,6 +39,7 @@ class FolderListGenerator
 
     /** @var UriBuilder */
     private $uriBuilder;
+
     /** @var ConnectionPool */
     private $connectionPool;
 
@@ -62,7 +64,11 @@ class FolderListGenerator
         });
 
         $folderItems = \array_map([$this, 'formatFolder'], $folders);
-        $fileItems = \array_map([$this, 'formatFile'], $folderObject->getFiles());
+
+        $fileReferences = $this->getFileReferences($folderObject);
+        $fileItems = \array_map(function (File $file) use ($fileReferences) {
+            return $this->formatFile($file, $fileReferences);
+        }, $folderObject->getFiles());
 
         return \array_merge(\array_values($folderItems), \array_values($fileItems));
     }
@@ -100,7 +106,7 @@ class FolderListGenerator
     /**
      * @return array[string]string
      */
-    protected function formatFile(File $file): array
+    protected function formatFile(File $file, array $fileReferences = []): array
     {
         $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
         $isWritable = $file->checkActionPermission('write');
@@ -127,7 +133,7 @@ class FolderListGenerator
             'type' => \strtoupper($file->getExtension()),
             //todo detect variants & references
             'variants' => '-',
-            'references' => $this->getReferences($file),
+            'references' => $fileReferences[$file->getUid()] ?? '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'thumbnailUrl' => $thumbnailUrl,
             'thumbnailWidth' => $thumbnailWidth,
@@ -140,31 +146,50 @@ class FolderListGenerator
         return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
     }
 
-    protected function getReferences(File $file): string
+    /**
+     * todo use own service for getting references
+     * @return array<string, int>
+     */
+    protected function getFileReferences(Folder $folder): array
     {
-        // todo calculate references for all files in one query.....
+        if (0 === \count($folder->getFiles())) {
+            return [];
+        }
+
+        $fileUids = \array_map(
+            static function (File $file) {
+                return $file->getUid();
+            },
+            $folder->getFiles()
+        );
+
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_refindex');
 
-        $referenceCount = $queryBuilder->count('*')
+        $referenceCount = $queryBuilder->select('ref_uid')
+            ->addSelectLiteral('COUNT(*) AS cnt_ref')
             ->from('sys_refindex')
             ->where(
-                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
                 $queryBuilder->expr()->eq(
                     'ref_table',
-                    $queryBuilder->createNamedParameter('sys_file', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('sys_file', Connection::PARAM_STR)
                 ),
-                $queryBuilder->expr()->eq(
+                $queryBuilder->expr()->in(
                     'ref_uid',
-                    $queryBuilder->createNamedParameter($file->getUid(), \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($fileUids, Connection::PARAM_INT_ARRAY)
                 ),
                 $queryBuilder->expr()->neq(
                     'tablename',
-                    $queryBuilder->createNamedParameter('sys_file_metadata', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('sys_file_metadata', Connection::PARAM_STR)
                 )
             )
+            ->groupBy('ref_uid')
             ->execute()
-            ->fetchColumn();
+            ->fetchAll();
 
-        return $referenceCount === 0 ? '-' : (string) $referenceCount;
+        return \array_combine(
+            \array_column($referenceCount, 'ref_uid'),
+            \array_column($referenceCount, 'cnt_ref')
+        );
     }
 }
