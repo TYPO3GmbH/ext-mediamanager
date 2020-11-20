@@ -651,6 +651,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'createFile':
         this.fileTree.addNode(uid);
         break;
+      default:
+        console.info('Todo: Implement cb action', event.detail.option);
     }
 
     if (null !== storeAction) {
