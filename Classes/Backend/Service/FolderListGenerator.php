@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -37,15 +38,19 @@ class FolderListGenerator
 
     /** @var UriBuilder */
     private $uriBuilder;
+    /** @var ConnectionPool */
+    private $connectionPool;
 
     public function __construct(
         LanguageServiceProvider $languageServiceProvider,
         IconFactory $iconFactory,
-        UriBuilder $uriBuilder
+        UriBuilder $uriBuilder,
+        ConnectionPool $connectionPool
     ) {
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->iconFactory = $iconFactory;
         $this->uriBuilder = $uriBuilder;
+        $this->connectionPool = $connectionPool;
     }
 
     public function getFolderItems(Folder $folderObject): array
@@ -86,7 +91,7 @@ class FolderListGenerator
             'type' => $this->languageService->getLL('folder'),
             //todo detect variants & references
             'variants' => '-',
-            'references' => '0',
+            'references' => '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
         ];
@@ -122,7 +127,7 @@ class FolderListGenerator
             'type' => \strtoupper($file->getExtension()),
             //todo detect variants & references
             'variants' => '-',
-            'references' => '0',
+            'references' => $this->getReferences($file),
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'thumbnailUrl' => $thumbnailUrl,
             'thumbnailWidth' => $thumbnailWidth,
@@ -133,5 +138,33 @@ class FolderListGenerator
     protected function buildContextMenuUrl(string $combinedIdentifier): string
     {
         return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
+    }
+
+    protected function getReferences(File $file): string
+    {
+        // todo calculate references for all files in one query.....
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_refindex');
+
+        $referenceCount = $queryBuilder->count('*')
+            ->from('sys_refindex')
+            ->where(
+                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq(
+                    'ref_table',
+                    $queryBuilder->createNamedParameter('sys_file', \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref_uid',
+                    $queryBuilder->createNamedParameter($file->getUid(), \PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->neq(
+                    'tablename',
+                    $queryBuilder->createNamedParameter('sys_file_metadata', \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchColumn();
+
+        return $referenceCount === 0 ? '-' : (string) $referenceCount;
     }
 }
