@@ -39,6 +39,7 @@ import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import * as FileActions from './redux/ducks/file-actions';
 import * as GlobalActions from './redux/ducks/global-actions';
 import { Action } from 'redux';
+import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -58,6 +59,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   @query('.content_left') contentLeft!: HTMLElement;
   @query('.content_right') contentRight!: HTMLElement;
+
+  @query('typo3-filetree') fileTree!: Typo3Filetree;
 
   public static styles = [themeStyles, styles];
 
@@ -144,6 +147,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             @typo3-node-collapse="${this._onNodeCollapse}"
             @typo3-node-rename="${(e: CustomEvent) =>
               this._onRename(e.detail.node.identifier, e.detail.name)}"
+            @typo3-node-add="${(e: CustomEvent) =>
+              this._onFolderAdd(e.detail.node, e.detail.parentNode)}"
           ></typo3-filetree>
         </div>
         <typo3-dropzone
@@ -579,6 +584,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
   }
 
+  _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
+    store.dispatch(
+      new FileActions.AddFolder(node, parentNode, this.fileActionUrl)
+    );
+  }
+
   _onContextMenuItemClick(
     event: CustomEvent<{
       contextItem: ListItem | Typo3Node;
@@ -603,6 +614,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         break;
       case 'deleteFile':
         storeAction = new FileActions.DeleteFiles([uid], this.fileActionUrl);
+        break;
+      case 'createFile':
+        this.fileTree.addNode(uid);
         break;
     }
 

@@ -165,12 +165,8 @@ export class Typo3Snackbar extends LitElement {
   }
 
   _setSnackbarValues(element: SnackbarValues) {
-    if (element.message) {
-      this.message = element.message;
-    }
-    if (element.title) {
-      this.messageTitle = element.title;
-    }
+    this.message = element.message;
+    this.messageTitle = element.title;
 
     this.dismissible = element.dismissible;
     this._duration = element.duration;

@@ -1,7 +1,7 @@
 import { ActionsObservable } from 'redux-observable';
 
 import * as fromList from '../ducks/list';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import { Observable, of } from 'rxjs';
 import { Action } from 'redux';

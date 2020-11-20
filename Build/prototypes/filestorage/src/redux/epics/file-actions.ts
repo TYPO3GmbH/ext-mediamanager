@@ -63,3 +63,25 @@ export const showFileInfo = (
     ignoreElements()
   );
 };
+
+export const addFolder = (
+  action$: ActionsObservable<fromActions.AddFolder>
+): Observable<Action> => {
+  return action$.ofType(fromActions.ADD_FOLDER).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      formData.append('data[newfolder][0][data]', action.node.name);
+      formData.append(
+        'data[newfolder][0][target]',
+        action.parentNode.identifier
+      );
+      return ajax
+        .post(action.fileActionUrl, formData)
+        .pipe(catchError(error => of(error)));
+    }),
+    mergeMap(() => [
+      new fromGlobal.Reload(),
+      new fromGlobal.LoadFlashMessages(),
+    ])
+  );
+};
