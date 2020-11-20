@@ -268,7 +268,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     if (this.state.viewMode.mode === ViewMode.LIST) {
       return html` <typo3-datagrid
         class="main-content"
-        style="width: 100%; overflow: scroll"
+        style="width: 100%; overflow: auto;"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
         editableColumns='["name"]'
