@@ -166,8 +166,8 @@ export class Typo3Datagrid extends LitElement {
       bubbles: true,
       composed: true,
       detail: {
-        data: e.cell.data,
-        originalEvent: e.NativeEvent,
+        node: e.cell.data,
+        event: e.NativeEvent,
       },
     });
     this.dispatchEvent(contextMenuEvent);

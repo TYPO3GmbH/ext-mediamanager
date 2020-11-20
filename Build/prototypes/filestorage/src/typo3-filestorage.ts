@@ -275,6 +275,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .selectedRows="${selectedRows(this.state.list)}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         ,
+        @typo3-datagrid-contextmenu="${this._onContextMenu}"
+        ,
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
           this._onRename(e.detail.data.uid, e.detail.data.name)}"
       ></typo3-datagrid>`;

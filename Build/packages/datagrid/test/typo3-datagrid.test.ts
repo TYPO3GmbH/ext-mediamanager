@@ -52,7 +52,7 @@ describe('Typo3Datagrid', () => {
 
     const listener = oneEvent(element, 'typo3-datagrid-value-change');
 
-    element._onEndEdit(event);
+    element._onEndEdit(event as EndEditEvent);
 
     const { detail } = await listener;
     expect(detail.value).to.be.eq('New value');
@@ -79,7 +79,7 @@ describe('Typo3Datagrid', () => {
       },
     };
 
-    element._onEndEdit(event);
+    element._onEndEdit(event as EndEditEvent);
     await elementUpdated(element);
 
     expect(valueChangedEvents).to.equal(0);
@@ -104,7 +104,7 @@ describe('Typo3Datagrid', () => {
       },
     };
 
-    element._onEndEdit(event);
+    element._onEndEdit(event as EndEditEvent);
     await elementUpdated(element);
 
     expect(valueChangedEvents).to.equal(0);
@@ -128,8 +128,8 @@ describe('Typo3Datagrid', () => {
     element._onContextmenu(event as ContextMenuEvent);
 
     const { detail } = await listener;
-    expect(detail.NativeEvent).to.be.not.be.instanceOf(MouseEvent);
-    expect(detail.data).to.be.eql({ uid: 1 });
+    expect(detail.event).to.be.eq(nativeEvent);
+    expect(detail.node).to.be.eql({ uid: 1 });
   });
 
   it('wont fire a `typo3-datagrid-contextmenu` on contextMenu on header cell', async () => {
