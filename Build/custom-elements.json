@@ -1123,7 +1123,14 @@
     },
     {
       "name": "typo3-overlay",
-      "properties": [],
+      "properties": [
+        {
+          "name": "fixed",
+          "attribute": "fixed",
+          "type": "boolean",
+          "default": "false"
+        }
+      ],
       "cssProperties": [
         {
           "name": "--typo3-modal-overlay-opacity"
