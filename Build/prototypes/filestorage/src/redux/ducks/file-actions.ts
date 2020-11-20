@@ -5,6 +5,7 @@ export const RENAME_FILE = '[FILE] Rename';
 export const DELETE_FILES = '[FILE] Delete files';
 export const SHOW_FILE_INFO = '[FILE] Show file info';
 export const ADD_FOLDER = '[FILE] Add folder';
+export const UPLOAD_FILES = '[FILE] Upload files';
 
 export class RenameFile implements Action {
   readonly type = RENAME_FILE;
@@ -30,6 +31,15 @@ export class AddFolder implements Action {
   constructor(
     public node: Typo3Node,
     public parentNode: Typo3Node,
+    public fileActionUrl: string
+  ) {}
+}
+
+export class UploadFiles implements Action {
+  readonly type = UPLOAD_FILES;
+  constructor(
+    public dataTransfer: DataTransfer,
+    public node: Typo3Node,
     public fileActionUrl: string
   ) {}
 }

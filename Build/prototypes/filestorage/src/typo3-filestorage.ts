@@ -154,6 +154,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <typo3-dropzone
           class="content_right"
           style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
+          @typo3-dropzone-drop="${this._onFileUpload}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -588,6 +589,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(
       new FileActions.AddFolder(node, parentNode, this.fileActionUrl)
     );
+  }
+
+  _onFileUpload(event: CustomEvent<DragEvent>): void {
+    const currentNode = this.state.tree.selected;
+
+    console.log(currentNode);
+
+    const action = new FileActions.UploadFiles(
+      event.detail.dataTransfer,
+      currentNode,
+      this.fileActionUrl
+    );
+    store.dispatch(action);
   }
 
   _onContextMenuItemClick(

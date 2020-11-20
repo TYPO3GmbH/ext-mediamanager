@@ -4,6 +4,7 @@ import {
   deleteFiles,
   renameFile,
   showFileInfo,
+  uploadFiles,
 } from './file-actions';
 import { fetchListData } from './list';
 import { fetchTreeData } from './tree';
@@ -14,6 +15,7 @@ export const rootEpic = combineEpics(
   deleteFiles,
   renameFile,
   addFolder,
+  uploadFiles,
   fetchListData,
   fetchTreeData,
   reload,
