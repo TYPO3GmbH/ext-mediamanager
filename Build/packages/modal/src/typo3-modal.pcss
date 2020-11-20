@@ -21,18 +21,6 @@
   visibility: visible;
 }
 
-.overlay {
-  background: #000000;
-  opacity: var(--typo3-modal-overlay-opacity, var(--typo3-global-modal-overlay-opacity));
-  height: 100%;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
 .modal {
   width: var(--typo3-modal-width, var(--typo3-global-modal-width));
   position: relative;
@@ -44,7 +32,8 @@
   border: var(--typo3-modal-border-width, var(--typo3-global-modal-border-width)) solid var(--typo3-modal-border-color, var(--typo3-global-modal-border-color));
   border-radius: var(--typo3-modal-border-radius, var(--typo3-global-modal-border-radius));
   outline: 0;
-  font-size: var(--typo3-modal-font-size, var(--typo3-global-modal-font-size)); ;
+  font-size: var(--typo3-modal-font-size, var(--typo3-global-modal-font-size));
+  z-index: 101;
 }
 
 #btn-close {

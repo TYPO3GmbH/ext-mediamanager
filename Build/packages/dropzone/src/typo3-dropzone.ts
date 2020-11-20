@@ -110,7 +110,10 @@ export class Typo3Dropzone extends LitElement {
   }
 
   protected render(): TemplateResult {
-    return html` <slot></slot> `;
+    return html`
+      ${this.isDragged ? html` <typo3-overlay></typo3-overlay>` : html``}
+      <slot></slot>
+    `;
   }
 
   protected clearDebouncedDragLeave(): void {

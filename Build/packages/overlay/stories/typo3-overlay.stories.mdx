@@ -1,0 +1,25 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/packages/overlay/src/typo3-overlay';
+
+<Meta
+  title="Components/typo3-overlay"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-overlay', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Overlay.ts
+
+<Preview>
+    <Story name="Overlay" height="220px">
+    {html`
+      <div style="height: 200px;">
+        <typo3-overlay></typo3-overlay>
+      </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-overlay" />

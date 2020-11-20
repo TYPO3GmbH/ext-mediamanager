@@ -85,3 +85,31 @@ export const addFolder = (
     ])
   );
 };
+
+export const uploadFiles = (
+  action$: ActionsObservable<fromActions.UploadFiles>
+): Observable<Action> => {
+  return action$.ofType(fromActions.UPLOAD_FILES).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      for (let i = 0; i < action.dataTransfer.files.length; i++) {
+        formData.append(
+          'data[upload][' + i + '][target]',
+          action.node.identifier
+        );
+        formData.append('data[upload][' + i + '][data]', i.toString());
+        formData.append(
+          'upload_' + i,
+          action.dataTransfer.files.item(i) as File
+        );
+      }
+      return ajax.post(action.fileActionUrl, formData).pipe(
+        mergeMap(() => [
+          new fromGlobal.Reload(),
+          new fromGlobal.LoadFlashMessages(),
+        ]),
+        catchError(() => of(new fromGlobal.LoadFlashMessages()))
+      );
+    })
+  );
+};

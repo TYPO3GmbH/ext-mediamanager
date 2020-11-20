@@ -1,4 +1,4 @@
-import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs, action} from '@open-wc/demoing-storybook';
 import {html} from 'lit-html';
 import '../../../out-tsc/packages/dropzone/src/typo3-dropzone';
 
@@ -13,7 +13,12 @@ import '../../../out-tsc/packages/dropzone/src/typo3-dropzone';
 <Preview withToolbar>
     <Story name="Dropzone" height="220px">
         {html`
-        <typo3-dropzone style="border: dashed 0.125rem #e1e1e1;padding: 4.5rem;border-radius: 0.25rem;">
+        <typo3-dropzone
+            @typo3-dropzone-dragleave="${(e) => action(`typo3-dropzone-dragleave`)(e.detail)}"
+            @typo3-dropzone-dragover="${(e) => action(`typo3-dropzone-dragover`)(e.detail)}"
+            @typo3-dropzone-drop="${(e) => action(`typo3-dropzone-drop`)(e.detail)}"
+            @typo3-dropzone-should-accept="${(e) => action(`typo3-dropzone-should-accept`)(e.detail)}"
+            style="border: dashed 0.125rem #e1e1e1;padding: 4.5rem;border-radius: 0.25rem;">
             <div>
                 <h2>Drag and Drop Your File</h2>
             </div>
