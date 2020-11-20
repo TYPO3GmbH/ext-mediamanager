@@ -155,6 +155,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           class="content_right"
           style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
           @typo3-dropzone-drop="${this._onFileUpload}"
+          @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -564,15 +565,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onDeleteClicked(): void {
-    store.dispatch(
-      new FileActions.DeleteFiles(
-        selectedRows(this.state.list).map(data => data.uid),
-        this.fileActionUrl
-      )
-    );
-  }
-
   _onNodeExpand(event: CustomEvent<Typo3Node>): void {
     store.dispatch(new TreeActions.ExpandTreeNode(event.detail));
   }
@@ -581,27 +573,54 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new TreeActions.CollapseTreeNode(event.detail));
   }
 
+  _onDeleteClicked(): void {
+    const action = new FileActions.DeleteFiles(
+      selectedRows(this.state.list).map(data => data.uid),
+      this.fileActionUrl
+    ) as Action;
+
+    store.dispatch(action);
+  }
+
   _onRename(uid: string, name: string): void {
-    store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
+    store.dispatch(
+      new FileActions.RenameFile(uid, name, this.fileActionUrl) as Action
+    );
   }
 
   _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
     store.dispatch(
-      new FileActions.AddFolder(node, parentNode, this.fileActionUrl)
+      new FileActions.AddFolder(node, parentNode, this.fileActionUrl) as Action
     );
   }
 
   _onFileUpload(event: CustomEvent<DragEvent>): void {
     const currentNode = this.state.tree.selected;
-
-    console.log(currentNode);
-
     const action = new FileActions.UploadFiles(
-      event.detail.dataTransfer,
-      currentNode,
+      event.detail.dataTransfer as DataTransfer,
+      currentNode as Typo3Node,
       this.fileActionUrl
-    );
+    ) as Action;
+
     store.dispatch(action);
+  }
+
+  _onDropZoneShouldAccept(event: CustomEvent<DragEvent>): void {
+    const currentNode = this.state.tree.selected;
+    if (null == currentNode) {
+      event.preventDefault();
+      return;
+    }
+    if (null === event.detail.dataTransfer) {
+      event.preventDefault();
+      return;
+    }
+    const dataTransfer = event.detail.dataTransfer as DataTransfer;
+
+    if (dataTransfer.types.indexOf('Files') === -1) {
+      event.preventDefault();
+      return;
+    }
   }
 
   _onContextMenuItemClick(
