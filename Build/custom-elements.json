@@ -1120,6 +1120,19 @@
           "description": "Event fired on node rename"
         }
       ]
+    },
+    {
+      "name": "typo3-overlay",
+      "properties": [],
+      "cssProperties": [
+        {
+          "name": "--typo3-modal-overlay-opacity"
+        },
+        {
+          "name": "--typo3-modal-overlay-color",
+          "type": "Color"
+        }
+      ]
     }
   ]
 }

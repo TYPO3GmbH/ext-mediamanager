@@ -56,7 +56,7 @@ export class Typo3Modal extends LitElement {
       class="wrapper ${this.open ? 'open' : ''}"
       aria-hidden="${!this.open}"
     >
-      <div class="overlay" @click="${this.close}"></div>
+      <typo3-overlay @click="${this.close}"></typo3-overlay>
       <div id="modal" class="modal">
         ${this.headerContent}
         <div id="content" class="content">
