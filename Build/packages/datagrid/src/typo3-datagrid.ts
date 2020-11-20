@@ -18,10 +18,12 @@ import { PropertyValues } from 'lit-element/lib/updating-element';
 import * as _ from 'lodash-es';
 import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
 import { EndEditEvent } from './lib/event/EndEditEvent';
+import { ContextMenuEvent } from './lib/event/ContextMenuEvent';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
  *@fires typo3-datagrid-value-change - Dispatched on change of a cell value
+ *@fires typo3-datagrid-contextmenu - Dispatched on row contextmenu
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
@@ -153,8 +155,22 @@ export class Typo3Datagrid extends LitElement {
     e.ctx.strokeStyle = 'transparent';
   }
 
-  _onContextmenu(e: Event): void {
+  _onContextmenu(e: ContextMenuEvent): void {
     e.preventDefault();
+
+    if (true === e.cell.isHeader) {
+      return;
+    }
+
+    const contextMenuEvent = new CustomEvent('typo3-datagrid-contextmenu', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        data: e.cell.data,
+        originalEvent: e.NativeEvent,
+      },
+    });
+    this.dispatchEvent(contextMenuEvent);
   }
 
   _onRenderOrderByArrow(e: RenderOrderByArrowEvent): void {

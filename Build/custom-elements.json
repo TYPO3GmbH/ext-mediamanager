@@ -524,6 +524,10 @@
         {
           "name": "typo3-datagrid-value-change",
           "description": "Dispatched on change of a cell value"
+        },
+        {
+          "name": "typo3-datagrid-contextmenu",
+          "description": "Dispatched on row contextmenu"
         }
       ]
     },

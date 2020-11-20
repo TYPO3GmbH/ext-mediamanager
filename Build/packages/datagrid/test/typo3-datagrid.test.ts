@@ -8,6 +8,7 @@ import {
 import '../src/typo3-datagrid.js';
 import { Typo3Datagrid } from '../src/typo3-datagrid';
 import { EndEditEvent } from '../src/lib/event/EndEditEvent';
+import { ContextMenuEvent } from '../src/lib/event/ContextMenuEvent';
 
 describe('Typo3Datagrid', () => {
   let element: Typo3Datagrid;
@@ -107,5 +108,52 @@ describe('Typo3Datagrid', () => {
     await elementUpdated(element);
 
     expect(valueChangedEvents).to.equal(0);
+  });
+
+  it('will fire a `typo3-datagrid-contextmenu` on contextMenu on content cell', async () => {
+    const nativeEvent = new MouseEvent('contextmenu');
+
+    const event: ContextMenuEvent | {} = {
+      NativeEvent: nativeEvent,
+      cell: {
+        isHeader: false,
+        data: { uid: 1 },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      preventDefault: () => {},
+    };
+
+    const listener = oneEvent(element, 'typo3-datagrid-contextmenu');
+
+    element._onContextmenu(event as ContextMenuEvent);
+
+    const { detail } = await listener;
+    expect(detail.NativeEvent).to.be.not.be.instanceOf(MouseEvent);
+    expect(detail.data).to.be.eql({ uid: 1 });
+  });
+
+  it('wont fire a `typo3-datagrid-contextmenu` on contextMenu on header cell', async () => {
+    let contextMenuEvents = 0;
+
+    element.addEventListener('typo3-datagrid-contextmenu', () => {
+      contextMenuEvents += 1;
+    });
+
+    const nativeEvent = new MouseEvent('contextmenu');
+
+    const event: ContextMenuEvent | {} = {
+      NativeEvent: nativeEvent,
+      cell: {
+        isHeader: true,
+        data: { uid: 1 },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      preventDefault: () => {},
+    };
+
+    element._onContextmenu(event as ContextMenuEvent);
+    await elementUpdated(element);
+
+    expect(contextMenuEvents).to.equal(0);
   });
 });
