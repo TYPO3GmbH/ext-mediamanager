@@ -1,5 +1,7 @@
 import { combineEpics } from 'redux-observable';
 import {
+  fileActionFailure,
+  fileActionSuccess,
   addFolder,
   deleteFiles,
   renameFile,
@@ -11,6 +13,8 @@ import { fetchTreeData } from './tree';
 import { loadFlashMessages, reload } from './global-actions';
 
 export const rootEpic = combineEpics(
+  fileActionSuccess,
+  fileActionFailure,
   showFileInfo,
   deleteFiles,
   renameFile,
