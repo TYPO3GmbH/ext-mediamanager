@@ -140,6 +140,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
           </div>
           <typo3-filetree
+            ?inDropMode="${this.state.fileActions.isDraggingFiles}"
+            @drop="${this._onTreeDrop}"
+            @dragover="${this._onTreeDragOver}"
+            @typo3-node-drop="${this._onTreeNodeDrop}"
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
             @typo3-node-select="${this._onSelectedNode}"
@@ -270,6 +274,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       return html` <typo3-datagrid
         class="main-content"
         style="width: 100%; overflow: auto;"
+        draggable="${selectionIsEmpty(this.state.list) ? 'false' : 'true'}"
+        @dragstart="${this._onDragStart}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
         editableColumns='["name"]'
@@ -292,6 +298,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       class="main-content"
       hash="${hash}"
       selectable
+      @dragstart="${this._onDragStart}"
+      draggable="${selectionIsEmpty(this.state.list) ? 'false' : 'true'}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
       ${orderedData.map(listData => this.getCardContent(listData))}
@@ -584,14 +592,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onRename(uid: string, name: string): void {
-    store.dispatch(
-      new FileActions.RenameFile(uid, name, this.fileActionUrl) as Action
-    );
+    store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
   }
 
   _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
     store.dispatch(
-      new FileActions.AddFolder(node, parentNode, this.fileActionUrl) as Action
+      new FileActions.AddFolder(node, parentNode, this.fileActionUrl)
     );
   }
 
@@ -659,5 +665,43 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     if (null !== storeAction) {
       store.dispatch(storeAction);
     }
+  }
+
+  _onDragStart(e: DragEvent): void {
+    store.dispatch(new FileActions.DragFilesStart());
+
+    // todo use web component for drag element
+    const elem = document.createElement('div') as HTMLElement;
+
+    elem.id = 'drag-ghost';
+    elem.textContent =
+      'Dragging ' + selectedRows(this.state.list).length + ' Files';
+    elem.style.position = 'absolute';
+    elem.style.top = '-1000px';
+    elem.style.minWidth = '6rem';
+    elem.style.padding = '1rem';
+    elem.style.height = '4rem';
+    elem.style.color = 'white';
+    elem.style.backgroundColor = '#0078e6';
+
+    document.body.appendChild(elem);
+    e.dataTransfer!.setDragImage(elem, 0, 0);
+  }
+
+  _onTreeDragOver(e: DragEvent): void {
+    e.preventDefault();
+  }
+
+  _onTreeDrop(): void {
+    store.dispatch(new FileActions.DragFilesEnd());
+  }
+
+  _onTreeNodeDrop(e: CustomEvent<Typo3Node>): void {
+    const identifiers = selectedRows(this.state.list).map(
+      (listItem: ListItem) => listItem.uid
+    );
+    store.dispatch(
+      new FileActions.MoveFiles(identifiers, e.detail, this.fileActionUrl)
+    );
   }
 }

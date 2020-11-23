@@ -20,11 +20,14 @@ interface Icon {
  * @fires typo3-node-expand - Event fired on node expand
  * @fires typo3-node-collapse - Event fired on node expand
  * @fires typo3-node-contextmenu - Event fired on contextmenu for node
+ * @fires typo3-node-drop - Event fired on dropping element to node
  */
 export class Typo3SvgTree extends LitElement {
   @property({ type: Array }) nodes: Typo3Node[] = [];
 
   @property({ type: Array }) expandedNodeIds: string[] = [];
+
+  @property({ type: Boolean }) inDropMode = false;
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
@@ -149,6 +152,9 @@ export class Typo3SvgTree extends LitElement {
       this._nodesAddPlaceholder();
       this._replaceData(this.nodes);
       this._nodesRemovePlaceholder();
+    }
+    if (_changedProperties.has('inDropMode')) {
+      this.container.classed('nodes-wrapper--dragging', this.inDropMode);
     }
   }
 
@@ -684,14 +690,17 @@ export class Typo3SvgTree extends LitElement {
       .attr('transform', this._getNodeTransform)
       .attr('data-state-id', this._getNodeStateIdentifier)
       .attr('title', this._getNodeTitle)
-      .on('mouseover', (_, node: Typo3Node) => {
+      .on('mouseover dragover', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOver(node, this);
       })
-      .on('mouseout', (_, node: Typo3Node) => {
+      .on('mouseout dragleave', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOut(node, this);
       })
       .on('contextmenu', (event: MouseEvent, node: Typo3Node) => {
         this._onContextmenu(event, node);
+      })
+      .on('drop', (_, node: Typo3Node) => {
+        this._onNodeDrop(node);
       });
 
     nodes
@@ -1093,5 +1102,13 @@ export class Typo3SvgTree extends LitElement {
       })
     );
     this.dispatch.call('nodeRightClick', node, this);
+  }
+
+  private _onNodeDrop(node: Typo3Node): void {
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-drop', {
+        detail: node,
+      })
+    );
   }
 }

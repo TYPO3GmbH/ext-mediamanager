@@ -103,6 +103,27 @@ export const uploadFiles = (
   );
 };
 
+export const moveFiles = (
+  action$: ActionsObservable<fromActions.MoveFiles>
+): Observable<Action> => {
+  return action$.ofType(fromActions.MOVE_FILES).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      for (let i = 0; i < action.identifiers.length; i++) {
+        formData.append(
+          'data[move][' + i + '][target]',
+          action.target.identifier
+        );
+        formData.append('data[move][' + i + '][data]', action.identifiers[i]);
+      }
+      return ajax.post(action.fileActionUrl, formData).pipe(
+        map(() => new fromActions.MoveFilesSuccess()),
+        catchError(() => of(new fromActions.MoveFilesFailure()))
+      );
+    })
+  );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -111,7 +132,8 @@ export const fileActionSuccess = (
       fromActions.ADD_FOLDER_SUCCESS,
       fromActions.DELETE_FILES_SUCCESS,
       fromActions.RENAME_FILE_SUCCESS,
-      fromActions.UPLOAD_FILES_SUCCESS
+      fromActions.UPLOAD_FILES_SUCCESS,
+      fromActions.MOVE_FILES_SUCCESS
     )
     .pipe(
       mergeMap(() => [
@@ -129,7 +151,8 @@ export const fileActionFailure = (
       fromActions.DELETE_FILES_FAILURE,
       fromActions.RENAME_FILE_FAILURE,
       fromActions.RENAME_FILE_FAILURE,
-      fromActions.UPLOAD_FILES_FAILURE
+      fromActions.UPLOAD_FILES_FAILURE,
+      fromActions.MOVE_FILES_FAILURE
     )
     .pipe(
       mergeMap(action => {
@@ -146,3 +169,14 @@ export const fileActionFailure = (
       })
     );
 };
+
+export const fileActions = [
+  fileActionFailure,
+  fileActionSuccess,
+  addFolder,
+  deleteFiles,
+  renameFile,
+  showFileInfo,
+  uploadFiles,
+  moveFiles,
+];

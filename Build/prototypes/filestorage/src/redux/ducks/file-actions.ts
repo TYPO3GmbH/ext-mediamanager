@@ -2,26 +2,30 @@ import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 
-export const RENAME_FILE = '[FILE] RENAME';
-export const RENAME_FILE_SUCCESS = '[FILE] RENAME SUCCESS';
-export const RENAME_FILE_FAILURE = '[FILE] RENAME FAILURE';
+export const ADD_FOLDER = '[FILE] ADD FOLDER';
+export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
+export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
 export const DELETE_FILES = '[FILE] DELETE FILES';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
 
-export const ADD_FOLDER = '[FILE] ADD FOLDER';
-export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
-export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
+export const DRAG_FILES_START = '[FILE] DRAG FILES START';
+export const DRAG_FILES_END = '[FILE] DRAG FILES END';
+
+export const MOVE_FILES = '[FILE] MOVE FILES';
+export const MOVE_FILES_SUCCESS = '[FILE] MOVE FILES SUCCESS';
+export const MOVE_FILES_FAILURE = '[FILE] MOVE FILES FAILURE';
+
+export const RENAME_FILE = '[FILE] RENAME';
+export const RENAME_FILE_SUCCESS = '[FILE] RENAME SUCCESS';
+export const RENAME_FILE_FAILURE = '[FILE] RENAME FAILURE';
+
+export const SHOW_FILE_INFO = '[FILE] SHOW FILE INFO';
 
 export const UPLOAD_FILES = '[FILE] UPLOAD FILES';
 export const UPLOAD_FILES_SUCCESS = '[FILE] UPLOAD FILES SUCCESS';
 export const UPLOAD_FILES_FAILURE = '[FILE] UPLOAD FILES FAILURE';
-
-export const DRAG_FILES_START = '[FILE] DRAG START';
-export const DRAG_FILES_END = '[FILE] DRAG END';
-
-export const SHOW_FILE_INFO = '[FILE] SHOW FILE INFO';
 
 export type FileActionsState = Readonly<{
   isAddingFolder: boolean;
@@ -29,6 +33,7 @@ export type FileActionsState = Readonly<{
   isRenamingFile: boolean;
   isUploadingFiles: boolean;
   isDraggingFiles: boolean;
+  isMovingFiles: boolean;
 }>;
 
 const initialState: FileActionsState = {
@@ -37,6 +42,7 @@ const initialState: FileActionsState = {
   isRenamingFile: false,
   isUploadingFiles: false,
   isDraggingFiles: false,
+  isMovingFiles: false,
 };
 
 export const fileActionsReducer = (
@@ -75,6 +81,17 @@ export const fileActionsReducer = (
       return {
         ...state,
         isDraggingFiles: false,
+      };
+    case MOVE_FILES:
+      return {
+        ...state,
+        isMovingFiles: true,
+      };
+    case MOVE_FILES_SUCCESS:
+    case MOVE_FILES_FAILURE:
+      return {
+        ...state,
+        isMovingFiles: false,
       };
     case RENAME_FILE:
       return {
@@ -180,22 +197,42 @@ export class UploadFilesFailure implements Action {
   readonly type = UPLOAD_FILES_FAILURE;
 }
 
+export class MoveFiles implements Action {
+  readonly type = MOVE_FILES;
+  constructor(
+    public identifiers: string[],
+    public target: Typo3Node,
+    public fileActionUrl: string
+  ) {}
+}
+
+export class MoveFilesFailure implements Action {
+  readonly type = MOVE_FILES_FAILURE;
+}
+
+export class MoveFilesSuccess implements Action {
+  readonly type = MOVE_FILES_SUCCESS;
+}
+
 export type Actions =
   | AddFolder
-  | AddFolderSuccess
   | AddFolderFailure
-  | RenameFile
-  | RenameFileSuccess
-  | RenameFileFailure
+  | AddFolderSuccess
   | DeleteFiles
-  | DeleteFilesSuccess
   | DeleteFilesFailure
+  | DeleteFilesSuccess
   | DragFilesEnd
   | DragFilesStart
+  | MoveFiles
+  | MoveFilesFailure
+  | MoveFilesSuccess
+  | RenameFile
+  | RenameFileFailure
+  | RenameFileSuccess
+  | ShowFileInfo
   | UploadFiles
-  | UploadFilesSuccess
   | UploadFilesFailure
-  | ShowFileInfo;
+  | UploadFilesSuccess;
 
 export const isExecutingFileAction = createSelector(
   (state: FileActionsState) => state,
@@ -203,5 +240,6 @@ export const isExecutingFileAction = createSelector(
     state.isUploadingFiles ||
     state.isDeletingFiles ||
     state.isAddingFolder ||
-    state.isRenamingFile
+    state.isRenamingFile ||
+    state.isMovingFiles
 );
