@@ -18,6 +18,9 @@ export const UPLOAD_FILES = '[FILE] UPLOAD FILES';
 export const UPLOAD_FILES_SUCCESS = '[FILE] UPLOAD FILES SUCCESS';
 export const UPLOAD_FILES_FAILURE = '[FILE] UPLOAD FILES FAILURE';
 
+export const DRAG_FILES_START = '[FILE] DRAG START';
+export const DRAG_FILES_END = '[FILE] DRAG END';
+
 export const SHOW_FILE_INFO = '[FILE] SHOW FILE INFO';
 
 export type FileActionsState = Readonly<{
@@ -25,6 +28,7 @@ export type FileActionsState = Readonly<{
   isDeletingFiles: boolean;
   isRenamingFile: boolean;
   isUploadingFiles: boolean;
+  isDraggingFiles: boolean;
 }>;
 
 const initialState: FileActionsState = {
@@ -32,6 +36,7 @@ const initialState: FileActionsState = {
   isDeletingFiles: false,
   isRenamingFile: false,
   isUploadingFiles: false,
+  isDraggingFiles: false,
 };
 
 export const fileActionsReducer = (
@@ -60,6 +65,16 @@ export const fileActionsReducer = (
       return {
         ...state,
         isDeletingFiles: false,
+      };
+    case DRAG_FILES_START:
+      return {
+        ...state,
+        isDraggingFiles: true,
+      };
+    case DRAG_FILES_END:
+      return {
+        ...state,
+        isDraggingFiles: false,
       };
     case RENAME_FILE:
       return {
@@ -132,6 +147,14 @@ export class AddFolder implements Action {
   ) {}
 }
 
+export class DragFilesEnd implements Action {
+  readonly type = DRAG_FILES_END;
+}
+
+export class DragFilesStart implements Action {
+  readonly type = DRAG_FILES_START;
+}
+
 export class AddFolderSuccess implements Action {
   readonly type = ADD_FOLDER_SUCCESS;
 }
@@ -167,6 +190,8 @@ export type Actions =
   | DeleteFiles
   | DeleteFilesSuccess
   | DeleteFilesFailure
+  | DragFilesEnd
+  | DragFilesStart
   | UploadFiles
   | UploadFilesSuccess
   | UploadFilesFailure
