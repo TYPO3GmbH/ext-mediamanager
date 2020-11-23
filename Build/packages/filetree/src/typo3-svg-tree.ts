@@ -1044,8 +1044,8 @@ export class Typo3SvgTree extends LitElement {
    * of the node data is not represented in DOM on hideChildren and showChildren.
    */
   _setExpandedState(node: Typo3Node): void {
-    const nodeElement = document.getElementById(
-      'identifier-' + this._getNodeStateIdentifier(node)
+    const nodeElement = this.shadowRoot!.querySelector(
+      '#identifier-' + this._getNodeStateIdentifier(node)
     );
     if (nodeElement) {
       nodeElement.toggleAttribute(

@@ -86,8 +86,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new TreeActions.LoadTreeData(this.treeUrl));
   }
 
+  public connectedCallback(): void {
+    super.connectedCallback();
+    this.addEventListener('dragleave', this._onDragLeave);
+  }
+
+  public disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('dragleave', this._onDragLeave);
+  }
+
   refresh(): void {
-    store.dispatch(new GlobalActions.Reload());
+    store.dispatch(new GlobalActions.Reload() as Action);
   }
 
   protected render(): TemplateResult {
@@ -141,7 +151,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           </div>
           <typo3-filetree
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
-            @drop="${this._onTreeDrop}"
             @typo3-node-drop="${this._onTreeNodeDrop}"
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
@@ -687,16 +696,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     e.dataTransfer!.setDragImage(elem, 0, 0);
   }
 
-  _onTreeDrop(): void {
-    store.dispatch(new FileActions.DragFilesEnd());
-  }
-
   _onTreeNodeDrop(e: CustomEvent<Typo3Node>): void {
     const identifiers = selectedRows(this.state.list).map(
       (listItem: ListItem) => listItem.uid
     );
+    store.dispatch(new FileActions.DragFilesEnd());
     store.dispatch(
       new FileActions.MoveFiles(identifiers, e.detail, this.fileActionUrl)
     );
+  }
+
+  _onDragLeave(): void {
+    store.dispatch(new FileActions.DragFilesEnd());
   }
 }
