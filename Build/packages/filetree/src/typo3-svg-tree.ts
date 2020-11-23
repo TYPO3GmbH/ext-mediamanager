@@ -703,8 +703,8 @@ export class Typo3SvgTree extends LitElement {
         event.preventDefault();
         this._nodeBgEvents().mouseOver(node, this);
       })
-      .on('drop', (_, node: Typo3Node) => {
-        this._onNodeDrop(node);
+      .on('drop', (event: DragEvent, node: Typo3Node) => {
+        this._onNodeDrop(event, node);
       });
 
     nodes
@@ -1108,10 +1108,13 @@ export class Typo3SvgTree extends LitElement {
     this.dispatch.call('nodeRightClick', node, this);
   }
 
-  private _onNodeDrop(node: Typo3Node): void {
+  private _onNodeDrop(event: DragEvent, node: Typo3Node): void {
     this.dispatchEvent(
       new CustomEvent('typo3-node-drop', {
-        detail: node,
+        detail: {
+          event: event,
+          node: node,
+        },
       })
     );
   }

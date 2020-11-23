@@ -696,14 +696,24 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     e.dataTransfer!.setDragImage(elem, 0, 0);
   }
 
-  _onTreeNodeDrop(e: CustomEvent<Typo3Node>): void {
+  _onTreeNodeDrop(e: CustomEvent<{ event: DragEvent; node: Typo3Node }>): void {
     const identifiers = selectedRows(this.state.list).map(
       (listItem: ListItem) => listItem.uid
     );
     store.dispatch(new FileActions.DragFilesEnd());
-    store.dispatch(
-      new FileActions.MoveFiles(identifiers, e.detail, this.fileActionUrl)
-    );
+
+    const action = e.detail.event.ctrlKey
+      ? new FileActions.CopyFiles(
+          identifiers,
+          e.detail.node,
+          this.fileActionUrl
+        )
+      : new FileActions.MoveFiles(
+          identifiers,
+          e.detail.node,
+          this.fileActionUrl
+        );
+    store.dispatch(action);
   }
 
   _onDragLeave(): void {

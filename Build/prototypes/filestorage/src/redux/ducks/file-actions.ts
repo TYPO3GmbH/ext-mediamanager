@@ -6,6 +6,10 @@ export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
 export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
+export const COPY_FILES = '[FILE] COPY FILES';
+export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
+export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
+
 export const DELETE_FILES = '[FILE] DELETE FILES';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
@@ -34,6 +38,7 @@ export type FileActionsState = Readonly<{
   isUploadingFiles: boolean;
   isDraggingFiles: boolean;
   isMovingFiles: boolean;
+  isCopyingFiles: boolean;
 }>;
 
 const initialState: FileActionsState = {
@@ -43,6 +48,7 @@ const initialState: FileActionsState = {
   isUploadingFiles: false,
   isDraggingFiles: false,
   isMovingFiles: false,
+  isCopyingFiles: false,
 };
 
 export const fileActionsReducer = (
@@ -60,6 +66,17 @@ export const fileActionsReducer = (
       return {
         ...state,
         isAddingFolder: false,
+      };
+    case COPY_FILES:
+      return {
+        ...state,
+        isCopyingFiles: true,
+      };
+    case COPY_FILES_SUCCESS:
+    case COPY_FILES_FAILURE:
+      return {
+        ...state,
+        isCopyingFiles: false,
       };
     case DELETE_FILES:
       return {
@@ -214,10 +231,30 @@ export class MoveFilesSuccess implements Action {
   readonly type = MOVE_FILES_SUCCESS;
 }
 
+export class CopyFiles implements Action {
+  readonly type = COPY_FILES;
+  constructor(
+    public identifiers: string[],
+    public target: Typo3Node,
+    public fileActionUrl: string
+  ) {}
+}
+
+export class CopyFilesFailure implements Action {
+  readonly type = COPY_FILES_FAILURE;
+}
+
+export class CopyFilesSuccess implements Action {
+  readonly type = COPY_FILES_SUCCESS;
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
   | AddFolderSuccess
+  | CopyFiles
+  | CopyFilesFailure
+  | CopyFilesSuccess
   | DeleteFiles
   | DeleteFilesFailure
   | DeleteFilesSuccess
@@ -241,5 +278,6 @@ export const isExecutingFileAction = createSelector(
     state.isDeletingFiles ||
     state.isAddingFolder ||
     state.isRenamingFile ||
-    state.isMovingFiles
+    state.isMovingFiles ||
+    state.isCopyingFiles
 );
