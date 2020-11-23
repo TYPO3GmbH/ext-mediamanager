@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { createSelector } from 'reselect';
 
 export const RENAME_FILE = '[FILE] RENAME';
 export const RENAME_FILE_SUCCESS = '[FILE] RENAME SUCCESS';
@@ -170,3 +171,12 @@ export type Actions =
   | UploadFilesSuccess
   | UploadFilesFailure
   | ShowFileInfo;
+
+export const isExecutingFileAction = createSelector(
+  (state: FileActionsState) => state,
+  state =>
+    state.isUploadingFiles ||
+    state.isDeletingFiles ||
+    state.isAddingFolder ||
+    state.isRenamingFile
+);

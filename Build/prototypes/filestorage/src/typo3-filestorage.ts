@@ -40,6 +40,7 @@ import * as FileActions from './redux/ducks/file-actions';
 import * as GlobalActions from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
+import { isLoading } from './redux/ducks/global-actions';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -396,7 +397,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <span>Tiles</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
-      ${this.state.tree.loading || this.state.list.loading
+      ${isLoading(this.state)
         ? html`<div class="loading"><typo3-spinner></typo3-spinner></div>`
         : html``}
     `;
