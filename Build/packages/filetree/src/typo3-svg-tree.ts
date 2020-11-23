@@ -690,7 +690,7 @@ export class Typo3SvgTree extends LitElement {
       .attr('transform', this._getNodeTransform)
       .attr('data-state-id', this._getNodeStateIdentifier)
       .attr('title', this._getNodeTitle)
-      .on('mouseover dragover', (_, node: Typo3Node) => {
+      .on('mouseover', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOver(node, this);
       })
       .on('mouseout dragleave', (_, node: Typo3Node) => {
@@ -698,6 +698,10 @@ export class Typo3SvgTree extends LitElement {
       })
       .on('contextmenu', (event: MouseEvent, node: Typo3Node) => {
         this._onContextmenu(event, node);
+      })
+      .on('dragover', (event: DragEvent, node: Typo3Node) => {
+        event.preventDefault();
+        this._nodeBgEvents().mouseOver(node, this);
       })
       .on('drop', (_, node: Typo3Node) => {
         this._onNodeDrop(node);

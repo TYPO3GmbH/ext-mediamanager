@@ -142,7 +142,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <typo3-filetree
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
             @drop="${this._onTreeDrop}"
-            @dragover="${this._onTreeDragOver}"
             @typo3-node-drop="${this._onTreeNodeDrop}"
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
@@ -686,10 +685,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     document.body.appendChild(elem);
     e.dataTransfer!.setDragImage(elem, 0, 0);
-  }
-
-  _onTreeDragOver(e: DragEvent): void {
-    e.preventDefault();
   }
 
   _onTreeDrop(): void {
