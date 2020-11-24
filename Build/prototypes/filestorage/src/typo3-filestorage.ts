@@ -689,6 +689,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _onDragStart(e: DragEvent): void {
     store.dispatch(new FileActions.DragFilesStart());
     const dummyElement = document.createElement('div');
+    dummyElement.textContent = '.';
+    dummyElement.style.position = 'absolute';
+
+    document.body.appendChild(dummyElement);
     e.dataTransfer!.setDragImage(dummyElement, 0, 0);
   }
 
