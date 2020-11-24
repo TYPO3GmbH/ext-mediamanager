@@ -43,6 +43,7 @@ import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { isLoading } from './redux/ducks/global-actions';
 import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
 import { getDragMode } from './redux/ducks/file-actions';
+import { Typo3MoveFilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -65,6 +66,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   @query('typo3-filetree') fileTree!: Typo3Filetree;
   @query('typo3-files-draghandler') filesDragHandler!: Typo3FilesDraghandler;
+  @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
 
   public static styles = [themeStyles, styles];
 
@@ -215,7 +217,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Delete
                 </typo3-button>
-                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
+                <typo3-button
+                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  @click="${() => this._showFilesModalDialog('move')}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -229,7 +234,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   Move to
                 </typo3-button>
-                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
+                <typo3-button
+                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  @click="${() => this._showFilesModalDialog('copy')}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -272,6 +280,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         mode="${getDragMode(this.state.fileActions)}"
         .hidden="${this.state.fileActions.isDraggingFiles !== true}"
       ></typo3-files-draghandler>
+      <typo3-files-modal
+        @typo3-move-files="${this._onMoveFilesModal}"
+      ></typo3-files-modal>
     `;
   }
 
@@ -728,5 +739,32 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
     this.filesDragHandler.style.top = e.offsetY + 10 + 'px';
     this.filesDragHandler.style.left = e.offsetX + 'px';
+  }
+
+  _showFilesModalDialog(mode: 'copy' | 'move'): void {
+    this.moveFilesModal.nodes = this.state.tree.nodes;
+    this.moveFilesModal.expandedNodeIds = this.state.tree.expandedNodeIds;
+    this.moveFilesModal.selectedFiles = selectedRows(this.state.list);
+    this.moveFilesModal.mode = mode;
+    this.moveFilesModal.show();
+  }
+
+  _onMoveFilesModal(
+    e: CustomEvent<{ mode: string; files: ListItem[]; target: Typo3Node }>
+  ): void {
+    const action =
+      e.detail.mode === 'copy'
+        ? new FileActions.CopyFiles(
+            e.detail.files.map(item => item.uid),
+            e.detail.target,
+            this.fileActionUrl
+          )
+        : new FileActions.MoveFiles(
+            e.detail.files.map(item => item.uid),
+            e.detail.target,
+            this.fileActionUrl
+          );
+
+    store.dispatch(action);
   }
 }

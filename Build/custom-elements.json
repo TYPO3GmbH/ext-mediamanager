@@ -798,7 +798,13 @@
           "name": "--typo3-modal-font-size"
         },
         {
-          "name": "--typo3-modal-padding"
+          "name": "--typo3-modal-header-padding"
+        },
+        {
+          "name": "--typo3-modal-content-padding"
+        },
+        {
+          "name": "--typo3-modal-footer-padding"
         },
         {
           "name": "--typo3-modal-overlay-opacity"
