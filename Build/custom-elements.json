@@ -1144,6 +1144,33 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-files-draghandler",
+      "properties": [
+        {
+          "name": "numFiles",
+          "attribute": "numFiles",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "mode",
+          "attribute": "mode",
+          "type": "String",
+          "default": "\"move\""
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-draghandler-background-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-draghandler-color",
+          "type": "Color"
+        }
+      ]
     }
   ]
 }

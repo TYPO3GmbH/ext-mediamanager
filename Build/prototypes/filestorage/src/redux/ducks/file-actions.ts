@@ -15,6 +15,7 @@ export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
 
 export const DRAG_FILES_START = '[FILE] DRAG FILES START';
+export const DRAG_FILES_CHANGE_MODE = '[FILE] DRAG FILES CHANGE MODE';
 export const DRAG_FILES_END = '[FILE] DRAG FILES END';
 
 export const MOVE_FILES = '[FILE] MOVE FILES';
@@ -39,6 +40,7 @@ export type FileActionsState = Readonly<{
   isDraggingFiles: boolean;
   isMovingFiles: boolean;
   isCopyingFiles: boolean;
+  dragFilesMode: 'copy' | 'move';
 }>;
 
 const initialState: FileActionsState = {
@@ -49,6 +51,7 @@ const initialState: FileActionsState = {
   isDraggingFiles: false,
   isMovingFiles: false,
   isCopyingFiles: false,
+  dragFilesMode: 'move',
 };
 
 export const fileActionsReducer = (
@@ -89,10 +92,16 @@ export const fileActionsReducer = (
         ...state,
         isDeletingFiles: false,
       };
+    case DRAG_FILES_CHANGE_MODE:
+      return {
+        ...state,
+        dragFilesMode: action.mode,
+      };
     case DRAG_FILES_START:
       return {
         ...state,
         isDraggingFiles: true,
+        dragFilesMode: 'move',
       };
     case DRAG_FILES_END:
       return {
@@ -185,6 +194,11 @@ export class DragFilesEnd implements Action {
   readonly type = DRAG_FILES_END;
 }
 
+export class DragFilesChangeMode implements Action {
+  readonly type = DRAG_FILES_CHANGE_MODE;
+  constructor(public mode: 'move' | 'copy') {}
+}
+
 export class DragFilesStart implements Action {
   readonly type = DRAG_FILES_START;
 }
@@ -258,6 +272,7 @@ export type Actions =
   | DeleteFiles
   | DeleteFilesFailure
   | DeleteFilesSuccess
+  | DragFilesChangeMode
   | DragFilesEnd
   | DragFilesStart
   | MoveFiles
@@ -280,4 +295,9 @@ export const isExecutingFileAction = createSelector(
     state.isRenamingFile ||
     state.isMovingFiles ||
     state.isCopyingFiles
+);
+
+export const getDragMode = createSelector(
+  (state: FileActionsState) => state,
+  state => state.dragFilesMode
 );

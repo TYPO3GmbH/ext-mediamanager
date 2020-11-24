@@ -41,6 +41,8 @@ import * as GlobalActions from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { isLoading } from './redux/ducks/global-actions';
+import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
+import { getDragMode } from './redux/ducks/file-actions';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -62,6 +64,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('.content_right') contentRight!: HTMLElement;
 
   @query('typo3-filetree') fileTree!: Typo3Filetree;
+  @query('typo3-files-draghandler') filesDragHandler!: Typo3FilesDraghandler;
 
   public static styles = [themeStyles, styles];
 
@@ -89,11 +92,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   public connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener('dragleave', this._onDragLeave);
+    this.addEventListener('dragover', this._onDragOver);
   }
 
   public disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('dragleave', this._onDragLeave);
+    this.addEventListener('dragover', this._onDragOver);
   }
 
   refresh(): void {
@@ -261,6 +266,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
+      <typo3-files-draghandler
+        style="position: absolute; top: -1000px:"
+        numFiles="${selectedRows(this.state.list).length}"
+        mode="${getDragMode(this.state.fileActions)}"
+        .hidden="${this.state.fileActions.isDraggingFiles !== true}"
+      ></typo3-files-draghandler>
     `;
   }
 
@@ -677,23 +688,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onDragStart(e: DragEvent): void {
     store.dispatch(new FileActions.DragFilesStart());
-
-    // todo use web component for drag element
-    const elem = document.createElement('div') as HTMLElement;
-
-    elem.id = 'drag-ghost';
-    elem.textContent =
-      'Dragging ' + selectedRows(this.state.list).length + ' Files';
-    elem.style.position = 'absolute';
-    elem.style.top = '-1000px';
-    elem.style.minWidth = '6rem';
-    elem.style.padding = '1rem';
-    elem.style.height = '4rem';
-    elem.style.color = 'white';
-    elem.style.backgroundColor = '#0078e6';
-
-    document.body.appendChild(elem);
-    e.dataTransfer!.setDragImage(elem, 0, 0);
+    const dummyElement = document.createElement('div');
+    e.dataTransfer!.setDragImage(dummyElement, 0, 0);
   }
 
   _onTreeNodeDrop(e: CustomEvent<{ event: DragEvent; node: Typo3Node }>): void {
@@ -702,21 +698,31 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
     store.dispatch(new FileActions.DragFilesEnd());
 
-    const action = e.detail.event.ctrlKey
-      ? new FileActions.CopyFiles(
-          identifiers,
-          e.detail.node,
-          this.fileActionUrl
-        )
-      : new FileActions.MoveFiles(
-          identifiers,
-          e.detail.node,
-          this.fileActionUrl
-        );
+    const action =
+      this.state.fileActions.dragFilesMode === 'copy'
+        ? new FileActions.CopyFiles(
+            identifiers,
+            e.detail.node,
+            this.fileActionUrl
+          )
+        : new FileActions.MoveFiles(
+            identifiers,
+            e.detail.node,
+            this.fileActionUrl
+          );
     store.dispatch(action);
   }
 
   _onDragLeave(): void {
     store.dispatch(new FileActions.DragFilesEnd());
+  }
+
+  _onDragOver(e: DragEvent): void {
+    const dragMode = e.ctrlKey == true ? 'copy' : 'move';
+    if (dragMode != getDragMode(this.state.fileActions)) {
+      store.dispatch(new FileActions.DragFilesChangeMode(dragMode));
+    }
+    this.filesDragHandler.style.top = e.offsetY + 10 + 'px';
+    this.filesDragHandler.style.left = e.offsetX + 'px';
   }
 }
