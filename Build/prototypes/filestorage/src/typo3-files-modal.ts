@@ -11,6 +11,9 @@ import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-files-modal.pcss';
+import { addSlotToRawHtml } from './lib/utils';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { styleMap } from 'lit-html/directives/style-map';
 
 @customElement('typo3-files-modal')
 export class Typo3FilesModal extends LitElement {
@@ -29,8 +32,8 @@ export class Typo3FilesModal extends LitElement {
   public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
-    const selectedFiles = this.selectedFiles.map(
-      item => html`<typo3-list-item>${item.name}</typo3-list-item>`
+    const selectedFiles = this.selectedFiles.map(item =>
+      this.formatFileItem(item)
     );
 
     const headline = this.mode == 'copy' ? 'Copy Files' : 'Move Files';
@@ -43,12 +46,15 @@ export class Typo3FilesModal extends LitElement {
     >
       <typo3-splitpane>
         <div class="selected-files">
-          ${this.target
-            ? html` <div class="selected-files-target">
-                ${btnText} ${this.selectedFiles.length} Elements to <br />
-                <strong>${this._getFullPath(this.target)}</strong>
-              </div>`
-            : html``}
+          <div
+            class="selected-files-target"
+            style=${styleMap({
+              visibility: this.target ? 'visible' : 'hidden',
+            })}
+          >
+            ${btnText} ${this.selectedFiles.length} Elements to <br />
+            <strong>${this._getFullPath(this.target)}</strong>
+          </div>
           <typo3-list> ${selectedFiles} </typo3-list>
         </div>
         <typo3-filetree
@@ -66,6 +72,39 @@ export class Typo3FilesModal extends LitElement {
         >
       </div>
     </typo3-modal>`;
+  }
+
+  protected formatFileItem(item: ListItem): TemplateResult {
+    const rawIcon = addSlotToRawHtml(item.icon, 'icon');
+    let imageSlot = html`${unsafeHTML(rawIcon)}`;
+    if (item.thumbnailUrl) {
+      imageSlot = html`<img
+        slot="icon"
+        loading="lazy"
+        src="${item.thumbnailUrl}"
+        alt="${item.name}"
+      />`;
+    }
+
+    const content = html`
+      <div class="item-body">
+        <div class="file-data">
+          <div class="file-title">${item.name}</div>
+          <div class="file-subtitle">${item.modified}</div>
+        </div>
+        <button
+          class="btn-remove"
+          style=${styleMap({
+            visibility: this.selectedFiles.length > 1 ? 'visible' : 'hidden',
+          })}
+          @click="${() => this._onRemoveItem(item)}"
+        >
+          ×
+        </button>
+      </div>
+    `;
+
+    return html`<typo3-list-item>${imageSlot} ${content}</typo3-list-item>`;
   }
 
   show(): void {
@@ -90,7 +129,11 @@ export class Typo3FilesModal extends LitElement {
     this.target = event.detail;
   }
 
-  _getFullPath(target: Typo3Node): string {
+  _getFullPath(target: Typo3Node | null): string {
+    if (null === target) {
+      return '';
+    }
+
     return [
       target.name,
       ...target.parentsStateIdentifier
@@ -103,5 +146,11 @@ export class Typo3FilesModal extends LitElement {
     ]
       .reverse()
       .join('/');
+  }
+
+  _onRemoveItem(item: ListItem): void {
+    this.selectedFiles = this.selectedFiles.filter(
+      listItem => listItem != item
+    );
   }
 }

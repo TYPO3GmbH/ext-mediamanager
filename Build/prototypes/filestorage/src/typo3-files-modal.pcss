@@ -24,3 +24,50 @@ typo3-splitpane {
   align-self: flex-end;
   width: 4rem;
 }
+
+typo3-list-item {
+  border: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
+  margin-bottom: .5rem;
+  --typo3-list-item-icon-size: 32;
+}
+
+.item-body {
+  display: flex;
+  align-items: center;
+}
+.file-data {
+  flex: 1;
+  overflow: hidden;
+  line-height: 1.2rem;
+}
+
+.file-title {
+  font-size: var(--typo3-card-title-text-size, 0.875rem);
+  color: var(--typo3-card-title-text-color, #505050);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-subtitle {
+  font-size: var(--typo3-card-subtitle-text-size, 0.625rem);
+  color: var(--typo3-card-subtitle-color, #6e6e6e);
+}
+
+.btn-remove {
+  text-shadow: 0 1px 0 #fff;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.5;
+  outline: none;
+}
+
+.btn-remove:hover {
+  opacity: 1;
+}
+
+typo3-splitpane > * {
+  flex: 1 1 50%;
+}
