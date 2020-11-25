@@ -6,6 +6,9 @@ export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
 export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
+export const CLIPBOARD_COPY_FILE = '[FILE][CLIPBOARD] COPY FILE';
+export const CLIPBOARD_CUT_FILE = '[FILE][CLIPBOARD] CUT FILE';
+
 export const COPY_FILES = '[FILE] COPY FILES';
 export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
 export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
@@ -262,10 +265,22 @@ export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
 }
 
+export class ClipboardCopyFile implements Action {
+  readonly type = CLIPBOARD_COPY_FILE;
+  constructor(public identifier: string) {}
+}
+
+export class ClipboardCutFile implements Action {
+  readonly type = CLIPBOARD_CUT_FILE;
+  constructor(public identifier: string) {}
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
   | AddFolderSuccess
+  | ClipboardCopyFile
+  | ClipboardCutFile
   | CopyFiles
   | CopyFilesFailure
   | CopyFilesSuccess

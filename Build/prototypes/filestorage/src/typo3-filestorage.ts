@@ -688,6 +688,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'createFile':
         this.fileTree.addNode(uid);
         break;
+      case 'copyFile':
+        storeAction = new FileActions.ClipboardCopyFile(uid);
+        break;
+      case 'cutFile':
+        storeAction = new FileActions.ClipboardCutFile(uid);
+        break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
     }

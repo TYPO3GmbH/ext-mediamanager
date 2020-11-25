@@ -81,6 +81,7 @@ class FilelistController
         $this->view->assign('fileActionUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'));
         $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
         $this->view->assign('flashMessagesUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'));
+        $this->view->assign('clipboardUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'));
 
         return new HtmlResponse($this->view->render());
     }
