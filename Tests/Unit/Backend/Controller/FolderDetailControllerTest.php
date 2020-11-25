@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Controller\FolderDetailController;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FolderDetailControllerTest extends UnitTestCase
@@ -33,7 +33,7 @@ class FolderDetailControllerTest extends UnitTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|ResourceFactory */
     private $resourceFactory;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|FolderListGenerator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FolderListGeneratorInterface */
     private $folderListGenerator;
 
     public function setUp(): void
@@ -41,7 +41,7 @@ class FolderDetailControllerTest extends UnitTestCase
         parent::setUp();
 
         $this->resourceFactory = $this->createMock(ResourceFactory::class);
-        $this->folderListGenerator = $this->createMock(FolderListGenerator::class);
+        $this->folderListGenerator = $this->createMock(FolderListGeneratorInterface::class);
 
         $this->controller = new FolderDetailController(
             $this->resourceFactory,
@@ -66,7 +66,7 @@ class FolderDetailControllerTest extends UnitTestCase
     public function it_returns_a_404_status_code_on_missing_storage(): void
     {
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
+        $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $this->resourceFactory->expects($this->once())
             ->method('getStorageObjectFromCombinedIdentifier')
@@ -95,7 +95,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($storage);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
+        $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
         $this->assertEquals(404, $response->getStatusCode());
@@ -123,7 +123,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($storage);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
+        $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
         $this->assertEquals(405, $response->getStatusCode());
@@ -163,7 +163,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn($sampleData);
 
         $request = new ServerRequest();
-        $request = $request->withQueryParams(['uid' => '1:/introduction/']);
+        $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
 

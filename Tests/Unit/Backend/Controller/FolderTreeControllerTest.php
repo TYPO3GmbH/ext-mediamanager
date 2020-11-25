@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Controller\FolderTreeController;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGenerator;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FolderTreeControllerTest extends UnitTestCase
@@ -33,7 +33,7 @@ class FolderTreeControllerTest extends UnitTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|BackendUserProvider */
     private $backendUserProviderMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|FolderTreeGenerator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FolderTreeGeneratorInterface */
     private $folderTreeGeneratorMock;
 
     public function setUp(): void
@@ -43,7 +43,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->folderTreeGeneratorMock = $this->getMockBuilder(FolderTreeGenerator::class)
+        $this->folderTreeGeneratorMock = $this->getMockBuilder(FolderTreeGeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

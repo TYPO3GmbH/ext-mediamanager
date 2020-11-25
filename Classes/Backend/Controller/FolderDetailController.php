@@ -21,19 +21,19 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
 
 class FolderDetailController
 {
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    /** @var FolderListGenerator */
+    /** @var FolderListGeneratorInterface */
     private $folderListGenerator;
 
     public function __construct(
         ResourceFactory $resourceFactory,
-        FolderListGenerator $folderListGenerator
+        FolderListGeneratorInterface $folderListGenerator
     ) {
         $this->resourceFactory = $resourceFactory;
         $this->folderListGenerator = $folderListGenerator;
