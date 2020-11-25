@@ -36,8 +36,8 @@ export const deleteFiles = (
   return action$.ofType(fromActions.DELETE_FILES).pipe(
     switchMap(action => {
       const formData = new FormData();
-      action.uids.forEach((uid, index) => {
-        formData.append('data[delete][' + index + '][data]', uid);
+      action.identifiers.forEach((identifier, index) => {
+        formData.append('data[delete][' + index + '][data]', identifier);
       });
       return ajax.post(action.fileActionUrl, formData).pipe(
         map(() => new fromActions.DeleteFilesSuccess()),
@@ -53,7 +53,7 @@ export const showFileInfo = (
   return action$.ofType(fromActions.SHOW_FILE_INFO).pipe(
     tap(action => {
       // @ts-ignore
-      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.uid);
+      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.identifier);
     }),
     ignoreElements()
   );

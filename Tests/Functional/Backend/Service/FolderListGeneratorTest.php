@@ -50,7 +50,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $fileReferencesProviderMock = $this->createMock(FileReferencesProviderInterface::class);
 
         $fileReferencesProviderMock->method('getFileReferencesForFolderFiles')
-            ->willReturn([13 => '2']);
+            ->willReturn([13 => 2]);
 
         $GLOBALS['LANG'] = LanguageService::create('default');
         $this->generator = new FolderListGenerator(
@@ -107,7 +107,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $result = $this->generator->getFolderItems($folderObject);
 
         $this->assertEquals([[
-            'uid' => '1:/test-folder',
+            'identifier' => '1:/test-folder',
             'icon' => 'icon',
             'name' => 'TestFolder',
             'modified' => '01-01-70',
@@ -192,7 +192,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $result = $this->generator->getFolderItems($folderObject);
 
         $this->assertEquals([[
-            'uid' => '1:/test-file',
+            'identifier' => '1:/test-file',
             'icon' => 'icon',
             'name' => 'Test-file',
             'modified' => '01-01-70',

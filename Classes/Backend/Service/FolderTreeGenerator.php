@@ -181,7 +181,7 @@ class FolderTreeGenerator
 
     protected function buildFolderUrl(string $combinedIdentifier): string
     {
-        return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['uid' => $combinedIdentifier]);
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['identifier' => $combinedIdentifier]);
     }
 
     protected function buildContextMenuUrl(string $combinedIdentifier, string $type = 'sys_file'): string

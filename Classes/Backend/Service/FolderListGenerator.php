@@ -88,7 +88,7 @@ class FolderListGenerator
         $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
 
         return [
-            'uid' => $combinedIdentifier,
+            'identifier' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
             'name' => $folder->getName(),
             'modified' => BackendUtility::date($folder->getModificationTime()),
@@ -126,7 +126,7 @@ class FolderListGenerator
         }
 
         return [
-            'uid' => $combinedIdentifier,
+            'identifier' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
             'name' => $file->getName(),
             'modified' => BackendUtility::date($file->getModificationTime()),

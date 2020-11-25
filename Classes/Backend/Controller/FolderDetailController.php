@@ -41,10 +41,10 @@ class FolderDetailController
 
     public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
     {
-        $combinedIdentifier = $request->getQueryParams()['uid'] ?? null;
+        $combinedIdentifier = $request->getQueryParams()['identifier'] ?? null;
 
         if (null === $combinedIdentifier) {
-            return new HtmlResponse('Parameter "uid" is missing', 400);
+            return new HtmlResponse('Parameter "identifier" is missing', 400);
         }
 
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($combinedIdentifier);

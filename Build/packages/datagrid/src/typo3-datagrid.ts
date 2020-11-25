@@ -35,7 +35,7 @@ export class Typo3Datagrid extends LitElement {
 
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
 
-  @property({ type: String }) rowIdentifier = 'uid';
+  @property({ type: String }) rowIdentifier = 'identifier';
 
   @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
 

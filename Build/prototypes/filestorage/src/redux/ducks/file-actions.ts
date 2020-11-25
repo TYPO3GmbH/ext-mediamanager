@@ -190,7 +190,7 @@ export class RenameFileFailure implements Action {
 
 export class DeleteFiles implements Action {
   readonly type = DELETE_FILES;
-  constructor(public uids: string[], public fileActionUrl: string) {}
+  constructor(public identifiers: string[], public fileActionUrl: string) {}
 }
 
 export class DeleteFilesSuccess implements Action {
@@ -203,7 +203,10 @@ export class DeleteFilesFailure implements Action {
 
 export class ShowFileInfo implements Action {
   readonly type = SHOW_FILE_INFO;
-  constructor(public uid: string, public sys_type: '_FILE' | '_FOLDER') {}
+  constructor(
+    public identifier: string,
+    public sys_type: '_FILE' | '_FOLDER'
+  ) {}
 }
 
 export class AddFolder implements Action {
