@@ -87,6 +87,7 @@ class FolderListGenerator
         $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
         $isWritable = $folder->checkActionPermission('write');
         $combinedIdentifier = $folder->getCombinedIdentifier();
+        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
 
         return [
             'uid' => $combinedIdentifier,
@@ -100,6 +101,7 @@ class FolderListGenerator
             'references' => '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
+            'clipboardIdentifier' => $clipboardIdentifier,
         ];
     }
 
@@ -111,6 +113,7 @@ class FolderListGenerator
         $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
         $isWritable = $file->checkActionPermission('write');
         $combinedIdentifier = $file->getCombinedIdentifier();
+        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
 
         $thumbnailUrl = null;
         $thumbnailWidth = 190;
@@ -138,6 +141,7 @@ class FolderListGenerator
             'thumbnailUrl' => $thumbnailUrl,
             'thumbnailWidth' => $thumbnailWidth,
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
+            'clipboardIdentifier' => $clipboardIdentifier,
         ];
     }
 
@@ -148,6 +152,7 @@ class FolderListGenerator
 
     /**
      * todo use own service for getting references
+     *
      * @return array<string, int>
      */
     protected function getFileReferences(Folder $folder): array

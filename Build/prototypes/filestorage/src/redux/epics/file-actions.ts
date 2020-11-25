@@ -11,7 +11,7 @@ import {
 } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 
 export const renameFile = (
@@ -145,6 +145,62 @@ export const copyFiles = (
   );
 };
 
+export const clipboardSelectionAction = (
+  action$: ActionsObservable<fromActions.ClipboardSelectionActions>
+): Observable<void> => {
+  return action$
+    .ofType(
+      fromActions.CLIPBOARD_COPY_FILE,
+      fromActions.CLIPBOARD_CUT_FILE,
+      fromActions.CLIPBOARD_COPY_RELEASE_FILE,
+      fromActions.CLIPBOARD_CUT_RELEASE_FILE
+    )
+    .pipe(
+      switchMap(action => {
+        // @ts-ignore
+        const url: string = window.clipboardUrl;
+        const params = new URLSearchParams();
+        params.append(
+          'CB[el][_FILE|' + action.clipboardIdentifier + ']',
+          action.identifier
+        );
+        if (
+          -1 !==
+          [
+            fromActions.CLIPBOARD_COPY_FILE,
+            fromActions.CLIPBOARD_COPY_RELEASE_FILE,
+          ].indexOf(action.type)
+        ) {
+          params.append('CB[setCopyMode]', '1');
+        }
+
+        return ajax.post(url + '&' + params.toString()).pipe(
+          catchError(() => {
+            console.warn('error during clipboard action');
+            return EMPTY;
+          })
+        );
+      }),
+      ignoreElements()
+    );
+};
+
+export const clipboardPaste = (
+  action$: ActionsObservable<fromActions.ClipboardPaste>
+): Observable<Action> => {
+  return action$.ofType(fromActions.CLIPBOARD_PASTE).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
+      formData.append('CB[pad]', 'normal');
+      return ajax.post(action.fileActionUrl, formData).pipe(
+        map(() => new fromActions.ClipboardPasteSuccess()),
+        catchError(() => of(new fromActions.ClipboardPasteFailure()))
+      );
+    })
+  );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -155,7 +211,8 @@ export const fileActionSuccess = (
       fromActions.RENAME_FILE_SUCCESS,
       fromActions.UPLOAD_FILES_SUCCESS,
       fromActions.MOVE_FILES_SUCCESS,
-      fromActions.COPY_FILES_SUCCESS
+      fromActions.COPY_FILES_SUCCESS,
+      fromActions.CLIPBOARD_PASTE_SUCCESS
     )
     .pipe(
       mergeMap(() => [
@@ -175,7 +232,8 @@ export const fileActionFailure = (
       fromActions.RENAME_FILE_FAILURE,
       fromActions.UPLOAD_FILES_FAILURE,
       fromActions.MOVE_FILES_FAILURE,
-      fromActions.COPY_FILES_FAILURE
+      fromActions.COPY_FILES_FAILURE,
+      fromActions.CLIPBOARD_PASTE_FAILURE
     )
     .pipe(
       mergeMap(action => {
@@ -196,6 +254,8 @@ export const fileActionFailure = (
 export const fileActions = [
   fileActionFailure,
   fileActionSuccess,
+  clipboardSelectionAction,
+  clipboardPaste,
   addFolder,
   deleteFiles,
   renameFile,

@@ -11,4 +11,5 @@ interface ListItem {
   thumbnailUrl?: string;
   thumbnailWidth?: string;
   contextMenuUrl: string;
+  clipboardIdentifier: string;
 }

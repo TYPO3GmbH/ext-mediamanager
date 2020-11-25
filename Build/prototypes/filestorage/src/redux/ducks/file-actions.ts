@@ -6,6 +6,16 @@ export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
 export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
+export const CLIPBOARD_COPY_FILE = '[FILE][CLIPBOARD] COPY FILE';
+export const CLIPBOARD_COPY_RELEASE_FILE =
+  '[FILE][CLIPBOARD] COPY RELEASE FILE';
+export const CLIPBOARD_CUT_FILE = '[FILE][CLIPBOARD] CUT FILE';
+export const CLIPBOARD_CUT_RELEASE_FILE = '[FILE][CLIPBOARD] CUT RELEASE FILE';
+
+export const CLIPBOARD_PASTE = '[FILE][CLIPBOARD] PASTE';
+export const CLIPBOARD_PASTE_SUCCESS = '[FILE][CLIPBOARD] PASTE SUCCESS';
+export const CLIPBOARD_PASTE_FAILURE = '[FILE][CLIPBOARD] PASTE FAILURE';
+
 export const COPY_FILES = '[FILE] COPY FILES';
 export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
 export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
@@ -40,6 +50,7 @@ export type FileActionsState = Readonly<{
   isDraggingFiles: boolean;
   isMovingFiles: boolean;
   isCopyingFiles: boolean;
+  isPastingFiles: boolean;
   dragFilesMode: 'copy' | 'move';
 }>;
 
@@ -51,6 +62,7 @@ const initialState: FileActionsState = {
   isDraggingFiles: false,
   isMovingFiles: false,
   isCopyingFiles: false,
+  isPastingFiles: false,
   dragFilesMode: 'move',
 };
 
@@ -70,6 +82,19 @@ export const fileActionsReducer = (
         ...state,
         isAddingFolder: false,
       };
+
+    case CLIPBOARD_PASTE:
+      return {
+        ...state,
+        isPastingFiles: true,
+      };
+    case CLIPBOARD_PASTE_SUCCESS:
+    case CLIPBOARD_PASTE_FAILURE:
+      return {
+        ...state,
+        isPastingFiles: false,
+      };
+
     case COPY_FILES:
       return {
         ...state,
@@ -262,10 +287,48 @@ export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
 }
 
+export class ClipboardCopyFile implements Action {
+  readonly type = CLIPBOARD_COPY_FILE;
+  constructor(public clipboardIdentifier: string, public identifier: string) {}
+}
+
+export class ClipboardCopyReleaseFile implements Action {
+  readonly type = CLIPBOARD_COPY_RELEASE_FILE;
+  readonly identifier = '0';
+  constructor(public clipboardIdentifier: string) {}
+}
+
+export class ClipboardCutFile implements Action {
+  readonly type = CLIPBOARD_CUT_FILE;
+  constructor(public clipboardIdentifier: string, public identifier: string) {}
+}
+
+export class ClipboardCutReleaseFile implements Action {
+  readonly type = CLIPBOARD_CUT_RELEASE_FILE;
+  readonly identifier = '0';
+  constructor(public clipboardIdentifier: string) {}
+}
+
+export class ClipboardPaste implements Action {
+  readonly type = CLIPBOARD_PASTE;
+  constructor(public targetIdentifier: string, public fileActionUrl: string) {}
+}
+
+export class ClipboardPasteFailure implements Action {
+  readonly type = CLIPBOARD_PASTE_FAILURE;
+}
+
+export class ClipboardPasteSuccess implements Action {
+  readonly type = CLIPBOARD_PASTE_SUCCESS;
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
   | AddFolderSuccess
+  | ClipboardPaste
+  | ClipboardPasteFailure
+  | ClipboardPasteSuccess
   | CopyFiles
   | CopyFilesFailure
   | CopyFilesSuccess
@@ -286,6 +349,12 @@ export type Actions =
   | UploadFilesFailure
   | UploadFilesSuccess;
 
+export type ClipboardSelectionActions =
+  | ClipboardCopyFile
+  | ClipboardCopyReleaseFile
+  | ClipboardCutFile
+  | ClipboardCutReleaseFile;
+
 export const isExecutingFileAction = createSelector(
   (state: FileActionsState) => state,
   state =>
@@ -294,7 +363,8 @@ export const isExecutingFileAction = createSelector(
     state.isAddingFolder ||
     state.isRenamingFile ||
     state.isMovingFiles ||
-    state.isCopyingFiles
+    state.isCopyingFiles ||
+    state.isPastingFiles
 );
 
 export const getDragMode = createSelector(
