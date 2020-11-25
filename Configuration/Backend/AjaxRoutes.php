@@ -26,4 +26,8 @@ return [
         'path' => '/filelist_ng/folder/fetchData',
         'target' => Controller\FolderDetailController::class . '::fetchDataAction',
     ],
+    'filelist_ng_download_files' => [
+        'path' => '/filelist_ng/download-files',
+        'target' => Controller\DownloadFilesController::class . '::downloadAction',
+    ],
 ];

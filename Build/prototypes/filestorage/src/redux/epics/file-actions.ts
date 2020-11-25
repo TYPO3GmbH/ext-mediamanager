@@ -201,6 +201,26 @@ export const clipboardPaste = (
   );
 };
 
+export const downloadFiles = (
+  action$: ActionsObservable<fromActions.DownloadFiles>
+): Observable<Action> => {
+  return action$.ofType(fromActions.DOWNLOAD_FILES).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      action.identifiers.forEach((identifier, i) => {
+        formData.append('identifiers[' + i + ']', identifier);
+      });
+
+      // @ts-ignore
+      const url: string = window.downloadFilesUrl;
+      return ajax.post(url, formData).pipe(
+        tap(result => result),
+        ignoreElements()
+      );
+    })
+  );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -264,4 +284,5 @@ export const fileActions = [
   uploadFiles,
   moveFiles,
   copyFiles,
+  downloadFiles,
 ];
