@@ -39,7 +39,7 @@ describe('Typo3Datagrid', () => {
 
   it('will fire a `typo3-datagrid-value-change` on end edit', async () => {
     const event: EndEditEvent | {} = {
-      abort: false,
+      aborted: false,
       value: 'New value',
       cell: {
         header: {
@@ -68,7 +68,7 @@ describe('Typo3Datagrid', () => {
     });
 
     const event: EndEditEvent | {} = {
-      abort: false,
+      aborted: false,
       value: 'Old value',
       cell: {
         header: {
@@ -93,7 +93,7 @@ describe('Typo3Datagrid', () => {
     });
 
     const event: EndEditEvent | {} = {
-      abort: true,
+      aborted: true,
       value: 'New value',
       cell: {
         header: {

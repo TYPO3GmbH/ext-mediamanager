@@ -235,7 +235,7 @@ export class Typo3Datagrid extends LitElement {
     }
   }
   _onEndEdit(event: EndEditEvent): void {
-    if (event.abort === true) {
+    if (event.aborted === true) {
       return;
     }
 
