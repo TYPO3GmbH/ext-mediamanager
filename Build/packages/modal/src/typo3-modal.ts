@@ -3,6 +3,7 @@ import {
   html,
   LitElement,
   property,
+  query,
   TemplateResult,
 } from 'lit-element';
 
@@ -51,6 +52,8 @@ export class Typo3Modal extends LitElement {
    */
   @property({ type: Boolean, reflect: true }) dismissible = false;
 
+  @query('#modal') modal!: HTMLElement;
+
   public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
@@ -59,7 +62,7 @@ export class Typo3Modal extends LitElement {
       aria-hidden="${!this.open}"
     >
       <typo3-overlay fixed @click="${this.close}"></typo3-overlay>
-      <div id="modal" class="modal">
+      <div id="modal" class="modal" tabindex="-1">
         ${this.headerContent}
         <div id="content" class="content">
           <slot></slot>
@@ -96,11 +99,20 @@ export class Typo3Modal extends LitElement {
     const closeEvent = new CustomEvent('typo3-modal-open');
     this.dispatchEvent(closeEvent);
     this.open = true;
+    setTimeout(() => this.modal.focus(), 2);
+    window.addEventListener('keydown', event => this._onKeyDown(event));
   }
 
   close(): void {
+    window.removeEventListener('keydown', event => this._onKeyDown(event));
     this.open = false;
     const closeEvent = new CustomEvent('typo3-modal-close');
     this.dispatchEvent(closeEvent);
+  }
+
+  _onKeyDown(event: KeyboardEvent): void {
+    if (this.dismissible && 'Escape' === event.key) {
+      this.close();
+    }
   }
 }
