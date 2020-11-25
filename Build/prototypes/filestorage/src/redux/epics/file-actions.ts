@@ -229,7 +229,6 @@ export const fileActionFailure = (
     .ofType(
       fromActions.DELETE_FILES_FAILURE,
       fromActions.RENAME_FILE_FAILURE,
-      fromActions.RENAME_FILE_FAILURE,
       fromActions.UPLOAD_FILES_FAILURE,
       fromActions.MOVE_FILES_FAILURE,
       fromActions.COPY_FILES_FAILURE,
@@ -242,6 +241,8 @@ export const fileActionFailure = (
           [
             fromActions.RENAME_FILE_FAILURE,
             fromActions.ADD_FOLDER_FAILURE,
+            fromActions.MOVE_FILES_FAILURE,
+            fromActions.COPY_FILES_FAILURE,
           ].indexOf(action.type) != -1
         ) {
           actions.push(new fromGlobal.Reload());
