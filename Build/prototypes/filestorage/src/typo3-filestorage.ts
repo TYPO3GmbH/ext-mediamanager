@@ -710,6 +710,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           contextItem.clipboardIdentifier
         );
         break;
+      case 'pasteFileInto':
+        storeAction = new FileActions.ClipboardPaste(uid, this.fileActionUrl);
+        break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
     }

@@ -12,6 +12,10 @@ export const CLIPBOARD_COPY_RELEASE_FILE =
 export const CLIPBOARD_CUT_FILE = '[FILE][CLIPBOARD] CUT FILE';
 export const CLIPBOARD_CUT_RELEASE_FILE = '[FILE][CLIPBOARD] CUT RELEASE FILE';
 
+export const CLIPBOARD_PASTE = '[FILE][CLIPBOARD] PASTE';
+export const CLIPBOARD_PASTE_SUCCESS = '[FILE][CLIPBOARD] PASTE SUCCESS';
+export const CLIPBOARD_PASTE_FAILURE = '[FILE][CLIPBOARD] PASTE FAILURE';
+
 export const COPY_FILES = '[FILE] COPY FILES';
 export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
 export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
@@ -46,6 +50,7 @@ export type FileActionsState = Readonly<{
   isDraggingFiles: boolean;
   isMovingFiles: boolean;
   isCopyingFiles: boolean;
+  isPastingFiles: boolean;
   dragFilesMode: 'copy' | 'move';
 }>;
 
@@ -57,6 +62,7 @@ const initialState: FileActionsState = {
   isDraggingFiles: false,
   isMovingFiles: false,
   isCopyingFiles: false,
+  isPastingFiles: false,
   dragFilesMode: 'move',
 };
 
@@ -76,6 +82,19 @@ export const fileActionsReducer = (
         ...state,
         isAddingFolder: false,
       };
+
+    case CLIPBOARD_PASTE:
+      return {
+        ...state,
+        isPastingFiles: true,
+      };
+    case CLIPBOARD_PASTE_SUCCESS:
+    case CLIPBOARD_PASTE_FAILURE:
+      return {
+        ...state,
+        isPastingFiles: false,
+      };
+
     case COPY_FILES:
       return {
         ...state,
@@ -290,10 +309,26 @@ export class ClipboardCutReleaseFile implements Action {
   constructor(public clipboardIdentifier: string) {}
 }
 
+export class ClipboardPaste implements Action {
+  readonly type = CLIPBOARD_PASTE;
+  constructor(public targetIdentifier: string, public fileActionUrl: string) {}
+}
+
+export class ClipboardPasteFailure implements Action {
+  readonly type = CLIPBOARD_PASTE_FAILURE;
+}
+
+export class ClipboardPasteSuccess implements Action {
+  readonly type = CLIPBOARD_PASTE_SUCCESS;
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
   | AddFolderSuccess
+  | ClipboardPaste
+  | ClipboardPasteFailure
+  | ClipboardPasteSuccess
   | CopyFiles
   | CopyFilesFailure
   | CopyFilesSuccess
@@ -314,7 +349,7 @@ export type Actions =
   | UploadFilesFailure
   | UploadFilesSuccess;
 
-export type ClipboardActions =
+export type ClipboardSelectionActions =
   | ClipboardCopyFile
   | ClipboardCopyReleaseFile
   | ClipboardCutFile
@@ -328,7 +363,8 @@ export const isExecutingFileAction = createSelector(
     state.isAddingFolder ||
     state.isRenamingFile ||
     state.isMovingFiles ||
-    state.isCopyingFiles
+    state.isCopyingFiles ||
+    state.isPastingFiles
 );
 
 export const getDragMode = createSelector(
