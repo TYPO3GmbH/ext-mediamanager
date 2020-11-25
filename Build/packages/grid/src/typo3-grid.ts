@@ -30,6 +30,16 @@ export class Typo3Grid extends LitElement {
 
   private _masonry!: Masonry;
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('keydown', this._onKeyDown);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('keydown', this._onKeyDown);
+  }
+
   render(): TemplateResult {
     return html` <slot name="item" @click="${this._onItemClick}"></slot> `;
   }
@@ -41,6 +51,7 @@ export class Typo3Grid extends LitElement {
   }
 
   firstUpdated(): void {
+    this.setAttribute('tabIndex', '-1');
     this._masonry = new Masonry(this, {
       useContainerWidth: true,
       columnBreakpoints: {
@@ -98,5 +109,29 @@ export class Typo3Grid extends LitElement {
     this.dispatchEvent(
       new CustomEvent('typo3-grid-selection-changed', { detail: selectedItems })
     );
+  };
+
+  _onKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'Escape':
+        this.selectedItems.forEach(item => item.removeAttribute('selected'));
+        this.dispatchEvent(
+          new CustomEvent('typo3-grid-selection-changed', { detail: [] })
+        );
+        event.preventDefault();
+        break;
+      case 'a':
+        if (event.metaKey || event.ctrlKey) {
+          this.items.forEach(item => item.setAttribute('selected', 'selected'));
+
+          this.dispatchEvent(
+            new CustomEvent('typo3-grid-selection-changed', {
+              detail: this.items,
+            })
+          );
+          event.preventDefault();
+        }
+        break;
+    }
   };
 }

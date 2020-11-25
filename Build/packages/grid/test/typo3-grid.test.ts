@@ -107,4 +107,35 @@ describe('Typo3Grid', () => {
 
     expect(selectionChangedCount).to.equal(0);
   });
+
+  it('fires `typo3-grid-selection-changed` with empty selection on `Escape`', async () => {
+    cardItemOne.setAttribute('selected', 'selected');
+    const listener = oneEvent(element, 'typo3-grid-selection-changed');
+
+    const event = new KeyboardEvent('keydown', { key: 'Escape' });
+    element.dispatchEvent(event);
+
+    await elementUpdated(element);
+
+    expect(cardItemOne.hasAttribute('selected')).to.be.false;
+    expect(cardItemTwo.hasAttribute('selected')).to.be.false;
+
+    const { detail } = await listener;
+    expect(detail).to.be.eql([]);
+  });
+
+  it('fires `typo3-grid-selection-changed` with all items on `ctrl a`', async () => {
+    const listener = oneEvent(element, 'typo3-grid-selection-changed');
+
+    const event = new KeyboardEvent('keydown', { key: 'a', ctrlKey: true });
+    element.dispatchEvent(event);
+
+    await elementUpdated(element);
+
+    expect(cardItemOne.hasAttribute('selected')).to.be.true;
+    expect(cardItemTwo.hasAttribute('selected')).to.be.true;
+
+    const { detail } = await listener;
+    expect(detail).to.be.eql([cardItemOne, cardItemTwo]);
+  });
 });
