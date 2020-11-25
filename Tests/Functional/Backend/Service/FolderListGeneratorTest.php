@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Functional\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -26,6 +25,7 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
 use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -47,13 +47,17 @@ class FolderListGeneratorTest extends FunctionalTestCase
         parent::setUp();
 
         $this->iconFactoryMock = $this->createMock(IconFactory::class);
+        $fileReferencesProviderMock = $this->createMock(FileReferencesProviderInterface::class);
+
+        $fileReferencesProviderMock->method('getFileReferencesForFolderFiles')
+            ->willReturn([13 => '2']);
 
         $GLOBALS['LANG'] = LanguageService::create('default');
         $this->generator = new FolderListGenerator(
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
             GeneralUtility::makeInstance(UriBuilder::class),
-            GeneralUtility::makeInstance(ConnectionPool::class)
+            $fileReferencesProviderMock
         );
     }
 
@@ -167,6 +171,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $file->method('getExtension')
             ->willReturn('xls');
 
+        $file->method('getUid')
+            ->willReturn(13);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -192,7 +199,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'size' => '0 B',
             'type' => 'XLS',
             'variants' => '-',
-            'references' => '-',
+            'references' => '2',
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
             'clipboardIdentifier' => '4fbe4dde37',
