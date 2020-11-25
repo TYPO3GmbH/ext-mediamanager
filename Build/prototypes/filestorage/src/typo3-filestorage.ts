@@ -180,7 +180,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar>
               <div slot="left">
-                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
+                <typo3-button
+                  @click="${this._onDownload}"
+                  .disabled="${selectionIsEmpty(this.state.list)}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -796,6 +799,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             this.fileActionUrl
           );
 
+    store.dispatch(action);
+  }
+
+  _onDownload(): void {
+    const identifiers = selectedRows(this.state.list).map(
+      item => item.identifier
+    );
+    const action = new FileActions.DownloadFiles(identifiers);
     store.dispatch(action);
   }
 }

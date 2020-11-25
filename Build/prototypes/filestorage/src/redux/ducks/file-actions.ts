@@ -24,6 +24,8 @@ export const DELETE_FILES = '[FILE] DELETE FILES';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
 
+export const DOWNLOAD_FILES = '[FILE] DOWNLOAD FILES';
+
 export const DRAG_FILES_START = '[FILE] DRAG FILES START';
 export const DRAG_FILES_CHANGE_MODE = '[FILE] DRAG FILES CHANGE MODE';
 export const DRAG_FILES_END = '[FILE] DRAG FILES END';
@@ -325,6 +327,11 @@ export class ClipboardPasteSuccess implements Action {
   readonly type = CLIPBOARD_PASTE_SUCCESS;
 }
 
+export class DownloadFiles implements Action {
+  readonly type = DOWNLOAD_FILES;
+  constructor(public identifiers: string[]) {}
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
@@ -338,6 +345,7 @@ export type Actions =
   | DeleteFiles
   | DeleteFilesFailure
   | DeleteFilesSuccess
+  | DownloadFiles
   | DragFilesChangeMode
   | DragFilesEnd
   | DragFilesStart
