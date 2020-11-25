@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsExcepti
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FolderListGenerator
@@ -82,25 +83,13 @@ class FolderListGenerator
             $numFiles = 0;
         }
 
-        $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
-        $isWritable = $folder->checkActionPermission('write');
-        $combinedIdentifier = $folder->getCombinedIdentifier();
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
-
-        return [
-            'identifier' => $combinedIdentifier,
-            'icon' => $icon->getMarkup(),
-            'name' => $folder->getName(),
-            'modified' => BackendUtility::date($folder->getModificationTime()),
-            'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
-            'type' => $this->languageService->getLL('folder'),
-            //todo detect variants & references
-            'variants' => '-',
-            'references' => '-',
-            'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
-            'clipboardIdentifier' => $clipboardIdentifier,
-        ];
+        return \array_merge(
+            $this->formatResource($folder),
+            [
+                'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
+                'type' => $this->languageService->getLL('folder'),
+            ]
+        );
     }
 
     /**
@@ -108,11 +97,6 @@ class FolderListGenerator
      */
     protected function formatFile(File $file, array $fileReferences = []): array
     {
-        $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
-        $isWritable = $file->checkActionPermission('write');
-        $combinedIdentifier = $file->getCombinedIdentifier();
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
-
         $thumbnailUrl = null;
         $thumbnailWidth = 190;
 
@@ -125,19 +109,37 @@ class FolderListGenerator
             $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
         }
 
+        return \array_merge(
+            $this->formatResource($file),
+            [
+                'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
+                'type' => \strtoupper($file->getExtension()),
+                'references' => $fileReferences[$file->getUid()] ?? '-',
+                'thumbnailUrl' => $thumbnailUrl,
+                'thumbnailWidth' => $thumbnailWidth,
+            ]
+        );
+    }
+
+    /**
+     * @return array[string]string
+     */
+    protected function formatResource(ResourceInterface $resource): array
+    {
+        $combinedIdentifier = $resource->getCombinedIdentifier();
+        $icon = $this->iconFactory->getIconForResource($resource, Icon::SIZE_SMALL);
+        $isWritable = $resource->checkActionPermission('write');
+        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+
         return [
             'identifier' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
-            'name' => $file->getName(),
-            'modified' => BackendUtility::date($file->getModificationTime()),
-            'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
-            'type' => \strtoupper($file->getExtension()),
-            //todo detect variants & references
+            'name' => $resource->getName(),
+            'modified' => BackendUtility::date($resource->getModificationTime()),
+            //todo detect variants
             'variants' => '-',
-            'references' => $fileReferences[$file->getUid()] ?? '-',
+            'references' => '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'thumbnailUrl' => $thumbnailUrl,
-            'thumbnailWidth' => $thumbnailWidth,
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             'clipboardIdentifier' => $clipboardIdentifier,
         ];
