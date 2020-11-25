@@ -144,6 +144,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'hasChildren' => true,
                 'folderUrl' => '/typo3/index.php?route=%2Fajax%2Ffilelist_ng%2Ffolder%2FfetchData&token=dummyToken&uid=1%3A%2Ftest-folder',
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file_storage&uid=1%3A%2Ftest-folder',
+                'clipboardIdentifier' => '95ed07cec0',
                 'allowEdit' => false,
             ],
             [
@@ -158,6 +159,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'hasChildren' => false,
                 'folderUrl' => '/typo3/index.php?route=%2Fajax%2Ffilelist_ng%2Ffolder%2FfetchData&token=dummyToken&uid=1%3A%2Ftest-folder-sub',
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder-sub',
+                'clipboardIdentifier' => 'db62f25b40',
                 'allowEdit' => true,
             ],
         ], $result);

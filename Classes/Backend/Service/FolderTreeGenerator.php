@@ -68,6 +68,7 @@ class FolderTreeGenerator
             $rootLevelFolder = $rootLevelFolderInfo['folder'];
             $rootLevelFolderName = $rootLevelFolderInfo['name'];
             $combinedIdentifier = $rootLevelFolder->getCombinedIdentifier();
+            $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
             $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
@@ -91,6 +92,7 @@ class FolderTreeGenerator
                 'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
                 'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, 'sys_file_storage'),
                 'allowEdit' => $rootLevelFolder->checkActionPermission('rename'),
+                'clipboardIdentifier' => $clipboardIdentifier,
             ];
 
             // If the mount is expanded, go down:
@@ -123,6 +125,7 @@ class FolderTreeGenerator
             $isLocked = $subFolder instanceof InaccessibleFolder;
 
             $combinedIdentifier = $subFolder->getCombinedIdentifier();
+            $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
             $specUID = GeneralUtility::md5int($combinedIdentifier);
             $this->specUIDmap[$specUID] = $combinedIdentifier;
             $icon = $this->iconFactory->getIconForResource($subFolder, Icon::SIZE_SMALL, null);
@@ -143,6 +146,7 @@ class FolderTreeGenerator
                 'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
                 'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
                 'allowEdit' => $subFolder->checkActionPermission('rename'),
+                'clipboardIdentifier' => $clipboardIdentifier,
             ];
 
             if (\count($subFolder->getSubfolders()) > 0) {

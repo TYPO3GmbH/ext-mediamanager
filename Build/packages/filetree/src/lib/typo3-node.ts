@@ -36,4 +36,5 @@ export interface Typo3Node {
   lastChild?: boolean;
   class?: string;
   contextMenuUrl: string;
+  clipboardIdentifier: string;
 }

@@ -113,6 +113,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'references' => '-',
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder',
+            'clipboardIdentifier' => '95ed07cec0',
         ]], $result);
     }
 
@@ -194,6 +195,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'references' => '-',
             'rw' => 'R',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
+            'clipboardIdentifier' => '4fbe4dde37',
             'thumbnailUrl' => null,
             'thumbnailWidth' => 190,
         ]], $result);

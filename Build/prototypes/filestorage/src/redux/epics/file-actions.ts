@@ -11,7 +11,7 @@ import {
 } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 
 export const renameFile = (
@@ -145,6 +145,45 @@ export const copyFiles = (
   );
 };
 
+export const clipboardAction = (
+  action$: ActionsObservable<fromActions.ClipboardActions>
+): Observable<void> => {
+  return action$
+    .ofType(
+      fromActions.CLIPBOARD_COPY_FILE,
+      fromActions.CLIPBOARD_CUT_FILE,
+      fromActions.CLIPBOARD_COPY_RELEASE_FILE,
+      fromActions.CLIPBOARD_CUT_RELEASE_FILE
+    )
+    .pipe(
+      switchMap(action => {
+        const url: string = (window as any).clipboardUrl;
+        const params = new URLSearchParams();
+        params.append(
+          'CB[el][_FILE|' + action.clipboardIdentifier + ']',
+          action.identifier
+        );
+        if (
+          -1 !==
+          [
+            fromActions.CLIPBOARD_COPY_FILE,
+            fromActions.CLIPBOARD_COPY_RELEASE_FILE,
+          ].indexOf(action.type)
+        ) {
+          params.append('CB[setCopyMode]', '1');
+        }
+
+        return ajax.post(url + '&' + params.toString()).pipe(
+          catchError(() => {
+            console.warn('error during clipboard action');
+            return EMPTY;
+          })
+        );
+      }),
+      ignoreElements()
+    );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -196,6 +235,7 @@ export const fileActionFailure = (
 export const fileActions = [
   fileActionFailure,
   fileActionSuccess,
+  clipboardAction,
   addFolder,
   deleteFiles,
   renameFile,

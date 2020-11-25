@@ -7,7 +7,10 @@ export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
 export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
 export const CLIPBOARD_COPY_FILE = '[FILE][CLIPBOARD] COPY FILE';
+export const CLIPBOARD_COPY_RELEASE_FILE =
+  '[FILE][CLIPBOARD] COPY RELEASE FILE';
 export const CLIPBOARD_CUT_FILE = '[FILE][CLIPBOARD] CUT FILE';
+export const CLIPBOARD_CUT_RELEASE_FILE = '[FILE][CLIPBOARD] CUT RELEASE FILE';
 
 export const COPY_FILES = '[FILE] COPY FILES';
 export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
@@ -267,20 +270,30 @@ export class CopyFilesSuccess implements Action {
 
 export class ClipboardCopyFile implements Action {
   readonly type = CLIPBOARD_COPY_FILE;
-  constructor(public identifier: string) {}
+  constructor(public clipboardIdentifier: string, public identifier: string) {}
+}
+
+export class ClipboardCopyReleaseFile implements Action {
+  readonly type = CLIPBOARD_COPY_RELEASE_FILE;
+  readonly identifier = '0';
+  constructor(public clipboardIdentifier: string) {}
 }
 
 export class ClipboardCutFile implements Action {
   readonly type = CLIPBOARD_CUT_FILE;
-  constructor(public identifier: string) {}
+  constructor(public clipboardIdentifier: string, public identifier: string) {}
+}
+
+export class ClipboardCutReleaseFile implements Action {
+  readonly type = CLIPBOARD_CUT_RELEASE_FILE;
+  readonly identifier = '0';
+  constructor(public clipboardIdentifier: string) {}
 }
 
 export type Actions =
   | AddFolder
   | AddFolderFailure
   | AddFolderSuccess
-  | ClipboardCopyFile
-  | ClipboardCutFile
   | CopyFiles
   | CopyFilesFailure
   | CopyFilesSuccess
@@ -300,6 +313,12 @@ export type Actions =
   | UploadFiles
   | UploadFilesFailure
   | UploadFilesSuccess;
+
+export type ClipboardActions =
+  | ClipboardCopyFile
+  | ClipboardCopyReleaseFile
+  | ClipboardCutFile
+  | ClipboardCutReleaseFile;
 
 export const isExecutingFileAction = createSelector(
   (state: FileActionsState) => state,
