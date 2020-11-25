@@ -22,7 +22,9 @@ import themeStyles from '../../../theme/index.pcss';
  * @cssprop --typo3-modal-border-color
  * @cssprop --typo3-modal-border-radius
  * @cssprop --typo3-modal-font-size
- * @cssprop --typo3-modal-padding
+ * @cssprop --typo3-modal-header-padding
+ * @cssprop --typo3-modal-content-padding
+ * @cssprop --typo3-modal-footer-padding
  * @cssprop --typo3-modal-overlay-opacity
  *
  * @cssprop --typo3-modal-close-btn-font-size

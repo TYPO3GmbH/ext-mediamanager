@@ -32,9 +32,9 @@ export class Typo3ListItemBase extends ListItemBase {
   render(): TemplateResult {
     return html`
       <slot name="icon"></slot>
-      <span class="list-item__text">
+      <div class="list-item__text">
         <slot></slot>
-      </span>
+      </div>
     `;
   }
 

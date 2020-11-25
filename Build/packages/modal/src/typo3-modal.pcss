@@ -38,7 +38,7 @@
 
 #btn-close {
   all: unset;
-  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  padding: var(--typo3-modal-header-padding, var(--typo3-global-modal-padding));
   margin: -1rem -1rem -1rem auto;
   float: right;
   border-radius: 0;
@@ -62,7 +62,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  padding: var(--typo3-modal-header-padding, var(--typo3-global-modal-padding));
   background-color:var(--typo3-global-gray-lighter);
   border-bottom: var(--typo3-global-modal-border-width) solid var(--typo3-global-gray-light);
 }
@@ -78,11 +78,11 @@
 .content {
   position: relative;
   flex: 1 1 auto;
-  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  padding: var(--typo3-modal-content-padding, var(--typo3-global-modal-padding));
 }
 
 .footer {
   display: flex;
   align-items: center;
-  padding: var(--typo3-modal-padding, var(--typo3-global-modal-padding));
+  padding: var(--typo3-modal-footer-padding, var(--typo3-global-modal-padding));
 }

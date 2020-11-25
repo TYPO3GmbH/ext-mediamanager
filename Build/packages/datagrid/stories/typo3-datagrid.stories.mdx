@@ -13,6 +13,8 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
     <Story name="Simple" height="220px">
     {html`
       <typo3-datagrid
+        @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
+        @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
         schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
         data='[
         {
@@ -57,9 +59,11 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
     <Story name="Grid with editable column (description)" height="220px">
     {html`
       <typo3-datagrid
-        schema='[{"name": "uid", "type": "text", "title": " ", "hidden": true }, {"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
+        @typo3-datagrid-value-change="${(e) => action(`typo3-datagrid-value-change`)(e.detail)}"
+        @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
+        @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
         editableColumns='["description"]'
-        @typo3-datagrid-value-change=${(e) => action(`typo3-datagrid-value-change`)(e.detail)}
+        schema='[{"name": "uid", "type": "text", "title": " ", "hidden": true }, {"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
         data='[
         {
           "uid": "1",

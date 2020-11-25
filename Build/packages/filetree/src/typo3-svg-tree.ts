@@ -20,11 +20,14 @@ interface Icon {
  * @fires typo3-node-expand - Event fired on node expand
  * @fires typo3-node-collapse - Event fired on node expand
  * @fires typo3-node-contextmenu - Event fired on contextmenu for node
+ * @fires typo3-node-drop - Event fired on dropping element to node
  */
 export class Typo3SvgTree extends LitElement {
   @property({ type: Array }) nodes: Typo3Node[] = [];
 
   @property({ type: Array }) expandedNodeIds: string[] = [];
+
+  @property({ type: Boolean }) inDropMode = false;
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
   @query('.node-loader') nodeLoader!: HTMLElement;
@@ -149,6 +152,9 @@ export class Typo3SvgTree extends LitElement {
       this._nodesAddPlaceholder();
       this._replaceData(this.nodes);
       this._nodesRemovePlaceholder();
+    }
+    if (_changedProperties.has('inDropMode')) {
+      this.container.classed('nodes-wrapper--dragging', this.inDropMode);
     }
   }
 
@@ -687,11 +693,18 @@ export class Typo3SvgTree extends LitElement {
       .on('mouseover', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOver(node, this);
       })
-      .on('mouseout', (_, node: Typo3Node) => {
+      .on('mouseout dragleave', (_, node: Typo3Node) => {
         this._nodeBgEvents().mouseOut(node, this);
       })
       .on('contextmenu', (event: MouseEvent, node: Typo3Node) => {
         this._onContextmenu(event, node);
+      })
+      .on('dragover', (event: DragEvent, node: Typo3Node) => {
+        event.preventDefault();
+        this._nodeBgEvents().mouseOver(node, this);
+      })
+      .on('drop', (event: DragEvent, node: Typo3Node) => {
+        this._onNodeDrop(event, node);
       });
 
     nodes
@@ -1031,8 +1044,8 @@ export class Typo3SvgTree extends LitElement {
    * of the node data is not represented in DOM on hideChildren and showChildren.
    */
   _setExpandedState(node: Typo3Node): void {
-    const nodeElement = document.getElementById(
-      'identifier-' + this._getNodeStateIdentifier(node)
+    const nodeElement = this.shadowRoot!.querySelector(
+      '#identifier-' + this._getNodeStateIdentifier(node)
     );
     if (nodeElement) {
       nodeElement.toggleAttribute(
@@ -1093,5 +1106,16 @@ export class Typo3SvgTree extends LitElement {
       })
     );
     this.dispatch.call('nodeRightClick', node, this);
+  }
+
+  private _onNodeDrop(event: DragEvent, node: Typo3Node): void {
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-drop', {
+        detail: {
+          event: event,
+          node: node,
+        },
+      })
+    );
   }
 }
