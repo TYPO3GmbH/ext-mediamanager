@@ -83,6 +83,6 @@ class ArchiveGeneratorTest extends UnitTestCase
         $this->assertEquals('fileA', $zip->getFromName('root/fileA.jpg'));
         $this->assertEquals('fileB', $zip->getFromName('root/test/fileB.jpg'));
 
-        @\unlink($fileInRootFolder);
+        @\unlink($filePath);
     }
 }
