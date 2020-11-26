@@ -120,7 +120,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar>
               <div slot="left">
-                <typo3-button>
+                <typo3-button
+                  .disabled="${this.state.tree.selected == null}"
+                  @click="${() =>
+                    this.fileTree.addNode(
+                      this.state.tree.selected!.identifier
+                    )}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
