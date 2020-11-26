@@ -29,6 +29,9 @@ class FileProvider extends AbstractProvider
     /** @var File|Folder */
     protected $record;
 
+    /** @var ResourceFactory */
+    private $resourceFactory;
+
     /** @var string[][] */
     protected $itemsConfiguration = [
         'new' => [
@@ -87,10 +90,9 @@ class FileProvider extends AbstractProvider
     protected function initialize()
     {
         parent::initialize();
-        $fileObject = GeneralUtility::makeInstance(ResourceFactory::class)
-            ->retrieveFileOrFolderObject($this->identifier);
 
-        $this->record = $fileObject;
+        $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+        $this->record = $this->resourceFactory->retrieveFileOrFolderObject($this->identifier);
     }
 
     protected function canRender(string $itemName, string $type): bool
@@ -104,9 +106,6 @@ class FileProvider extends AbstractProvider
         $canRender = false;
         switch ($itemName) {
             //just for files
-            case 'edit':
-                $canRender = $this->canBeEdited();
-                break;
             case 'info':
                 $canRender = $this->canShowInfo();
                 break;
@@ -137,13 +136,6 @@ class FileProvider extends AbstractProvider
                 break;
         }
         return $canRender;
-    }
-
-    protected function canBeEdited(): bool
-    {
-        return $this->isFile()
-            && $this->record->checkActionPermission('write')
-            && $this->record->isTextFile();
     }
 
     protected function canBeDeleted(): bool
@@ -177,38 +169,35 @@ class FileProvider extends AbstractProvider
         if (empty($elArr)) {
             return false;
         }
-        $selItem = \reset($elArr);
-        $fileOrFolderInClipBoard = GeneralUtility::makeInstance(ResourceFactory::class)->retrieveFileOrFolderObject($selItem);
 
-        return $this->isFolder()
-            && $this->record->checkActionPermission('write')
-            && (
-                !$fileOrFolderInClipBoard instanceof Folder
-                || !$fileOrFolderInClipBoard->getStorage()->isWithinFolder($fileOrFolderInClipBoard, $this->record)
-            )
-            && $this->isFoldersAreInTheSameRoot($fileOrFolderInClipBoard);
+        $selItem = \reset($elArr);
+        $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
+
+        if (false === $this->isFolder()) {
+            return false;
+        }
+
+        if (false === $this->record->checkActionPermission('write')) {
+            return false;
+        }
+
+        if ($fileOrFolderInClipBoard instanceof Folder) {
+            return $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard);
+        }
+
+        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($fileOrFolderInClipBoard, $this->record);
     }
 
     /**
      * Checks if folder and record are in the same filemount
      * Cannot copy folders between filemounts
-     *
-     * @param File|Folder|null $fileOrFolderInClipBoard
-     *
-     * @return bool
      */
-    protected function isFoldersAreInTheSameRoot($fileOrFolderInClipBoard): bool
+    protected function foldersAreInTheSameRoot(Folder $folderInClipBoard): bool
     {
-        if (false === $fileOrFolderInClipBoard instanceof Folder) {
-            return true;
-        }
+        $recordRootFolderId = $this->record->getStorage()->getRootLevelFolder()->getCombinedIdentifier();
+        $clipboardRootFolderId = $folderInClipBoard->getStorage()->getRootLevelFolder()->getCombinedIdentifier();
 
-
-        return (!$fileOrFolderInClipBoard instanceof Folder)
-            || (
-                $this->record->getStorage()->getRootLevelFolder()->getCombinedIdentifier()
-                == $fileOrFolderInClipBoard->getStorage()->getRootLevelFolder()->getCombinedIdentifier()
-            );
+        return $recordRootFolderId === $clipboardRootFolderId;
     }
 
     protected function isRecordInClipboard(string $mode = ''): bool
@@ -280,7 +269,11 @@ class FileProvider extends AbstractProvider
             $elArr = $this->clipboard->elFromTable('_FILE');
             $selItem = \reset($elArr);
 
-            $fileOrFolderInClipBoard = GeneralUtility::makeInstance(ResourceFactory::class)->retrieveFileOrFolderObject($selItem);
+            $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
+
+            if (null === $fileOrFolderInClipBoard) {
+                return $attributes;
+            }
 
             $title = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:clip_paste');
 

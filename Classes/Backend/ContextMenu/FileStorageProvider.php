@@ -27,11 +27,6 @@ class FileStorageProvider extends FileProvider
             'iconIdentifier' => 'actions-open',
             'callbackAction' => 'editFileStorage',
         ],
-        'upload' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.upload',
-            'iconIdentifier' => 'actions-edit-upload',
-            'callbackAction' => 'uploadFile',
-        ],
         'new' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.new',
             'iconIdentifier' => 'actions-document-new',
