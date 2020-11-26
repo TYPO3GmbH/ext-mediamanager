@@ -2,6 +2,10 @@ import { ActionsObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
 import {
+  DownloadFilesFailure,
+  DownloadFilesSuccess,
+} from '../ducks/file-actions';
+import {
   catchError,
   ignoreElements,
   map,
@@ -220,8 +224,9 @@ export const downloadFiles = (
         responseType: 'arraybuffer',
       }).pipe(
         tap(response => {
+          console.log('create file');
           const file = new Blob([response.response], {
-            type: response.xhr.getResponseHeader('Content-Type'),
+            type: response.xhr.getResponseHeader('Content-Type') ?? undefined,
           });
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // IE
@@ -231,6 +236,7 @@ export const downloadFiles = (
             window.open(fileURL);
           }
         }),
+        map(() => new DownloadFilesSuccess()),
         catchError((error: AjaxError) => {
           window.dispatchEvent(
             new CustomEvent('typo3-add-snackbar', {
@@ -240,9 +246,8 @@ export const downloadFiles = (
               },
             })
           );
-          return EMPTY;
-        }),
-        ignoreElements()
+          return of(new DownloadFilesFailure());
+        })
       );
     })
   );

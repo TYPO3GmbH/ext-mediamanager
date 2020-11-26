@@ -25,6 +25,8 @@ export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
 
 export const DOWNLOAD_FILES = '[FILE] DOWNLOAD FILES';
+export const DOWNLOAD_FILES_SUCCESS = '[FILE] DOWNLOAD FILES SUCCESS';
+export const DOWNLOAD_FILES_FAILURE = '[FILE] DOWNLOAD FILES FAILURE';
 
 export const DRAG_FILES_START = '[FILE] DRAG FILES START';
 export const DRAG_FILES_CHANGE_MODE = '[FILE] DRAG FILES CHANGE MODE';
@@ -53,6 +55,7 @@ export type FileActionsState = Readonly<{
   isMovingFiles: boolean;
   isCopyingFiles: boolean;
   isPastingFiles: boolean;
+  isDownloadingFiles: boolean;
   dragFilesMode: 'copy' | 'move';
 }>;
 
@@ -65,6 +68,7 @@ const initialState: FileActionsState = {
   isMovingFiles: false,
   isCopyingFiles: false,
   isPastingFiles: false,
+  isDownloadingFiles: false,
   dragFilesMode: 'move',
 };
 
@@ -134,6 +138,17 @@ export const fileActionsReducer = (
       return {
         ...state,
         isDraggingFiles: false,
+      };
+    case DOWNLOAD_FILES:
+      return {
+        ...state,
+        isDownloadingFiles: true,
+      };
+    case DOWNLOAD_FILES_SUCCESS:
+    case DOWNLOAD_FILES_FAILURE:
+      return {
+        ...state,
+        isDownloadingFiles: false,
       };
     case MOVE_FILES:
       return {
@@ -332,6 +347,14 @@ export class DownloadFiles implements Action {
   constructor(public identifiers: string[]) {}
 }
 
+export class DownloadFilesSuccess implements Action {
+  readonly type = DOWNLOAD_FILES_SUCCESS;
+}
+
+export class DownloadFilesFailure implements Action {
+  readonly type = DOWNLOAD_FILES_FAILURE;
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
@@ -346,6 +369,8 @@ export type Actions =
   | DeleteFilesFailure
   | DeleteFilesSuccess
   | DownloadFiles
+  | DownloadFilesSuccess
+  | DownloadFilesFailure
   | DragFilesChangeMode
   | DragFilesEnd
   | DragFilesStart

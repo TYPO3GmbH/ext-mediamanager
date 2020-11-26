@@ -21,6 +21,7 @@ import {
 } from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
 import { SetSidebarWidth } from './redux/ducks/layout';
+import * as ListActions from './redux/ducks/list';
 import {
   ClearSelection,
   itemIsSelected,
@@ -28,7 +29,6 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
-import * as ListActions from './redux/ducks/list';
 
 import * as TreeActions from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
@@ -37,12 +37,12 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import * as FileActions from './redux/ducks/file-actions';
+import { getDragMode } from './redux/ducks/file-actions';
 import * as GlobalActions from './redux/ducks/global-actions';
+import { isLoading } from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
-import { isLoading } from './redux/ducks/global-actions';
 import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
-import { getDragMode } from './redux/ducks/file-actions';
 import { Typo3MoveFilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
@@ -182,7 +182,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               <div slot="left">
                 <typo3-button
                   @click="${this._onDownload}"
-                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  .disabled="${selectionIsEmpty(this.state.list) ||
+                  this.state.fileActions.isDownloadingFiles}"
                 >
                   <svg
                     slot="icon"
