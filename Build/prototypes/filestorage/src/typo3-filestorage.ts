@@ -323,8 +323,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const orderedData = orderBy(
       this.state.list.items,
-      [this.state.viewMode.order.field],
-      [this.state.viewMode.order.direction]
+      ['type', this.state.viewMode.order.field],
+      ['asc', this.state.viewMode.order.direction]
     );
     const hash = orderedData.map(item => item.identifier).join(',');
 
