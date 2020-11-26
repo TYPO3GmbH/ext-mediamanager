@@ -24,6 +24,10 @@ export const DELETE_FILES = '[FILE] DELETE FILES';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES';
 
+export const DOWNLOAD_FILES = '[FILE] DOWNLOAD FILES';
+export const DOWNLOAD_FILES_SUCCESS = '[FILE] DOWNLOAD FILES SUCCESS';
+export const DOWNLOAD_FILES_FAILURE = '[FILE] DOWNLOAD FILES FAILURE';
+
 export const DRAG_FILES_START = '[FILE] DRAG FILES START';
 export const DRAG_FILES_CHANGE_MODE = '[FILE] DRAG FILES CHANGE MODE';
 export const DRAG_FILES_END = '[FILE] DRAG FILES END';
@@ -51,6 +55,7 @@ export type FileActionsState = Readonly<{
   isMovingFiles: boolean;
   isCopyingFiles: boolean;
   isPastingFiles: boolean;
+  isDownloadingFiles: boolean;
   dragFilesMode: 'copy' | 'move';
 }>;
 
@@ -63,6 +68,7 @@ const initialState: FileActionsState = {
   isMovingFiles: false,
   isCopyingFiles: false,
   isPastingFiles: false,
+  isDownloadingFiles: false,
   dragFilesMode: 'move',
 };
 
@@ -133,6 +139,17 @@ export const fileActionsReducer = (
         ...state,
         isDraggingFiles: false,
       };
+    case DOWNLOAD_FILES:
+      return {
+        ...state,
+        isDownloadingFiles: true,
+      };
+    case DOWNLOAD_FILES_SUCCESS:
+    case DOWNLOAD_FILES_FAILURE:
+      return {
+        ...state,
+        isDownloadingFiles: false,
+      };
     case MOVE_FILES:
       return {
         ...state,
@@ -190,7 +207,7 @@ export class RenameFileFailure implements Action {
 
 export class DeleteFiles implements Action {
   readonly type = DELETE_FILES;
-  constructor(public uids: string[], public fileActionUrl: string) {}
+  constructor(public identifiers: string[], public fileActionUrl: string) {}
 }
 
 export class DeleteFilesSuccess implements Action {
@@ -203,7 +220,10 @@ export class DeleteFilesFailure implements Action {
 
 export class ShowFileInfo implements Action {
   readonly type = SHOW_FILE_INFO;
-  constructor(public uid: string, public sys_type: '_FILE' | '_FOLDER') {}
+  constructor(
+    public identifier: string,
+    public sys_type: '_FILE' | '_FOLDER'
+  ) {}
 }
 
 export class AddFolder implements Action {
@@ -322,6 +342,19 @@ export class ClipboardPasteSuccess implements Action {
   readonly type = CLIPBOARD_PASTE_SUCCESS;
 }
 
+export class DownloadFiles implements Action {
+  readonly type = DOWNLOAD_FILES;
+  constructor(public identifiers: string[]) {}
+}
+
+export class DownloadFilesSuccess implements Action {
+  readonly type = DOWNLOAD_FILES_SUCCESS;
+}
+
+export class DownloadFilesFailure implements Action {
+  readonly type = DOWNLOAD_FILES_FAILURE;
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
@@ -335,6 +368,9 @@ export type Actions =
   | DeleteFiles
   | DeleteFilesFailure
   | DeleteFilesSuccess
+  | DownloadFiles
+  | DownloadFilesSuccess
+  | DownloadFilesFailure
   | DragFilesChangeMode
   | DragFilesEnd
   | DragFilesStart

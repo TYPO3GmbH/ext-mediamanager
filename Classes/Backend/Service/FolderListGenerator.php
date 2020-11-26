@@ -18,8 +18,6 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -27,9 +25,10 @@ use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsExcepti
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class FolderListGenerator
+class FolderListGenerator implements FolderListGeneratorInterface
 {
     /** @var LanguageService */
     private $languageService;
@@ -40,19 +39,19 @@ class FolderListGenerator
     /** @var UriBuilder */
     private $uriBuilder;
 
-    /** @var ConnectionPool */
-    private $connectionPool;
+    /** @var FileReferencesProviderInterface */
+    private $fileReferencesProvider;
 
     public function __construct(
         LanguageServiceProvider $languageServiceProvider,
         IconFactory $iconFactory,
         UriBuilder $uriBuilder,
-        ConnectionPool $connectionPool
+        FileReferencesProviderInterface $fileReferencesProvider
     ) {
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->iconFactory = $iconFactory;
         $this->uriBuilder = $uriBuilder;
-        $this->connectionPool = $connectionPool;
+        $this->fileReferencesProvider = $fileReferencesProvider;
     }
 
     public function getFolderItems(Folder $folderObject): array
@@ -65,7 +64,7 @@ class FolderListGenerator
 
         $folderItems = \array_map([$this, 'formatFolder'], $folders);
 
-        $fileReferences = $this->getFileReferences($folderObject);
+        $fileReferences = $this->fileReferencesProvider->getFileReferencesForFolderFiles($folderObject);
         $fileItems = \array_map(function (File $file) use ($fileReferences) {
             return $this->formatFile($file, $fileReferences);
         }, $folderObject->getFiles());
@@ -84,25 +83,13 @@ class FolderListGenerator
             $numFiles = 0;
         }
 
-        $icon = $this->iconFactory->getIconForResource($folder, Icon::SIZE_SMALL);
-        $isWritable = $folder->checkActionPermission('write');
-        $combinedIdentifier = $folder->getCombinedIdentifier();
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
-
-        return [
-            'uid' => $combinedIdentifier,
-            'icon' => $icon->getMarkup(),
-            'name' => $folder->getName(),
-            'modified' => BackendUtility::date($folder->getModificationTime()),
-            'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
-            'type' => $this->languageService->getLL('folder'),
-            //todo detect variants & references
-            'variants' => '-',
-            'references' => '-',
-            'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
-            'clipboardIdentifier' => $clipboardIdentifier,
-        ];
+        return \array_merge(
+            $this->formatResource($folder),
+            [
+                'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
+                'type' => $this->languageService->getLL('folder'),
+            ]
+        );
     }
 
     /**
@@ -110,11 +97,6 @@ class FolderListGenerator
      */
     protected function formatFile(File $file, array $fileReferences = []): array
     {
-        $icon = $this->iconFactory->getIconForResource($file, Icon::SIZE_SMALL);
-        $isWritable = $file->checkActionPermission('write');
-        $combinedIdentifier = $file->getCombinedIdentifier();
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
-
         $thumbnailUrl = null;
         $thumbnailWidth = 190;
 
@@ -127,19 +109,37 @@ class FolderListGenerator
             $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
         }
 
+        return \array_merge(
+            $this->formatResource($file),
+            [
+                'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
+                'type' => \strtoupper($file->getExtension()),
+                'references' => $fileReferences[$file->getUid()] ?? '-',
+                'thumbnailUrl' => $thumbnailUrl,
+                'thumbnailWidth' => $thumbnailWidth,
+            ]
+        );
+    }
+
+    /**
+     * @return array[string]string
+     */
+    protected function formatResource(ResourceInterface $resource): array
+    {
+        $combinedIdentifier = $resource->getCombinedIdentifier();
+        $icon = $this->iconFactory->getIconForResource($resource, Icon::SIZE_SMALL);
+        $isWritable = $resource->checkActionPermission('write');
+        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+
         return [
-            'uid' => $combinedIdentifier,
+            'identifier' => $combinedIdentifier,
             'icon' => $icon->getMarkup(),
-            'name' => $file->getName(),
-            'modified' => BackendUtility::date($file->getModificationTime()),
-            'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
-            'type' => \strtoupper($file->getExtension()),
-            //todo detect variants & references
+            'name' => $resource->getName(),
+            'modified' => BackendUtility::date($resource->getModificationTime()),
+            //todo detect variants
             'variants' => '-',
-            'references' => $fileReferences[$file->getUid()] ?? '-',
+            'references' => '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'thumbnailUrl' => $thumbnailUrl,
-            'thumbnailWidth' => $thumbnailWidth,
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             'clipboardIdentifier' => $clipboardIdentifier,
         ];
@@ -148,53 +148,5 @@ class FolderListGenerator
     protected function buildContextMenuUrl(string $combinedIdentifier): string
     {
         return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
-    }
-
-    /**
-     * todo use own service for getting references
-     *
-     * @return array<string, int>
-     */
-    protected function getFileReferences(Folder $folder): array
-    {
-        if (0 === \count($folder->getFiles())) {
-            return [];
-        }
-
-        $fileUids = \array_map(
-            static function (File $file) {
-                return $file->getUid();
-            },
-            $folder->getFiles()
-        );
-
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_refindex');
-
-        $referenceCount = $queryBuilder->select('ref_uid')
-            ->addSelectLiteral('COUNT(*) AS cnt_ref')
-            ->from('sys_refindex')
-            ->where(
-                $queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)),
-                $queryBuilder->expr()->eq(
-                    'ref_table',
-                    $queryBuilder->createNamedParameter('sys_file', Connection::PARAM_STR)
-                ),
-                $queryBuilder->expr()->in(
-                    'ref_uid',
-                    $queryBuilder->createNamedParameter($fileUids, Connection::PARAM_INT_ARRAY)
-                ),
-                $queryBuilder->expr()->neq(
-                    'tablename',
-                    $queryBuilder->createNamedParameter('sys_file_metadata', Connection::PARAM_STR)
-                )
-            )
-            ->groupBy('ref_uid')
-            ->execute()
-            ->fetchAll();
-
-        return \array_combine(
-            \array_column($referenceCount, 'ref_uid'),
-            \array_column($referenceCount, 'cnt_ref')
-        );
     }
 }

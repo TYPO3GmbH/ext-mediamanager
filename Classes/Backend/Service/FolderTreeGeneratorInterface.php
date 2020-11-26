@@ -14,16 +14,11 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FilelistNg\Backend\Controller;
+namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
-return [
-    'filelist_ng_storage' => [
-        'path' => '/filelist_ng/storage',
-        'access' => 'public',
-        'target' =>  Controller\FilelistController::class . '::storageAction',
-    ],
-    'filelist_ng_download_files' => [
-        'path' => '/filelist_ng/download-files',
-        'target' => Controller\DownloadFilesController::class . '::downloadAction',
-    ],
-];
+use TYPO3\CMS\Core\Resource\ResourceStorage;
+
+interface FolderTreeGeneratorInterface
+{
+    public function getNodes(ResourceStorage $resourceStorage): array;
+}

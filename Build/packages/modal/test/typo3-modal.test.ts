@@ -100,4 +100,17 @@ describe('Typo3Modal', () => {
     const modalDiv = element.shadowRoot!.querySelector('#modal')!;
     expect(modalDiv).not.to.be.null;
   });
+
+  it('will close dismissible modal on `Escape`', async () => {
+    const dismissibleModal = (await fixture(
+      html` <typo3-modal dismissible="true">Modal</typo3-modal> `
+    )) as Typo3Modal;
+
+    const event = new KeyboardEvent('keydown', { key: 'Escape' });
+
+    dismissibleModal.dispatchEvent(event);
+
+    await elementUpdated(dismissibleModal);
+    expect(dismissibleModal.open).to.be.false;
+  });
 });

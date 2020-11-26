@@ -513,7 +513,7 @@
         {
           "name": "rowIdentifier",
           "type": "string",
-          "default": "\"uid\""
+          "default": "\"identifier\""
         }
       ],
       "events": [

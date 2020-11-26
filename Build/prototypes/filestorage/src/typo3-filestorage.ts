@@ -21,6 +21,7 @@ import {
 } from './redux/ducks/view-mode';
 import { RootState } from './redux/ducks';
 import { SetSidebarWidth } from './redux/ducks/layout';
+import * as ListActions from './redux/ducks/list';
 import {
   ClearSelection,
   itemIsSelected,
@@ -28,7 +29,6 @@ import {
   selectionIsEmpty,
   SetSelection,
 } from './redux/ducks/list';
-import * as ListActions from './redux/ducks/list';
 
 import * as TreeActions from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
@@ -37,12 +37,12 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import * as FileActions from './redux/ducks/file-actions';
+import { getDragMode } from './redux/ducks/file-actions';
 import * as GlobalActions from './redux/ducks/global-actions';
+import { isLoading } from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
-import { isLoading } from './redux/ducks/global-actions';
 import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
-import { getDragMode } from './redux/ducks/file-actions';
 import { Typo3MoveFilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
@@ -71,7 +71,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   public static styles = [themeStyles, styles];
 
   protected listHeader = [
-    { name: 'uid', type: 'text', title: ' ', hidden: true },
+    { name: 'identifier', type: 'text', title: ' ', hidden: true },
     { name: 'icon', type: 'html', title: ' ', width: '24' },
     { name: 'name', title: 'Name', sortable: true },
     { name: 'modified', title: 'Modified', width: '150', sortable: true },
@@ -180,7 +180,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar>
               <div slot="left">
-                <typo3-button .disabled="${selectionIsEmpty(this.state.list)}">
+                <typo3-button
+                  @click="${this._onDownload}"
+                  .disabled="${selectionIsEmpty(this.state.list) ||
+                  this.state.fileActions.isDownloadingFiles}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -313,7 +317,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
-          this._onRename(e.detail.data.uid, e.detail.data.name)}"
+          this._onRename(e.detail.data.identifier, e.detail.data.name)}"
       ></typo3-datagrid>`;
     }
 
@@ -322,7 +326,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       [this.state.viewMode.order.field],
       [this.state.viewMode.order.direction]
     );
-    const hash = orderedData.map(item => item.uid).join(',');
+    const hash = orderedData.map(item => item.identifier).join(',');
 
     return html`<typo3-grid
       class="main-content"
@@ -368,15 +372,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     return html` <typo3-card
       slot="item"
-      ?selected="${itemIsSelected(this.state.list)(listData.uid)}"
-      value="${listData.uid}"
+      ?selected="${itemIsSelected(this.state.list)(listData.identifier)}"
+      value="${listData.identifier}"
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
       ?titleEditable="${true}"
       @contextmenu="${contextMenuCallback}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
-        this._onRename(listData.uid, e.detail)}"
+        this._onRename(listData.identifier, e.detail)}"
       >${imageSlot} ${badge}
     </typo3-card>`;
   }
@@ -593,7 +597,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDatagridSelectionChange(event: CustomEvent<ListItem[]>): void {
-    store.dispatch(new SetSelection(event.detail.map(row => row.uid)));
+    store.dispatch(new SetSelection(event.detail.map(row => row.identifier)));
   }
 
   _onCardgridSelectionChange(event: CustomEvent<Typo3Card[]>): void {
@@ -614,15 +618,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onDeleteClicked(): void {
     const action = new FileActions.DeleteFiles(
-      selectedRows(this.state.list).map(data => data.uid),
+      selectedRows(this.state.list).map(data => data.identifier),
       this.fileActionUrl
     ) as Action;
 
     store.dispatch(action);
   }
 
-  _onRename(uid: string, name: string): void {
-    store.dispatch(new FileActions.RenameFile(uid, name, this.fileActionUrl));
+  _onRename(identifier: string, name: string): void {
+    store.dispatch(
+      new FileActions.RenameFile(identifier, name, this.fileActionUrl)
+    );
   }
 
   _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
@@ -672,26 +678,27 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       contextItem.type !== 'Folder'
         ? '_FILE'
         : '_FOLDER';
-    const uid = Object.prototype.hasOwnProperty.call(contextItem, 'identifier')
-      ? contextItem.identifier
-      : contextItem.uid;
+    const identifier = contextItem.identifier;
 
     let storeAction: Action | null = null;
 
     switch (event.detail.option.callbackAction) {
       case 'openInfoPopUp':
-        storeAction = new FileActions.ShowFileInfo(uid, type);
+        storeAction = new FileActions.ShowFileInfo(identifier, type);
         break;
       case 'deleteFile':
-        storeAction = new FileActions.DeleteFiles([uid], this.fileActionUrl);
+        storeAction = new FileActions.DeleteFiles(
+          [identifier],
+          this.fileActionUrl
+        );
         break;
       case 'createFile':
-        this.fileTree.addNode(uid);
+        this.fileTree.addNode(identifier);
         break;
       case 'copyFile':
         storeAction = new FileActions.ClipboardCopyFile(
           contextItem.clipboardIdentifier,
-          uid
+          identifier
         );
         break;
       case 'copyReleaseFile':
@@ -702,7 +709,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'cutFile':
         storeAction = new FileActions.ClipboardCutFile(
           contextItem.clipboardIdentifier,
-          uid
+          identifier
         );
         break;
       case 'cutReleaseFile':
@@ -711,7 +718,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'pasteFileInto':
-        storeAction = new FileActions.ClipboardPaste(uid, this.fileActionUrl);
+        storeAction = new FileActions.ClipboardPaste(
+          identifier,
+          this.fileActionUrl
+        );
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
@@ -734,7 +744,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onTreeNodeDrop(e: CustomEvent<{ event: DragEvent; node: Typo3Node }>): void {
     const identifiers = selectedRows(this.state.list).map(
-      (listItem: ListItem) => listItem.uid
+      (listItem: ListItem) => listItem.identifier
     );
     store.dispatch(new FileActions.DragFilesEnd());
 
@@ -780,16 +790,24 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const action =
       e.detail.mode === 'copy'
         ? new FileActions.CopyFiles(
-            e.detail.files.map(item => item.uid),
+            e.detail.files.map(item => item.identifier),
             e.detail.target,
             this.fileActionUrl
           )
         : new FileActions.MoveFiles(
-            e.detail.files.map(item => item.uid),
+            e.detail.files.map(item => item.identifier),
             e.detail.target,
             this.fileActionUrl
           );
 
+    store.dispatch(action);
+  }
+
+  _onDownload(): void {
+    const identifiers = selectedRows(this.state.list).map(
+      item => item.identifier
+    );
+    const action = new FileActions.DownloadFiles(identifiers);
     store.dispatch(action);
   }
 }

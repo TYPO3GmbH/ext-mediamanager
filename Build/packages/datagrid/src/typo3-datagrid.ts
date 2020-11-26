@@ -35,7 +35,7 @@ export class Typo3Datagrid extends LitElement {
 
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
 
-  @property({ type: String }) rowIdentifier = 'uid';
+  @property({ type: String }) rowIdentifier = 'identifier';
 
   @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
 
@@ -61,6 +61,11 @@ export class Typo3Datagrid extends LitElement {
         editable="${this.editableColumns.length > 0}"
       ></canvas-datagrid>
     `;
+  }
+
+  firstUpdated(): void {
+    this.focus();
+    this.canvasGrid!.focus();
   }
 
   updated(_changedProperties: PropertyValues): void {
@@ -235,7 +240,7 @@ export class Typo3Datagrid extends LitElement {
     }
   }
   _onEndEdit(event: EndEditEvent): void {
-    if (event.abort === true) {
+    if (event.aborted === true) {
       return;
     }
 

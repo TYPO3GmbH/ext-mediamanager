@@ -2,6 +2,10 @@ import { ActionsObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
 import {
+  DownloadFilesFailure,
+  DownloadFilesSuccess,
+} from '../ducks/file-actions';
+import {
   catchError,
   ignoreElements,
   map,
@@ -9,7 +13,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { ajax } from 'rxjs/ajax';
+import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
@@ -36,8 +40,8 @@ export const deleteFiles = (
   return action$.ofType(fromActions.DELETE_FILES).pipe(
     switchMap(action => {
       const formData = new FormData();
-      action.uids.forEach((uid, index) => {
-        formData.append('data[delete][' + index + '][data]', uid);
+      action.identifiers.forEach((identifier, index) => {
+        formData.append('data[delete][' + index + '][data]', identifier);
       });
       return ajax.post(action.fileActionUrl, formData).pipe(
         map(() => new fromActions.DeleteFilesSuccess()),
@@ -53,7 +57,7 @@ export const showFileInfo = (
   return action$.ofType(fromActions.SHOW_FILE_INFO).pipe(
     tap(action => {
       // @ts-ignore
-      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.uid);
+      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.identifier);
     }),
     ignoreElements()
   );
@@ -201,6 +205,54 @@ export const clipboardPaste = (
   );
 };
 
+export const downloadFiles = (
+  action$: ActionsObservable<fromActions.DownloadFiles>
+): Observable<Action> => {
+  return action$.ofType(fromActions.DOWNLOAD_FILES).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      action.identifiers.forEach((identifier, i) => {
+        formData.append('identifiers[' + i + ']', identifier);
+      });
+
+      // @ts-ignore
+      const url: string = window.downloadFilesUrl;
+      return ajax({
+        url: url,
+        method: 'POST',
+        body: formData,
+        responseType: 'arraybuffer',
+      }).pipe(
+        tap(response => {
+          console.log('create file');
+          const file = new Blob([response.response], {
+            type: response.xhr.getResponseHeader('Content-Type') ?? undefined,
+          });
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            // IE
+            window.navigator.msSaveOrOpenBlob(file);
+          } else {
+            const fileURL = URL.createObjectURL(file);
+            window.open(fileURL);
+          }
+        }),
+        map(() => new DownloadFilesSuccess()),
+        catchError((error: AjaxError) => {
+          window.dispatchEvent(
+            new CustomEvent('typo3-add-snackbar', {
+              detail: {
+                message: error.message,
+                variant: 'danger',
+              },
+            })
+          );
+          return of(new DownloadFilesFailure());
+        })
+      );
+    })
+  );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -264,4 +316,5 @@ export const fileActions = [
   uploadFiles,
   moveFiles,
   copyFiles,
+  downloadFiles,
 ];

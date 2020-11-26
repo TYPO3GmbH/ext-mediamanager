@@ -21,19 +21,19 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
 
 class FolderDetailController
 {
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    /** @var FolderListGenerator */
+    /** @var FolderListGeneratorInterface */
     private $folderListGenerator;
 
     public function __construct(
         ResourceFactory $resourceFactory,
-        FolderListGenerator $folderListGenerator
+        FolderListGeneratorInterface $folderListGenerator
     ) {
         $this->resourceFactory = $resourceFactory;
         $this->folderListGenerator = $folderListGenerator;
@@ -41,10 +41,10 @@ class FolderDetailController
 
     public function fetchDataAction(ServerRequestInterface $request): ResponseInterface
     {
-        $combinedIdentifier = $request->getQueryParams()['uid'] ?? null;
+        $combinedIdentifier = $request->getQueryParams()['identifier'] ?? null;
 
         if (null === $combinedIdentifier) {
-            return new HtmlResponse('Parameter "uid" is missing', 400);
+            return new HtmlResponse('Parameter "identifier" is missing', 400);
         }
 
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($combinedIdentifier);

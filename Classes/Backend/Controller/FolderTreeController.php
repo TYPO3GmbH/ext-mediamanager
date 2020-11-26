@@ -21,18 +21,20 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGenerator;
+use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
 
 class FolderTreeController
 {
     /** @var BackendUserProvider */
     private $backendUserProvider;
 
-    /** @var FolderTreeGenerator */
+    /** @var FolderTreeGeneratorInterface */
     private $folderTreeGenerator;
 
-    public function __construct(BackendUserProvider $backendUserProvider, FolderTreeGenerator $folderTreeGenerator)
-    {
+    public function __construct(
+        BackendUserProvider $backendUserProvider,
+        FolderTreeGeneratorInterface $folderTreeGenerator
+    ) {
         $this->backendUserProvider = $backendUserProvider;
         $this->folderTreeGenerator = $folderTreeGenerator;
     }

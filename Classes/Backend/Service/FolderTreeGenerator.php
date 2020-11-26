@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Utility\ListUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class FolderTreeGenerator
+class FolderTreeGenerator implements FolderTreeGeneratorInterface
 {
     /** @var BackendUserProvider */
     private $backendUserProvider;
@@ -68,7 +68,6 @@ class FolderTreeGenerator
             $rootLevelFolder = $rootLevelFolderInfo['folder'];
             $rootLevelFolderName = $rootLevelFolderInfo['name'];
             $combinedIdentifier = $rootLevelFolder->getCombinedIdentifier();
-            $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
             $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
@@ -76,24 +75,17 @@ class FolderTreeGenerator
             if (false === $resourceStorage->isOnline()) {
                 $rootLevelFolderName .= ' (' . $this->languageService->sL('sys_file_storage.isOffline') . ')';
             }
-            // Preparing rootRec for the mount
-            $icon = $this->iconFactory->getIconForResource($rootLevelFolder, Icon::SIZE_SMALL, null, ['mount-root' => true]);
 
-            $items[] = [
-                'stateIdentifier' => $stateIdentifier,
-                'identifier' => $combinedIdentifier,
-                'depth' => $depth,
-                'icon' => $icon->getIdentifier(),
-                'name' => $rootLevelFolderName,
-                'nameSourceField' => 'title',
-                'siblingsCount' => \count($rootLevelFolders) - 1,
-                'siblingsPosition' =>  $i,
-                'hasChildren' => \count($rootLevelFolder->getSubfolders()) > 0,
-                'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
-                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, 'sys_file_storage'),
-                'allowEdit' => $rootLevelFolder->checkActionPermission('rename'),
-                'clipboardIdentifier' => $clipboardIdentifier,
-            ];
+            $items[] = \array_merge(
+                $this->formatFolder($rootLevelFolder, true),
+                [
+                    'name' => $rootLevelFolderName,
+                    'stateIdentifier' => $stateIdentifier,
+                    'depth' => $depth,
+                    'siblingsCount' => \count($rootLevelFolders) - 1,
+                    'siblingsPosition' => $i,
+                ]
+            );
 
             // If the mount is expanded, go down:
             if ($resourceStorage->isBrowsable()) {
@@ -121,33 +113,22 @@ class FolderTreeGenerator
         /** @var Folder $subFolder */
         foreach ($subFolders as $subFolderName => $subFolder) {
             ++$subFolderCounter;
-
-            $isLocked = $subFolder instanceof InaccessibleFolder;
-
             $combinedIdentifier = $subFolder->getCombinedIdentifier();
-            $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
             $specUID = GeneralUtility::md5int($combinedIdentifier);
             $this->specUIDmap[$specUID] = $combinedIdentifier;
-            $icon = $this->iconFactory->getIconForResource($subFolder, Icon::SIZE_SMALL, null);
 
             $folderHashSpecUID = GeneralUtility::md5int($combinedIdentifier);
             $stateIdentifier = $subFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
 
-            $items[] = [
-                'stateIdentifier' => $stateIdentifier,
-                'identifier' => $subFolder->getCombinedIdentifier(),
-                'depth' => $depth,
-                'icon' => $icon->getIdentifier(),
-                'name' => $subFolderName,
-                'nameSourceField' => 'title',
-                'siblingsCount' => \count($subFolders) - 1,
-                'siblingsPosition' => $subFolderCounter + 1,
-                'hasChildren' => \count($subFolder->getSubfolders()) > 0,
-                'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
-                'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
-                'allowEdit' => $subFolder->checkActionPermission('rename'),
-                'clipboardIdentifier' => $clipboardIdentifier,
-            ];
+            $items[] = \array_merge(
+                $this->formatFolder($subFolder),
+                [
+                    'stateIdentifier' => $stateIdentifier,
+                    'depth' => $depth,
+                    'siblingsCount' => \count($subFolders) - 1,
+                    'siblingsPosition' => $subFolderCounter + 1,
+                ]
+            );
 
             if (\count($subFolder->getSubfolders()) > 0) {
                 $childItems = $this->getFolderTree($subFolder, $depth + 1);
@@ -155,6 +136,35 @@ class FolderTreeGenerator
             }
         }
         return $items;
+    }
+
+    /**
+     * @return array[string]string
+     */
+    protected function formatFolder(Folder $folder, bool $isStorage = false): array
+    {
+        $combinedIdentifier = $folder->getCombinedIdentifier();
+
+        $icon = $this->iconFactory->getIconForResource(
+            $folder,
+            Icon::SIZE_SMALL,
+            null,
+            $isStorage ? ['mount-root' => true] : []
+        );
+
+        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+
+        return [
+            'identifier' => $combinedIdentifier,
+            'icon' => $icon->getIdentifier(),
+            'name' => $folder->getName(),
+            'nameSourceField' => 'title',
+            'hasChildren' => \count($folder->getSubfolders()) > 0,
+            'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
+            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, $isStorage ? 'sys_file_storage' : 'sys_file'),
+            'allowEdit' => $folder->checkActionPermission('rename'),
+            'clipboardIdentifier' => $clipboardIdentifier,
+        ];
     }
 
     private function getRootLevelFolders(ResourceStorage $resourceStorage): array
@@ -181,7 +191,7 @@ class FolderTreeGenerator
 
     protected function buildFolderUrl(string $combinedIdentifier): string
     {
-        return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['uid' => $combinedIdentifier]);
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_folder_fetchData', ['identifier' => $combinedIdentifier]);
     }
 
     protected function buildContextMenuUrl(string $combinedIdentifier, string $type = 'sys_file'): string

@@ -85,6 +85,7 @@ export class Typo3Card extends LitElement {
   _onKeyDown(event: KeyboardEvent): void {
     if (['Enter', 'Tab', 'Escape'].indexOf(event.key) !== -1) {
       this._onBlur(event.key === 'Escape');
+      event.stopPropagation();
     }
   }
 }

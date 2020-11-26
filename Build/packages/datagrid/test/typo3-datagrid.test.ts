@@ -39,14 +39,14 @@ describe('Typo3Datagrid', () => {
 
   it('will fire a `typo3-datagrid-value-change` on end edit', async () => {
     const event: EndEditEvent | {} = {
-      abort: false,
+      aborted: false,
       value: 'New value',
       cell: {
         header: {
           name: 'fieldA',
         },
         value: 'OldValue',
-        data: { uid: 1 },
+        data: { identifier: 1 },
       },
     };
 
@@ -56,7 +56,7 @@ describe('Typo3Datagrid', () => {
 
     const { detail } = await listener;
     expect(detail.value).to.be.eq('New value');
-    expect(detail.data).to.be.eql({ uid: 1 });
+    expect(detail.data).to.be.eql({ identifier: 1 });
     expect(detail.field).to.be.eq('fieldA');
   });
 
@@ -68,14 +68,14 @@ describe('Typo3Datagrid', () => {
     });
 
     const event: EndEditEvent | {} = {
-      abort: false,
+      aborted: false,
       value: 'Old value',
       cell: {
         header: {
           name: 'fieldA',
         },
         value: 'Old value',
-        data: { uid: 1 },
+        data: { identifier: 1 },
       },
     };
 
@@ -93,14 +93,14 @@ describe('Typo3Datagrid', () => {
     });
 
     const event: EndEditEvent | {} = {
-      abort: true,
+      aborted: true,
       value: 'New value',
       cell: {
         header: {
           name: 'fieldA',
         },
         value: 'Old value',
-        data: { uid: 1 },
+        data: { identifier: 1 },
       },
     };
 
@@ -117,7 +117,7 @@ describe('Typo3Datagrid', () => {
       NativeEvent: nativeEvent,
       cell: {
         isHeader: false,
-        data: { uid: 1 },
+        data: { identifier: 1 },
       },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       preventDefault: () => {},
@@ -129,7 +129,7 @@ describe('Typo3Datagrid', () => {
 
     const { detail } = await listener;
     expect(detail.event).to.be.eq(nativeEvent);
-    expect(detail.node).to.be.eql({ uid: 1 });
+    expect(detail.node).to.be.eql({ identifier: 1 });
   });
 
   it('wont fire a `typo3-datagrid-contextmenu` on contextMenu on header cell', async () => {
@@ -145,7 +145,7 @@ describe('Typo3Datagrid', () => {
       NativeEvent: nativeEvent,
       cell: {
         isHeader: true,
-        data: { uid: 1 },
+        data: { identifier: 1 },
       },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       preventDefault: () => {},
