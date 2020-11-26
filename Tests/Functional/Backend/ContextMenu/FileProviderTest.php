@@ -28,9 +28,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FileProviderTest extends FunctionalTestCase
 {
-    /** @var FileProvider */
-    private $subject;
-
     protected $testExtensionsToLoad = [
         'typo3conf/ext/cms_filelist_ng',
     ];
@@ -49,7 +46,6 @@ class FileProviderTest extends FunctionalTestCase
 
         $this->setUpBackendUserFromFixture(1);
 
-        $this->subject = new FileProvider('sys_file', '1:/fileA.jpg', 'tree');
         $this->resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $this->clipboardMock = $this->createMock(Clipboard::class);
 
@@ -62,7 +58,9 @@ class FileProviderTest extends FunctionalTestCase
      */
     public function it_can_handle_files(): void
     {
-        $this->assertTrue($this->subject->canHandle());
+        $subject = new FileProvider('sys_file', '1:/fileA.jpg', 'tree');
+
+        $this->assertTrue($subject->canHandle());
     }
 
     /**
@@ -79,12 +77,14 @@ class FileProviderTest extends FunctionalTestCase
      *
      * @dataProvider provideData
      */
-    public function it_returns_correct_options(array $expectedItemsKeys, ResourceInterface $resource): void
+    public function it_returns_correct_options(array $expectedItemsKeys, ResourceInterface $resource, string $context = 'list'): void
     {
+        $subject =  new FileProvider('sys_file', '1:/fileA.jpg', $context);
+
         $this->resourceFactoryMock->method('retrieveFileOrFolderObject')
             ->willReturn($resource);
 
-        $itemKeys = \array_keys($this->subject->addItems([]));
+        $itemKeys = \array_keys($subject->addItems([]));
 
         $this->assertEquals($expectedItemsKeys, $itemKeys);
     }
@@ -123,8 +123,14 @@ class FileProviderTest extends FunctionalTestCase
             ->willReturn(true);
 
         yield 'Writable folder' => [
+            ['divider', 'copy', 'cut', 'divider2', 'delete'],
+            $writableFolder,
+        ];
+
+        yield 'Writable folder (tree context)' => [
             ['new', 'divider', 'copy', 'cut', 'divider2', 'delete'],
             $writableFolder,
+            'tree',
         ];
     }
 }
