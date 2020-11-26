@@ -196,6 +196,6 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
 
     protected function buildContextMenuUrl(string $combinedIdentifier, string $type = 'sys_file'): string
     {
-        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => $type, 'uid' => $combinedIdentifier]);
+        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => $type, 'uid' => $combinedIdentifier, 'context' => 'tree']);
     }
 }

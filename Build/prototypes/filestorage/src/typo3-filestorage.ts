@@ -120,7 +120,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <div class="topbar-wrapper">
             <typo3-topbar>
               <div slot="left">
-                <typo3-button>
+                <typo3-button
+                  .disabled="${this.state.tree.selected == null}"
+                  @click="${() =>
+                    this.fileTree.addNode(
+                      this.state.tree.selected!.identifier
+                    )}"
+                >
                   <svg
                     slot="icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -323,8 +329,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const orderedData = orderBy(
       this.state.list.items,
-      [this.state.viewMode.order.field],
-      [this.state.viewMode.order.direction]
+      ['type', this.state.viewMode.order.field],
+      ['asc', this.state.viewMode.order.direction]
     );
     const hash = orderedData.map(item => item.identifier).join(',');
 
