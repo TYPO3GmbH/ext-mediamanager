@@ -22,4 +22,8 @@ return [
         'access' => 'public',
         'target' =>  Controller\FilelistController::class . '::storageAction',
     ],
+    'filelist_ng_download_files' => [
+        'path' => '/filelist_ng/download-files',
+        'target' => Controller\DownloadFilesController::class . '::downloadAction',
+    ],
 ];

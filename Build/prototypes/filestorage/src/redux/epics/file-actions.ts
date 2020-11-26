@@ -9,7 +9,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { ajax } from 'rxjs/ajax';
+import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
@@ -213,8 +213,35 @@ export const downloadFiles = (
 
       // @ts-ignore
       const url: string = window.downloadFilesUrl;
-      return ajax.post(url, formData).pipe(
-        tap(result => result),
+      return ajax({
+        url: url,
+        method: 'POST',
+        body: formData,
+        responseType: 'arraybuffer',
+      }).pipe(
+        tap(response => {
+          const file = new Blob([response.response], {
+            type: response.xhr.getResponseHeader('Content-Type'),
+          });
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            // IE
+            window.navigator.msSaveOrOpenBlob(file);
+          } else {
+            const fileURL = URL.createObjectURL(file);
+            window.open(fileURL);
+          }
+        }),
+        catchError((error: AjaxError) => {
+          window.dispatchEvent(
+            new CustomEvent('typo3-add-snackbar', {
+              detail: {
+                message: error.message,
+                variant: 'danger',
+              },
+            })
+          );
+          return EMPTY;
+        }),
         ignoreElements()
       );
     })

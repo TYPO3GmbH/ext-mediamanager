@@ -19,18 +19,26 @@ namespace TYPO3\CMS\FilelistNg\Backend\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
 
 class DownloadFilesController
 {
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    public function __construct(ResourceFactory $resourceFactory)
-    {
+    /** @var ArchiveGeneratorInterface */
+    private $archiveGenerator;
+
+    public function __construct(
+        ResourceFactory $resourceFactory,
+        ArchiveGeneratorInterface $archiveGenerator
+    ) {
         $this->resourceFactory = $resourceFactory;
+        $this->archiveGenerator = $archiveGenerator;
     }
 
     public function downloadAction(ServerRequestInterface $request): ResponseInterface
@@ -49,8 +57,31 @@ class DownloadFilesController
             $fileOrFolderObject = $this->resourceFactory->retrieveFileOrFolderObject($identifier);
 
             if ($fileOrFolderObject instanceof File) {
-                return new JsonResponse(['url' => $fileOrFolderObject->getPublicUrl()]);
+                if (false === $fileOrFolderObject->checkActionPermission('read')) {
+                    return new HtmlResponse('Missing read permissions  for ' . $fileOrFolderObject->getName(), 403);
+                }
+                return new RedirectResponse($fileOrFolderObject->getPublicUrl(true));
             }
+        }
+
+        $resources = \array_map(function (string $identifier) {
+            return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
+        }, $identifiers);
+
+        try {
+            $archiveFilePath = $this->archiveGenerator->generateArchive($resources);
+            $stream = @\fopen($archiveFilePath, 'rb');
+
+            return new Response(
+                $stream,
+                200,
+                [
+                    'Content-Type' => 'application/zip',
+                    'Content-Disposition' => 'attachment;filename="' . 'download.zip' . '"',
+                ]
+            );
+        } catch (\Throwable $e) {
+            return new HtmlResponse('An error occurred while downloading files ' . $e->getMessage(), 500);
         }
     }
 }
