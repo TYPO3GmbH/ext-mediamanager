@@ -49,7 +49,7 @@ class FileProviderTest extends FunctionalTestCase
 
         $this->setUpBackendUserFromFixture(1);
 
-        $this->subject = new FileProvider('sys_file', '1:/fileA.jpg', 'ab');
+        $this->subject = new FileProvider('sys_file', '1:/fileA.jpg', 'tree');
         $this->resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $this->clipboardMock = $this->createMock(Clipboard::class);
 
@@ -70,7 +70,7 @@ class FileProviderTest extends FunctionalTestCase
      */
     public function it_wont_handle_something_other_than_files(): void
     {
-        $subject =  new FileProvider('something_different', '1:/fileA.jpg', 'ab');
+        $subject =  new FileProvider('something_different', '1:/fileA.jpg', 'tree');
         $this->assertFalse($subject->canHandle());
     }
 

@@ -150,7 +150,7 @@ class FileProvider extends AbstractProvider
 
     protected function canCreateNew(): bool
     {
-        return $this->isFolder() && $this->record->checkActionPermission('write');
+        return $this->isFolder() && $this->record->checkActionPermission('write') && 'tree' === $this->context;
     }
 
     protected function canBeCopied(): bool
