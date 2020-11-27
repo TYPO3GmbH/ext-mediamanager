@@ -14,6 +14,7 @@ import { D3DragEvent, DragBehavior } from 'd3';
 import { Selection } from 'd3-selection';
 import { styleMap } from 'lit-html/directives/style-map';
 import { classMap } from 'lit-html/directives/class-map';
+import { PropertyValues } from 'lit-element/lib/updating-element';
 
 interface DragData {
   startPageX: number;
@@ -30,12 +31,12 @@ interface DragData {
 @customElement('typo3-filetree')
 export class Typo3Filetree extends Typo3SvgTree {
   @property({ type: Boolean }) editable = false;
+  @property({ type: Boolean }) dragDropEnabled: boolean = false;
 
   @query('.node-dd') dragHandler!: HTMLEmbedElement;
 
   @internalProperty() isDragging = false;
-
-  private dragDropEnabled: boolean = true;
+  @internalProperty() allowDrop = false;
 
   protected clicks = 0;
   protected nodeIsEdit = false;
@@ -63,16 +64,28 @@ export class Typo3Filetree extends Typo3SvgTree {
     };
   }
 
+  updated(_changedProperties: PropertyValues): void {
+    super.updated(_changedProperties);
+    if (_changedProperties.has('allowDrop')) {
+      this.container.classed(
+        'nodes-wrapper--nodrop',
+        this.isDragging && !this.allowDrop
+      );
+    }
+  }
+
   render(): TemplateResult[] {
     return [super.render(), this.renderDragHandler()];
   }
+
   renderDragHandler(): TemplateResult {
     const draggedNode = this.draggedNode as Typo3Node;
     return html`
       <div
         class=${classMap({
           'node-dd': true,
-          'node-dd--nodrop': true,
+          'node-dd--nodrop': !this.allowDrop,
+          'node-dd--ok-append': this.allowDrop,
         })}
         style=${styleMap({
           display: this.isDragging ? 'block' : 'none',
@@ -423,11 +436,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     this.dragHandler.style.left = left + 'px';
     this.dragHandler.style.top = top + 'px';
 
-    // global update ...
-    this.container.classed(
-      'nodes-wrapper--nodrop',
-      node.isOver || !this.isOverSvg
-    );
+    this.allowDrop = !node.isOver && this.isOverSvg;
   }
 
   dragEnd(event: D3DragEvent<any, any, any>, node: Typo3Node): boolean {
@@ -446,13 +455,14 @@ export class Typo3Filetree extends Typo3SvgTree {
     node._isDragged = false;
     this.inDropMode = false;
 
-    this.container.classed('nodes-wrapper--nodrop', false);
-
     if (node.isOver) {
       return false;
     }
 
-    const target = this.processedNodes.find(node => node.isOver);
+    const target = this._getHoveredNode();
+    if (!target) {
+      return false;
+    }
 
     this.dispatchEvent(
       new CustomEvent('typo3-node-move', {

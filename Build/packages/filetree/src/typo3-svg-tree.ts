@@ -580,7 +580,6 @@ export class Typo3SvgTree extends LitElement {
       .attr('visibility', this._getToggleVisibility)
       .attr('transform', 'translate(-8, -8)')
       .on('click', (_, node: Typo3Node) => {
-        console.log('click');
         this._chevronClick(node);
       });
 
@@ -1118,5 +1117,9 @@ export class Typo3SvgTree extends LitElement {
         },
       })
     );
+  }
+
+  _getHoveredNode(): Typo3Node | null {
+    return this.processedNodes.find(node => node.isOver) ?? null;
   }
 }

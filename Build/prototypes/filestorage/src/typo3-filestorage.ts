@@ -166,6 +166,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
             ?editable="${true}"
+            ?dragDropEnabled="${true}"
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
             @typo3-node-drop="${this._onTreeNodeDrop}"
             @typo3-node-select="${this._onSelectedNode}"
