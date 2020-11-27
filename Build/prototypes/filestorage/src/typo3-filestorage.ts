@@ -172,6 +172,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"
             @typo3-node-collapse="${this._onNodeCollapse}"
+            @typo3-node-move="${this._onTreeNodeMove}"
             @typo3-node-rename="${(e: CustomEvent) =>
               this._onRename(e.detail.node.identifier, e.detail.name)}"
             @typo3-node-add="${(e: CustomEvent) =>
@@ -815,6 +816,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       item => item.identifier
     );
     const action = new FileActions.DownloadFiles(identifiers);
+    store.dispatch(action);
+  }
+
+  _onTreeNodeMove(
+    event: CustomEvent<{ event: DragEvent; node: Typo3Node; target: Typo3Node }>
+  ): void {
+    const action = new FileActions.MoveFiles(
+      [event.detail.node.identifier],
+      event.detail.target,
+      this.fileActionUrl
+    );
     store.dispatch(action);
   }
 }

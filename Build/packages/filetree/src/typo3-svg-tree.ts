@@ -69,7 +69,6 @@ export class Typo3SvgTree extends LitElement {
     width: 300,
     duration: 400,
     dataUrl: '',
-    nodeOver: {} as Typo3Node,
     validation: {
       maxItems: Number.MAX_VALUE,
     },
@@ -116,8 +115,12 @@ export class Typo3SvgTree extends LitElement {
       .append('svg')
       .attr('version', '1.1')
       .attr('width', '100%')
-      .on('mouseover', () => (this.isOverSvg = true))
-      .on('mouseover', () => (this.isOverSvg = false));
+      .on('mouseover', () => {
+        this.isOverSvg = true;
+      })
+      .on('mouseout', () => {
+        this.isOverSvg = false;
+      });
     // todo add handleKeyboardInteraction
 
     this.container = this.svg
@@ -478,7 +481,6 @@ export class Typo3SvgTree extends LitElement {
         '.nodes-bg .node-bg[data-state-id="' + node.stateIdentifier + '"]'
       );
       node.isOver = true;
-      this.settings.nodeOver.node = node;
 
       if (elementNodeBg.size()) {
         elementNodeBg
@@ -494,8 +496,6 @@ export class Typo3SvgTree extends LitElement {
       );
 
       node.isOver = false;
-      this.settings.nodeOver.node = false;
-
       if (elementNodeBg.size()) {
         elementNodeBg
           .classed('node-over node-alert', false)
@@ -580,6 +580,7 @@ export class Typo3SvgTree extends LitElement {
       .attr('visibility', this._getToggleVisibility)
       .attr('transform', 'translate(-8, -8)')
       .on('click', (_, node: Typo3Node) => {
+        console.log('click');
         this._chevronClick(node);
       });
 
