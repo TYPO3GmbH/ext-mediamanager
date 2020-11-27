@@ -163,10 +163,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
           </div>
           <typo3-filetree
-            ?inDropMode="${this.state.fileActions.isDraggingFiles}"
-            @typo3-node-drop="${this._onTreeNodeDrop}"
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
+            ?editable="${true}"
+            ?inDropMode="${this.state.fileActions.isDraggingFiles}"
+            @typo3-node-drop="${this._onTreeNodeDrop}"
             @typo3-node-select="${this._onSelectedNode}"
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"

@@ -1106,6 +1106,18 @@
           "attribute": "expandedNodeIds",
           "type": "Array",
           "default": "[]"
+        },
+        {
+          "name": "editable",
+          "attribute": "editable",
+          "type": "Boolean",
+          "default": "false"
+        },
+        {
+          "name": "inDropMode",
+          "attribute": "inDropMode",
+          "type": "Boolean",
+          "default": "false"
         }
       ],
       "events": [

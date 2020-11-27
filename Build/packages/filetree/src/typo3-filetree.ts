@@ -1,4 +1,4 @@
-import { customElement } from 'lit-element';
+import { customElement, property } from 'lit-element';
 
 import { Typo3SvgTree } from './typo3-svg-tree';
 import { Typo3Node } from './lib/typo3-node';
@@ -12,6 +12,8 @@ import { Selection } from 'd3-selection';
  */
 @customElement('typo3-filetree')
 export class Typo3Filetree extends Typo3SvgTree {
+  @property({ type: Boolean }) editable = false;
+
   protected clicks = 0;
   protected nodeIsEdit = false;
 
@@ -118,7 +120,6 @@ export class Typo3Filetree extends Typo3SvgTree {
         if (code === 13 || code === 9) {
           //enter || tab
           const newName = this.value.trim();
-
           if (newName.length) {
             self.nodeIsEdit = false;
             self._removeEditedText();
@@ -184,7 +185,7 @@ export class Typo3Filetree extends Typo3SvgTree {
   _editNodeLabel(node: Typo3Node): void {
     const self = this;
 
-    if (!node.allowEdit) {
+    if (!node.allowEdit || !self.editable) {
       return;
     }
     const parentNode = this.svg.node()?.parentNode as SVGSVGElement;
