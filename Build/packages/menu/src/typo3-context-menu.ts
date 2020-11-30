@@ -10,6 +10,8 @@ import { Typo3Menu } from './typo3-menu';
 import './typo3-menu-item';
 import { html } from 'lit-html';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import themeStyles from '../../../theme/index.pcss';
+import styles from './typo3-context-menu.pcss';
 
 interface OpenContextMenuDetail {
   options: { [key: string]: Typo3ContextMenuOption };
@@ -28,6 +30,8 @@ export class Typo3ContextMenu extends LitElement {
   currentContextMenuDetail: null | OpenContextMenuDetail = null;
 
   @query('typo3-menu') typo3Menu!: Typo3Menu;
+
+  public static styles = [themeStyles, styles];
 
   connectedCallback() {
     super.connectedCallback();
