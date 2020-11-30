@@ -80,7 +80,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
 
             if (false === $resourceStorage->isOnline()) {
-                $rootLevelFolderName .= ' (' . $this->languageService->sL('sys_file_storage.isOffline') . ')';
+                $rootLevelFolderName .= ' (' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_file.xlf:sys_file_storage.isOffline') . ')';
             }
 
             $items[] = \array_merge(
