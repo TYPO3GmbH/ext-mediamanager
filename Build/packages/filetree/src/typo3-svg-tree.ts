@@ -424,10 +424,9 @@ export class Typo3SvgTree extends LitElement {
 
       nodes
         .select('use.node-icon-overlay')
-        .attr('xlink:href', this._getIconOverlayId);
-      nodes.select('use.node-icon-locked').attr('xlink:href', node => {
-        return '#icon-' + (node.locked ? 'warning-in-use' : '');
-      });
+        .attr('xlink:href', this._getIconOverlayId)
+        .attr('width', '11px')
+        .attr('height', '11px');
     }
     // dispatch event
     this.dispatch.call('updateNodes', this, nodes);
@@ -610,6 +609,7 @@ export class Typo3SvgTree extends LitElement {
       nodeContainer
         .append('use')
         .attr('transform', 'translate(8, -3)')
+        .attr('x', 5)
         .attr('class', 'node-icon-overlay');
 
       nodeContainer
@@ -848,7 +848,7 @@ export class Typo3SvgTree extends LitElement {
    * Returns icon's href attribute value
    */
   _getIconOverlayId(node: Typo3Node): string {
-    return '#icon-' + node.overlayIcon;
+    return node.overlayIcon;
   }
 
   /**
