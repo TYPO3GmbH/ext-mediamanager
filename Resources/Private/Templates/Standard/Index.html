@@ -3,24 +3,31 @@
     body {
         margin: 0;
     }
+    svg{
+        fill: currentColor;
+        height: 100%;
+        width: 100%;
+    }
 </style>
 
-<div style="height: 100vh;padding: 1rem;background-color:white;">
-
+<div style="height: 100%;padding: 1rem;background-color:white;">
     <typo3-alert color="info">Select as storage to start browsing your assets</typo3-alert>
 
     <typo3-grid>
         <f:for each="{storages}" as="storage">
-            <a href="{storage.storageUrl}"  slot="item">
+            <a href="{storage.storageUrl}" slot="item">
                 <typo3-card
                     title="{storage.name}"
                     href="{storage.storageUrl}"
                 >
-                    <f:format.raw>{storage.icon}</f:format.raw>
+                    <div slot="image">
+                        <f:format.raw>{storage.icon}</f:format.raw>
+                    </div>
                 </typo3-card>
             </a>
         </f:for>
     </typo3-grid>
 </div>
+
 
 
