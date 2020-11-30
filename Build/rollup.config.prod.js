@@ -5,7 +5,6 @@ import postcssNano from 'cssnano';
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
-import copy from 'rollup-plugin-copy';
 
 import merge from 'deepmerge';
 // use createSpaConfig for bundling a Single Page App
@@ -31,9 +30,6 @@ const baseConfig = createBasicConfig({
 });
 
 const plugins = [
-  copy({
-    targets: [{ src: 'node_modules/@typo3/icons/dist/sprites/*', dest:  '../Resources/Public/Sprites' }],
-  }),
   minifyHTML(),
   postcss({
     plugins: [postcssImport, postcssNano],
