@@ -110,22 +110,16 @@ export class Typo3Datagrid extends LitElement {
           e.cell.value,
           'text/html'
         );
-        const imageElement = domElement.querySelector(
-          'img'
-        ) as HTMLImageElement;
-        const src = imageElement.src;
+
+        const src = domElement.querySelector('use').href.baseVal;
+        console.log(src);
 
         const image = new Image();
         this.imageBuffer[e.cell.value] = image;
         image.src = src;
-        if (imageElement.width > 0) {
-          image.setAttribute('targetWidth', '' + imageElement.width);
-        }
-        if (imageElement.height > 0) {
-          image.setAttribute('targetHeight', '' + imageElement.height);
-        }
 
-        image.onload = () => {
+        image.onload = e => {
+          console.log(e);
           this.canvasGrid.draw();
         };
         return;
@@ -143,6 +137,8 @@ export class Typo3Datagrid extends LitElement {
 
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
+
+        console.log('drawImage', image);
 
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }

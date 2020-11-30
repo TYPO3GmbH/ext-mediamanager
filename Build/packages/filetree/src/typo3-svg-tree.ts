@@ -173,16 +173,6 @@ export class Typo3SvgTree extends LitElement {
         </div>
         <div class="svg-tree-loader"></div>
       </div>
-
-      <svg style="display: none">
-        <defs>
-          <g class="icon-def" id="icon-apps-filetree-mount" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="#AAA" d="M0 4h16v5H0V4zM16 12v2H0v-2h16z"/><path fill="#59F" d="M12 11v4H4v-4h2V9h4v2h2z"/><path fill="#666" d="M1 7h10v1H1V7zM1 5h10v1H1V5z"/><path fill="#AAA" d="M2.6 1h10.8L16 4H0l2.6-3z"/><path fill="#EFEFEF" d="M3.15 2h9.6l1.75 2H1.4l1.75-2z"/><path opacity=".3" d="M6 9h4v1H6V9z"/><path fill="#CD201F" d="M13 7h2v1h-2V7z"/><path fill="#59F" d="M13 5h2v1h-2V5z"/></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-default" ><g><path fill="#FFC857" d="M16 4v10H0V2h7l1.33 2H16z"/><path fill="#E8A33D" d="M16 5H8.33L7 7H0V4h16v1z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-opened" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#E8A33D" d="M0 2v12h12.69V3.81H5.08L3.95 2H0z"/><path fill="#FFC857" d="M8.26 6.08L6.55 7.4H2.53L0 14h12.96L16 6.08H8.26z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-opened" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#E8A33D" d="M0 2v12h12.69V3.81H5.08L3.95 2H0z"/><path fill="#FFC857" d="M8.26 6.08L6.55 7.4H2.53L0 14h12.96L16 6.08H8.26z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-temp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#AAA" d="M16 4v10H0V2h7l1.3 2H16z"/><path opacity=".43" d="M16 5H8.3L7 7H0V4h16v1z"/></g></svg>
-        </defs>
-      </svg>
     `;
   }
 
@@ -426,7 +416,12 @@ export class Typo3SvgTree extends LitElement {
       .attr('visibility', node => this._getToggleVisibility(node));
 
     if (this.settings.showIcons) {
-      nodes.select('use.node-icon').attr('xlink:href', this._getIconId);
+      nodes
+        .select('use.node-icon')
+        .attr('xlink:href', this._getIconId)
+        .attr('width', '16px')
+        .attr('height', '16px');
+
       nodes
         .select('use.node-icon-overlay')
         .attr('xlink:href', this._getIconOverlayId);
@@ -846,7 +841,7 @@ export class Typo3SvgTree extends LitElement {
    * Returns icon's href attribute value
    */
   _getIconId(node: Typo3Node): string {
-    return '#icon-' + node.icon;
+    return node.icon;
   }
 
   /**

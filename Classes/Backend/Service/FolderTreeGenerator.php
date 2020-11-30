@@ -19,12 +19,14 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\InaccessibleFolder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Utility\ListUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 class FolderTreeGenerator implements FolderTreeGeneratorInterface
 {
@@ -46,16 +48,21 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
     /** @var UriBuilder */
     private $uriBuilder;
 
+    /** @var IconRegistry */
+    private $iconRegistry;
+
     public function __construct(
         BackendUserProvider $backendUserProvider,
         LanguageServiceProvider $languageServiceProvider,
         IconFactory $iconFactory,
-        UriBuilder $uriBuilder
+        UriBuilder $uriBuilder,
+        IconRegistry $iconRegistry
     ) {
         $this->backendUserProvider = $backendUserProvider;
         $this->iconFactory = $iconFactory;
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->uriBuilder = $uriBuilder;
+        $this->iconRegistry = $iconRegistry;
     }
 
     public function getNodes(ResourceStorage $resourceStorage): array
@@ -152,11 +159,17 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             $isStorage ? ['mount-root' => true] : []
         );
 
+        $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($icon->getIdentifier());
+        $iconSource = $iconConfiguration['options']['sprite'];
+        if (strpos($iconSource, 'EXT:') === 0 || strpos($iconSource, '/') !== 0) {
+            $iconSource = GeneralUtility::getFileAbsFileName($iconSource);
+        }
+
         $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
 
         return [
             'identifier' => $combinedIdentifier,
-            'icon' => $icon->getIdentifier(),
+            'icon' => PathUtility::getAbsoluteWebPath($iconSource),
             'name' => $folder->getName(),
             'nameSourceField' => 'title',
             'hasChildren' => \count($folder->getSubfolders()) > 0,

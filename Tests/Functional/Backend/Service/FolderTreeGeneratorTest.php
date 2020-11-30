@@ -20,6 +20,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
@@ -62,7 +63,8 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
             new BackendUserProvider(),
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
-            GeneralUtility::makeInstance(UriBuilder::class)
+            GeneralUtility::makeInstance(UriBuilder::class),
+            GeneralUtility::makeInstance(IconRegistry::class)
         );
     }
 
@@ -123,7 +125,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getIdentifier')
-            ->willReturn('icon');
+            ->willReturn('apps-filetree-mount');
 
         $this->iconFactoryMock->method('getIconForResource')
             ->with($rootFolder)
@@ -136,7 +138,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'stateIdentifier' => '_157208700',
                 'identifier' => '1:/test-folder',
                 'depth' => 0,
-                'icon' => 'icon',
+                'icon' => 'typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/apps.svg#apps-filetree-mount',
                 'name' => 'TestFolder',
                 'nameSourceField' => 'title',
                 'siblingsCount' => 0,
@@ -151,7 +153,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'stateIdentifier' => '_230043429',
                 'identifier' => '1:/test-folder-sub',
                 'depth' => 1,
-                'icon' => 'icon',
+                'icon' => 'typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/apps.svg#apps-filetree-mount',
                 'name' => 'Subfolder',
                 'nameSourceField' => 'title',
                 'siblingsCount' => 0,
