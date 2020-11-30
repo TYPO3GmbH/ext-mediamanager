@@ -7,6 +7,6 @@
 composer.lock
 etc/testing-docker/.env
 var
-/Resources/Public/JavaScript/es.js
-/Resources/Public/JavaScript/es.js.map
+/Resources/Public/JavaScript/
+/Resources/Public/Sprites/
 /public/

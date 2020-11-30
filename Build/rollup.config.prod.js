@@ -5,12 +5,13 @@ import postcssNano from 'cssnano';
 import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
+import copy from 'rollup-plugin-copy';
 
 import merge from 'deepmerge';
 // use createSpaConfig for bundling a Single Page App
 //import {createSpaConfig} from '@open-wc/building-rollup';
 // use createBasicConfig to do regular JS to JS bundling
-import { createBasicConfig } from '@open-wc/building-rollup';
+import {createBasicConfig} from '@open-wc/building-rollup';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import commonjs from 'rollup-plugin-commonjs';
 
@@ -30,6 +31,9 @@ const baseConfig = createBasicConfig({
 });
 
 const plugins = [
+  copy({
+    targets: [{ src: 'node_modules/@typo3/icons/dist/sprites/*', dest:  '../Resources/Public/Sprites' }],
+  }),
   minifyHTML(),
   postcss({
     plugins: [postcssImport, postcssNano],
@@ -42,7 +46,7 @@ const plugins = [
   }),
   injectProcessEnv({
     NODE_ENV: 'development',
-  }),
+  })
 ];
 
 baseConfig.plugins.unshift(...plugins);
