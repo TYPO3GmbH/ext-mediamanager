@@ -5,11 +5,16 @@
   "license": "GPL-3.0-or-later",
   "require": {
     "php": ">=7.2 <7.5",
-    "typo3/cms-core": "^10.4.0",
+    "typo3/cms-core": "dev-master as 11.0.0@dev",
     "ext-zip": "*"
   },
   "require-dev": {
-    "typo3/testing-framework": "^6.4.0",
+    "typo3/testing-framework": "dev-master",
+    "typo3/cms-backend": "dev-master as 11.0.0@dev",
+    "typo3/cms-frontend": "dev-master as 11.0.0@dev",
+    "typo3/cms-extbase": "dev-master as 11.0.0@dev",
+    "typo3/cms-fluid": "dev-master as 11.0.0@dev",
+    "typo3/cms-recordlist": "dev-master as 11.0.0@dev",
     "roave/security-advisories": "dev-master",
     "symplify/easy-coding-standard": "^8.3",
     "slevomat/coding-standard": "^6.4",
