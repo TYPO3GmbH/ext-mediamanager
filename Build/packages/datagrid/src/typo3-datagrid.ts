@@ -103,7 +103,7 @@ export class Typo3Datagrid extends LitElement {
       e.cell.type === 'html' &&
       e.cell.value &&
       e.cell.rowIndex > -1 &&
-      /img/.test(e.cell.value)
+      /use/.test(e.cell.value)
     ) {
       if (!this.imageBuffer[e.cell.value]) {
         const domElement = new DOMParser().parseFromString(
@@ -111,35 +111,50 @@ export class Typo3Datagrid extends LitElement {
           'text/html'
         );
 
-        const src = domElement.querySelector('use').href.baseVal;
-        console.log(src);
+        const useElement = domElement.querySelector('use') as SVGUseElement;
 
-        const image = new Image();
-        this.imageBuffer[e.cell.value] = image;
-        image.src = src;
+        if (!useElement) {
+          return;
+        }
 
-        image.onload = e => {
-          console.log(e);
-          this.canvasGrid.draw();
-        };
+        const src = useElement.href.baseVal;
+        const id = src.replace(/.*#/, '');
+        const img = new Image();
+
+        this.imageBuffer[e.cell.value] = img;
+
+        fetch(src)
+          .then(r => r.text())
+          .then(markup =>
+            new DOMParser().parseFromString(markup, 'image/svg+xml')
+          )
+          .then(doc => {
+            const node = doc.getElementById(id) as HTMLElement;
+            const xml = new XMLSerializer().serializeToString(node);
+            const svgURL = xml
+              .replace('symbol', 'svg')
+              .replace('symbol', 'svg');
+
+            const svg = new Blob([svgURL], {
+              type: 'image/svg+xml;charset=utf-8',
+            });
+            const domURL = self.URL || self.webkitURL || self;
+            const url = domURL.createObjectURL(svg);
+
+            img.onload = () => {
+              this.canvasGrid.draw();
+            };
+            img.src = url;
+          });
         return;
       }
 
       const image = this.imageBuffer[e.cell.value];
-      if (image && image.width !== 0) {
-        const targetWidth = parseInt(
-          (image.getAttribute('targetWidth') as string) ?? e.cell.height
-        );
-        const targetHeight = parseInt(
-          (image.getAttribute('targetHeight') as string) ??
-            e.cell.height * (image.width / image.height)
-        );
-
+      if (image) {
+        const targetWidth = 16;
+        const targetHeight = 16;
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
-
-        console.log('drawImage', image);
-
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }
     }
