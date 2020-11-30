@@ -29,6 +29,7 @@ use TYPO3\CMS\Extbase\Domain\Model\BackendUser;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGenerator;
 use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\FilelistNg\Backend\Service\SvgSpriteUrlProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FolderTreeGeneratorTest extends FunctionalTestCase
@@ -64,7 +65,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
             GeneralUtility::makeInstance(UriBuilder::class),
-            GeneralUtility::makeInstance(IconRegistry::class)
+            GeneralUtility::makeInstance(SvgSpriteUrlProvider::class, GeneralUtility::makeInstance(IconRegistry::class))
         );
     }
 
@@ -148,6 +149,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file_storage&uid=1%3A%2Ftest-folder&context=tree',
                 'clipboardIdentifier' => '95ed07cec0',
                 'allowEdit' => false,
+                'overlayIcon' => null,
             ],
             [
                 'stateIdentifier' => '_230043429',
@@ -163,6 +165,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder-sub&context=tree',
                 'clipboardIdentifier' => 'db62f25b40',
                 'allowEdit' => true,
+                'overlayIcon' => null,
             ],
         ], $result);
     }
