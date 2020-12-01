@@ -619,19 +619,6 @@ export class Typo3SvgTree extends LitElement {
         .attr('class', 'node-icon-locked');
     }
 
-    /**
-     * todo handle tooltip
-     Tooltip.initialize('[data-toggle="tooltip"]', {
-      delay: {
-        "show": 50,
-        "hide": 50
-      }
-      trigger: 'hover',
-      container: 'body',
-      placement: 'right',
-    });
-     **/
-
     this.dispatch.call('updateSvg', this, nodeEnter);
 
     this._appendTextElement(nodeEnter);
