@@ -1,4 +1,4 @@
-import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs, action} from '@open-wc/demoing-storybook';
+import {action, Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
 import {html} from 'lit-html';
 import '../../../out-tsc/packages/menu/src/typo3-context-menu';
 
@@ -18,7 +18,7 @@ import '../../../out-tsc/packages/menu/src/typo3-context-menu';
             new CustomEvent("typo3-show-context-menu",
                 {detail: {
                     options: {
-                        "delete": {"callbackAction": "createFile", "icon": "<img src=\\"https:\\/\\/raw.githubusercontent.com\\/TYPO3\\/TYPO3.CMS\\/master\\/typo3\\/sysext\\/core\\/Resources\\/Public\\/Icons\\/T3Icons\\/actions\\/actions-folder-add.svg\\" \\/>", "label": "New File", "type": "item"},
+                        "delete": {"callbackAction": "createFile", "icon": "<svg><use xlink:href=\\"node_modules\\/@typo3\\/icons\\/dist\\/sprites\\/actions.svg#actions-delete\\"/></svg>", "label": "New File", "type": "item"},
                         "divider1": {"type": "divider"},
                         "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
                     },

@@ -1,4 +1,4 @@
-import {Meta, Preview, Props, Story, action} from '@open-wc/demoing-storybook';
+import {action, Meta, Preview, Props, Story} from '@open-wc/demoing-storybook';
 import {html} from 'lit-html';
 import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
 
@@ -18,7 +18,7 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
         schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
         data='[
         {
-          "icon": "<img src=\\"https:\\/\\/raw.githubusercontent.com\\/TYPO3\\/TYPO3.CMS\\/master\\/typo3\\/sysext\\/core\\/Resources\\/Public\\/Icons\\/T3Icons\\/actions\\/actions-edit-rename.svg\\" width=\\"16\\" height=\\"16\\" \\/>",
+          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
           "title": "row 1 column 1",
           "description": "row 1 column 2",
           "foo": "row 1 column 3"
