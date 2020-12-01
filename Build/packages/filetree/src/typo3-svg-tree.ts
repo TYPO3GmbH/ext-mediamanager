@@ -27,6 +27,8 @@ export class Typo3SvgTree extends LitElement {
 
   @property({ type: Array }) expandedNodeIds: string[] = [];
 
+  @property({ type: Array }) selectedNodeIds: string[] = [];
+
   @property({ type: Boolean }) inDropMode = false;
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
@@ -250,9 +252,6 @@ export class Typo3SvgTree extends LitElement {
         node.stateIdentifier = parentId + '_' + node.identifier;
       }
 
-      if (typeof node.checked === 'undefined') {
-        node.checked = false;
-      }
       if (node.selectable === false) {
         this.settings.unselectableElements.push(node.identifier);
       }
@@ -349,9 +348,9 @@ export class Typo3SvgTree extends LitElement {
       position + visibleRows
     );
     const focusableElement = this.wrapper.querySelector('[tabindex="0"]');
-    const checkedNodeInViewport = visibleNodes.find(function (node) {
-      return node.checked;
-    });
+    const checkedNodeInViewport = visibleNodes.find(
+      node => this.selectedNodeIds.indexOf(node.identifier) != -1
+    );
     let nodes = this.nodesContainer
       .selectAll('.node')
       .data(visibleNodes, d => d.stateIdentifier);
@@ -766,7 +765,7 @@ export class Typo3SvgTree extends LitElement {
       nextNode = nodeBgClass.data()[i + 1];
     }
 
-    if (node.checked) {
+    if (this._isNodeSelected(node)) {
       bgClass += ' node-selected';
     }
 
@@ -880,8 +879,7 @@ export class Typo3SvgTree extends LitElement {
       return;
     }
 
-    const checked = node.checked;
-    this._handleExclusiveNodeSelection(node);
+    const checked = this._isNodeSelected(node);
 
     if (this.settings.validation && this.settings.validation.maxItems) {
       const selectedNodes = this._getSelectedNodes();
@@ -893,8 +891,6 @@ export class Typo3SvgTree extends LitElement {
       }
     }
 
-    node.checked = !checked;
-
     this.dispatchEvent(
       new CustomEvent('typo3-node-select', {
         detail: node,
@@ -903,43 +899,6 @@ export class Typo3SvgTree extends LitElement {
 
     this.dispatch.call('nodeSelectedAfter', this, node);
     this._update();
-  }
-
-  /**
-   * Handle exclusive nodes functionality
-   * If a node is one of the exclusiveNodesIdentifiers list,
-   * all other nodes has to be unselected before selecting this node.
-   */
-  _handleExclusiveNodeSelection(node: Typo3Node): void {
-    const exclusiveKeys = this.settings.exclusiveNodesIdentifiers.split(',');
-    if (
-      this.settings.exclusiveNodesIdentifiers.length &&
-      node.checked === false
-    ) {
-      if (exclusiveKeys.indexOf('' + node.identifier) > -1) {
-        // this key is exclusive, so uncheck all others
-        this.processedNodes.forEach(node => {
-          if (node.checked === true) {
-            node.checked = false;
-            this.dispatch.call('nodeSelectedAfter', this, node);
-          }
-        });
-
-        this.exclusiveSelectedNode = node;
-      } else if (
-        exclusiveKeys.indexOf('' + node.identifier) === -1 &&
-        this.exclusiveSelectedNode
-      ) {
-        // current node is not exclusive, but other exclusive node is already selected
-        this.exclusiveSelectedNode.checked = false;
-        this.dispatch.call(
-          'nodeSelectedAfter',
-          this,
-          this.exclusiveSelectedNode
-        );
-        this.exclusiveSelectedNode = null;
-      }
-    }
   }
 
   /**
@@ -959,13 +918,17 @@ export class Typo3SvgTree extends LitElement {
     return this.expandedNodeIds.indexOf(node.identifier) != -1;
   }
 
+  _isNodeSelected(node: Typo3Node): boolean {
+    return this.selectedNodeIds.indexOf(node.identifier) != -1;
+  }
+
   /**
    * Returns an array of selected nodes
    */
   _getSelectedNodes(): Typo3Node[] {
-    return this.processedNodes.filter(node => {
-      return node.checked;
-    });
+    return this.processedNodes.filter(
+      node => this.selectedNodeIds.indexOf(node.identifier) != -1
+    );
   }
 
   /**

@@ -231,10 +231,7 @@ export class Typo3Filetree extends Typo3SvgTree {
   }
 
   _selectNode(node: Typo3Node): void {
-    this._getSelectedNodes()
-      .filter(node => node.checked)
-      .forEach(node => (node.checked = false));
-
+    this.selectedNodeIds = [node.identifier];
     super._selectNode(node);
   }
 

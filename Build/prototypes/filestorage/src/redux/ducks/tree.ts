@@ -111,7 +111,7 @@ export type Actions =
   | ExpandTreeNode
   | CollapseTreeNode;
 
-export const selectedTreeNodes = createSelector(
+export const selectedTreeBreadcrumb = createSelector(
   (state: TreeState) => state,
   state => {
     if (state.nodes.length === 0) {
@@ -119,7 +119,7 @@ export const selectedTreeNodes = createSelector(
     }
 
     if (null === state.selected) {
-      return [state.nodes[0]];
+      return [];
     }
 
     return [
@@ -130,5 +130,16 @@ export const selectedTreeNodes = createSelector(
         })
       ),
     ].reverse();
+  }
+);
+
+export const selectedTreeNodeIdentifiers = createSelector(
+  (state: TreeState) => state,
+  state => {
+    if (null === state.selected) {
+      return [];
+    }
+
+    return [state.selected.identifier];
   }
 );

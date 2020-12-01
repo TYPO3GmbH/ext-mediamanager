@@ -20,7 +20,6 @@ export interface Typo3Node {
   parentsStateIdentifier: string[];
   _isDragged: boolean;
   canToggle: boolean;
-  checked: boolean;
   selectable: boolean;
   overlayIcon: string;
   locked: boolean;

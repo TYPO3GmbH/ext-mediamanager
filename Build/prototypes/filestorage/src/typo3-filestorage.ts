@@ -31,6 +31,7 @@ import {
 } from './redux/ducks/list';
 
 import * as TreeActions from './redux/ducks/tree';
+import { selectedTreeNodeIdentifiers } from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
@@ -165,6 +166,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <typo3-filetree
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
+            .selectedNodeIds="${selectedTreeNodeIdentifiers(this.state.tree)}"
             ?editable="${true}"
             ?dragDropEnabled="${true}"
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
@@ -300,7 +302,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get breadcrumbContent(): TemplateResult[] {
-    const nodes = TreeActions.selectedTreeNodes(this.state.tree) as Typo3Node[];
+    const nodes = TreeActions.selectedTreeBreadcrumb(
+      this.state.tree
+    ) as Typo3Node[];
     return nodes.map(
       node =>
         html` <typo3-breadcrumb-item slot="item" title="${node.name}">
