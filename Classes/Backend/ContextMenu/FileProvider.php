@@ -185,7 +185,7 @@ class FileProvider extends AbstractProvider
             return $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard);
         }
 
-        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($fileOrFolderInClipBoard, $this->record);
+        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->record, $fileOrFolderInClipBoard);
     }
 
     /**
