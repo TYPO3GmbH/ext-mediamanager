@@ -101,7 +101,10 @@ export class Typo3Filetree extends Typo3SvgTree {
               <div class="node-dd__text">
                 <div class="node-dd__icon">
                   <svg width="16" height="16" role="img">
-                    <use xlink:href="" />
+                    <use
+                      xlink:href=""
+                      xlink:href="${this._getIconId(draggedNode)}"
+                    />
                   </svg>
                 </div>
                 <span class="node-dd__name">${draggedNode.name}</span>
@@ -436,12 +439,6 @@ export class Typo3Filetree extends Typo3SvgTree {
 
     this.dragHandler.style.left = left + 'px';
     this.dragHandler.style.top = top + 'px';
-    // setting xlink:href via template has no effect
-    const useElement = this.dragHandler.querySelector('use');
-    useElement!.setAttribute(
-      'xlink:href',
-      this._getIconId(this.draggedNode as Typo3Node)
-    );
     this.allowDrop = !node.isOver && this.isOverSvg;
   }
 
