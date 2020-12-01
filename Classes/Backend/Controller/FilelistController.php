@@ -22,6 +22,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
+use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
@@ -37,18 +38,22 @@ class FilelistController
 
     /** @var IconFactory */
     private $iconFactory;
+    /** @var LanguageServiceProvider */
+    private $languageServiceProvider;
 
     public function __construct(
         BackendTemplateView $view,
         UriBuilder $uriBuilder,
         BackendUserProvider $backendUserProvider,
-        IconFactory $iconFactory
+        IconFactory $iconFactory,
+        LanguageServiceProvider $languageServiceProvider
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
         $this->backendUserProvider = $backendUserProvider;
         $this->view->initializeView();
         $this->iconFactory = $iconFactory;
+        $this->languageServiceProvider = $languageServiceProvider;
     }
 
     public function indexAction(): ResponseInterface
@@ -70,6 +75,30 @@ class FilelistController
 
         $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
 
+        $languageService = $this->languageServiceProvider->getLanguageService();
+
+        $translations = [
+            'new' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.new'),
+            'upload' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.upload'),
+            'download' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.download'),
+            'delete' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.delete'),
+            'moveTo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.moveto'),
+            'copyTo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.copyto'),
+            'view.sorting' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sorting'),
+            'view.sortingdir.asc' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sortingdir.asc'),
+            'view.sortingdir.desc' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sortingdir.desc'),
+            'view.mode' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode'),
+            'view.mode.list' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode.list'),
+            'view.mode.tiles' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode.tiles'),
+            'field.name' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.name'),
+            'field.modified' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.modified'),
+            'field.size' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.size'),
+            'field.type' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.type'),
+            'field.variants' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.variants'),
+            'field.references' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.references'),
+            'field.rw' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.rw'),
+        ];
+
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
         $this->view->assign('fileActionUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'));
@@ -78,6 +107,7 @@ class FilelistController
         $this->view->assign('clipboardUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'));
         $this->view->assign('downloadFilesUrl', (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'));
 
+        $this->view->assign('translations', \json_encode($translations));
         return new HtmlResponse($this->view->render());
     }
 

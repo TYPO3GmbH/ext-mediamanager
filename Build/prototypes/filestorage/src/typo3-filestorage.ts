@@ -51,6 +51,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: String }) treeUrl!: string;
   @property({ type: String }) fileActionUrl!: string;
 
+  @property({ type: Object }) translations: { [key: string]: string } = {};
+
   @property({ type: Array }) private storages: {
     storageUrl: string;
     name: string;
@@ -70,18 +72,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
 
   public static styles = [themeStyles, styles];
-
-  protected listHeader = [
-    { name: 'identifier', type: 'text', title: ' ', hidden: true },
-    { name: 'icon', type: 'html', title: ' ', width: '24' },
-    { name: 'name', title: 'Name', sortable: true },
-    { name: 'modified', title: 'Modified', width: '150', sortable: true },
-    { name: 'size', title: 'Size', width: '100', sortable: true },
-    { name: 'type', title: 'Type', width: '150' },
-    { name: 'variants', title: 'Variants', width: '100' },
-    { name: 'references', title: 'References', width: '100' },
-    { name: 'rw', title: 'RW', width: '50' },
-  ];
 
   stateChanged(state: RootState): void {
     this.state = state;
@@ -106,6 +96,38 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   refresh(): void {
     store.dispatch(new GlobalActions.Reload() as Action);
+  }
+
+  get listHeader(): object {
+    return [
+      { name: 'identifier', type: 'text', title: ' ', hidden: true },
+      { name: 'icon', type: 'html', title: ' ', width: '24' },
+      { name: 'name', title: this.translations['field.name'], sortable: true },
+      {
+        name: 'modified',
+        title: this.translations['field.modified'],
+        width: '150',
+        sortable: true,
+      },
+      {
+        name: 'size',
+        title: this.translations['field.size'],
+        width: '100',
+        sortable: true,
+      },
+      { name: 'type', title: this.translations['field.type'], width: '150' },
+      {
+        name: 'variants',
+        title: this.translations['field.variants'],
+        width: '100',
+      },
+      {
+        name: 'references',
+        title: this.translations['field.references'],
+        width: '100',
+      },
+      { name: 'rw', title: this.translations['field.rw'], width: '50' },
+    ];
   }
 
   protected render(): TemplateResult {
@@ -139,7 +161,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       />
                     </g>
                   </svg>
-                  New
+                  ${this.translations['new']}
                 </typo3-button>
                 <typo3-button>
                   <svg
@@ -157,7 +179,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       <path d="M7 6h2v4H7z" />
                     </g>
                   </svg>
-                  Upload
+                  ${this.translations['upload']}
                 </typo3-button>
               </div>
             </typo3-topbar>
@@ -211,7 +233,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       <path d="M7 2h2v4H7z" />
                     </g>
                   </svg>
-                  Download
+                  ${this.translations['download']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
@@ -230,7 +252,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       <path d="M13.5 4h-11a.5.5 0 010-1h11a.5.5 0 010 1z" />
                     </g>
                   </svg>
-                  Delete
+                  ${this.translations['delete']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
@@ -247,7 +269,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       />
                     </g>
                   </svg>
-                  Move to
+                  ${this.translations['moveTo']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
@@ -264,7 +286,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       />
                     </g>
                   </svg>
-                  Copy to
+                  ${this.translations['copyTo']}
                 </typo3-button>
               </div>
               <div slot="right">
@@ -414,7 +436,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               />
             </g>
           </svg>
-          View
+          ${this.translations['view.mode']}
         </typo3-dropdown-button>
         <typo3-dropdown-item
           value="${ViewMode.LIST}"
@@ -431,7 +453,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               />
             </g>
           </svg>
-          <span>List</span>
+          <span>${this.translations['view.mode.list']}</span>
         </typo3-dropdown-item>
         <li divider></li>
         <typo3-dropdown-item
@@ -449,7 +471,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               />
             </g>
           </svg>
-          <span>Tiles</span>
+          <span>${this.translations['view.mode.tiles']}</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
       ${isLoading(this.state)
@@ -478,7 +500,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               />
             </g>
           </svg>
-          Sorting
+          ${this.translations['view.sorting']}
         </typo3-dropdown-button>
         ${this.listHeader
           .filter(header => header.sortable === true)
@@ -498,8 +520,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           })}
         <li divider></li>
         ${[
-          { title: 'Ascending', name: 'asc' },
-          { title: 'Descending', name: 'desc' },
+          { title: this.translations['view.sortingdir.asc'], name: 'asc' },
+          { title: this.translations['view.sortingdir.desc'], name: 'desc' },
         ].map(sortDir => {
           return html`
             <typo3-dropdown-item

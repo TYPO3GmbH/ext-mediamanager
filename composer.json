@@ -6,7 +6,8 @@
   "require": {
     "php": ">=7.2 <7.5",
     "typo3/cms-core": "dev-master as 11.0.0@dev",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-json": "*"
   },
   "require-dev": {
     "typo3/testing-framework": "dev-master",
