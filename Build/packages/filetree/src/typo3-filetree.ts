@@ -1,19 +1,46 @@
-import { customElement } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  property,
+  query,
+  TemplateResult,
+} from 'lit-element';
 
 import { Typo3SvgTree } from './typo3-svg-tree';
 import { Typo3Node } from './lib/typo3-node';
 import * as d3 from 'd3';
+import { D3DragEvent, DragBehavior } from 'd3';
 import { Selection } from 'd3-selection';
+import { styleMap } from 'lit-html/directives/style-map';
+import { classMap } from 'lit-html/directives/class-map';
+import { PropertyValues } from 'lit-element/lib/updating-element';
+
+interface DragData {
+  startPageX: number;
+  startPageY: number;
+  startDrag: boolean;
+}
 
 /* eslint-disable */
 /**
  * @fires typo3-node-rename - Event fired on node rename
  * @fires typo3-node-add - Event fired on node add
+ * @fires typo3-node-move - Event fired on node move
  */
 @customElement('typo3-filetree')
 export class Typo3Filetree extends Typo3SvgTree {
+  @property({ type: Boolean }) editable = false;
+  @property({ type: Boolean }) dragDropEnabled: boolean = false;
+
+  @query('.node-dd') dragHandler!: HTMLEmbedElement;
+
+  @internalProperty() isDragging = false;
+  @internalProperty() allowDrop = false;
+
   protected clicks = 0;
   protected nodeIsEdit = false;
+  private dragData!: DragData;
 
   constructor() {
     super();
@@ -35,6 +62,52 @@ export class Typo3Filetree extends Typo3SvgTree {
       readableRootline: '',
       isMountPoint: false,
     };
+  }
+
+  updated(_changedProperties: PropertyValues): void {
+    super.updated(_changedProperties);
+    if (_changedProperties.has('allowDrop')) {
+      this.container.classed(
+        'nodes-wrapper--nodrop',
+        this.isDragging && !this.allowDrop
+      );
+    }
+  }
+
+  render(): TemplateResult[] {
+    return [super.render(), this.renderDragHandler()];
+  }
+
+  renderDragHandler(): TemplateResult {
+    const draggedNode = this.draggedNode as Typo3Node;
+    return html`
+      <div
+        class=${classMap({
+          'node-dd': true,
+          'node-dd--nodrop': !this.allowDrop,
+          'node-dd--ok-append': this.allowDrop,
+        })}
+        style=${styleMap({
+          display: this.isDragging ? 'block' : 'none',
+        })}
+      >
+        ${!this.isDragging || !draggedNode
+          ? html``
+          : html` <div class="node-dd__ctrl-icon"></div>
+              <div class="node-dd__text">
+                <div class="node-dd__icon">
+                  <svg aria-hidden="true" width="16" height="16">
+                    <use xlink:href="${this._getIconId(draggedNode)}" />
+                  </svg>
+                </div>
+                <span class="node-dd__name">${draggedNode.name}</span>
+              </div>`}
+      </div>
+    `;
+  }
+
+  get draggedNode(): Typo3Node | null {
+    return this.processedNodes.find(node => node._isDragged) ?? null;
   }
 
   addNode(parentNodeIdentifier: string): void {
@@ -118,7 +191,6 @@ export class Typo3Filetree extends Typo3SvgTree {
         if (code === 13 || code === 9) {
           //enter || tab
           const newName = this.value.trim();
-
           if (newName.length) {
             self.nodeIsEdit = false;
             self._removeEditedText();
@@ -184,7 +256,7 @@ export class Typo3Filetree extends Typo3SvgTree {
   _editNodeLabel(node: Typo3Node): void {
     const self = this;
 
-    if (!node.allowEdit) {
+    if (!node.allowEdit || !self.editable) {
       return;
     }
     const parentNode = this.svg.node()?.parentNode as SVGSVGElement;
@@ -286,6 +358,134 @@ export class Typo3Filetree extends Typo3SvgTree {
           parentNode: parentNode,
         },
       })
+    );
+  }
+
+  // todo use decorator draggable treee etc.
+
+  _nodesUpdate(nodes: any): any {
+    const processNodes = super._nodesUpdate(nodes);
+
+    if (this.dragDropEnabled) {
+      processNodes.call(this._getDragBehavior());
+    }
+
+    return processNodes;
+  }
+
+  _updateNodeBgClass(nodes: any): any {
+    const processNodes = super._updateNodeBgClass(nodes);
+    if (this.dragDropEnabled) {
+      processNodes.call(this._getDragBehavior());
+    }
+    return processNodes;
+  }
+
+  _getDragBehavior(): DragBehavior<any, any, any> {
+    // @ts-ignore
+    return d3
+      .drag()
+      .clickDistance(5)
+      .on('start', event => this.dragStart(event))
+      .on('drag', (event: D3DragEvent<any, any, any>, node: Typo3Node) =>
+        this.dragDragged(event, node)
+      )
+      .on('end', (event: D3DragEvent<any, any, any>, node: Typo3Node) =>
+        this.dragEnd(event, node)
+      );
+  }
+
+  dragStart(event: D3DragEvent<any, any, any>): void {
+    this.isDragging = false;
+
+    this.dragData = {
+      startPageX: event.sourceEvent.pageX,
+      startPageY: event.sourceEvent.pageY,
+      startDrag: false,
+    };
+  }
+
+  dragDragged(event: D3DragEvent<any, any, any>, node: Typo3Node): boolean {
+    if (0 === node.depth) {
+      return false;
+    }
+
+    if (this.isDragNodeDistanceMore(event, this.dragData, 10)) {
+      this.dragData.startDrag = true;
+    } else {
+      return false;
+    }
+    if (!node._isDragged) {
+      node._isDragged = true;
+    }
+
+    this.isDragging = true;
+    this.inDropMode = true;
+
+    let left = 10;
+    let top = 15;
+
+    if (event.sourceEvent && event.sourceEvent.pageX) {
+      left += event.sourceEvent.pageX;
+    }
+
+    if (event.sourceEvent && event.sourceEvent.pageY) {
+      top += event.sourceEvent.pageY;
+    }
+
+    this.dragHandler.style.left = left + 'px';
+    this.dragHandler.style.top = top + 'px';
+
+    this.allowDrop = !node.isOver && this.isOverSvg;
+  }
+
+  dragEnd(event: D3DragEvent<any, any, any>, node: Typo3Node): boolean {
+    this.inDropMode = false;
+    document.body.style.pointerEvents = 'auto';
+
+    if (
+      !this.dragData.startDrag ||
+      this.dragDropEnabled !== true ||
+      node.depth === 0
+    ) {
+      return false;
+    }
+
+    this.isDragging = false;
+    node._isDragged = false;
+    this.inDropMode = false;
+
+    if (node.isOver) {
+      return false;
+    }
+
+    const target = this._getHoveredNode();
+    if (!target) {
+      return false;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('typo3-node-move', {
+        detail: {
+          event: event,
+          node: node,
+          target: target,
+        },
+      })
+    );
+  }
+
+  isDragNodeDistanceMore(
+    event: D3DragEvent<any, any, any>,
+    data: DragData,
+    distance: number
+  ) {
+    return (
+      data.startDrag ||
+      data.startPageX - distance > event.sourceEvent.pageX ||
+      data.startPageX + distance < event.sourceEvent.pageX ||
+      data.startPageY - distance > event.sourceEvent.pageY ||
+      data.startPageY + distance < event.sourceEvent.pageY
     );
   }
 }
