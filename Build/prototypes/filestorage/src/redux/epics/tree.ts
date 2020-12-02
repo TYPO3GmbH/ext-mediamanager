@@ -5,6 +5,7 @@ import { ajax } from 'rxjs/ajax';
 import { Observable, of } from 'rxjs';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { Action } from 'redux';
+import * as fromList from '../ducks/list';
 
 export const fetchTreeData = (
   action$: ActionsObservable<fromTree.LoadTreeData>
@@ -17,7 +18,12 @@ export const fetchTreeData = (
         mergeMap(data => {
           const actions: Action[] = [new fromTree.LoadTreeDataSuccess(data)];
           if (isInit && data.length > 0) {
-            actions.push(new fromTree.ExpandTreeNode(data[0]));
+            const node = data[0];
+            node.parentsStateIdentifier = [];
+
+            actions.push(new fromTree.ExpandTreeNode(node));
+            actions.push(new fromTree.SelectTreeNode(node));
+            actions.push(new fromList.LoadListData(node.folderUrl));
           }
           return actions;
         }),

@@ -27,6 +27,8 @@ export class Typo3SvgTree extends LitElement {
 
   @property({ type: Array }) expandedNodeIds: string[] = [];
 
+  @property({ type: Array }) selectedNodeIds: string[] = [];
+
   @property({ type: Boolean }) inDropMode = false;
 
   @query('.svg-tree-wrapper') wrapper!: HTMLElement;
@@ -173,16 +175,6 @@ export class Typo3SvgTree extends LitElement {
         </div>
         <div class="svg-tree-loader"></div>
       </div>
-
-      <svg style="display: none">
-        <defs>
-          <g class="icon-def" id="icon-apps-filetree-mount" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="#AAA" d="M0 4h16v5H0V4zM16 12v2H0v-2h16z"/><path fill="#59F" d="M12 11v4H4v-4h2V9h4v2h2z"/><path fill="#666" d="M1 7h10v1H1V7zM1 5h10v1H1V5z"/><path fill="#AAA" d="M2.6 1h10.8L16 4H0l2.6-3z"/><path fill="#EFEFEF" d="M3.15 2h9.6l1.75 2H1.4l1.75-2z"/><path opacity=".3" d="M6 9h4v1H6V9z"/><path fill="#CD201F" d="M13 7h2v1h-2V7z"/><path fill="#59F" d="M13 5h2v1h-2V5z"/></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-default" ><g><path fill="#FFC857" d="M16 4v10H0V2h7l1.33 2H16z"/><path fill="#E8A33D" d="M16 5H8.33L7 7H0V4h16v1z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-opened" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#E8A33D" d="M0 2v12h12.69V3.81H5.08L3.95 2H0z"/><path fill="#FFC857" d="M8.26 6.08L6.55 7.4H2.53L0 14h12.96L16 6.08H8.26z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-opened" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#E8A33D" d="M0 2v12h12.69V3.81H5.08L3.95 2H0z"/><path fill="#FFC857" d="M8.26 6.08L6.55 7.4H2.53L0 14h12.96L16 6.08H8.26z"/></g></g>
-          <g class="icon-def" id="icon-apps-filetree-folder-temp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g><path fill="#AAA" d="M16 4v10H0V2h7l1.3 2H16z"/><path opacity=".43" d="M16 5H8.3L7 7H0V4h16v1z"/></g></svg>
-        </defs>
-      </svg>
     `;
   }
 
@@ -260,9 +252,6 @@ export class Typo3SvgTree extends LitElement {
         node.stateIdentifier = parentId + '_' + node.identifier;
       }
 
-      if (typeof node.checked === 'undefined') {
-        node.checked = false;
-      }
       if (node.selectable === false) {
         this.settings.unselectableElements.push(node.identifier);
       }
@@ -359,9 +348,9 @@ export class Typo3SvgTree extends LitElement {
       position + visibleRows
     );
     const focusableElement = this.wrapper.querySelector('[tabindex="0"]');
-    const checkedNodeInViewport = visibleNodes.find(function (node) {
-      return node.checked;
-    });
+    const checkedNodeInViewport = visibleNodes.find(
+      node => this.selectedNodeIds.indexOf(node.identifier) != -1
+    );
     let nodes = this.nodesContainer
       .selectAll('.node')
       .data(visibleNodes, d => d.stateIdentifier);
@@ -426,13 +415,17 @@ export class Typo3SvgTree extends LitElement {
       .attr('visibility', node => this._getToggleVisibility(node));
 
     if (this.settings.showIcons) {
-      nodes.select('use.node-icon').attr('xlink:href', this._getIconId);
+      nodes
+        .select('use.node-icon')
+        .attr('xlink:href', this._getIconId)
+        .attr('width', '16px')
+        .attr('height', '16px');
+
       nodes
         .select('use.node-icon-overlay')
-        .attr('xlink:href', this._getIconOverlayId);
-      nodes.select('use.node-icon-locked').attr('xlink:href', node => {
-        return '#icon-' + (node.locked ? 'warning-in-use' : '');
-      });
+        .attr('xlink:href', this._getIconOverlayId)
+        .attr('width', '11px')
+        .attr('height', '11px');
     }
     // dispatch event
     this.dispatch.call('updateNodes', this, nodes);
@@ -615,6 +608,7 @@ export class Typo3SvgTree extends LitElement {
       nodeContainer
         .append('use')
         .attr('transform', 'translate(8, -3)')
+        .attr('x', 5)
         .attr('class', 'node-icon-overlay');
 
       nodeContainer
@@ -623,19 +617,6 @@ export class Typo3SvgTree extends LitElement {
         .attr('y', -7)
         .attr('class', 'node-icon-locked');
     }
-
-    /**
-     * todo handle tooltip
-     Tooltip.initialize('[data-toggle="tooltip"]', {
-      delay: {
-        "show": 50,
-        "hide": 50
-      }
-      trigger: 'hover',
-      container: 'body',
-      placement: 'right',
-    });
-     **/
 
     this.dispatch.call('updateSvg', this, nodeEnter);
 
@@ -784,7 +765,7 @@ export class Typo3SvgTree extends LitElement {
       nextNode = nodeBgClass.data()[i + 1];
     }
 
-    if (node.checked) {
+    if (this._isNodeSelected(node)) {
       bgClass += ' node-selected';
     }
 
@@ -846,14 +827,14 @@ export class Typo3SvgTree extends LitElement {
    * Returns icon's href attribute value
    */
   _getIconId(node: Typo3Node): string {
-    return '#icon-' + node.icon;
+    return node.icon;
   }
 
   /**
    * Returns icon's href attribute value
    */
   _getIconOverlayId(node: Typo3Node): string {
-    return '#icon-' + node.overlayIcon;
+    return node.overlayIcon;
   }
 
   /**
@@ -898,8 +879,7 @@ export class Typo3SvgTree extends LitElement {
       return;
     }
 
-    const checked = node.checked;
-    this._handleExclusiveNodeSelection(node);
+    const checked = this._isNodeSelected(node);
 
     if (this.settings.validation && this.settings.validation.maxItems) {
       const selectedNodes = this._getSelectedNodes();
@@ -911,8 +891,6 @@ export class Typo3SvgTree extends LitElement {
       }
     }
 
-    node.checked = !checked;
-
     this.dispatchEvent(
       new CustomEvent('typo3-node-select', {
         detail: node,
@@ -921,43 +899,6 @@ export class Typo3SvgTree extends LitElement {
 
     this.dispatch.call('nodeSelectedAfter', this, node);
     this._update();
-  }
-
-  /**
-   * Handle exclusive nodes functionality
-   * If a node is one of the exclusiveNodesIdentifiers list,
-   * all other nodes has to be unselected before selecting this node.
-   */
-  _handleExclusiveNodeSelection(node: Typo3Node): void {
-    const exclusiveKeys = this.settings.exclusiveNodesIdentifiers.split(',');
-    if (
-      this.settings.exclusiveNodesIdentifiers.length &&
-      node.checked === false
-    ) {
-      if (exclusiveKeys.indexOf('' + node.identifier) > -1) {
-        // this key is exclusive, so uncheck all others
-        this.processedNodes.forEach(node => {
-          if (node.checked === true) {
-            node.checked = false;
-            this.dispatch.call('nodeSelectedAfter', this, node);
-          }
-        });
-
-        this.exclusiveSelectedNode = node;
-      } else if (
-        exclusiveKeys.indexOf('' + node.identifier) === -1 &&
-        this.exclusiveSelectedNode
-      ) {
-        // current node is not exclusive, but other exclusive node is already selected
-        this.exclusiveSelectedNode.checked = false;
-        this.dispatch.call(
-          'nodeSelectedAfter',
-          this,
-          this.exclusiveSelectedNode
-        );
-        this.exclusiveSelectedNode = null;
-      }
-    }
   }
 
   /**
@@ -977,13 +918,17 @@ export class Typo3SvgTree extends LitElement {
     return this.expandedNodeIds.indexOf(node.identifier) != -1;
   }
 
+  _isNodeSelected(node: Typo3Node): boolean {
+    return this.selectedNodeIds.indexOf(node.identifier) != -1;
+  }
+
   /**
    * Returns an array of selected nodes
    */
   _getSelectedNodes(): Typo3Node[] {
-    return this.processedNodes.filter(node => {
-      return node.checked;
-    });
+    return this.processedNodes.filter(
+      node => this.selectedNodeIds.indexOf(node.identifier) != -1
+    );
   }
 
   /**

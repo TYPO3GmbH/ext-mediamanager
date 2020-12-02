@@ -4,17 +4,12 @@
   padding: 1rem;
   display: flex;
   gap: 0.25rem;
+  pointer-events: none;
 }
 
 .draghandler--body {
   display: flex;
   flex-direction: column;
-}
-
-.draghandler--icon svg {
-  fill: currentColor;
-  height: 1.2rem;
-  width: 1.2rem;
 }
 
 .draghandler--title {
@@ -24,5 +19,11 @@
 
 .draghandler--message {
   font-size: 0.625rem
+}
+
+slot[name='icon']::slotted(*) {
+  fill: currentColor;
+  height: 1.2rem;
+  width: 1.2rem;
 }
 

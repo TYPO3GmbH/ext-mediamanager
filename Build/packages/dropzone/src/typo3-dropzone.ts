@@ -111,7 +111,11 @@ export class Typo3Dropzone extends LitElement {
 
   protected render(): TemplateResult {
     return html`
-      ${this.isDragged ? html` <typo3-overlay></typo3-overlay>` : html``}
+      ${this.isDragged
+        ? html` <typo3-overlay
+            style="--typo3-modal-overlay-color: var(--typo3-global-brand-primary)"
+          ></typo3-overlay>`
+        : html``}
       <slot></slot>
     `;
   }

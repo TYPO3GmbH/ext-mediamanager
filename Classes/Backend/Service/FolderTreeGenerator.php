@@ -46,16 +46,21 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
     /** @var UriBuilder */
     private $uriBuilder;
 
+    /** @var IconUrlProviderInterface */
+    private $iconUrlProvider;
+
     public function __construct(
         BackendUserProvider $backendUserProvider,
         LanguageServiceProvider $languageServiceProvider,
         IconFactory $iconFactory,
-        UriBuilder $uriBuilder
+        UriBuilder $uriBuilder,
+        IconUrlProviderInterface $iconUrlProvider
     ) {
         $this->backendUserProvider = $backendUserProvider;
         $this->iconFactory = $iconFactory;
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->uriBuilder = $uriBuilder;
+        $this->iconUrlProvider = $iconUrlProvider;
     }
 
     public function getNodes(ResourceStorage $resourceStorage): array
@@ -73,7 +78,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
 
             if (false === $resourceStorage->isOnline()) {
-                $rootLevelFolderName .= ' (' . $this->languageService->sL('sys_file_storage.isOffline') . ')';
+                $rootLevelFolderName .= ' (' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_file.xlf:sys_file_storage.isOffline') . ')';
             }
 
             $items[] = \array_merge(
@@ -156,7 +161,8 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
 
         return [
             'identifier' => $combinedIdentifier,
-            'icon' => $icon->getIdentifier(),
+            'icon' => $this->iconUrlProvider->getUrl($icon),
+            'overlayIcon' => $this->iconUrlProvider->getUrl($icon->getOverlayIcon()),
             'name' => $folder->getName(),
             'nameSourceField' => 'title',
             'hasChildren' => \count($folder->getSubfolders()) > 0,

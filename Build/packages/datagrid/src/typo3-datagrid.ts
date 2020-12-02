@@ -103,47 +103,61 @@ export class Typo3Datagrid extends LitElement {
       e.cell.type === 'html' &&
       e.cell.value &&
       e.cell.rowIndex > -1 &&
-      /img/.test(e.cell.value)
+      /use/.test(e.cell.value)
     ) {
       if (!this.imageBuffer[e.cell.value]) {
         const domElement = new DOMParser().parseFromString(
           e.cell.value,
           'text/html'
         );
-        const imageElement = domElement.querySelector(
-          'img'
-        ) as HTMLImageElement;
-        const src = imageElement.src;
+        const useElement = domElement.querySelector('use') as SVGUseElement;
 
-        const image = new Image();
-        this.imageBuffer[e.cell.value] = image;
-        image.src = src;
-        if (imageElement.width > 0) {
-          image.setAttribute('targetWidth', '' + imageElement.width);
-        }
-        if (imageElement.height > 0) {
-          image.setAttribute('targetHeight', '' + imageElement.height);
+        if (!useElement) {
+          return;
         }
 
-        image.onload = () => {
-          this.canvasGrid.draw();
-        };
+        const src = useElement.href.baseVal;
+        const id = src.replace(/.*#/, '');
+        const img = new Image();
+
+        this.imageBuffer[e.cell.value] = img;
+
+        fetch(src)
+          .then(r => r.text())
+          .then(markup =>
+            new DOMParser().parseFromString(markup, 'image/svg+xml')
+          )
+          .then(doc => {
+            const node = doc.getElementById(id) as HTMLElement;
+            node.setAttribute('width', '16px');
+            node.setAttribute('height', '16px');
+            const xml = new XMLSerializer().serializeToString(node);
+            const svgURL = xml
+              .replace('symbol', 'svg')
+              .replace('symbol', 'svg');
+
+            const svg = new Blob([svgURL], {
+              type: 'image/svg+xml;charset=utf-8',
+            });
+            const domURL = self.URL || self.webkitURL || self;
+            const url = domURL.createObjectURL(svg);
+
+            img.onload = () => {
+              this.canvasGrid.draw();
+              domURL.revokeObjectURL(url);
+            };
+            img.src = url;
+          });
         return;
       }
 
       const image = this.imageBuffer[e.cell.value];
       if (image && image.width !== 0) {
-        const targetWidth = parseInt(
-          (image.getAttribute('targetWidth') as string) ?? e.cell.height
-        );
-        const targetHeight = parseInt(
-          (image.getAttribute('targetHeight') as string) ??
-            e.cell.height * (image.width / image.height)
-        );
+        const targetWidth = image.width;
+        const targetHeight = image.height;
 
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
-
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }
     }

@@ -3,32 +3,60 @@
 	<file t3:id="1415814869" source-language="en" datatype="plaintext" original="EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf" date="2020-10-26T20:22:34Z" product-name="lang">
 		<header/>
 		<body>
-			<trans-unit id="bigControlPanel" resname="bigControlPanel">
-				<source>Extended view</source>
+			<trans-unit id="cm.download" resname="cm.download">
+				<source>Download</source>
 			</trans-unit>
-			<trans-unit id="clipBoard" resname="clipBoard">
-				<source>Show clipboard</source>
+			<trans-unit id="cm.moveto" resname="cm.moveto">
+				<source>Move To</source>
 			</trans-unit>
-			<trans-unit id="clip_paste" resname="clip_paste">
-				<source>Paste in clipboard content</source>
+			<trans-unit id="cm.copyto" resname="cm.copyto">
+				<source>Copy To</source>
 			</trans-unit>
-			<trans-unit id="clip_pasteInto" resname="clip_pasteInto">
-				<source>Paste into: Clipboard content is inserted into this folder</source>
+			<trans-unit id="view.sorting" resname="view.sorting">
+				<source>Sorting</source>
 			</trans-unit>
-			<trans-unit id="clip_markRecords" resname="clip_markRecords">
-				<source>Mark All/Mark none</source>
+			<trans-unit id="view.sortingdir.asc" resname="view.sortingdir.asc">
+				<source>Ascending</source>
 			</trans-unit>
-			<trans-unit id="clip_selectMarked" resname="clip_selectMarked">
-				<source>Transfer the selection of files to clipboard</source>
+			<trans-unit id="view.sortingdir.desc" resname="view.sortingdir.desc">
+				<source>Descending</source>
 			</trans-unit>
+			<trans-unit id="view.mode" resname="view.mode">
+				<source>View</source>
+			</trans-unit>
+			<trans-unit id="view.mode.list" resname="view.mode.list">
+				<source>List</source>
+			</trans-unit>
+			<trans-unit id="view.mode.tiles" resname="view.mode.tiles">
+				<source>Tiles</source>
+			</trans-unit>
+			<trans-unit id="field.name" resname="field.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="field.modified" resname="field.modified">
+				<source>Modified</source>
+			</trans-unit>
+			<trans-unit id="field.size" resname="field.size">
+				<source>Size</source>
+			</trans-unit>
+			<trans-unit id="field.type" resname="field.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="field.variants" resname="field.variants">
+				<source>Variants</source>
+			</trans-unit>
+			<trans-unit id="field.references" resname="field.references">
+				<source>References</source>
+			</trans-unit>
+			<trans-unit id="field.rw" resname="field.rw">
+				<source>RW</source>
+			</trans-unit>
+
 			<trans-unit id="clip_deleteMarked" resname="clip_deleteMarked">
 				<source>Delete marked</source>
 			</trans-unit>
 			<trans-unit id="clip_deleteMarkedWarning" resname="clip_deleteMarkedWarning">
 				<source>Are you sure you want to delete all marked files from this folder?</source>
-			</trans-unit>
-			<trans-unit id="displayThumbs" resname="displayThumbs">
-				<source>Display thumbnails</source>
 			</trans-unit>
 			<trans-unit id="c_file" resname="c_file">
 				<source>File Name</source>
@@ -72,6 +100,49 @@
 			<trans-unit id="write" resname="write">
 				<source>W</source>
 			</trans-unit>
+
+			<trans-unit id="dnd.move.message" resname="dnd.move.message">
+				<source><![CDATA[Hold &lt;STRG&gt; to copy <br /> Press &lt;ESC&gt; to cancel]]></source>
+			</trans-unit>
+			<trans-unit id="dnd.copy.message" resname="dnd.copy.message">
+				<source><![CDATA[Release &lt;STRG&gt; to move <br /> Press &lt;ESC&gt; to cancel]]></source>
+			</trans-unit>
+			<trans-unit id="dnd.copy.title" resname="dnd.copy.title">
+				<source>Copy %1s Files</source>
+			</trans-unit>
+			<trans-unit id="dnd.move.title" resname="dnd.move.title">
+				<source>Move %1s Files</source>
+			</trans-unit>
+			<trans-unit id="selected" resname="selected">
+				<source>Selected</source>
+			</trans-unit>
+
+			<trans-unit id="modal.move.title" resname="modal.move.title">
+				<source>Move Files</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.title" resname="modal.copy.title">
+				<source>Copy Files</source>
+			</trans-unit>
+			<trans-unit id="modal.move.message" resname="modal.move.message">
+				<source>Move %1s Elements to</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.message" resname="modal.copy.message">
+				<source>Copy %1s Elements to</source>
+			</trans-unit>
+			<trans-unit id="modal.move.button" resname="modal.move.title">
+				<source>Move</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.button" resname="modal.copy.title">
+				<source>Copy</source>
+			</trans-unit>
+
+			<trans-unit id="emptyFolder" resname="emptyFolder">
+				<source>This folder is empty</source>
+			</trans-unit>
+			<trans-unit id="dragFilesUploadMessage" resname="dragFilesUploadMessage">
+				<source>Drag files here to upload them</source>
+			</trans-unit>
+
 			<trans-unit id="storageNotBrowsableTitle" resname="storageNotBrowsableTitle">
 				<source>Access denied.</source>
 			</trans-unit>

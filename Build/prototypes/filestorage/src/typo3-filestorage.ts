@@ -31,6 +31,7 @@ import {
 } from './redux/ducks/list';
 
 import * as TreeActions from './redux/ducks/tree';
+import { selectedTreeNodeIdentifiers } from './redux/ducks/tree';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
@@ -42,13 +43,16 @@ import * as GlobalActions from './redux/ducks/global-actions';
 import { isLoading } from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
-import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
+import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3MoveFilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: String }) treeUrl!: string;
   @property({ type: String }) fileActionUrl!: string;
+
+  @property({ type: Object }) translations: { [key: string]: string } = {};
+  @property({ type: Object }) iconUrls: { [key: string]: string } = {};
 
   @property({ type: Array }) private storages: {
     storageUrl: string;
@@ -65,22 +69,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('.content_right') contentRight!: HTMLElement;
 
   @query('typo3-filetree') fileTree!: Typo3Filetree;
-  @query('typo3-files-draghandler') filesDragHandler!: Typo3FilesDraghandler;
+  @query('typo3-draghandler') filesDragHandler!: Typo3Draghandler;
   @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
 
-  public static styles = [themeStyles, styles];
+  @query('#file_upload') fileUploadInput!: HTMLInputElement;
 
-  protected listHeader = [
-    { name: 'identifier', type: 'text', title: ' ', hidden: true },
-    { name: 'icon', type: 'html', title: ' ', width: '24' },
-    { name: 'name', title: 'Name', sortable: true },
-    { name: 'modified', title: 'Modified', width: '150', sortable: true },
-    { name: 'size', title: 'Size', width: '100', sortable: true },
-    { name: 'type', title: 'Type', width: '150' },
-    { name: 'variants', title: 'Variants', width: '100' },
-    { name: 'references', title: 'References', width: '100' },
-    { name: 'rw', title: 'RW', width: '50' },
-  ];
+  public static styles = [themeStyles, styles];
 
   stateChanged(state: RootState): void {
     this.state = state;
@@ -107,6 +101,45 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new GlobalActions.Reload() as Action);
   }
 
+  get listHeader(): {
+    name: string;
+    type?: string;
+    width?: string;
+    title: string;
+    hidden?: boolean;
+    sortable?: boolean;
+  }[] {
+    return [
+      { name: 'identifier', type: 'text', title: ' ', hidden: true },
+      { name: 'icon', type: 'html', title: ' ', width: '24' },
+      { name: 'name', title: this.translations['field.name'], sortable: true },
+      {
+        name: 'modified',
+        title: this.translations['field.modified'],
+        width: '150',
+        sortable: true,
+      },
+      {
+        name: 'size',
+        title: this.translations['field.size'],
+        width: '100',
+        sortable: true,
+      },
+      { name: 'type', title: this.translations['field.type'], width: '150' },
+      {
+        name: 'variants',
+        title: this.translations['field.variants'],
+        width: '100',
+      },
+      {
+        name: 'references',
+        title: this.translations['field.references'],
+        width: '100',
+      },
+      { name: 'rw', title: this.translations['field.rw'], width: '50' },
+    ];
+  }
+
   protected render(): TemplateResult {
     return html`
       <typo3-splitpane
@@ -127,37 +160,30 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                       this.state.tree.selected!.identifier
                     )}"
                 >
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path
-                        d="M12.5 9H9v3.5c0 .3-.2.5-.5.5h-1c-.3 0-.5-.2-.5-.5V9H3.5c-.3 0-.5-.2-.5-.5v-1c0-.3.2-.5.5-.5H7V3.5c0-.3.2-.5.5-.5h1c.3 0 .5.2.5.5V7h3.5c.3 0 .5.2.5.5v1c0 .3-.2.5-.5.5z"
-                      />
-                    </g>
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['new']}"
+                    ></use>
                   </svg>
-                  New
+                  ${this.translations['new']}
                 </typo3-button>
-                <typo3-button>
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path
-                        d="M10 11h1v1h-1zM12 11h1v1h-1zM11.27 6H4.73a.25.25 0 01-.188-.414l3.27-3.743a.244.244 0 01.377 0l3.27 3.743A.25.25 0 0111.27 6z"
-                      />
-                      <path
-                        d="M14.5 9H10v1h4v3H2v-3h4V9H1.5a.5.5 0 00-.5.5v4a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-4a.5.5 0 00-.5-.5z"
-                      />
-                      <path d="M7 6h2v4H7z" />
-                    </g>
+                <typo3-button @click="${() => this.fileUploadInput.click()}">
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['upload']}"
+                    ></use>
                   </svg>
-                  Upload
+                  ${this.translations['upload']}
                 </typo3-button>
+                <input
+                  type="file"
+                  id="file_upload"
+                  style="display: none"
+                  multiple
+                  @change="${this._onDialogFileUpload}"
+                />
               </div>
             </typo3-topbar>
             <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
@@ -165,6 +191,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <typo3-filetree
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
+            .selectedNodeIds="${selectedTreeNodeIdentifiers(this.state.tree)}"
             ?editable="${true}"
             ?dragDropEnabled="${true}"
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
@@ -183,7 +210,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <typo3-dropzone
           class="content_right"
           style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
-          @typo3-dropzone-drop="${this._onFileUpload}"
+          @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
           @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
           <div class="topbar-wrapper">
@@ -194,75 +221,49 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   .disabled="${selectionIsEmpty(this.state.list) ||
                   this.state.fileActions.isDownloadingFiles}"
                 >
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path
-                        d="M14.5 9h-3.973l-.874 1H14v3H2v-3h4.346l-.873-1H1.5a.5.5 0 00-.5.5v4a.5.5 0 00.5.5h13a.5.5 0 00.5-.5v-4a.5.5 0 00-.5-.5z"
-                      />
-                      <path
-                        d="M10 11h1v1h-1zM12 11h1v1h-1zM11.27 6H4.73a.25.25 0 00-.188.414l3.27 3.743a.244.244 0 00.377 0l3.27-3.743A.25.25 0 0011.27 6z"
-                      />
-                      <path d="M7 2h2v4H7z" />
-                    </g>
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['download']}"
+                    ></use>
                   </svg>
-                  Download
+                  ${this.translations['download']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
                   @click="${this._onDeleteClicked}"
                 >
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path d="M7 5H6v8h1zM10 5H9v8h1z" />
-                      <path
-                        d="M13 3h-2v-.75C11 1.56 10.44 1 9.75 1h-3.5C5.56 1 5 1.56 5 2.25V3H3v10.75c0 .69.56 1.25 1.25 1.25h7.5c.69 0 1.25-.56 1.25-1.25V3zm-7-.75A.25.25 0 016.25 2h3.5a.25.25 0 01.25.25V3H6v-.75zm6 11.5a.25.25 0 01-.25.25h-7.5a.25.25 0 01-.25-.25V4h8v9.75z"
-                      />
-                      <path d="M13.5 4h-11a.5.5 0 010-1h11a.5.5 0 010 1z" />
-                    </g>
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['delete']}"
+                    ></use>
                   </svg>
-                  Delete
+                  ${this.translations['delete']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
                   @click="${() => this._showFilesModalDialog('move')}"
                 >
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path
-                        d="M14.823 7.823l-2.396-2.396a.25.25 0 00-.427.177V7H9V4h1.396a.25.25 0 00.177-.427L8.177 1.177a.25.25 0 00-.354 0L5.427 3.573A.25.25 0 005.604 4H7v3H4V5.604a.25.25 0 00-.427-.177L1.177 7.823a.25.25 0 000 .354l2.396 2.396A.25.25 0 004 10.396V9h3v3H5.604a.25.25 0 00-.177.427l2.396 2.396a.25.25 0 00.354 0l2.396-2.396a.25.25 0 00-.177-.427H9V9h3v1.396a.25.25 0 00.427.177l2.396-2.396a.25.25 0 000-.354z"
-                      />
-                    </g>
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['moveTo']}"
+                    ></use>
                   </svg>
-                  Move to
+                  ${this.translations['moveTo']}
                 </typo3-button>
                 <typo3-button
                   .disabled="${selectionIsEmpty(this.state.list)}"
                   @click="${() => this._showFilesModalDialog('copy')}"
                 >
-                  <svg
-                    slot="icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                  >
-                    <g class="icon-color">
-                      <path
-                        d="M12.5 2H9.4c-.2-.6-.7-1-1.4-1s-1.2.4-1.4 1H3.5c-.3 0-.5.2-.5.5v12c0 .3.2.5.5.5h9c.3 0 .5-.2.5-.5v-12c0-.3-.2-.5-.5-.5zM8 1.8c.4 0 .8.3.8.8s-.4.7-.8.7-.7-.4-.7-.8.3-.7.7-.7zM12 14H4V3h1v.5c0 .3.2.5.5.5h5c.3 0 .5-.2.5-.5V3h1v11z"
-                      />
-                    </g>
+                  <svg slot="icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this.iconUrls['copyTo']}"
+                    ></use>
                   </svg>
-                  Copy to
+                  ${this.translations['copyTo']}
                 </typo3-button>
               </div>
               <div slot="right">
@@ -275,6 +276,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               </typo3-breadcrumb>
               <div slot="right">
                 <typo3-selection-button
+                  suffix="${this.translations['selected']}"
                   count="${this.state.list.selectedItemIds.length}"
                   @typo3-selection-clear="${this._onClearSelection}"
                 ></typo3-selection-button>
@@ -287,20 +289,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
-      <typo3-files-draghandler
-        style="position: absolute; top: -1000px:"
-        numFiles="${selectedRows(this.state.list).length}"
-        mode="${getDragMode(this.state.fileActions)}"
-        .hidden="${this.state.fileActions.isDraggingFiles !== true}"
-      ></typo3-files-draghandler>
+      ${this.getDragHandler()}
       <typo3-files-modal
+        .translations="${this.translations}"
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
     `;
   }
 
   protected get breadcrumbContent(): TemplateResult[] {
-    const nodes = TreeActions.selectedTreeNodes(this.state.tree) as Typo3Node[];
+    const nodes = TreeActions.selectedTreeBreadcrumb(
+      this.state.tree
+    ) as Typo3Node[];
     return nodes.map(
       node =>
         html` <typo3-breadcrumb-item slot="item" title="${node.name}">
@@ -310,7 +310,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get mainContent(): TemplateResult {
     if (this.state.list.items.length === 0) {
-      return html``;
+      if (true === isLoading(this.state)) {
+        return html``;
+      }
+
+      return html` <div class="main-content main-content-info">
+        <svg>
+          <use xlink:href="" xlink:href="${this.iconUrls['emptyFolder']}"></use>
+        </svg>
+        <h3>${this.translations['emptyFolder']}</h3>
+        <span>${this.translations['dragFilesUploadMessage']}</span>
+      </div>`;
     }
 
     if (this.state.viewMode.mode === ViewMode.LIST) {
@@ -398,54 +408,35 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return html`
       <typo3-dropdown activatable @selected="${this._onSelectViewMode}">
         <typo3-dropdown-button slot="button" color="default">
-          <svg
-            slot="icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <g class="icon-color">
-              <path d="M13 2v12H3V2h10m1-1H2v14h12V1z" />
-              <path
-                d="M4 9h2v1H4zM7 9h2v1H7zM10 9h2v1h-2zM4 11h2v1H4zM7 11h2v1H7zM10 11h2v1h-2zM4 7h2v1H4zM7 7h2v1H7zM10 7h2v1h-2zM4 5h2v1H4zM7 5h2v1H7zM10 5h2v1h-2zM4 3h2v1H4zM7 3h2v1H7zM10 3h2v1h-2z"
-              />
-            </g>
+          <svg slot="icon">
+            <use xlink:href="" xlink:href="${this.iconUrls['view.mode']}"></use>
           </svg>
-          View
+          ${this.translations['view.mode']}
         </typo3-dropdown-button>
         <typo3-dropdown-item
           value="${ViewMode.LIST}"
           ?selected="${this.state.viewMode.mode === ViewMode.LIST}"
         >
-          <svg
-            slot="icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <g class="icon-color">
-              <path
-                d="M2 2h12v2H2zM2 5h10v1H2zM2 7h12v1H2zM2 9h10v1H2zM2 11h12v1H2zM2 13h10v1H2z"
-              />
-            </g>
+          <svg slot="icon">
+            <use
+              xlink:href=""
+              xlink:href="${this.iconUrls['view.mode.list']}"
+            ></use>
           </svg>
-          <span>List</span>
+          <span>${this.translations['view.mode.list']}</span>
         </typo3-dropdown-item>
         <li divider></li>
         <typo3-dropdown-item
           value="${ViewMode.TILES}"
           ?selected="${this.state.viewMode.mode === ViewMode.TILES}"
         >
-          <svg
-            slot="icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <g class="icon-color">
-              <path
-                d="M6 2v4H2V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 10v4h-4v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM6 10v4H2v-4h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5zM14 2v4h-4V2h4m.5-1h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5v-5a.5.5 0 00-.5-.5z"
-              />
-            </g>
+          <svg slot="icon">
+            <use
+              xlink:href=""
+              xlink:href="${this.iconUrls['view.mode.tiles']}"
+            ></use>
           </svg>
-          <span>Tiles</span>
+          <span>${this.translations['view.mode.tiles']}</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
       ${isLoading(this.state)
@@ -462,19 +453,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           color="default"
           .disabled="${this.state.viewMode.mode === ViewMode.LIST}"
         >
-          <svg
-            slot="icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <g class="icon-color">
-              <path d="M4 2h1v12H4z" />
-              <path
-                d="M6 12l-1.5 2L3 12H2l2.3 3c.1.1.3.1.4 0L7 12H6zM9 5h5V4H8v2h1zM9 8h3V7H8v2h1zM9 11h1v-1H8v2h1z"
-              />
-            </g>
+          <svg slot="icon">
+            <use
+              xlink:href=""
+              xlink:href="${this.iconUrls['view.sorting']}"
+            ></use>
           </svg>
-          Sorting
+          <span>${this.translations['view.sorting']}</span>
         </typo3-dropdown-button>
         ${this.listHeader
           .filter(header => header.sortable === true)
@@ -494,8 +479,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           })}
         <li divider></li>
         ${[
-          { title: 'Ascending', name: 'asc' },
-          { title: 'Descending', name: 'desc' },
+          { title: this.translations['view.sortingdir.asc'], name: 'asc' },
+          { title: this.translations['view.sortingdir.desc'], name: 'desc' },
         ].map(sortDir => {
           return html`
             <typo3-dropdown-item
@@ -540,6 +525,33 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           `
         )}
       </typo3-dropdown>
+    `;
+  }
+
+  protected getDragHandler(): TemplateResult {
+    let iconUrl = this.iconUrls['moveTo'];
+    let message = this.translations['dnd.move.message'];
+    let title = this.translations['dnd.move.title'];
+
+    if ('copy' === getDragMode(this.state.fileActions)) {
+      iconUrl = this.iconUrls['copyTo'];
+      message = this.translations['dnd.copy.message'];
+      title = this.translations['dnd.copy.title'];
+    }
+
+    title = title.replace(/%\w*/gm, '' + selectedRows(this.state.list).length);
+
+    return html`
+      <typo3-draghandler
+        .hidden="${this.state.fileActions.isDraggingFiles !== true}"
+        style="position: absolute; top: -1000px:"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${iconUrl}"></use>
+        </svg>
+        <span slot="title">${title}</span>
+        <span slot="message">${unsafeHTML(message)}</span>
+      </typo3-draghandler>
     `;
   }
 
@@ -646,7 +658,22 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onFileUpload(event: CustomEvent<DragEvent>): void {
+  _onDialogFileUpload(): void {
+    const currentNode = this.state.tree.selected;
+    const dataTransfer = {
+      files: this.fileUploadInput.files,
+    };
+
+    const action = new FileActions.UploadFiles(
+      dataTransfer as DataTransfer,
+      currentNode as Typo3Node,
+      this.fileActionUrl
+    ) as Action;
+
+    store.dispatch(action);
+  }
+
+  _onDragAndDropFileUpload(event: CustomEvent<DragEvent>): void {
     const currentNode = this.state.tree.selected;
     const action = new FileActions.UploadFiles(
       event.detail.dataTransfer as DataTransfer,

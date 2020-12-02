@@ -22,6 +22,8 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
+use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
@@ -38,28 +40,32 @@ class FilelistController
     /** @var IconFactory */
     private $iconFactory;
 
+    /** @var LanguageServiceProvider */
+    private $languageServiceProvider;
+
+    /** @var IconUrlProviderInterface */
+    private $iconUrlProvider;
+
     public function __construct(
         BackendTemplateView $view,
         UriBuilder $uriBuilder,
         BackendUserProvider $backendUserProvider,
-        IconFactory $iconFactory
+        IconFactory $iconFactory,
+        LanguageServiceProvider $languageServiceProvider,
+        IconUrlProviderInterface $iconUrlProvider
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
         $this->backendUserProvider = $backendUserProvider;
         $this->view->initializeView();
         $this->iconFactory = $iconFactory;
+        $this->languageServiceProvider = $languageServiceProvider;
+        $this->iconUrlProvider = $iconUrlProvider;
     }
 
     public function indexAction(): ResponseInterface
     {
-        $storages = \array_map(function (array $data) {
-            $data['icon'] = \preg_replace('/(<img.*) (\/>)/', '$1 slot="image" />', $data['icon']);
-            return $data;
-        }, $this->getStoragesData());
-
-        $this->view->assign('storages', $storages);
-
+        $this->view->assign('storages', $this->getStoragesData());
         return new HtmlResponse($this->view->render());
     }
 
@@ -84,6 +90,9 @@ class FilelistController
         $this->view->assign('clipboardUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'));
         $this->view->assign('downloadFilesUrl', (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'));
 
+        $this->view->assign('translations', \json_encode($this->getTranslations()));
+        $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
+
         return new HtmlResponse($this->view->render());
     }
 
@@ -100,5 +109,74 @@ class FilelistController
                 'icon' => $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup(),
             ];
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getTranslations(): array
+    {
+        $languageService = $this->languageServiceProvider->getLanguageService();
+
+        return [
+            'new' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.new'),
+            'upload' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.upload'),
+            'download' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.download'),
+            'delete' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.delete'),
+            'moveTo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.moveto'),
+            'copyTo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:cm.copyto'),
+            'view.sorting' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sorting'),
+            'view.sortingdir.asc' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sortingdir.asc'),
+            'view.sortingdir.desc' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.sortingdir.desc'),
+            'view.mode' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode'),
+            'view.mode.list' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode.list'),
+            'view.mode.tiles' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:view.mode.tiles'),
+            'field.name' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.name'),
+            'field.modified' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.modified'),
+            'field.size' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.size'),
+            'field.type' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.type'),
+            'field.variants' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.variants'),
+            'field.references' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.references'),
+            'field.rw' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.rw'),
+            'dnd.move.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.move.message'),
+            'dnd.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.message'),
+            'dnd.move.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.move.title'),
+            'dnd.copy.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.title'),
+            'selected' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:selected'),
+            'modal.move.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.move.title'),
+            'modal.copy.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.title'),
+            'modal.move.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.move.message'),
+            'modal.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.message'),
+            'modal.move.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.move.button'),
+            'modal.copy.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.button'),
+            'emptyFolder' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:emptyFolder'),
+            'dragFilesUploadMessage' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dragFilesUploadMessage'),
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getIconUrls(): array
+    {
+        $iconIdentifiers = [
+            'new' => 'actions-document-new',
+            'upload' => 'actions-edit-upload',
+            'download' => 'actions-download',
+            'delete' => 'actions-delete',
+            'moveTo' => 'actions-move',
+            'copyTo' => 'actions-clipboard',
+            'view.sorting' => 'actions-sort-amount-down',
+            'view.mode' => 'actions-table',
+            'view.mode.list' => 'actions-viewmode-list',
+            'view.mode.tiles' => 'actions-viewmode-tiles',
+            'emptyFolder' =>  'apps-pagetree-folder-default',
+            'refresh' => 'actions-refresh',
+        ];
+
+        return \array_map(function (string $identifier) {
+            $icon = $this->iconFactory->getIcon($identifier);
+            return $this->iconUrlProvider->getUrl($icon);
+        }, $iconIdentifiers);
     }
 }

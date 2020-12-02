@@ -66,7 +66,10 @@ export class Typo3Filetree extends Typo3SvgTree {
 
   updated(_changedProperties: PropertyValues): void {
     super.updated(_changedProperties);
-    if (_changedProperties.has('allowDrop')) {
+    if (
+      _changedProperties.has('allowDrop') ||
+      _changedProperties.has('isDragging')
+    ) {
       this.container.classed(
         'nodes-wrapper--nodrop',
         this.isDragging && !this.allowDrop
@@ -80,6 +83,7 @@ export class Typo3Filetree extends Typo3SvgTree {
 
   renderDragHandler(): TemplateResult {
     const draggedNode = this.draggedNode as Typo3Node;
+
     return html`
       <div
         class=${classMap({
@@ -96,8 +100,11 @@ export class Typo3Filetree extends Typo3SvgTree {
           : html` <div class="node-dd__ctrl-icon"></div>
               <div class="node-dd__text">
                 <div class="node-dd__icon">
-                  <svg aria-hidden="true" width="16" height="16">
-                    <use xlink:href="${this._getIconId(draggedNode)}" />
+                  <svg width="16" height="16" role="img">
+                    <use
+                      xlink:href=""
+                      xlink:href="${this._getIconId(draggedNode)}"
+                    />
                   </svg>
                 </div>
                 <span class="node-dd__name">${draggedNode.name}</span>
@@ -227,10 +234,7 @@ export class Typo3Filetree extends Typo3SvgTree {
   }
 
   _selectNode(node: Typo3Node): void {
-    this._getSelectedNodes()
-      .filter(node => node.checked)
-      .forEach(node => (node.checked = false));
-
+    this.selectedNodeIds = [node.identifier];
     super._selectNode(node);
   }
 
@@ -435,7 +439,6 @@ export class Typo3Filetree extends Typo3SvgTree {
 
     this.dragHandler.style.left = left + 'px';
     this.dragHandler.style.top = top + 'px';
-
     this.allowDrop = !node.isOver && this.isOverSvg;
   }
 
@@ -473,6 +476,8 @@ export class Typo3Filetree extends Typo3SvgTree {
         },
       })
     );
+
+    return true;
   }
 
   isDragNodeDistanceMore(
