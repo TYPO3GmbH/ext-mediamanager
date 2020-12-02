@@ -139,7 +139,7 @@ class FilelistController
             'field.references' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.references'),
             'field.rw' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:field.rw'),
             'dnd.move.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.move.message'),
-            'dnd.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.message'),    
+            'dnd.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.message'),
             'dnd.move.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.move.title'),
             'dnd.copy.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.title'),
             'selected' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:selected'),
@@ -170,11 +170,11 @@ class FilelistController
             'view.mode' => 'actions-table',
             'view.mode.list' => 'actions-viewmode-list',
             'view.mode.tiles' => 'actions-viewmode-tiles',
-            'emptyFolder' =>  'apps-pagetree-folder-default'
-
+            'emptyFolder' =>  'apps-pagetree-folder-default',
+            'refresh' => 'actions-refresh',
         ];
 
-        return array_map(function(string $identifier) {
+        return \array_map(function (string $identifier) {
             $icon = $this->iconFactory->getIcon($identifier);
             return $this->iconUrlProvider->getUrl($icon);
         }, $iconIdentifiers);

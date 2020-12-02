@@ -42,7 +42,7 @@ const plugins = [
   }),
   injectProcessEnv({
     NODE_ENV: 'development',
-  })
+  }),
 ];
 
 baseConfig.plugins.unshift(...plugins);
