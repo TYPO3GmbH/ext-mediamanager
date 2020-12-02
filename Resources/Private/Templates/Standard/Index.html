@@ -1,32 +1,15 @@
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
 <style type="text/css">
     body {
-        margin-top: 2rem;
-    }
-    svg{
-        height: 100%;
-        width: 100%;
+        margin: 0;
     }
 </style>
-
-<div style="height: 100%;padding: 1rem;background-color:white;">
-    <typo3-alert color="info">Select as storage to start browsing your assets</typo3-alert>
-
-    <typo3-grid>
-        <f:for each="{storages}" as="storage">
-            <a href="{storage.storageUrl}" slot="item">
-                <typo3-card
-                    title="{storage.name}"
-                    href="{storage.storageUrl}"
-                >
-                    <div slot="image">
-                        <f:format.raw>{storage.icon}</f:format.raw>
-                    </div>
-                </typo3-card>
-            </a>
-        </f:for>
-    </typo3-grid>
+<div style="height:100vh">
+    <typo3-storages
+        storages="{storagesJson}"
+        translations="{translations}"
+        iconUrls="{iconUrls}"
+        switchUserUrl="{switchUserUrl}"
+        userName="{userName}"
+    ></typo3-storages>
 </div>
-
-
-

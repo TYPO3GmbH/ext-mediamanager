@@ -65,7 +65,15 @@ class FilelistController
 
     public function indexAction(): ResponseInterface
     {
-        $this->view->assign('storages', $this->getStoragesData());
+        $storages = $this->getStoragesData();
+        $backendUser = $this->backendUserProvider->getBackendUser();
+
+        $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
+        $this->view->assign('translations', \json_encode($this->getTranslations()));
+        $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
+        $this->view->assign('switchUserUrl', $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'));
+        $this->view->assign('userName', $backendUser->user['username']);
+
         return new HtmlResponse($this->view->render());
     }
 
@@ -151,6 +159,12 @@ class FilelistController
             'modal.copy.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.button'),
             'emptyFolder' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:emptyFolder'),
             'dragFilesUploadMessage' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dragFilesUploadMessage'),
+            'selectStorageInfo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:selectStorageInfo'),
+            'storagesAccessDeniedTitle' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedTitle'),
+            'storagesAccessDeniedMessage' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedMessage'),
+            'userName' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.refresh_login_username'),
+            'storagesAccessDeniedSwitchUser' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedSwitchUser'),
+            'storagesAccessDeniedRefresh' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedRefresh'),
         ];
     }
 

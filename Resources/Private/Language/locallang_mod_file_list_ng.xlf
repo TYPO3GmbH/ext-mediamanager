@@ -143,6 +143,28 @@
 				<source>Drag files here to upload them</source>
 			</trans-unit>
 
+			<trans-unit id="selectStorageInfo" resname="selectStorageInfo">
+				<source>Select a storage to start browsing your assets</source>
+			</trans-unit>
+
+			<trans-unit id="storagesAccessDeniedTitle" resname="storagesAccessDeniedTitle">
+				<source>You dont have sufficient permissions to access any storage folder</source>
+			</trans-unit>
+
+			<trans-unit id="storagesAccessDeniedTitle" resname="storagesAccessDeniedTitle">
+				<source>You dont have sufficient permissions to access any storage folder</source>
+			</trans-unit>
+
+			<trans-unit id="storagesAccessDeniedMessage" resname="storagesAccessDeniedMessage">
+				<source>Please contact your Administrator for assistance.</source>
+			</trans-unit>
+			<trans-unit id="storagesAccessDeniedSwitchUser" resname="storagesAccessDeniedSwitchUser">
+				<source>SwitchUser</source>
+			</trans-unit>
+			<trans-unit id="storagesAccessDeniedRefresh" resname="storagesAccessDeniedRefresh">
+				<source>Refresh</source>
+			</trans-unit>
+
 			<trans-unit id="storageNotBrowsableTitle" resname="storageNotBrowsableTitle">
 				<source>Access denied.</source>
 			</trans-unit>

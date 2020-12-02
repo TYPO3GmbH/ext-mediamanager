@@ -54,12 +54,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: Object }) translations: { [key: string]: string } = {};
   @property({ type: Object }) iconUrls: { [key: string]: string } = {};
 
-  @property({ type: Array }) private storages: {
-    storageUrl: string;
-    name: string;
-    uid: number;
-    icon: string;
-  }[] = [];
+  @property({ type: Array }) private storages: Storage[] = [];
 
   @property({ type: Number }) private selectedStorageUid = 0;
 
