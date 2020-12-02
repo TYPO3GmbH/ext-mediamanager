@@ -72,6 +72,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('typo3-draghandler') filesDragHandler!: Typo3Draghandler;
   @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
 
+  @query('#file_upload') fileUploadInput!: HTMLInputElement;
+
   public static styles = [themeStyles, styles];
 
   stateChanged(state: RootState): void {
@@ -166,7 +168,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   ${this.translations['new']}
                 </typo3-button>
-                <typo3-button>
+                <typo3-button @click="${() => this.fileUploadInput.click()}">
                   <svg slot="icon">
                     <use
                       xlink:href=""
@@ -175,6 +177,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   ${this.translations['upload']}
                 </typo3-button>
+                <input
+                  type="file"
+                  id="file_upload"
+                  style="display: none"
+                  multiple
+                  @change="${this._onDialogFileUpload}"
+                />
               </div>
             </typo3-topbar>
             <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
@@ -201,7 +210,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <typo3-dropzone
           class="content_right"
           style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
-          @typo3-dropzone-drop="${this._onFileUpload}"
+          @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
           @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
           <div class="topbar-wrapper">
@@ -649,7 +658,22 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onFileUpload(event: CustomEvent<DragEvent>): void {
+  _onDialogFileUpload(): void {
+    const currentNode = this.state.tree.selected;
+    const dataTransfer = {
+      files: this.fileUploadInput.files,
+    };
+
+    const action = new FileActions.UploadFiles(
+      dataTransfer as DataTransfer,
+      currentNode as Typo3Node,
+      this.fileActionUrl
+    ) as Action;
+
+    store.dispatch(action);
+  }
+
+  _onDragAndDropFileUpload(event: CustomEvent<DragEvent>): void {
     const currentNode = this.state.tree.selected;
     const action = new FileActions.UploadFiles(
       event.detail.dataTransfer as DataTransfer,
