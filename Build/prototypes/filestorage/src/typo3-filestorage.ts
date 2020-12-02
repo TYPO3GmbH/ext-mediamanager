@@ -267,6 +267,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               </typo3-breadcrumb>
               <div slot="right">
                 <typo3-selection-button
+                  suffix="${this.translations['selected']}"
                   count="${this.state.list.selectedItemIds.length}"
                   @typo3-selection-clear="${this._onClearSelection}"
                 ></typo3-selection-button>

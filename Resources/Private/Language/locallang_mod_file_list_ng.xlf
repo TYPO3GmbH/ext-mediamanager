@@ -107,13 +107,14 @@
 			<trans-unit id="dnd.copy.message" resname="dnd.copy.message">
 				<source><![CDATA[Release &lt;STRG&gt; to move <br /> Press &lt;ESC&gt; to cancel]]></source>
 			</trans-unit>
-
 			<trans-unit id="dnd.copy.title" resname="dnd.copy.title">
 				<source>Copy %1s Files</source>
 			</trans-unit>
-
 			<trans-unit id="dnd.move.title" resname="dnd.move.title">
 				<source>Move %1s Files</source>
+			</trans-unit>
+			<trans-unit id="selected" resname="selected">
+				<source>Selected</source>
 			</trans-unit>
 
 			<trans-unit id="storageNotBrowsableTitle" resname="storageNotBrowsableTitle">

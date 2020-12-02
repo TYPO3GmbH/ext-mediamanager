@@ -142,6 +142,7 @@ class FilelistController
             'dnd.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.message'),    
             'dnd.move.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.move.title'),
             'dnd.copy.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dnd.copy.title'),
+            'selected' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:selected'),
         ];
     }
 
