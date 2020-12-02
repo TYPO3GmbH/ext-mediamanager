@@ -117,6 +117,25 @@
 				<source>Selected</source>
 			</trans-unit>
 
+			<trans-unit id="modal.move.title" resname="modal.move.title">
+				<source>Move Files</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.title" resname="modal.copy.title">
+				<source>Copy Files</source>
+			</trans-unit>
+			<trans-unit id="modal.move.message" resname="modal.move.message">
+				<source>Move %1s Elements to</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.message" resname="modal.copy.message">
+				<source>Copy %1s Elements to</source>
+			</trans-unit>
+			<trans-unit id="modal.move.button" resname="modal.move.title">
+				<source>Move</source>
+			</trans-unit>
+			<trans-unit id="modal.copy.button" resname="modal.copy.title">
+				<source>Copy</source>
+			</trans-unit>
+
 			<trans-unit id="storageNotBrowsableTitle" resname="storageNotBrowsableTitle">
 				<source>Access denied.</source>
 			</trans-unit>

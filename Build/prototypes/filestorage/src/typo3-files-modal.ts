@@ -27,6 +27,8 @@ export class Typo3FilesModal extends LitElement {
 
   @property({ type: Array }) selectedFiles: ListItem[] = [];
 
+  @property({ type: Object }) translations: { [key: string]: string } = {};
+
   @internalProperty() target: Typo3Node | null = null;
 
   public static styles = [themeStyles, styles];
@@ -36,8 +38,17 @@ export class Typo3FilesModal extends LitElement {
       this.formatFileItem(item)
     );
 
-    const headline = this.mode == 'copy' ? 'Copy Files' : 'Move Files';
-    const btnText = this.mode == 'copy' ? 'Copy' : 'Move';
+    let headline = this.translations['modal.move.title'];
+    let btnText = this.translations['modal.move.button'];
+    let message = this.translations['modal.move.message'];
+
+    if ('copy' === this.mode) {
+      headline = this.translations['modal.copy.title'];
+      btnText = this.translations['modal.copy.button'];
+      message = this.translations['modal.move.message'];
+    }
+
+    message = message.replace(/%\w*/gm, '' + this.selectedFiles.length);
 
     return html` <typo3-modal
       headline="${headline}"
@@ -52,7 +63,7 @@ export class Typo3FilesModal extends LitElement {
               visibility: this.target ? 'visible' : 'hidden',
             })}
           >
-            ${btnText} ${this.selectedFiles.length} Elements to <br />
+            ${message} <br />
             <strong>${this._getFullPath(this.target)}</strong>
           </div>
           <typo3-list> ${selectedFiles} </typo3-list>

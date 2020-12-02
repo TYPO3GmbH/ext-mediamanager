@@ -282,6 +282,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ></typo3-context-menu>
       ${this.getDragHandler()}
       <typo3-files-modal
+        .translations="${this.translations}"
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
     `;
