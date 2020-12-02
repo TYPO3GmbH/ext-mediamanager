@@ -17,6 +17,7 @@ export class Typo3Storages extends LitElement {
   @property({ type: Object }) translations: { [key: string]: string } = {};
   @property({ type: Object }) iconUrls: { [key: string]: string } = {};
   @property({ type: String }) switchUserUrl!: string;
+  @property({ type: String }) newStorageUrl!: string;
   @property({ type: String }) userName!: string;
 
   public static styles = [themeStyles, styles];
@@ -25,8 +26,19 @@ export class Typo3Storages extends LitElement {
     return html`
       <div class="content_left">
         <div class="topbar-wrapper">
-          <typo3-topbar></typo3-topbar>
-          <typo3-topbar></typo3-topbar>
+          <typo3-topbar>
+            <div slot="left">
+              <typo3-button @click="${this._onNewStorage}" slot="left">
+                <svg slot="icon">
+                  <use xlink:href="" xlink:href="${this.iconUrls['new']}"></use>
+                </svg>
+                ${this.translations['new']}
+              </typo3-button>
+            </div>
+          </typo3-topbar>
+          <typo3-topbar>
+            <span slot="left">${this.translations['myStorages']}</span>
+          </typo3-topbar>
         </div>
         ${this.renderContent()}
       </div>
@@ -93,5 +105,9 @@ export class Typo3Storages extends LitElement {
 
   _onSwitchUser(): void {
     window.location.href = this.switchUserUrl;
+  }
+
+  _onNewStorage(): void {
+    window.location.href = this.newStorageUrl;
   }
 }

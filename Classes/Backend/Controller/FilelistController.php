@@ -68,10 +68,16 @@ class FilelistController
         $storages = $this->getStoragesData();
         $backendUser = $this->backendUserProvider->getBackendUser();
 
+        $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/CmsFilelistNg');
+
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('translations', \json_encode($this->getTranslations()));
         $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
-        $this->view->assign('switchUserUrl', $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'));
+        $this->view->assign('switchUserUrl', (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'));
+        $this->view->assign('newStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
+            'edit[sys_file_storage][0]' => 'new',
+            'returnUrl' => (string) $fileListUrl,
+        ]));
         $this->view->assign('userName', $backendUser->user['username']);
 
         return new HtmlResponse($this->view->render());
@@ -165,6 +171,7 @@ class FilelistController
             'userName' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.refresh_login_username'),
             'storagesAccessDeniedSwitchUser' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedSwitchUser'),
             'storagesAccessDeniedRefresh' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedRefresh'),
+            'myStorages' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:myStorages'),
         ];
     }
 
