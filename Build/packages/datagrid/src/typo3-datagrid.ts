@@ -129,6 +129,8 @@ export class Typo3Datagrid extends LitElement {
           )
           .then(doc => {
             const node = doc.getElementById(id) as HTMLElement;
+            node.setAttribute('width', '16px');
+            node.setAttribute('height', '16px');
             const xml = new XMLSerializer().serializeToString(node);
             const svgURL = xml
               .replace('symbol', 'svg')
@@ -151,8 +153,9 @@ export class Typo3Datagrid extends LitElement {
 
       const image = this.imageBuffer[e.cell.value];
       if (image && image.width !== 0) {
-        const targetWidth = 16;
-        const targetHeight = 16;
+        const targetWidth = image.width;
+        const targetHeight = image.height;
+
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
