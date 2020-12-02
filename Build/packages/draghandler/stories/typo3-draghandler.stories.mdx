@@ -1,0 +1,31 @@
+import {Meta, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/packages/draghandler/src/typo3-draghandler';
+
+<Meta
+  title="Components/typo3-draghandler"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-draghandler', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3draghandler.ts
+
+<Preview>
+    <Story name="draghandler" height="220px">
+    {html`
+      <div style="height: 200px;">
+        <typo3-draghandler style="display:inline-block">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
+                <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-move"></use>
+            </svg>
+            <span slot="title">Move 4 Files</span>
+            <span slot="message">Hold &lt;STRG&gt; to copy<br/>Press &lt;ESC&gt; to cancel</span>
+        </typo3-draghandler>
+      </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-draghandler" />

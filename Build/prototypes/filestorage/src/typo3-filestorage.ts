@@ -43,7 +43,7 @@ import * as GlobalActions from './redux/ducks/global-actions';
 import { isLoading } from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
-import { Typo3FilesDraghandler } from '../../../packages/draghandler/src/typo3-files-draghandler';
+import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3MoveFilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
@@ -69,7 +69,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('.content_right') contentRight!: HTMLElement;
 
   @query('typo3-filetree') fileTree!: Typo3Filetree;
-  @query('typo3-files-draghandler') filesDragHandler!: Typo3FilesDraghandler;
+  @query('typo3-draghandler') filesDragHandler!: Typo3Draghandler;
   @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
 
   public static styles = [themeStyles, styles];
@@ -279,12 +279,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
-      <typo3-files-draghandler
-        style="position: absolute; top: -1000px:"
-        numFiles="${selectedRows(this.state.list).length}"
-        mode="${getDragMode(this.state.fileActions)}"
-        .hidden="${this.state.fileActions.isDraggingFiles !== true}"
-      ></typo3-files-draghandler>
+      ${this.getDragHandler()}
       <typo3-files-modal
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
@@ -509,6 +504,33 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           `
         )}
       </typo3-dropdown>
+    `;
+  }
+
+  protected getDragHandler(): TemplateResult {
+    let iconUrl = this.iconUrls['moveTo'];
+    let message = this.translations['dnd.move.message'];
+    let title = this.translations['dnd.move.title'];
+
+    if ('copy' === getDragMode(this.state.fileActions)) {
+      iconUrl = this.iconUrls['copyTo'];
+      message = this.translations['dnd.copy.message'];
+      title = this.translations['dnd.copy.title'];
+    }
+
+    title = title.replace(/%\w*/gm, '' + selectedRows(this.state.list).length);
+
+    return html`
+      <typo3-draghandler
+        .hidden="${this.state.fileActions.isDraggingFiles !== true}"
+        style="position: absolute; top: -1000px:"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${iconUrl}"></use>
+        </svg>
+        <span slot="title">${title}</span>
+        <span slot="message">${unsafeHTML(message)}</span>
+      </typo3-draghandler>
     `;
   }
 

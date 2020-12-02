@@ -1170,19 +1170,19 @@
       ]
     },
     {
-      "name": "typo3-files-draghandler",
-      "properties": [
+      "name": "typo3-draghandler",
+      "slots": [
         {
-          "name": "numFiles",
-          "attribute": "numFiles",
-          "type": "number",
-          "default": "0"
+          "name": "icon",
+          "description": "Icon that appears on the left"
         },
         {
-          "name": "mode",
-          "attribute": "mode",
-          "type": "String",
-          "default": "\"move\""
+          "name": "title",
+          "description": "Title for drag handler"
+        },
+        {
+          "name": "message",
+          "description": "Message for drag handler"
         }
       ],
       "cssProperties": [

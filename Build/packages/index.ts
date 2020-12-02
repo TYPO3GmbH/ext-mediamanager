@@ -7,7 +7,7 @@ import './button/src/typo3-dropdown-button';
 import './button/src/typo3-selection-button';
 import './card/src/typo3-card';
 import './datagrid/src/typo3-datagrid';
-import './draghandler/src/typo3-files-draghandler';
+import './draghandler/src/typo3-draghandler';
 import './dropdown/src/typo3-dropdown';
 import './dropdown/src/typo3-dropdown-item';
 import './dropzone/src/typo3-dropzone';
