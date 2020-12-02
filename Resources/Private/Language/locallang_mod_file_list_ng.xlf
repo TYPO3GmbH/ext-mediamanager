@@ -136,6 +136,13 @@
 				<source>Copy</source>
 			</trans-unit>
 
+			<trans-unit id="emptyFolder" resname="emptyFolder">
+				<source>This folder is empty</source>
+			</trans-unit>
+			<trans-unit id="dragFilesUploadMessage" resname="dragFilesUploadMessage">
+				<source>Drag files here to upload them</source>
+			</trans-unit>
+
 			<trans-unit id="storageNotBrowsableTitle" resname="storageNotBrowsableTitle">
 				<source>Access denied.</source>
 			</trans-unit>

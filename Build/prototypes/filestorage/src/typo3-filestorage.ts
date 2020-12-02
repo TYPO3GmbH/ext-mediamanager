@@ -301,7 +301,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get mainContent(): TemplateResult {
     if (this.state.list.items.length === 0) {
-      return html``;
+      if (true === isLoading(this.state)) {
+        return html``;
+      }
+
+      return html` <div class="main-content main-content-info">
+        <svg>
+          <use xlink:href="" xlink:href="${this.iconUrls['emptyFolder']}"></use>
+        </svg>
+        <h3>${this.translations['emptyFolder']}</h3>
+        <span>${this.translations['dragFilesUploadMessage']}</span>
+      </div>`;
     }
 
     if (this.state.viewMode.mode === ViewMode.LIST) {

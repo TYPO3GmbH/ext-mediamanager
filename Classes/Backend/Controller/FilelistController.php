@@ -149,6 +149,8 @@ class FilelistController
             'modal.copy.message' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.message'),
             'modal.move.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.move.button'),
             'modal.copy.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.button'),
+            'emptyFolder' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:emptyFolder'),
+            'dragFilesUploadMessage' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dragFilesUploadMessage'),
         ];
     }
 
@@ -168,6 +170,8 @@ class FilelistController
             'view.mode' => 'actions-table',
             'view.mode.list' => 'actions-viewmode-list',
             'view.mode.tiles' => 'actions-viewmode-tiles',
+            'emptyFolder' =>  'apps-pagetree-folder-default'
+
         ];
 
         return array_map(function(string $identifier) {
