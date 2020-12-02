@@ -16,8 +16,6 @@
 namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Service;
 
 use PHPUnit\Framework\TestCase;
-use TYPO3\CMS\Core\Core\ApplicationContext;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
@@ -71,38 +69,5 @@ class SvgSpriteUrlProviderTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         $this->subject->getUrl($icon);
-    }
-
-    /**
-     * @test
-     */
-    public function it_will_return_sprite_url_on_icon(): void
-    {
-        Environment::initialize(
-            $this->createMock(ApplicationContext::class),
-            false,
-            false,
-            '/project',
-            '//public/',
-            '/var/',
-            '/config',
-            '/',
-            '/'
-        );
-
-        $icon = $this->createMock(Icon::class);
-        $icon->method('getidentifier')
-            ->willReturn('file-default');
-
-        $this->iconRegistryMock->method('getIconConfigurationByIdentifier')
-            ->with('file-default')
-            ->willReturn([
-                'options' => [
-                    'sprite' => 'EXT:core/Resources/Public/Icons/T3Icons/sprites/apps.svg#apps-filetree-mount',
-                ],
-            ]);
-
-        $result = $this->subject->getUrl($icon);
-        $this->assertEquals('typo3-test/file.svg#default', $result);
     }
 }
