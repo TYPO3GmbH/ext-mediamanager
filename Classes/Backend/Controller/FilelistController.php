@@ -121,6 +121,7 @@ class FilelistController
                 'name' => $storage->getName(),
                 'storageUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]),
                 'icon' => $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup(),
+                'type' => $storage->getDriverType(),
             ];
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
     }

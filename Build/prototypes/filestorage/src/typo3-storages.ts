@@ -93,7 +93,7 @@ export class Typo3Storages extends LitElement {
     const rawIcon = addSlotToRawHtml(storage.icon, 'image');
 
     return html` <a href="${storage.storageUrl}" slot="item">
-      <typo3-card title="${storage.name}">
+      <typo3-card title="${storage.name}" subtitle="${storage.type}">
         ${unsafeHTML(rawIcon)}
       </typo3-card></a
     >`;

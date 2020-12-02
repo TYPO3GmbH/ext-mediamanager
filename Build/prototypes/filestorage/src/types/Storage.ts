@@ -3,4 +3,5 @@ export interface Storage {
   name: string;
   uid: number;
   icon: string;
+  type: string;
 }
