@@ -38,7 +38,7 @@ export const selectFirstNodeOnfetchListDataError = (
   return action$.ofType(fromList.LOAD_LIST_DATA_FAILURE).pipe(
     filter(action => action.error.includes('404')),
     withLatestFrom(state$),
-    map(([_, state]) => state),
+    map(([, state]) => state),
     filter(state => fromTree.getTreeNodes(state).length > 0),
     filter(state => null !== fromTree.getLastSelectedTreeNodeId(state)),
     filter(state => null === fromTree.getSelectedTreeNode(state)),

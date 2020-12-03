@@ -182,6 +182,10 @@ class FilelistController
             'storagesAccessDeniedSwitchUser' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedSwitchUser'),
             'storagesAccessDeniedRefresh' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedRefresh'),
             'myStorages' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:myStorages'),
+            'deleteConfirmHeadline' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:delete'),
+            'deleteConfirmMessage' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.delete'),
+            'deleteConfirmCancelButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel'),
+            'deleteConfirmSubmitButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete'),
         ];
     }
 

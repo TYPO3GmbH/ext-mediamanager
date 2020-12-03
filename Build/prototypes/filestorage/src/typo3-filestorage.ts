@@ -32,6 +32,7 @@ import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3FilesModal } from './typo3-files-modal';
+import { Typo3ConfirmModal } from './typo3-confirm-modal';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -664,7 +665,25 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       this.fileActionUrl
     ) as Action;
 
-    store.dispatch(action);
+    let message = this.translations['deleteConfirmMessage'];
+
+    message = message
+      ? message.replace(
+          /%\w*/gm,
+          '' +
+            fromList
+              .getSelectedItems(this.state)
+              .map(item => item.name)
+              .join("', '")
+        )
+      : '';
+
+    this._confirmDelete(action, {
+      headline: this.translations['deleteConfirmHeadline'],
+      message: message,
+      submitButtonText: this.translations['deleteConfirmSubmitButton'],
+      cancelButtonText: this.translations['deleteConfirmCancelButton'],
+    });
   }
 
   _onRename(identifier: string, name: string): void {
@@ -726,7 +745,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _onContextMenuItemClick(
     event: CustomEvent<{
       contextItem: ListItem | Typo3Node;
-      option: { callbackAction: string };
+      option: { callbackAction: string; additionalAttributes?: {} };
     }>
   ): void {
     const contextItem = event.detail.contextItem;
@@ -740,6 +759,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     let storeAction: Action | null = null;
 
+    const additionalAttributes = event.detail.option!.additionalAttributes;
+
     switch (event.detail.option.callbackAction) {
       case 'openInfoPopUp':
         storeAction = new fromFileActions.ShowFileInfo(identifier, type);
@@ -749,7 +770,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           [identifier],
           this.fileActionUrl
         );
-        break;
+        this._confirmDelete(storeAction, {
+          headline: additionalAttributes['data-title'],
+          message: additionalAttributes['data-message'],
+          submitButtonText: additionalAttributes['data-button-ok-text'],
+          cancelButtonText: additionalAttributes['data-button-close-text'],
+        });
+        return;
+
       case 'createFile':
         this.fileTree.addNode(identifier);
         break;
@@ -882,5 +910,29 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       this.fileActionUrl
     );
     store.dispatch(action);
+  }
+
+  _confirmDelete(
+    action: Action,
+    modalData: {
+      headline: string;
+      message: string;
+      submitButtonText: string;
+      cancelButtonText: string;
+    }
+  ) {
+    const confirmDeleteModal = document.createElement(
+      'typo3-confirm-modal'
+    ) as Typo3ConfirmModal;
+    this.shadowRoot!.append(confirmDeleteModal);
+    confirmDeleteModal.headline = modalData.headline;
+    confirmDeleteModal.message = modalData.message;
+    confirmDeleteModal.submitButtonText = modalData.submitButtonText;
+    confirmDeleteModal.cancelButtonText = modalData.cancelButtonText;
+
+    confirmDeleteModal.addEventListener('typo3-confirm-submit', () =>
+      store.dispatch(action)
+    );
+    setTimeout(() => confirmDeleteModal.show(), 10);
   }
 }
