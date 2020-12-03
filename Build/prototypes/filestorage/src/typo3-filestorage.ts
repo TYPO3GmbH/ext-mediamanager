@@ -332,9 +332,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const orderedData = orderBy(
       fromList.getItems(this.state),
-      ['type', fromView.getSortField(this.state)],
-      ['asc', fromView.getSortDirection(this.state)]
+      [item => item.type === 'Folder', fromView.getSortField(this.state)],
+      ['desc', fromView.getSortDirection(this.state)]
     );
+
     const hash = orderedData.map(item => item.identifier).join(',');
 
     return html`<typo3-grid
