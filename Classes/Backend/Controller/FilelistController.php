@@ -104,6 +104,7 @@ class FilelistController
         $this->view->assign('flashMessagesUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'));
         $this->view->assign('clipboardUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'));
         $this->view->assign('downloadFilesUrl', (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'));
+        $this->view->assign('editFileStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit'));
 
         $this->view->assign('translations', \json_encode($this->getTranslations()));
         $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));

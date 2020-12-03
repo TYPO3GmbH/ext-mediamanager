@@ -32,6 +32,8 @@ export const DRAG_FILES_START = '[FILE] DRAG FILES START';
 export const DRAG_FILES_CHANGE_MODE = '[FILE] DRAG FILES CHANGE MODE';
 export const DRAG_FILES_END = '[FILE] DRAG FILES END';
 
+export const EDIT_FILE_STORAGE = '[FILE] EDIT FILE STORAGE';
+
 export const MOVE_FILES = '[FILE] MOVE FILES';
 export const MOVE_FILES_SUCCESS = '[FILE] MOVE FILES SUCCESS';
 export const MOVE_FILES_FAILURE = '[FILE] MOVE FILES FAILURE';
@@ -355,6 +357,11 @@ export class DownloadFilesFailure implements Action {
   readonly type = DOWNLOAD_FILES_FAILURE;
 }
 
+export class EditFileStorage implements Action {
+  readonly type = EDIT_FILE_STORAGE;
+  constructor(public identifier: string) {}
+}
+
 export type Actions =
   | AddFolder
   | AddFolderFailure
@@ -374,6 +381,7 @@ export type Actions =
   | DragFilesChangeMode
   | DragFilesEnd
   | DragFilesStart
+  | EditFileStorage
   | MoveFiles
   | MoveFilesFailure
   | MoveFilesSuccess

@@ -253,6 +253,25 @@ export const downloadFiles = (
   );
 };
 
+export const editFileStorage = (
+  action$: ActionsObservable<fromActions.EditFileStorage>
+): Observable<Action> => {
+  return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
+    tap(action => {
+      const url: string = window.editFileStorageUrl;
+
+      const storageId = parseInt(action.identifier);
+      const params = new URLSearchParams();
+      params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
+      params.append('returnUrl', window.document.location.href);
+
+      // @ts-ignore
+      window.location.href = url + '&' + params.toString();
+    }),
+    ignoreElements()
+  );
+};
+
 export const fileActionSuccess = (
   action$: ActionsObservable<fromActions.Actions>
 ): Observable<Action> => {
@@ -311,6 +330,7 @@ export const fileActions = [
   clipboardPaste,
   addFolder,
   deleteFiles,
+  editFileStorage,
   renameFile,
   showFileInfo,
   uploadFiles,

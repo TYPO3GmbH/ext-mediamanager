@@ -44,7 +44,7 @@ import { isLoading } from './redux/ducks/global-actions';
 import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
-import { Typo3MoveFilesModal } from './typo3-files-modal';
+import { Typo3FilesModal } from './typo3-files-modal';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -65,7 +65,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   @query('typo3-filetree') fileTree!: Typo3Filetree;
   @query('typo3-draghandler') filesDragHandler!: Typo3Draghandler;
-  @query('typo3-files-modal') moveFilesModal!: Typo3MoveFilesModal;
+  @query('typo3-files-modal') moveFilesModal!: Typo3FilesModal;
 
   @query('#file_upload') fileUploadInput!: HTMLInputElement;
 
@@ -756,6 +756,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           identifier,
           this.fileActionUrl
         );
+        break;
+      case 'editFileStorage':
+        storeAction = new FileActions.EditFileStorage(identifier);
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
