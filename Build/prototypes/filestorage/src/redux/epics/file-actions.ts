@@ -258,6 +258,7 @@ export const editFileStorage = (
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
+      // @ts-ignore
       const url: string = window.editFileStorageUrl;
 
       const storageId = parseInt(action.identifier);

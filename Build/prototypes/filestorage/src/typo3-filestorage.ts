@@ -507,19 +507,21 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
 
     return html`
-      <typo3-dropdown slot="left" activatable>
+      <typo3-dropdown id="storage_select" slot="left" activatable>
         <typo3-dropdown-button slot="button" color="default">
           ${unsafeHTML(addSlotToRawHtml(selectedStorage!.icon, 'icon'))}
           ${selectedStorage!.name}
         </typo3-dropdown-button>
         ${this.storages.map(
           storage => html`
-            <typo3-dropdown-item
-              ?selected="${storage.uid === this.selectedStorageUid}"
-            >
-              ${unsafeHTML(addSlotToRawHtml(storage!.icon, 'icon'))}
-              <a href="${storage.storageUrl}"> ${storage.name} </a>
-            </typo3-dropdown-item>
+            <a href="${storage.storageUrl}">
+              <typo3-dropdown-item
+                ?selected="${storage.uid === this.selectedStorageUid}"
+              >
+                ${unsafeHTML(addSlotToRawHtml(storage!.icon, 'icon'))}
+                ${storage.name}
+              </typo3-dropdown-item>
+            </a>
           `
         )}
       </typo3-dropdown>
