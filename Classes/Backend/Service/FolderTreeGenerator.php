@@ -158,6 +158,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
         );
 
         $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+        $parentFolder = $folder->getParentFolder();
 
         return [
             'identifier' => $combinedIdentifier,
@@ -170,6 +171,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, $isStorage ? 'sys_file_storage' : 'sys_file'),
             'allowEdit' => $folder->checkActionPermission('rename'),
             'clipboardIdentifier' => $clipboardIdentifier,
+            'parentIdentifier' => $parentFolder instanceof Folder && !$isStorage ? $parentFolder->getCombinedIdentifier() : null,
         ];
     }
 

@@ -290,7 +290,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get breadcrumbContent(): TemplateResult[] {
-    const nodes = fromTree.selectedTreeBreadcrumb(this.state) as Typo3Node[];
+    const nodes = fromTree.getSelectedTreeNodePath(this.state) as Typo3Node[];
     return nodes.map(
       node =>
         html` <typo3-breadcrumb-item slot="item" title="${node.name}">

@@ -95,6 +95,9 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
             ->with('rename')
             ->willReturn(true);
 
+        $subFolder->method('getParentFolder')
+            ->willReturn($rootFolder);
+
         $rootFolder->method('getStorage')
             ->willReturn($storage);
 
@@ -150,6 +153,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'clipboardIdentifier' => '95ed07cec0',
                 'allowEdit' => false,
                 'overlayIcon' => null,
+                'parentIdentifier' => null,
             ],
             [
                 'stateIdentifier' => '_230043429',
@@ -166,6 +170,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'clipboardIdentifier' => 'db62f25b40',
                 'allowEdit' => true,
                 'overlayIcon' => null,
+                'parentIdentifier' => '1:/test-folder',
             ],
         ], $result);
     }

@@ -2,6 +2,7 @@ import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
+import { resolveNodePath } from '../../lib/utils';
 
 export const LOAD_TREE_DATA = '[TREE] LOAD DATA';
 export const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
@@ -16,7 +17,7 @@ export type TreeState = Readonly<{
   nodes: Typo3Node[];
   loading: boolean;
   error: string | null;
-  selected: Typo3Node | null;
+  selectedNodeId: string | null;
   expandedNodeIds: string[];
 }>;
 
@@ -25,7 +26,7 @@ const initialState: TreeState = {
   loading: false,
   error: null,
   nodes: [],
-  selected: null,
+  selectedNodeId: null,
   expandedNodeIds: [],
 };
 
@@ -55,7 +56,7 @@ export const treeReducer = (
     case SELECT_TREE_NODE:
       return {
         ...state,
-        selected: action.node,
+        selectedNodeId: action.node.identifier,
       };
     case EXPAND_TREE_NODE:
       return {
@@ -118,7 +119,8 @@ export const getTreeNodes = createSelector(treeSelector, tree => tree.nodes);
 
 export const getSelectedTreeNode = createSelector(
   treeSelector,
-  tree => tree.selected
+  tree =>
+    tree.nodes.find(node => node.identifier === tree.selectedNodeId) ?? null
 );
 
 export const getExpandedTreeNodeIds = createSelector(
@@ -126,32 +128,19 @@ export const getExpandedTreeNodeIds = createSelector(
   tree => tree.expandedNodeIds
 );
 
-export const selectedTreeBreadcrumb = createSelector(treeSelector, tree => {
-  if (tree.nodes.length === 0) {
-    return [];
-  }
-
-  if (null === tree.selected) {
-    return [];
-  }
-
-  return [
-    tree.selected,
-    ...tree.selected.parentsStateIdentifier.map(parentStateIdentifier =>
-      tree.nodes.find(node => {
-        return node.stateIdentifier == parentStateIdentifier;
-      })
-    ),
-  ].reverse();
-});
+export const getSelectedTreeNodePath = createSelector(
+  getTreeNodes,
+  getSelectedTreeNode,
+  (nodes, selectedNode) => resolveNodePath(nodes, selectedNode)
+);
 
 export const selectedTreeNodeIdentifiers = createSelector(
   treeSelector,
   state => {
-    if (null === state.selected) {
+    if (null === state.selectedNodeId) {
       return [];
     }
 
-    return [state.selected.identifier];
+    return [state.selectedNodeId];
   }
 );

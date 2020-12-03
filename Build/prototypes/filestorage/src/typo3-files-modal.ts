@@ -11,7 +11,7 @@ import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-files-modal.pcss';
-import { addSlotToRawHtml } from './lib/utils';
+import { addSlotToRawHtml, resolveNodePath } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { styleMap } from 'lit-html/directives/style-map';
 
@@ -143,21 +143,8 @@ export class Typo3FilesModal extends LitElement {
   }
 
   _getFullPath(target: Typo3Node | null): string {
-    if (null === target) {
-      return '';
-    }
-
-    return [
-      target.name,
-      ...target.parentsStateIdentifier
-        .map(parentStateIdentifier =>
-          this.nodes.find(node => {
-            return node.stateIdentifier == parentStateIdentifier;
-          })
-        )
-        .map(node => (node ? node.name : '')),
-    ]
-      .reverse()
+    return resolveNodePath(this.nodes, target)
+      .map(node => node.name)
       .join('/');
   }
 
