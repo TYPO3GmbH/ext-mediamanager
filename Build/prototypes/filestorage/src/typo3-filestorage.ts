@@ -13,35 +13,22 @@ import { connect } from 'pwa-helpers';
 import { SelectedDetail } from '@material/mwc-list/mwc-list-foundation';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filestorage.pcss';
-import {
-  SetSortOrderDirection,
-  SetSortOrderField,
-  SetViewMode,
-  ViewMode,
-} from './redux/ducks/view-mode';
-import { RootState } from './redux/ducks';
-import { SetSidebarWidth } from './redux/ducks/layout';
-import * as ListActions from './redux/ducks/list';
-import {
-  ClearSelection,
-  itemIsSelected,
-  selectedRows,
-  selectionIsEmpty,
-  SetSelection,
-} from './redux/ducks/list';
 
-import * as TreeActions from './redux/ducks/tree';
-import { selectedTreeNodeIdentifiers } from './redux/ducks/tree';
+import { Action } from 'redux';
+import { RootState } from './redux/ducks';
+
+import * as fromLayout from './redux/ducks/layout';
+import * as fromView from './redux/ducks/view-mode';
+import * as fromList from './redux/ducks/list';
+import * as fromTree from './redux/ducks/tree';
+import * as fromFileActions from './redux/ducks/file-actions';
+import * as fromGlobalActions from './redux/ducks/global-actions';
+
 import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
-import * as FileActions from './redux/ducks/file-actions';
-import { getDragMode } from './redux/ducks/file-actions';
-import * as GlobalActions from './redux/ducks/global-actions';
-import { isLoading } from './redux/ducks/global-actions';
-import { Action } from 'redux';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3FilesModal } from './typo3-files-modal';
@@ -77,7 +64,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    store.dispatch(new TreeActions.LoadTreeData(this.treeUrl));
+    store.dispatch(new fromTree.LoadTreeData(this.treeUrl));
   }
 
   public connectedCallback(): void {
@@ -93,7 +80,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   refresh(): void {
-    store.dispatch(new GlobalActions.Reload() as Action);
+    store.dispatch(new fromGlobalActions.Reload() as Action);
   }
 
   get listHeader(): {
@@ -143,7 +130,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >
         <div
           class="content_left"
-          style="flex: 1 1 ${this.state.layout.sidebarWidth + '%'}"
+          style="${'flex: 1 1' + this.state.layout.sidebarWidth + '%'}"
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -189,7 +176,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <typo3-filetree
             .nodes="${this.state.tree.nodes}"
             .expandedNodeIds="${this.state.tree.expandedNodeIds}"
-            .selectedNodeIds="${selectedTreeNodeIdentifiers(this.state.tree)}"
+            .selectedNodeIds="${fromTree.selectedTreeNodeIdentifiers(
+              this.state.tree
+            )}"
             ?editable="${true}"
             ?dragDropEnabled="${true}"
             ?inDropMode="${this.state.fileActions.isDraggingFiles}"
@@ -207,7 +196,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         </div>
         <typo3-dropzone
           class="content_right"
-          style="flex: 1 1 ${100 - this.state.layout.sidebarWidth + '%'}"
+          style="${'flex: 1 1' + (100 - this.state.layout.sidebarWidth) + '%'}"
           @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
           @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
@@ -216,7 +205,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               <div slot="left">
                 <typo3-button
                   @click="${this._onDownload}"
-                  .disabled="${selectionIsEmpty(this.state.list) ||
+                  .disabled="${fromList.selectionIsEmpty(this.state.list) ||
                   this.state.fileActions.isDownloadingFiles}"
                 >
                   <svg slot="icon">
@@ -228,7 +217,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   ${this.translations['download']}
                 </typo3-button>
                 <typo3-button
-                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  .disabled="${fromList.selectionIsEmpty(this.state.list)}"
                   @click="${this._onDeleteClicked}"
                 >
                   <svg slot="icon">
@@ -240,7 +229,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   ${this.translations['delete']}
                 </typo3-button>
                 <typo3-button
-                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  .disabled="${fromList.selectionIsEmpty(this.state.list)}"
                   @click="${() => this._showFilesModalDialog('move')}"
                 >
                   <svg slot="icon">
@@ -252,7 +241,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   ${this.translations['moveTo']}
                 </typo3-button>
                 <typo3-button
-                  .disabled="${selectionIsEmpty(this.state.list)}"
+                  .disabled="${fromList.selectionIsEmpty(this.state.list)}"
                   @click="${() => this._showFilesModalDialog('copy')}"
                 >
                   <svg slot="icon">
@@ -296,7 +285,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get breadcrumbContent(): TemplateResult[] {
-    const nodes = TreeActions.selectedTreeBreadcrumb(
+    const nodes = fromTree.selectedTreeBreadcrumb(
       this.state.tree
     ) as Typo3Node[];
     return nodes.map(
@@ -308,7 +297,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get mainContent(): TemplateResult {
     if (this.state.list.items.length === 0) {
-      if (true === isLoading(this.state)) {
+      if (true === fromGlobalActions.isLoading(this.state)) {
         return html``;
       }
 
@@ -321,16 +310,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       </div>`;
     }
 
-    if (this.state.viewMode.mode === ViewMode.LIST) {
+    if (this.state.viewMode.mode === fromView.ViewMode.LIST) {
       return html` <typo3-datagrid
         class="main-content"
         style="width: 100%; overflow: auto;"
-        draggable="${selectionIsEmpty(this.state.list) ? 'false' : 'true'}"
+        draggable="${fromList.selectionIsEmpty(this.state.list)
+          ? 'false'
+          : 'true'}"
         @dragstart="${this._onDragStart}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(this.state.list.items)}"
         editableColumns='["name"]'
-        .selectedRows="${selectedRows(this.state.list)}"
+        .selectedRows="${fromList.selectedRows(this.state.list)}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
@@ -350,7 +341,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       hash="${hash}"
       selectable
       @dragstart="${this._onDragStart}"
-      draggable="${selectionIsEmpty(this.state.list) ? 'false' : 'true'}"
+      draggable="${fromList.selectionIsEmpty(this.state.list)
+        ? 'false'
+        : 'true'}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
       ${orderedData.map(listData => this.getCardContent(listData))}
@@ -389,7 +382,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     return html` <typo3-card
       slot="item"
-      ?selected="${itemIsSelected(this.state.list)(listData.identifier)}"
+      ?selected="${fromList.itemIsSelected(this.state.list)(
+        listData.identifier
+      )}"
       value="${listData.identifier}"
       title="${listData.name}"
       subtitle="${listData.modified}"
@@ -412,8 +407,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           ${this.translations['view.mode']}
         </typo3-dropdown-button>
         <typo3-dropdown-item
-          value="${ViewMode.LIST}"
-          ?selected="${this.state.viewMode.mode === ViewMode.LIST}"
+          value="${fromView.ViewMode.LIST}"
+          ?selected="${this.state.viewMode.mode === fromView.ViewMode.LIST}"
         >
           <svg slot="icon">
             <use
@@ -425,8 +420,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         </typo3-dropdown-item>
         <li divider></li>
         <typo3-dropdown-item
-          value="${ViewMode.TILES}"
-          ?selected="${this.state.viewMode.mode === ViewMode.TILES}"
+          value="${fromView.ViewMode.TILES}"
+          ?selected="${this.state.viewMode.mode === fromView.ViewMode.TILES}"
         >
           <svg slot="icon">
             <use
@@ -437,7 +432,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <span>${this.translations['view.mode.tiles']}</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
-      ${isLoading(this.state)
+      ${fromGlobalActions.isLoading(this.state)
         ? html`<div class="loading"><typo3-spinner></typo3-spinner></div>`
         : html``}
     `;
@@ -449,7 +444,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <typo3-dropdown-button
           slot="button"
           color="default"
-          .disabled="${this.state.viewMode.mode === ViewMode.LIST}"
+          .disabled="${this.state.viewMode.mode === fromView.ViewMode.LIST}"
         >
           <svg slot="icon">
             <use
@@ -533,13 +528,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     let message = this.translations['dnd.move.message'];
     let title = this.translations['dnd.move.title'];
 
-    if ('copy' === getDragMode(this.state.fileActions)) {
+    if ('copy' === fromFileActions.getDragMode(this.state.fileActions)) {
       iconUrl = this.iconUrls['copyTo'];
       message = this.translations['dnd.copy.message'];
       title = this.translations['dnd.copy.title'];
     }
 
-    title = title.replace(/%\w*/gm, '' + selectedRows(this.state.list).length);
+    title = title.replace(
+      /%\w*/gm,
+      '' + fromList.selectedRows(this.state.list).length
+    );
 
     return html`
       <typo3-draghandler
@@ -560,15 +558,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const width = this.contentLeft.offsetWidth + this.contentRight.offsetWidth;
     store.dispatch(
-      new SetSidebarWidth(
+      new fromLayout.SetSidebarWidth(
         Math.round((this.contentLeft.offsetWidth / width) * 100)
       )
     );
   }
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new TreeActions.SelectTreeNode(event.detail));
-    store.dispatch(new ListActions.LoadListData(event.detail.folderUrl));
+    store.dispatch(new fromTree.SelectTreeNode(event.detail));
+    store.dispatch(new fromList.LoadListData(event.detail.folderUrl));
   }
 
   _onContextMenu(
@@ -602,44 +600,48 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
-    store.dispatch(new SetViewMode(event.detail.index as ViewMode));
+    store.dispatch(
+      new fromView.SetViewMode(event.detail.index as fromView.ViewMode)
+    );
   }
 
   _onSelectSortField(field: string): void {
-    store.dispatch(new SetSortOrderField(field));
+    store.dispatch(new fromView.SetSortOrderField(field));
   }
 
   _onSelectSortDirection(direction: string): void {
-    store.dispatch(new SetSortOrderDirection(direction));
+    store.dispatch(new fromView.SetSortOrderDirection(direction));
   }
 
   _onClearSelection(): void {
-    store.dispatch(new ClearSelection());
+    store.dispatch(new fromList.ClearSelection());
   }
 
   _onDatagridSelectionChange(event: CustomEvent<ListItem[]>): void {
-    store.dispatch(new SetSelection(event.detail.map(row => row.identifier)));
+    store.dispatch(
+      new fromList.SetSelection(event.detail.map(row => row.identifier))
+    );
   }
 
   _onCardgridSelectionChange(event: CustomEvent<Typo3Card[]>): void {
     store.dispatch(
-      new SetSelection(
+      new fromList.SetSelection(
         event.detail.map((element: Typo3Card) => '' + element.value)
       )
     );
   }
 
   _onNodeExpand(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new TreeActions.ExpandTreeNode(event.detail));
+    store.dispatch(new fromTree.ExpandTreeNode(event.detail));
   }
 
   _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new TreeActions.CollapseTreeNode(event.detail));
+    store.dispatch(new fromTree.CollapseTreeNode(event.detail));
   }
 
   _onDeleteClicked(): void {
-    const action = new FileActions.DeleteFiles(
-      selectedRows(this.state.list).map(data => data.identifier),
+    const action = new fromFileActions.DeleteFiles(
+      fromList.selectedRows(this.state.list).map(data => data.identifier),
       this.fileActionUrl
     ) as Action;
 
@@ -648,13 +650,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onRename(identifier: string, name: string): void {
     store.dispatch(
-      new FileActions.RenameFile(identifier, name, this.fileActionUrl)
+      new fromFileActions.RenameFile(identifier, name, this.fileActionUrl)
     );
   }
 
   _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
     store.dispatch(
-      new FileActions.AddFolder(node, parentNode, this.fileActionUrl)
+      new fromFileActions.AddFolder(node, parentNode, this.fileActionUrl)
     );
   }
 
@@ -664,7 +666,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       files: this.fileUploadInput.files,
     };
 
-    const action = new FileActions.UploadFiles(
+    const action = new fromFileActions.UploadFiles(
       dataTransfer as DataTransfer,
       currentNode as Typo3Node,
       this.fileActionUrl
@@ -675,7 +677,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onDragAndDropFileUpload(event: CustomEvent<DragEvent>): void {
     const currentNode = this.state.tree.selected;
-    const action = new FileActions.UploadFiles(
+    const action = new fromFileActions.UploadFiles(
       event.detail.dataTransfer as DataTransfer,
       currentNode as Typo3Node,
       this.fileActionUrl
@@ -711,19 +713,20 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const contextItem = event.detail.contextItem;
     const type =
       Object.prototype.hasOwnProperty.call(contextItem, 'type') &&
-      contextItem.type !== 'Folder'
+      (contextItem as ListItem).type !== 'Folder'
         ? '_FILE'
         : '_FOLDER';
+
     const identifier = contextItem.identifier;
 
     let storeAction: Action | null = null;
 
     switch (event.detail.option.callbackAction) {
       case 'openInfoPopUp':
-        storeAction = new FileActions.ShowFileInfo(identifier, type);
+        storeAction = new fromFileActions.ShowFileInfo(identifier, type);
         break;
       case 'deleteFile':
-        storeAction = new FileActions.DeleteFiles(
+        storeAction = new fromFileActions.DeleteFiles(
           [identifier],
           this.fileActionUrl
         );
@@ -732,35 +735,35 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         this.fileTree.addNode(identifier);
         break;
       case 'copyFile':
-        storeAction = new FileActions.ClipboardCopyFile(
+        storeAction = new fromFileActions.ClipboardCopyFile(
           contextItem.clipboardIdentifier,
           identifier
         );
         break;
       case 'copyReleaseFile':
-        storeAction = new FileActions.ClipboardCopyReleaseFile(
+        storeAction = new fromFileActions.ClipboardCopyReleaseFile(
           contextItem.clipboardIdentifier
         );
         break;
       case 'cutFile':
-        storeAction = new FileActions.ClipboardCutFile(
+        storeAction = new fromFileActions.ClipboardCutFile(
           contextItem.clipboardIdentifier,
           identifier
         );
         break;
       case 'cutReleaseFile':
-        storeAction = new FileActions.ClipboardCutReleaseFile(
+        storeAction = new fromFileActions.ClipboardCutReleaseFile(
           contextItem.clipboardIdentifier
         );
         break;
       case 'pasteFileInto':
-        storeAction = new FileActions.ClipboardPaste(
+        storeAction = new fromFileActions.ClipboardPaste(
           identifier,
           this.fileActionUrl
         );
         break;
       case 'editFileStorage':
-        storeAction = new FileActions.EditFileStorage(identifier);
+        storeAction = new fromFileActions.EditFileStorage(identifier);
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
@@ -772,7 +775,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDragStart(e: DragEvent): void {
-    store.dispatch(new FileActions.DragFilesStart());
+    store.dispatch(new fromFileActions.DragFilesStart());
     const dummyElement = document.createElement('div');
     dummyElement.textContent = '.';
     dummyElement.style.position = 'absolute';
@@ -782,19 +785,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onTreeNodeDrop(e: CustomEvent<{ event: DragEvent; node: Typo3Node }>): void {
-    const identifiers = selectedRows(this.state.list).map(
-      (listItem: ListItem) => listItem.identifier
-    );
-    store.dispatch(new FileActions.DragFilesEnd());
+    const identifiers = fromList
+      .selectedRows(this.state.list)
+      .map((listItem: ListItem) => listItem.identifier);
+    store.dispatch(new fromFileActions.DragFilesEnd());
 
     const action =
       this.state.fileActions.dragFilesMode === 'copy'
-        ? new FileActions.CopyFiles(
+        ? new fromFileActions.CopyFiles(
             identifiers,
             e.detail.node,
             this.fileActionUrl
           )
-        : new FileActions.MoveFiles(
+        : new fromFileActions.MoveFiles(
             identifiers,
             e.detail.node,
             this.fileActionUrl
@@ -803,13 +806,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDragLeave(): void {
-    store.dispatch(new FileActions.DragFilesEnd());
+    store.dispatch(new fromFileActions.DragFilesEnd());
   }
 
   _onDragOver(e: DragEvent): void {
     const dragMode = e.ctrlKey == true ? 'copy' : 'move';
-    if (dragMode != getDragMode(this.state.fileActions)) {
-      store.dispatch(new FileActions.DragFilesChangeMode(dragMode));
+    if (dragMode != fromFileActions.getDragMode(this.state.fileActions)) {
+      store.dispatch(new fromFileActions.DragFilesChangeMode(dragMode));
     }
     this.filesDragHandler.style.top = e.offsetY + 10 + 'px';
     this.filesDragHandler.style.left = e.offsetX + 'px';
@@ -818,7 +821,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _showFilesModalDialog(mode: 'copy' | 'move'): void {
     this.moveFilesModal.nodes = this.state.tree.nodes;
     this.moveFilesModal.expandedNodeIds = this.state.tree.expandedNodeIds;
-    this.moveFilesModal.selectedFiles = selectedRows(this.state.list);
+    this.moveFilesModal.selectedFiles = fromList.selectedRows(this.state.list);
     this.moveFilesModal.mode = mode;
     this.moveFilesModal.show();
   }
@@ -828,12 +831,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   ): void {
     const action =
       e.detail.mode === 'copy'
-        ? new FileActions.CopyFiles(
+        ? new fromFileActions.CopyFiles(
             e.detail.files.map(item => item.identifier),
             e.detail.target,
             this.fileActionUrl
           )
-        : new FileActions.MoveFiles(
+        : new fromFileActions.MoveFiles(
             e.detail.files.map(item => item.identifier),
             e.detail.target,
             this.fileActionUrl
@@ -843,17 +846,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDownload(): void {
-    const identifiers = selectedRows(this.state.list).map(
-      item => item.identifier
-    );
-    const action = new FileActions.DownloadFiles(identifiers);
+    const identifiers = fromList
+      .selectedRows(this.state.list)
+      .map(item => item.identifier);
+    const action = new fromFileActions.DownloadFiles(identifiers);
     store.dispatch(action);
   }
 
   _onTreeNodeMove(
     event: CustomEvent<{ event: DragEvent; node: Typo3Node; target: Typo3Node }>
   ): void {
-    const action = new FileActions.MoveFiles(
+    const action = new fromFileActions.MoveFiles(
       [event.detail.node.identifier],
       event.detail.target,
       this.fileActionUrl
