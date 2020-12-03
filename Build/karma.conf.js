@@ -12,9 +12,7 @@ module.exports = config => {
         // npm run test -- --grep test/foo/bar.test.js
         // npm run test -- --grep test/bar/*
         {
-          pattern: config.grep
-            ? config.grep
-            : 'out-tsc/**/**/*.test.js',
+          pattern: config.grep ? config.grep : 'out-tsc/**/**/*.test.js',
           type: 'module',
         },
       ],
