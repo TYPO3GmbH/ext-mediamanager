@@ -532,10 +532,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title = this.translations['dnd.copy.title'];
     }
 
-    title = title.replace(
-      /%\w*/gm,
-      '' + fromList.getSelectedItems(this.state).length
-    );
+    title = title
+      ? title.replace(
+          /%\w*/gm,
+          '' + fromList.getSelectedItems(this.state).length
+        )
+      : '';
 
     return html`
       <typo3-draghandler

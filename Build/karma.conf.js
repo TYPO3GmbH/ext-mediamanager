@@ -14,7 +14,7 @@ module.exports = config => {
         {
           pattern: config.grep
             ? config.grep
-            : 'out-tsc/**/packages/**/*.test.js',
+            : 'out-tsc/**/**/*.test.js',
           type: 'module',
         },
       ],
