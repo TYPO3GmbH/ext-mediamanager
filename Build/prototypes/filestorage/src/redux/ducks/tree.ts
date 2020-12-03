@@ -123,6 +123,11 @@ export const getSelectedTreeNode = createSelector(
     tree.nodes.find(node => node.identifier === tree.selectedNodeId) ?? null
 );
 
+export const getLastSelectedTreeNodeId = createSelector(
+  treeSelector,
+  tree => tree.selectedNodeId
+);
+
 export const getExpandedTreeNodeIds = createSelector(
   treeSelector,
   tree => tree.expandedNodeIds

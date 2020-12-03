@@ -24,8 +24,9 @@ export const reload = (
       const actions: Action[] = [
         new fromTree.LoadTreeData(state.tree.url, false),
       ];
-      if (state.tree.selected) {
-        actions.push(new fromList.LoadListData(state.tree.selected.folderUrl));
+      const selectedNode = fromTree.getSelectedTreeNode(state);
+      if (selectedNode) {
+        actions.push(new fromList.LoadListData(selectedNode.folderUrl));
       }
       return actions;
     })

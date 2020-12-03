@@ -1,10 +1,19 @@
-import { ActionsObservable } from 'redux-observable';
+import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromList from '../ducks/list';
-import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+import * as fromTree from '../ducks/tree';
+import {
+  catchError,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import { Observable, of } from 'rxjs';
 import { Action } from 'redux';
+import { RootState } from '../ducks';
 
 export const fetchListData = (
   action$: ActionsObservable<fromList.LoadListData>
@@ -21,3 +30,24 @@ export const fetchListData = (
     )
   );
 };
+
+export const selectFirstNodeOnfetchListDataError = (
+  action$: ActionsObservable<fromList.LoadListDataFailure>,
+  state$: StateObservable<RootState>
+): Observable<Action> => {
+  return action$.ofType(fromList.LOAD_LIST_DATA_FAILURE).pipe(
+    filter(action => action.error.includes('404')),
+    withLatestFrom(state$),
+    map(([_, state]) => state),
+    filter(state => fromTree.getTreeNodes(state).length > 0),
+    filter(state => null !== fromTree.getLastSelectedTreeNodeId(state)),
+    filter(state => null === fromTree.getSelectedTreeNode(state)),
+    map(state => fromTree.getTreeNodes(state)[0]),
+    mergeMap(node => [
+      new fromTree.SelectTreeNode(node.identifier),
+      new fromList.LoadListData(node.folderUrl),
+    ])
+  );
+};
+
+export const listActions = [fetchListData, selectFirstNodeOnfetchListDataError];
