@@ -318,11 +318,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         class="main-content"
         style="width: 100%; overflow: auto;"
         draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
-        @dragstart="${this._onDragStart}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(fromList.getItems(this.state))}"
         editableColumns='["name"]'
         .selectedRows="${fromList.getSelectedItems(this.state)}"
+        @dragstart="${this._onDragStart}"
+        @contextmenu="${this._onContextMenuWithoutContext}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
@@ -342,8 +343,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       class="main-content"
       hash="${hash}"
       selectable
-      @dragstart="${this._onDragStart}"
       draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
+      @contextmenu="${this._onContextMenuWithoutContext}"
+      @dragstart="${this._onDragStart}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
       ${orderedData.map(listData => this.getCardContent(listData))}
@@ -569,6 +571,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     event: CustomEvent<{ event: MouseEvent; node: Typo3Node | ListItem }>
   ): void {
     event.detail.event.preventDefault();
+    event.detail.event.stopImmediatePropagation();
     fetch(event.detail.node.contextMenuUrl)
       .then((response: Response) => {
         if (!response.ok) {
@@ -593,6 +596,24 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           error
         );
       });
+  }
+
+  _onContextMenuWithoutContext(event: MouseEvent): void {
+    const currentNode = fromTree.getSelectedTreeNode(this.state);
+    if (null === currentNode) {
+      return;
+    }
+    const customEvent = new CustomEvent<{
+      event: MouseEvent;
+      node: Typo3Node | ListItem;
+    }>('unassigned-contextMenu', {
+      detail: {
+        node: currentNode,
+        event: event,
+      },
+    });
+
+    this._onContextMenu(customEvent);
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
