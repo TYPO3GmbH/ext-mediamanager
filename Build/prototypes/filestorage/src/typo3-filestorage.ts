@@ -163,7 +163,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   </svg>
                   ${this.translations['new']}
                 </typo3-button>
-                <typo3-button @click="${() => this.fileUploadInput.click()}">
+                <typo3-button
+                  .disabled="${this.state.tree.selected == null}"
+                  @click="${() => this.fileUploadInput.click()}"
+                >
                   <svg slot="icon">
                     <use
                       xlink:href=""
