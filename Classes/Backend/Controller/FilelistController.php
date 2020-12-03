@@ -20,6 +20,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
@@ -116,11 +117,18 @@ class FilelistController
     private function getStoragesData(): array
     {
         return \array_map(function ($storage) {
+            $storageIcon =  $this->iconFactory->getIconForResource(
+                $storage->getRootLevelFolder(),
+                Icon::SIZE_SMALL,
+                null,
+                ['mount-root' => true]
+            );
+
             return [
                 'uid' => $storage->getUid(),
                 'name' => $storage->getName(),
                 'storageUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]),
-                'icon' => $this->iconFactory->getIconForResource($storage->getRootLevelFolder())->getMarkup(),
+                'icon' => $storageIcon->getMarkup(),
                 'type' => $storage->getDriverType(),
             ];
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
