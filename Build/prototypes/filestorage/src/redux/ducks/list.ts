@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
+import { RootState } from './index';
 
 export const ADD_SELECTION_ITEM = '[LIST] ADD ITEM TO SELECTION';
 export const REMOVE_SELECTION_ITEM = '[LIST] REMOVE ITEM FROM SELECTION';
@@ -109,21 +110,22 @@ export class LoadListDataFailure implements Action {
   constructor(public error: string) {}
 }
 
-export const itemIsSelected = createSelector(
-  (state: ListState) => state.selectedItemIds,
-  currentItemIds => memoize((itemId: string) => currentItemIds.includes(itemId))
+const listSelector = (state: RootState) => state.list;
+
+export const isItemSelected = createSelector(listSelector, list =>
+  memoize((itemId: string) => list.selectedItemIds.includes(itemId))
 );
 
-export const selectionIsEmpty = createSelector(
-  (state: ListState) => state.selectedItemIds,
-  currentItemIds => currentItemIds.length === 0
+export const isEmptySelection = createSelector(
+  listSelector,
+  list => list.selectedItemIds.length === 0
 );
 
-export const selectedRows = createSelector(
-  (state: ListState) => state,
-  state =>
-    state.items.filter(item => state.selectedItemIds.includes(item.identifier))
+export const getSelectedItems = createSelector(listSelector, list =>
+  list.items.filter(item => list.selectedItemIds.includes(item.identifier))
 );
+
+export const getItems = createSelector(listSelector, list => list.items);
 
 export type Actions =
   | AddSelectionItem

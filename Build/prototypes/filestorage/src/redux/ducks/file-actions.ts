@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
+import { RootState } from './index';
 
 export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
@@ -411,7 +412,24 @@ export const isExecutingFileAction = createSelector(
     state.isPastingFiles
 );
 
+const fileActionsSelector = (state: RootState) => state.fileActions;
+
 export const getDragMode = createSelector(
-  (state: FileActionsState) => state,
-  state => state.dragFilesMode
+  fileActionsSelector,
+  fileActions => fileActions.dragFilesMode
+);
+
+export const isCopyDragMode = createSelector(
+  fileActionsSelector,
+  fileActions => fileActions.dragFilesMode === 'copy'
+);
+
+export const isDraggingFiles = createSelector(
+  fileActionsSelector,
+  fileActions => fileActions.isDraggingFiles
+);
+
+export const isDownloadingFiles = createSelector(
+  fileActionsSelector,
+  fileActions => fileActions.isDownloadingFiles
 );

@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
+import { RootState } from './index';
 
 export const LOAD_TREE_DATA = '[TREE] LOAD DATA';
 export const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
@@ -111,30 +112,41 @@ export type Actions =
   | ExpandTreeNode
   | CollapseTreeNode;
 
-export const selectedTreeBreadcrumb = createSelector(
-  (state: TreeState) => state,
-  state => {
-    if (state.nodes.length === 0) {
-      return [];
-    }
+const treeSelector = (state: RootState) => state.tree;
 
-    if (null === state.selected) {
-      return [];
-    }
+export const getTreeNodes = createSelector(treeSelector, tree => tree.nodes);
 
-    return [
-      state.selected,
-      ...state.selected.parentsStateIdentifier.map(parentStateIdentifier =>
-        state.nodes.find(node => {
-          return node.stateIdentifier == parentStateIdentifier;
-        })
-      ),
-    ].reverse();
-  }
+export const getSelectedTreeNode = createSelector(
+  treeSelector,
+  tree => tree.selected
 );
 
+export const getExpandedTreeNodeIds = createSelector(
+  treeSelector,
+  tree => tree.expandedNodeIds
+);
+
+export const selectedTreeBreadcrumb = createSelector(treeSelector, tree => {
+  if (tree.nodes.length === 0) {
+    return [];
+  }
+
+  if (null === tree.selected) {
+    return [];
+  }
+
+  return [
+    tree.selected,
+    ...tree.selected.parentsStateIdentifier.map(parentStateIdentifier =>
+      tree.nodes.find(node => {
+        return node.stateIdentifier == parentStateIdentifier;
+      })
+    ),
+  ].reverse();
+});
+
 export const selectedTreeNodeIdentifiers = createSelector(
-  (state: TreeState) => state,
+  treeSelector,
   state => {
     if (null === state.selected) {
       return [];

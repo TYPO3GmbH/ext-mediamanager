@@ -1,4 +1,6 @@
 import { Action } from 'redux';
+import { RootState } from './index';
+import { createSelector } from 'reselect';
 
 export const SET_SIDEBAR_WIDTH = '[LAYOUT] SET SIDEBAR WIDTH';
 
@@ -28,3 +30,10 @@ export class SetSidebarWidth implements Action {
 }
 
 export type Actions = SetSidebarWidth;
+
+const layoutSelector = (state: RootState) => state.layout;
+
+export const getSidebarWidth = createSelector(
+  layoutSelector,
+  layout => layout.sidebarWidth
+);

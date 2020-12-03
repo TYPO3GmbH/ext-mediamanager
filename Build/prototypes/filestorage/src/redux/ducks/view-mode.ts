@@ -1,4 +1,7 @@
 import { Action } from 'redux';
+import { RootState } from './index';
+import { createSelector } from 'reselect';
+import { memoize } from 'lodash-es';
 
 export enum ViewMode {
   LIST,
@@ -71,3 +74,33 @@ export class SetSortOrderDirection implements Action {
 }
 
 export type Actions = SetViewMode | SetSortOrderField | SetSortOrderDirection;
+
+const viewModeSelector = (state: RootState) => state.viewMode;
+
+export const isListMode = createSelector(
+  viewModeSelector,
+  layout => layout.mode === ViewMode.LIST
+);
+
+export const isTilesMode = createSelector(
+  viewModeSelector,
+  layout => layout.mode === ViewMode.TILES
+);
+
+export const getSortField = createSelector(
+  viewModeSelector,
+  layout => layout.order.field
+);
+
+export const getSortDirection = createSelector(
+  viewModeSelector,
+  layout => layout.order.direction
+);
+
+export const isSortField = createSelector(viewModeSelector, layout =>
+  memoize((field: string) => layout.order.field === field)
+);
+
+export const isSortDirection = createSelector(viewModeSelector, layout =>
+  memoize((direction: string) => layout.order.direction === direction)
+);
