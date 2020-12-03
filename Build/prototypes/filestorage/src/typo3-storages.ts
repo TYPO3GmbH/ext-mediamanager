@@ -6,7 +6,8 @@ import {
   TemplateResult,
 } from 'lit-element';
 import themeStyles from '../../../theme/index.pcss';
-import styles from './typo3-filestorage.pcss';
+import defaultStyles from './typo3-filestorage.pcss';
+import styles from './typo3-storages.pcss';
 import { Storage } from './types/Storage';
 import { addSlotToRawHtml } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
@@ -20,7 +21,7 @@ export class Typo3Storages extends LitElement {
   @property({ type: String }) newStorageUrl!: string;
   @property({ type: String }) userName!: string;
 
-  public static styles = [themeStyles, styles];
+  public static styles = [themeStyles, defaultStyles, styles];
 
   protected render(): TemplateResult {
     return html`
