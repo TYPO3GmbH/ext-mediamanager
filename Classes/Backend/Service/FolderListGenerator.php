@@ -98,14 +98,10 @@ class FolderListGenerator implements FolderListGeneratorInterface
     protected function formatFile(File $file, array $fileReferences = []): array
     {
         $thumbnailUrl = null;
-        $thumbnailWidth = 190;
+        $thumbnailWidth = '490m';
+        $thumbnailHeight = '300m';
 
         if ($file->isImage() || $file->isMediaFile()) {
-            $thumbnailHeight = 200;
-            if ($file->getProperty('width') > 0 && $file->getProperty('height') > 0) {
-                $aspectRatio = $file->getProperty('width') / $file->getProperty('height');
-                $thumbnailWidth = (int) (300 * $aspectRatio);
-            }
             $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
         }
 
@@ -116,7 +112,6 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'type' => \strtoupper($file->getExtension()),
                 'references' => $fileReferences[$file->getUid()] ?? '-',
                 'thumbnailUrl' => $thumbnailUrl,
-                'thumbnailWidth' => $thumbnailWidth,
             ]
         );
     }
