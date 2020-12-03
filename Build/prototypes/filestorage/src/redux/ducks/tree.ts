@@ -56,18 +56,18 @@ export const treeReducer = (
     case SELECT_TREE_NODE:
       return {
         ...state,
-        selectedNodeId: action.node.identifier,
+        selectedNodeId: action.identifier,
       };
     case EXPAND_TREE_NODE:
       return {
         ...state,
-        expandedNodeIds: [...state.expandedNodeIds, action.node.identifier],
+        expandedNodeIds: [...state.expandedNodeIds, action.identifier],
       };
     case COLLAPSE_TREE_NODE:
       return {
         ...state,
         expandedNodeIds: state.expandedNodeIds.filter(
-          nodeId => nodeId != action.node.identifier
+          nodeId => nodeId != action.identifier
         ),
       };
     default:
@@ -92,17 +92,17 @@ export class LoadTreeDataFailure implements Action {
 
 export class SelectTreeNode implements Action {
   readonly type = SELECT_TREE_NODE;
-  constructor(public node: Typo3Node) {}
+  constructor(public identifier: string) {}
 }
 
 export class ExpandTreeNode implements Action {
   readonly type = EXPAND_TREE_NODE;
-  constructor(public node: Typo3Node) {}
+  constructor(public identifier: string) {}
 }
 
 export class CollapseTreeNode implements Action {
   readonly type = COLLAPSE_TREE_NODE;
-  constructor(public node: Typo3Node) {}
+  constructor(public identifier: string) {}
 }
 
 export type Actions =

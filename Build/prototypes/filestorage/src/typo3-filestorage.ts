@@ -565,7 +565,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSelectedNode(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new fromTree.SelectTreeNode(event.detail));
+    store.dispatch(new fromTree.SelectTreeNode(event.detail.identifier));
     store.dispatch(new fromList.LoadListData(event.detail.folderUrl));
   }
 
@@ -651,11 +651,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onNodeExpand(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new fromTree.ExpandTreeNode(event.detail));
+    store.dispatch(new fromTree.ExpandTreeNode(event.detail.identifier));
   }
 
   _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new fromTree.CollapseTreeNode(event.detail));
+    store.dispatch(new fromTree.CollapseTreeNode(event.detail.identifier));
   }
 
   _onDeleteClicked(): void {

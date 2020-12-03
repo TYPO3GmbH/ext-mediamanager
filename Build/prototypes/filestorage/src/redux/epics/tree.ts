@@ -21,8 +21,8 @@ export const fetchTreeData = (
             const node = data[0];
             node.parentsStateIdentifier = [];
 
-            actions.push(new fromTree.ExpandTreeNode(node));
-            actions.push(new fromTree.SelectTreeNode(node));
+            actions.push(new fromTree.ExpandTreeNode(node.identifier));
+            actions.push(new fromTree.SelectTreeNode(node.identifier));
             actions.push(new fromList.LoadListData(node.folderUrl));
           }
           return actions;
