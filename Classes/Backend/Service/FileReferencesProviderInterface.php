@@ -16,12 +16,9 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Service;
 
-use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\FileInterface;
 
 interface FileReferencesProviderInterface
 {
-    /**
-     * @return array<int, int>
-     */
-    public function getFileReferencesForFolderFiles(FolderInterface $folder): array;
+    public function getReferencesCount(FileInterface $file): int;
 }

@@ -19,12 +19,15 @@ namespace TYPO3\CMS\FilelistNg\Backend\Service;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 
 class FileReferencesProvider implements FileReferencesProviderInterface
 {
     /** @var ConnectionPool */
     private $connectionPool;
+
+    private $cachedReferencesByFolder = [];
 
     public function __construct(ConnectionPool $connectionPool)
     {
@@ -34,12 +37,21 @@ class FileReferencesProvider implements FileReferencesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getFileReferencesForFolderFiles(FolderInterface $folder): array
+    public function getReferencesCount(FileInterface $file): int
     {
-        if (0 === \count($folder->getFiles())) {
-            return [];
+        $folder = $file->getParentFolder();
+
+        if (!isset($this->cachedReferencesByFolder[$folder->getIdentifier()])) {
+            $this->cachedReferencesByFolder[$folder->getIdentifier()] = $this->getReferencesByFolderFromDatabase($folder);
         }
 
+        $folderReferences = $this->cachedReferencesByFolder[$folder->getIdentifier()];
+
+        return $folderReferences[$file->getUid()] ?? 0;
+    }
+
+    private function getReferencesByFolderFromDatabase(FolderInterface $folder): array
+    {
         $fileUids = \array_map(
             static function (File $file) {
                 return $file->getUid();

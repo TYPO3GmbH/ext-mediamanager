@@ -64,11 +64,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
         });
 
         $folderItems = \array_map([$this, 'formatFolder'], $folders);
-
-        $fileReferences = $this->fileReferencesProvider->getFileReferencesForFolderFiles($folderObject);
-        $fileItems = \array_map(function (File $file) use ($fileReferences) {
-            return $this->formatFile($file, $fileReferences);
-        }, $folderObject->getFiles());
+        $fileItems = \array_map([$this, 'formatFile'], $folderObject->getFiles());
 
         return \array_merge(\array_values($folderItems), \array_values($fileItems));
     }
@@ -96,7 +92,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
     /**
      * @return array[string]string
      */
-    protected function formatFile(File $file, array $fileReferences = []): array
+    protected function formatFile(File $file): array
     {
         $thumbnailUrl = null;
         $thumbnailWidth = '490m';
@@ -111,7 +107,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             [
                 'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
                 'type' => \strtoupper($file->getExtension()),
-                'references' => $fileReferences[$file->getUid()] ?? '-',
+                'references' => $this->fileReferencesProvider->getReferencesCount($file),
                 'thumbnailUrl' => $thumbnailUrl,
             ]
         );

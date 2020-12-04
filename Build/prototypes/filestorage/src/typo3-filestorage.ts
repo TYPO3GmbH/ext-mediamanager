@@ -335,7 +335,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
         @typo3-datagrid-dblclick="${e => this._onItemDblClick(e.detail)}"
-        @dblclick="${e => console.log(e)}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
           this._onRename(e.detail.data.identifier, e.detail.data.name)}"
       ></typo3-datagrid>`;
@@ -951,6 +950,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       if (null !== treeNode) {
         this._onSelectedNode(treeNode);
       }
+      return;
     }
+    store.dispatch(new fromFileActions.EditFileMetadata(item.identifier));
   }
 }

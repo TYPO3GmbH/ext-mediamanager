@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Functional\Backend\Service;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
@@ -45,26 +46,28 @@ class FileReferencesProviderTest extends FunctionalTestCase
      */
     public function it_can_return_file_references(): void
     {
-        /** @var FolderInterface $folder */
+        /** @var FolderInterface|MockObject $folder */
         $folder = $this->createMock(Folder::class);
+        $folder->method('getIdentifier')
+            ->willReturn('1:/root');
 
         $fileA = $this->createMock(File::class);
         $fileA->method('getUid')->willReturn(1);
+        $fileA->method('getParentFolder')->willReturn($folder);
 
         $fileB = $this->createMock(File::class);
         $fileB->method('getUid')->willReturn(2);
+        $fileB->method('getParentFolder')->willReturn($folder);
 
         $fileC = $this->createMock(File::class);
         $fileC->method('getUid')->willReturn(3);
+        $fileC->method('getParentFolder')->willReturn($folder);
 
         $folder->method('getFiles')
             ->willReturn([$fileA, $fileB, $fileC]);
 
-        $references = $this->subject->getFileReferencesForFolderFiles($folder);
-
-        $this->assertEquals([
-            1 => 2,
-            3 => 1,
-        ], $references);
+        $this->assertEquals(2, $this->subject->getReferencesCount($fileA));
+        $this->assertEquals(0, $this->subject->getReferencesCount($fileB));
+        $this->assertEquals(1, $this->subject->getReferencesCount($fileC));
     }
 }

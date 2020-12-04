@@ -52,6 +52,6 @@ class FileReferencesProviderTest extends UnitTestCase
         $folder->method('getFiles')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->subject->getFileReferencesForFolderFiles($folder));
+        $this->assertEquals([], $this->subject->getReferencesCount($folder));
     }
 }

@@ -49,8 +49,8 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $this->iconFactoryMock = $this->createMock(IconFactory::class);
         $fileReferencesProviderMock = $this->createMock(FileReferencesProviderInterface::class);
 
-        $fileReferencesProviderMock->method('getFileReferencesForFolderFiles')
-            ->willReturn([13 => 2]);
+        $fileReferencesProviderMock->method('getReferencesCount')
+            ->willReturn(2);
 
         $GLOBALS['LANG'] = LanguageService::create('default');
         $this->generator = new FolderListGenerator(
