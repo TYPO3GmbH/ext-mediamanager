@@ -942,9 +942,6 @@
           "name": "--typo3-breadcrumb-border-radius"
         },
         {
-          "name": "--typo3-breadcrumb-padding-y"
-        },
-        {
           "name": "--typo3-breadcrumb-separator-content"
         },
         {

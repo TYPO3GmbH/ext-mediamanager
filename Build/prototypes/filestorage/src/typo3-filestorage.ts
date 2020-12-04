@@ -135,6 +135,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
+              <div slot="left">${this.getStorageDropDown()}</div>
+            </typo3-topbar>
+            <typo3-topbar>
               <div slot="left">
                 <typo3-button
                   .disabled="${fromTree.getSelectedTreeNode(this.state) ==
@@ -175,7 +178,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 />
               </div>
             </typo3-topbar>
-            <typo3-topbar> ${this.getStorageDropDown()} </typo3-topbar>
           </div>
           <typo3-filetree
             .nodes="${fromTree.getTreeNodes(this.state)}"
@@ -207,6 +209,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
           <div class="topbar-wrapper">
+            <typo3-topbar>
+              <typo3-breadcrumb slot="left">
+                ${this.breadcrumbContent}
+              </typo3-breadcrumb>
+              <div slot="right">
+                ${this.getSortingDropdown()} ${this.getViewModeDropDown()}
+              </div>
+            </typo3-topbar>
             <typo3-topbar>
               <div slot="left">
                 <typo3-button
@@ -259,14 +269,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   ${this.translations['copyTo']}
                 </typo3-button>
               </div>
-              <div slot="right">
-                ${this.getSortingDropdown()} ${this.getViewModeDropDown()}
-              </div>
-            </typo3-topbar>
-            <typo3-topbar>
-              <typo3-breadcrumb slot="left">
-                ${this.breadcrumbContent}
-              </typo3-breadcrumb>
               <div slot="right">
                 <typo3-selection-button
                   suffix="${this.translations['selected']}"
@@ -501,7 +503,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
 
     return html`
-      <typo3-dropdown id="storage_select" slot="left" activatable>
+      <typo3-dropdown id="storage_select" activatable>
         <typo3-dropdown-button slot="button" color="default">
           ${unsafeHTML(addSlotToRawHtml(selectedStorage!.icon, 'icon'))}
           ${selectedStorage!.name}

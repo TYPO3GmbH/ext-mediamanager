@@ -28,6 +28,9 @@ export class Typo3Storages extends LitElement {
       <div class="content_left">
         <div class="topbar-wrapper">
           <typo3-topbar>
+            <span slot="left">${this.translations['myStorages']}</span>
+          </typo3-topbar>
+          <typo3-topbar>
             <div slot="left">
               <typo3-button @click="${this._onNewStorage}" slot="left">
                 <svg slot="icon">
@@ -36,9 +39,6 @@ export class Typo3Storages extends LitElement {
                 ${this.translations['new']}
               </typo3-button>
             </div>
-          </typo3-topbar>
-          <typo3-topbar>
-            <span slot="left">${this.translations['myStorages']}</span>
           </typo3-topbar>
         </div>
         ${this.renderContent()}
