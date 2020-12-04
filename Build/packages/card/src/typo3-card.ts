@@ -58,9 +58,10 @@ export class Typo3Card extends LitElement {
     `;
   }
 
-  _onDoubleClick(): void {
+  _onDoubleClick(event: MouseEvent): void {
     if (this.titleEditable) {
       this.inEditMode = true;
+      event.stopImmediatePropagation();
     }
   }
 
