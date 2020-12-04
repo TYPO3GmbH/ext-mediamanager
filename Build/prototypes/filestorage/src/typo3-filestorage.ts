@@ -189,7 +189,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             ?dragDropEnabled="${true}"
             ?inDropMode="${fromFileActions.isDraggingFiles(this.state)}"
             @typo3-node-drop="${this._onTreeNodeDrop}"
-            @typo3-node-select="${this._onSelectedNode}"
+            @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>
+              this._onSelectedNode(e.detail)}"
             @typo3-node-contextmenu="${this._onContextMenu}"
             @typo3-node-expand="${this._onNodeExpand}"
             @typo3-node-collapse="${this._onNodeCollapse}"
@@ -296,7 +297,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const nodes = fromTree.getSelectedTreeNodePath(this.state) as Typo3Node[];
     return nodes.map(
       node =>
-        html` <typo3-breadcrumb-item slot="item" title="${node.name}">
+        html` <typo3-breadcrumb-item
+          slot="item"
+          title="${node.name}"
+          @click="${() => this._onSelectedNode(node)}"
+        >
         </typo3-breadcrumb-item>`
     );
   }
@@ -329,6 +334,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @contextmenu="${this._onContextMenuWithoutContext}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
+        @typo3-datagrid-dblclick="${e => this._onItemDblClick(e.detail)}"
+        @dblclick="${e => console.log(e)}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
           this._onRename(e.detail.data.identifier, e.detail.data.name)}"
       ></typo3-datagrid>`;
@@ -568,9 +575,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onSelectedNode(event: CustomEvent<Typo3Node>): void {
-    store.dispatch(new fromTree.SelectTreeNode(event.detail.identifier));
-    store.dispatch(new fromList.LoadListData(event.detail.folderUrl));
+  _onSelectedNode(node: Typo3Node): void {
+    store.dispatch(new fromTree.SelectTreeNode(node.identifier));
+    store.dispatch(new fromList.LoadListData(node.folderUrl));
   }
 
   _onContextMenu(
@@ -937,7 +944,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onItemDblClick(item: ListItem): void {
-    console.log(item);
-    // store.dispatch(new fromTree.SelectTreeNode(item.identifier));
+    if (item.sysType === '_FOLDER') {
+      const treeNode = fromTree.getTreeNodeByIdentifier(this.state)(
+        item.identifier
+      );
+      if (null !== treeNode) {
+        this._onSelectedNode(treeNode);
+      }
+    }
   }
 }

@@ -19,11 +19,13 @@ import * as _ from 'lodash-es';
 import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
 import { EndEditEvent } from './lib/event/EndEditEvent';
 import { ContextMenuEvent } from './lib/event/ContextMenuEvent';
+import { Cell } from './lib/Cell';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
  *@fires typo3-datagrid-value-change - Dispatched on change of a cell value
  *@fires typo3-datagrid-contextmenu - Dispatched on row contextmenu
+ *@fires typo3-datagrid-dblclick - Dispatched on row dblclick
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
@@ -54,6 +56,7 @@ export class Typo3Datagrid extends LitElement {
         @selectionchanged="${this._onSelectionChanged}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
         @endedit="${this._onEndEdit}"
+        @dblclick="${this._onDblClick}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -192,6 +195,23 @@ export class Typo3Datagrid extends LitElement {
     this.dispatchEvent(contextMenuEvent);
   }
 
+  _onDblClick(e: CanvasDataGridEvent): void {
+    if (true === e.cell.isHeader) {
+      return;
+    }
+
+    if (this._isEditableCell(e.cell)) {
+      return;
+    }
+
+    const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
+      bubbles: true,
+      composed: true,
+      detail: e.cell.data,
+    });
+    this.dispatchEvent(dblClickEvent);
+  }
+
   _onRenderOrderByArrow(e: RenderOrderByArrowEvent): void {
     e.preventDefault();
     const canvasStyle = this.canvasGrid.style;
@@ -249,7 +269,7 @@ export class Typo3Datagrid extends LitElement {
     );
   }
   _onBeforeBeginEdit(event: CanvasDataGridEvent): void {
-    if (this.editableColumns.indexOf(event.cell.header.name) === -1) {
+    if (false === this._isEditableCell(event.cell)) {
       event.preventDefault();
     }
   }
@@ -268,5 +288,9 @@ export class Typo3Datagrid extends LitElement {
       });
       this.dispatchEvent(changeEvent);
     }
+  }
+
+  _isEditableCell(cell: Cell): boolean {
+    return this.editableColumns.indexOf(cell.header.name) !== -1;
   }
 }

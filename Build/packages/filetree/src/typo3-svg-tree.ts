@@ -7,6 +7,7 @@ import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-filetree.pcss';
 import { Typo3Node } from './lib/typo3-node';
 import { PropertyValues } from 'lit-element/lib/updating-element';
+import * as _ from 'lodash-es';
 
 interface Icon {
   identifier: string;
@@ -157,7 +158,13 @@ export class Typo3SvgTree extends LitElement {
       this._nodesAddPlaceholder();
       this._replaceData(this.nodes);
       this._nodesRemovePlaceholder();
+    } else if (_changedProperties.has('selectedNodeIds')) {
+      const selectedNodeIds = _changedProperties.get('selectedNodeIds');
+      if (false === _.isEqual(this.selectedNodeIds, selectedNodeIds)) {
+        this._update();
+      }
     }
+
     if (_changedProperties.has('inDropMode')) {
       this.container.classed('nodes-wrapper--dragging', this.inDropMode);
     }

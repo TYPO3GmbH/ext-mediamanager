@@ -9,6 +9,7 @@ import '../src/typo3-datagrid.js';
 import { Typo3Datagrid } from '../src/typo3-datagrid';
 import { EndEditEvent } from '../src/lib/event/EndEditEvent';
 import { ContextMenuEvent } from '../src/lib/event/ContextMenuEvent';
+import { CanvasDataGridEvent } from '../src/lib/event/CanvasDataGridEvent';
 
 describe('Typo3Datagrid', () => {
   let element: Typo3Datagrid;
@@ -155,5 +156,52 @@ describe('Typo3Datagrid', () => {
     await elementUpdated(element);
 
     expect(contextMenuEvents).to.equal(0);
+  });
+
+  it('will fire a `typo3-datagrid-dblclick` on dblclick on a non-editable content cell', async () => {
+    const event: CanvasDataGridEvent | {} = {
+      cell: {
+        header: {
+          name: 'identifier',
+        },
+        isHeader: false,
+        name: 'identifier',
+        data: { identifier: 1 },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      preventDefault: () => {},
+    };
+
+    const listener = oneEvent(element, 'typo3-datagrid-dblclick');
+
+    element._onDblClick(event as ContextMenuEvent);
+
+    const { detail } = await listener;
+    expect(detail).to.be.eql({ identifier: 1 });
+  });
+
+  it('wont fire a `typo3-datagrid-dblclick` on dblclick on a non-editable content cell', async () => {
+    let dblClickEvents = 0;
+
+    element.addEventListener('typo3-datagrid-dblclick', () => {
+      dblClickEvents += 1;
+    });
+
+    element.editableColumns = ['identifier'];
+
+    const event: CanvasDataGridEvent | {} = {
+      cell: {
+        header: {
+          name: 'identifier',
+        },
+        isHeader: false,
+        data: { identifier: 1 },
+      },
+    };
+
+    element._onDblClick(event as CanvasDataGridEvent);
+    await elementUpdated(element);
+
+    expect(dblClickEvents).to.equal(0);
   });
 });

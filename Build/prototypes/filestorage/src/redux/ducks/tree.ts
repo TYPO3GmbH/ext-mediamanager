@@ -3,6 +3,7 @@ import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
 import { resolveNodePath } from '../../lib/utils';
+import { memoize } from 'lodash-es';
 
 export const LOAD_TREE_DATA = '[TREE] LOAD DATA';
 export const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
@@ -116,6 +117,13 @@ export type Actions =
 const treeSelector = (state: RootState) => state.tree;
 
 export const getTreeNodes = createSelector(treeSelector, tree => tree.nodes);
+
+export const getTreeNodeByIdentifier = createSelector(getTreeNodes, nodes =>
+  memoize(
+    (identifier: string) =>
+      nodes.find(node => identifier === node.identifier) ?? null
+  )
+);
 
 export const getSelectedTreeNode = createSelector(
   treeSelector,

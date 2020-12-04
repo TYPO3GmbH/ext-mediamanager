@@ -528,6 +528,10 @@
         {
           "name": "typo3-datagrid-contextmenu",
           "description": "Dispatched on row contextmenu"
+        },
+        {
+          "name": "typo3-datagrid-dblclick",
+          "description": "Dispatched on row dblclick"
         }
       ]
     },
