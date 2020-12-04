@@ -219,7 +219,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'clipboardIdentifier' => '4fbe4dde37',
             'thumbnailUrl' => null,
             'sysType' => '_FILE',
-            'metaDataUrl' => '/typo3/index.php?route=%2Frecord%2Fedit&token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit',
+            'metaDataUrl' => '/typo3/index.php?route=%2Frecord%2Fedit&token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit&returnUrl=typo3conf%2Fext%2Fcms_filelist_ng%2FResources%2FPublic%2FHtml%2FCloseModal.html',
         ]], $result);
     }
 }

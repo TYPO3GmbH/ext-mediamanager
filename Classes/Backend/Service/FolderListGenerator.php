@@ -28,6 +28,7 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 class FolderListGenerator implements FolderListGeneratorInterface
 {
@@ -105,6 +106,8 @@ class FolderListGenerator implements FolderListGeneratorInterface
         // todo: potential bottleneck: (either perform request to get metadata url or retrieve all metadataIds via queryProvider)
         $metaDataUrl = null;
         if ($file->isIndexed() && $file->checkActionPermission('editMeta')) {
+            $closeUrl = GeneralUtility::getFileAbsFileName('EXT:cms_filelist_ng/Resources/Public/Html/CloseModal.html');
+
             $metaData = $file->getMetaData()->get();
             $urlParameters = [
                 'edit' => [
@@ -112,7 +115,9 @@ class FolderListGenerator implements FolderListGeneratorInterface
                         $metaData['uid'] => 'edit',
                     ],
                 ],
+                'returnUrl' => PathUtility::getAbsoluteWebPath($closeUrl),
             ];
+
             $metaDataUrl = (string) $this->uriBuilder->buildUriFromRoute('record_edit', $urlParameters);
         }
 
