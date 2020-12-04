@@ -336,7 +336,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const orderedData = orderBy(
       fromList.getItems(this.state),
-      [item => item.type === 'Folder', fromView.getSortField(this.state)],
+      [item => item.sysType === '_FOLDER', fromView.getSortField(this.state)],
       ['desc', fromView.getSortDirection(this.state)]
     );
 
@@ -369,7 +369,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     let badge = html``;
 
-    if (listData.type === 'Folder') {
+    if (listData.sysType === '_FOLDER') {
       const sizeNumeric = parseInt(listData.size.replace(/^\D+/g, ''));
       badge = html`<typo3-badge
         slot="badge"
@@ -394,6 +394,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
       ?titleEditable="${true}"
       @contextmenu="${contextMenuCallback}"
+      @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
         this._onRename(listData.identifier, e.detail)}"
       >${imageSlot} ${badge}
@@ -751,12 +752,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }>
   ): void {
     const contextItem = event.detail.contextItem;
-    const type =
-      Object.prototype.hasOwnProperty.call(contextItem, 'type') &&
-      (contextItem as ListItem).type !== 'Folder'
-        ? '_FILE'
-        : '_FOLDER';
-
     const identifier = contextItem.identifier;
 
     let storeAction: Action | null = null;
@@ -765,7 +760,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     switch (event.detail.option.callbackAction) {
       case 'openInfoPopUp':
-        storeAction = new fromFileActions.ShowFileInfo(identifier, type);
+        storeAction = new fromFileActions.ShowFileInfo(
+          identifier,
+          contextItem.sysType
+        );
         break;
       case 'deleteFile':
         storeAction = new fromFileActions.DeleteFiles(
@@ -936,5 +934,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       store.dispatch(action)
     );
     setTimeout(() => confirmDeleteModal.show(), 10);
+  }
+
+  _onItemDblClick(item: ListItem): void {
+    console.log(item);
+    // store.dispatch(new fromTree.SelectTreeNode(item.identifier));
   }
 }

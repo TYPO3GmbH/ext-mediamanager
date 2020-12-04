@@ -5,6 +5,7 @@ interface ListItem {
   modified: string;
   size: string;
   type: string;
+  sysType: '_FILE' | '_FOLDER';
   variants: string;
   references: string;
   rw: string;

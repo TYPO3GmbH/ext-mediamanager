@@ -223,10 +223,7 @@ export class DeleteFilesFailure implements Action {
 
 export class ShowFileInfo implements Action {
   readonly type = SHOW_FILE_INFO;
-  constructor(
-    public identifier: string,
-    public sys_type: '_FILE' | '_FOLDER'
-  ) {}
+  constructor(public identifier: string, public sysType: '_FILE' | '_FOLDER') {}
 }
 
 export class AddFolder implements Action {

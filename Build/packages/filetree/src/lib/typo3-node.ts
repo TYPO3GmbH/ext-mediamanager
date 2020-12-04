@@ -10,6 +10,7 @@ export interface Typo3Node {
   loaded: boolean;
   mountPoint: number;
   name: string;
+  sysType: '_FILE' | '_FOLDER';
   nameSourceField: string;
   siblingsCount: number;
   siblingsPosition: number;

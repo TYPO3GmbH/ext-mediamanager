@@ -57,7 +57,7 @@ export const showFileInfo = (
   return action$.ofType(fromActions.SHOW_FILE_INFO).pipe(
     tap(action => {
       // @ts-ignore
-      window.top.TYPO3.InfoWindow.showItem(action.sys_type, action.identifier);
+      window.top.TYPO3.InfoWindow.showItem(action.sysType, action.identifier);
     }),
     ignoreElements()
   );

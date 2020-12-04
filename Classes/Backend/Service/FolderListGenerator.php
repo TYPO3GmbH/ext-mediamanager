@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
@@ -137,6 +138,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             'clipboardIdentifier' => $clipboardIdentifier,
+            'sysType' => $resource instanceof FileInterface ? '_FILE' : '_FOLDER',
         ];
     }
 

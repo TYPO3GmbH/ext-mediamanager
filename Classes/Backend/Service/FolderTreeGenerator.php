@@ -172,6 +172,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             'allowEdit' => $folder->checkActionPermission('rename'),
             'clipboardIdentifier' => $clipboardIdentifier,
             'parentIdentifier' => $parentFolder instanceof Folder && !$isStorage ? $parentFolder->getCombinedIdentifier() : null,
+            'sysType' => '_FOLDER',
         ];
     }
 
