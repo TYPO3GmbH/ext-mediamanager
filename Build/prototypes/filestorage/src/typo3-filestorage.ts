@@ -952,6 +952,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       }
       return;
     }
-    store.dispatch(new fromFileActions.EditFileMetadata(item.identifier));
+    if (item.metaDataUrl) {
+      store.dispatch(new fromFileActions.EditFileMetadata(item.metaDataUrl));
+    }
   }
 }

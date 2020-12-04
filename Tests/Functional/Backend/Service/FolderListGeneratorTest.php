@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\MetaDataAspect;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProviderInterface;
@@ -156,6 +157,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $folderObject = $this->createMock(Folder::class);
         $storage = $this->createMock(ResourceStorage::class);
         $file = $this->createMock(File::class);
+        $metaData = $this->createMock(MetaDataAspect::class);
+
+        $metaData->method('get')->willReturn(['uid' => 42]);
 
         $storage->method('getFoldersInFolder')
             ->willReturn([]);
@@ -174,6 +178,15 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $file->method('getUid')
             ->willReturn(13);
+
+        $file->method('isIndexed')
+            ->willReturn(true);
+
+        $file->method('getMetaData')
+            ->willReturn($metaData);
+
+        $file->method('checkActionPermission')
+            ->willReturn(true);
 
         $icon = $this->createMock(Icon::class);
 
@@ -200,12 +213,13 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'size' => '0 B',
             'type' => 'XLS',
             'variants' => '-',
-            'references' => '2',
-            'rw' => 'R',
+            'references' => 2,
+            'rw' => 'RW',
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
             'clipboardIdentifier' => '4fbe4dde37',
             'thumbnailUrl' => null,
             'sysType' => '_FILE',
+            'metaDataUrl' => '/typo3/index.php?route=%2Frecord%2Fedit&token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit',
         ]], $result);
     }
 }

@@ -102,6 +102,20 @@ class FolderListGenerator implements FolderListGeneratorInterface
             $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
         }
 
+        // todo: potential bottleneck: (either perform request to get metadata url or retrieve all metadataIds via queryProvider)
+        $metaDataUrl = null;
+        if ($file->isIndexed() && $file->checkActionPermission('editMeta')) {
+            $metaData = $file->getMetaData()->get();
+            $urlParameters = [
+                'edit' => [
+                    'sys_file_metadata' => [
+                        $metaData['uid'] => 'edit',
+                    ],
+                ],
+            ];
+            $metaDataUrl = (string) $this->uriBuilder->buildUriFromRoute('record_edit', $urlParameters);
+        }
+
         return \array_merge(
             $this->formatResource($file),
             [
@@ -109,6 +123,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'type' => \strtoupper($file->getExtension()),
                 'references' => $this->fileReferencesProvider->getReferencesCount($file),
                 'thumbnailUrl' => $thumbnailUrl,
+                'metaDataUrl' => $metaDataUrl,
             ]
         );
     }

@@ -224,7 +224,6 @@ export const downloadFiles = (
         responseType: 'arraybuffer',
       }).pipe(
         tap(response => {
-          console.log('create file');
           const file = new Blob([response.response], {
             type: response.xhr.getResponseHeader('Content-Type') ?? undefined,
           });
@@ -324,18 +323,35 @@ export const fileActionFailure = (
     );
 };
 
+export const editFileMetadata = (
+  action$: ActionsObservable<fromActions.EditFileMetadata>
+): Observable<Action> => {
+  return action$.ofType(fromActions.EDIT_FILE_METADATA).pipe(
+    tap(action => {
+      // @ts-ignore
+      window.top.TYPO3.Modal.advanced({
+        type: window.top.TYPO3.Modal.types.iframe,
+        size: window.top.TYPO3.Modal.sizes.large,
+        content: action.metaDataUrl,
+      });
+    }),
+    ignoreElements()
+  );
+};
+
 export const fileActions = [
+  addFolder,
+  clipboardPaste,
+  clipboardSelectionAction,
+  copyFiles,
+  deleteFiles,
+  downloadFiles,
+  editFileMetadata,
+  editFileStorage,
   fileActionFailure,
   fileActionSuccess,
-  clipboardSelectionAction,
-  clipboardPaste,
-  addFolder,
-  deleteFiles,
-  editFileStorage,
+  moveFiles,
   renameFile,
   showFileInfo,
   uploadFiles,
-  moveFiles,
-  copyFiles,
-  downloadFiles,
 ];

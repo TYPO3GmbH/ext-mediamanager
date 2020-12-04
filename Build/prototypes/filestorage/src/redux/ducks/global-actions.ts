@@ -3,8 +3,8 @@ import { createSelector } from 'reselect';
 import { RootState } from './index';
 import { isExecutingFileAction } from './file-actions';
 
-export const RELOAD = '[GLOBAL] Relaod';
-export const LOAD_FLASH_MESSAGES = '[GLOBAL] Load Flash messages';
+export const RELOAD = '[GLOBAL] RELOAD';
+export const LOAD_FLASH_MESSAGES = '[GLOBAL] LOAD FLASH MESSAGES';
 
 export class Reload implements Action {
   readonly type = RELOAD;
