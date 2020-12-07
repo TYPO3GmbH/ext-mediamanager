@@ -33,6 +33,14 @@ import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3FilesModal } from './typo3-files-modal';
 import { Typo3ConfirmModal } from './typo3-confirm-modal';
+import {
+  ContextMenuItemClickEvent,
+  MoveFilesModalEvent,
+  MoveTreeNodeEvent,
+  ContextMenuEvent,
+  TreeNodeDropEvent,
+} from './types/events';
+import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -334,7 +342,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @contextmenu="${this._onContextMenuWithoutContext}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
         @typo3-datagrid-contextmenu="${this._onContextMenu}"
-        @typo3-datagrid-dblclick="${e => this._onItemDblClick(e.detail)}"
+        @typo3-datagrid-dblclick="${(e: CustomEvent) =>
+          this._onItemDblClick(e.detail)}"
         @typo3-datagrid-value-change="${(e: CustomEvent) =>
           this._onRename(e.detail.data.identifier, e.detail.data.name)}"
       ></typo3-datagrid>`;
@@ -579,9 +588,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromList.LoadListData(node.folderUrl));
   }
 
-  _onContextMenu(
-    event: CustomEvent<{ event: MouseEvent; node: Typo3Node | ListItem }>
-  ): void {
+  _onContextMenu(event: ContextMenuEvent): void {
     event.detail.event.preventDefault();
     event.detail.event.stopImmediatePropagation();
     fetch(event.detail.node.contextMenuUrl)
@@ -751,20 +758,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
   }
 
-  _onContextMenuItemClick(
-    event: CustomEvent<{
-      contextItem: ListItem | Typo3Node;
-      option: { callbackAction: string; additionalAttributes?: {} };
-    }>
-  ): void {
+  _onContextMenuItemClick(event: ContextMenuItemClickEvent): void {
     const contextItem = event.detail.contextItem;
+    const callbackAction = event.detail.option.callbackAction;
     const identifier = contextItem.identifier;
 
     let storeAction: Action | null = null;
 
     const additionalAttributes = event.detail.option!.additionalAttributes;
 
-    switch (event.detail.option.callbackAction) {
+    switch (callbackAction) {
       case 'openInfoPopUp':
         storeAction = new fromFileActions.ShowFileInfo(
           identifier,
@@ -777,10 +780,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           this.fileActionUrl
         );
         this._confirmDelete(storeAction, {
-          headline: additionalAttributes['data-title'],
-          message: additionalAttributes['data-message'],
-          submitButtonText: additionalAttributes['data-button-ok-text'],
-          cancelButtonText: additionalAttributes['data-button-close-text'],
+          headline: additionalAttributes!['data-title'],
+          message: additionalAttributes!['data-message'],
+          submitButtonText: additionalAttributes!['data-button-ok-text'],
+          cancelButtonText: additionalAttributes!['data-button-close-text'],
         });
         return;
 
@@ -837,7 +840,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     e.dataTransfer!.setDragImage(dummyElement, 0, 0);
   }
 
-  _onTreeNodeDrop(e: CustomEvent<{ event: DragEvent; node: Typo3Node }>): void {
+  _onTreeNodeDrop(e: TreeNodeDropEvent): void {
     const identifiers = fromList
       .getSelectedItems(this.state)
       .map((listItem: ListItem) => listItem.identifier);
@@ -880,9 +883,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     this.moveFilesModal.show();
   }
 
-  _onMoveFilesModal(
-    e: CustomEvent<{ mode: string; files: ListItem[]; target: Typo3Node }>
-  ): void {
+  _onMoveFilesModal(e: MoveFilesModalEvent): void {
     const action =
       e.detail.mode === 'copy'
         ? new fromFileActions.CopyFiles(
@@ -907,9 +908,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(action);
   }
 
-  _onTreeNodeMove(
-    event: CustomEvent<{ event: DragEvent; node: Typo3Node; target: Typo3Node }>
-  ): void {
+  _onTreeNodeMove(event: MoveTreeNodeEvent): void {
     const action = new fromFileActions.MoveFiles(
       [event.detail.node.identifier],
       event.detail.target,
@@ -918,23 +917,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(action);
   }
 
-  _confirmDelete(
-    action: Action,
-    modalData: {
-      headline: string;
-      message: string;
-      submitButtonText: string;
-      cancelButtonText: string;
-    }
-  ) {
+  _confirmDelete(action: Action, modalData: ConfirmDeleteModalData): void {
     const confirmDeleteModal = document.createElement(
       'typo3-confirm-modal'
     ) as Typo3ConfirmModal;
     this.shadowRoot!.append(confirmDeleteModal);
-    confirmDeleteModal.headline = modalData.headline;
-    confirmDeleteModal.message = modalData.message;
-    confirmDeleteModal.submitButtonText = modalData.submitButtonText;
-    confirmDeleteModal.cancelButtonText = modalData.cancelButtonText;
+    Object.assign(confirmDeleteModal, modalData);
 
     confirmDeleteModal.addEventListener('typo3-confirm-submit', () =>
       store.dispatch(action)

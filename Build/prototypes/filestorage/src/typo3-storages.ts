@@ -8,7 +8,7 @@ import {
 import themeStyles from '../../../theme/index.pcss';
 import defaultStyles from './typo3-filestorage.pcss';
 import styles from './typo3-storages.pcss';
-import { Storage } from './types/Storage';
+import { Storage } from './types/storage';
 import { addSlotToRawHtml } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
