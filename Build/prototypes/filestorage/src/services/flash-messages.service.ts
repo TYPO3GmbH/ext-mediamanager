@@ -2,6 +2,8 @@ import { ajax } from 'rxjs/ajax';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
+import { SnackbarValues } from '../../../../packages/snackbar/src/lib/snackbar-values';
+import { SnackbarVariants } from '../../../../packages/snackbar/src/lib/snackbar-variants';
 
 interface Message {
   message: string;
@@ -26,18 +28,25 @@ export class FlashMessagesService {
           return;
         }
 
-        window.dispatchEvent(
-          new CustomEvent('typo3-add-snackbar', {
-            detail: {
-              message: relevantMessages
-                .map(errorMessage => errorMessage.message)
-                .join('<br />'),
-              title: relevantMessages[0].title,
-              variant:
-                relevantMessages[0].severity === 0 ? 'success' : 'danger',
-            },
-          })
-        );
+        const flashMessage = {
+          message: relevantMessages
+            .map(errorMessage => errorMessage.message)
+            .join('<br />'),
+          title: relevantMessages[0].title,
+          variant:
+            relevantMessages[0].severity === 0
+              ? SnackbarVariants.success
+              : SnackbarVariants.danger,
+        };
+        this.displayFlashMessage(flashMessage as SnackbarValues);
+      })
+    );
+  }
+
+  displayFlashMessage(data: SnackbarValues): void {
+    window.dispatchEvent(
+      new CustomEvent('typo3-add-snackbar', {
+        detail: data,
       })
     );
   }

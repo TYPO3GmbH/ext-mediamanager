@@ -42,7 +42,7 @@ export class Typo3Snackbar extends LitElement {
   @property({ type: String, reflect: true }) buttonText: string | null = null;
 
   @property({ type: String, reflect: true }) variant: SnackbarVariants =
-    'default';
+    SnackbarVariants.default;
 
   @property({ type: String, reflect: true }) placement: 'left' | 'right' =
     'left';
