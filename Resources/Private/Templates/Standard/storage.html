@@ -4,6 +4,9 @@
         margin: 0;
     }
 </style>
+<script type="text/javascript">
+    window.app = <f:format.raw>{app}</f:format.raw>;
+</script>
 
 <div style="height:100vh">
     <typo3-filestorage
@@ -11,8 +14,6 @@
         fileActionUrl="{fileActionUrl}"
         storages="{storagesJson}"
         selectedStorageUid="{selectedStorageUid}"
-        translations="{translations}"
-        iconUrls="{iconUrls}"
     ></typo3-filestorage>
     <typo3-snackbar placement="right"></typo3-snackbar>
 </div>

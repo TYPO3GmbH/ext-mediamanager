@@ -41,17 +41,14 @@ import {
   TreeNodeDropEvent,
 } from './types/events';
 import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
+import { translate } from './services/translation.service';
+import { getIconUrl } from './services/icon-url.service';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: String }) treeUrl!: string;
   @property({ type: String }) fileActionUrl!: string;
-
-  @property({ type: Object }) translations: { [key: string]: string } = {};
-  @property({ type: Object }) iconUrls: { [key: string]: string } = {};
-
   @property({ type: Array }) private storages: Storage[] = [];
-
   @property({ type: Number }) private selectedStorageUid = 0;
 
   @internalProperty() private state!: RootState;
@@ -103,31 +100,31 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return [
       { name: 'identifier', type: 'text', title: ' ', hidden: true },
       { name: 'icon', type: 'html', title: ' ', width: '24' },
-      { name: 'name', title: this.translations['field.name'], sortable: true },
+      { name: 'name', title: translate('field.name'), sortable: true },
       {
         name: 'modified',
-        title: this.translations['field.modified'],
+        title: translate('field.modified'),
         width: '150',
         sortable: true,
       },
       {
         name: 'size',
-        title: this.translations['field.size'],
+        title: translate('field.size'),
         width: '100',
         sortable: true,
       },
-      { name: 'type', title: this.translations['field.type'], width: '150' },
+      { name: 'type', title: translate('field.type'), width: '150' },
       {
         name: 'variants',
-        title: this.translations['field.variants'],
+        title: translate('field.variants'),
         width: '100',
       },
       {
         name: 'references',
-        title: this.translations['field.references'],
+        title: translate('field.references'),
         width: '100',
       },
-      { name: 'rw', title: this.translations['field.rw'], width: '50' },
+      { name: 'rw', title: translate('field.rw'), width: '50' },
     ];
   }
 
@@ -157,12 +154,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                     )}"
                 >
                   <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${this.iconUrls['new']}"
-                    ></use>
+                    <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
                   </svg>
-                  ${this.translations['new']}
+                  ${translate('new')}
                 </typo3-button>
                 <typo3-button
                   .disabled="${fromTree.getSelectedTreeNode(this.state) ==
@@ -172,10 +166,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <svg slot="icon">
                     <use
                       xlink:href=""
-                      xlink:href="${this.iconUrls['upload']}"
+                      xlink:href="${getIconUrl('upload')}"
                     ></use>
                   </svg>
-                  ${this.translations['upload']}
+                  ${translate('upload')}
                 </typo3-button>
                 <input
                   type="file"
@@ -236,10 +230,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <svg slot="icon">
                     <use
                       xlink:href=""
-                      xlink:href="${this.iconUrls['download']}"
+                      xlink:href="${getIconUrl('download')}"
                     ></use>
                   </svg>
-                  ${this.translations['download']}
+                  ${translate('download')}
                 </typo3-button>
                 <typo3-button
                   .disabled="${fromList.isEmptySelection(this.state)}"
@@ -248,10 +242,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <svg slot="icon">
                     <use
                       xlink:href=""
-                      xlink:href="${this.iconUrls['delete']}"
+                      xlink:href="${getIconUrl('delete')}"
                     ></use>
                   </svg>
-                  ${this.translations['delete']}
+                  ${translate('delete')}
                 </typo3-button>
                 <typo3-button
                   .disabled="${fromList.isEmptySelection(this.state)}"
@@ -260,10 +254,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <svg slot="icon">
                     <use
                       xlink:href=""
-                      xlink:href="${this.iconUrls['moveTo']}"
+                      xlink:href="${getIconUrl('moveTo')}"
                     ></use>
                   </svg>
-                  ${this.translations['moveTo']}
+                  ${translate('moveTo')}
                 </typo3-button>
                 <typo3-button
                   .disabled="${fromList.isEmptySelection(this.state)}"
@@ -272,15 +266,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                   <svg slot="icon">
                     <use
                       xlink:href=""
-                      xlink:href="${this.iconUrls['copyTo']}"
+                      xlink:href="${getIconUrl('copyTo')}"
                     ></use>
                   </svg>
-                  ${this.translations['copyTo']}
+                  ${translate('copyTo')}
                 </typo3-button>
               </div>
               <div slot="right">
                 <typo3-selection-button
-                  suffix="${this.translations['selected']}"
+                  suffix="${translate('selected')}"
                   count="${fromList.getSelectedItems(this.state).length}"
                   @typo3-selection-clear="${this._onClearSelection}"
                 ></typo3-selection-button>
@@ -295,7 +289,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ></typo3-context-menu>
       ${this.getDragHandler()}
       <typo3-files-modal
-        .translations="${this.translations}"
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
     `;
@@ -322,10 +315,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
       return html` <div class="main-content main-content-info">
         <svg>
-          <use xlink:href="" xlink:href="${this.iconUrls['emptyFolder']}"></use>
+          <use xlink:href="" xlink:href="${getIconUrl('emptyFolder')}"></use>
         </svg>
-        <h3>${this.translations['emptyFolder']}</h3>
-        <span>${this.translations['dragFilesUploadMessage']}</span>
+        <h3>${translate('emptyFolder')}</h3>
+        <span>${translate('dragFilesUploadMessage')}</span>
       </div>`;
     }
 
@@ -421,9 +414,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-dropdown activatable @selected="${this._onSelectViewMode}">
         <typo3-dropdown-button slot="button" color="default">
           <svg slot="icon">
-            <use xlink:href="" xlink:href="${this.iconUrls['view.mode']}"></use>
+            <use xlink:href="" xlink:href="${getIconUrl('view.mode')}"></use>
           </svg>
-          ${this.translations['view.mode']}
+          ${translate('view.mode')}
         </typo3-dropdown-button>
         <typo3-dropdown-item
           value="${fromView.ViewMode.LIST}"
@@ -432,10 +425,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <svg slot="icon">
             <use
               xlink:href=""
-              xlink:href="${this.iconUrls['view.mode.list']}"
+              xlink:href="${getIconUrl('view.mode.list')}"
             ></use>
           </svg>
-          <span>${this.translations['view.mode.list']}</span>
+          <span>${translate('view.mode.list')}</span>
         </typo3-dropdown-item>
         <li divider></li>
         <typo3-dropdown-item
@@ -445,10 +438,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           <svg slot="icon">
             <use
               xlink:href=""
-              xlink:href="${this.iconUrls['view.mode.tiles']}"
+              xlink:href="${getIconUrl('view.mode.tiles')}"
             ></use>
           </svg>
-          <span>${this.translations['view.mode.tiles']}</span>
+          <span>${translate('view.mode.tiles')}</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
       ${fromGlobalActions.isLoading(this.state)
@@ -466,12 +459,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           .disabled="${fromView.isListMode(this.state)}"
         >
           <svg slot="icon">
-            <use
-              xlink:href=""
-              xlink:href="${this.iconUrls['view.sorting']}"
-            ></use>
+            <use xlink:href="" xlink:href="${getIconUrl('view.sorting')}"></use>
           </svg>
-          <span>${this.translations['view.sorting']}</span>
+          <span>${translate('view.sorting')}</span>
         </typo3-dropdown-button>
         ${this.listHeader
           .filter(header => header.sortable === true)
@@ -490,8 +480,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           })}
         <li divider></li>
         ${[
-          { title: this.translations['view.sortingdir.asc'], name: 'asc' },
-          { title: this.translations['view.sortingdir.desc'], name: 'desc' },
+          { title: translate('view.sortingdir.asc'), name: 'asc' },
+          { title: translate('view.sortingdir.desc'), name: 'desc' },
         ].map(sortDir => {
           return html`
             <typo3-dropdown-item
@@ -541,14 +531,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected getDragHandler(): TemplateResult {
-    let iconUrl = this.iconUrls['moveTo'];
-    let message = this.translations['dnd.move.message'];
-    let title = this.translations['dnd.move.title'];
+    let iconUrl = getIconUrl('moveTo');
+    let message = translate('dnd.move.message');
+    let title = translate('dnd.move.title');
 
     if (fromFileActions.isCopyDragMode(this.state)) {
-      iconUrl = this.iconUrls['copyTo'];
-      message = this.translations['dnd.copy.message'];
-      title = this.translations['dnd.copy.title'];
+      iconUrl = getIconUrl('copyTo');
+      message = translate('dnd.copy.message');
+      title = translate('dnd.copy.title');
     }
 
     title = title
@@ -681,7 +671,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       this.fileActionUrl
     ) as Action;
 
-    let message = this.translations['deleteConfirmMessage'];
+    let message = translate('deleteConfirmMessage');
 
     message = message
       ? message.replace(
@@ -695,10 +685,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       : '';
 
     this._confirmDelete(action, {
-      headline: this.translations['deleteConfirmHeadline'],
+      headline: translate('deleteConfirmHeadline'),
       message: message,
-      submitButtonText: this.translations['deleteConfirmSubmitButton'],
-      cancelButtonText: this.translations['deleteConfirmCancelButton'],
+      submitButtonText: translate('deleteConfirmSubmitButton'),
+      cancelButtonText: translate('deleteConfirmCancelButton'),
     });
   }
 

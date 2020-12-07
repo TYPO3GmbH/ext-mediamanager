@@ -14,6 +14,7 @@ import styles from './typo3-files-modal.pcss';
 import { addSlotToRawHtml, resolveNodePath } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { styleMap } from 'lit-html/directives/style-map';
+import { translate } from './services/translation.service';
 
 @customElement('typo3-files-modal')
 export class Typo3FilesModal extends LitElement {
@@ -27,8 +28,6 @@ export class Typo3FilesModal extends LitElement {
 
   @property({ type: Array }) selectedFiles: ListItem[] = [];
 
-  @property({ type: Object }) translations: { [key: string]: string } = {};
-
   @internalProperty() target: Typo3Node | null = null;
 
   public static styles = [themeStyles, styles];
@@ -38,14 +37,14 @@ export class Typo3FilesModal extends LitElement {
       this.formatFileItem(item)
     );
 
-    let headline = this.translations['modal.move.title'];
-    let btnText = this.translations['modal.move.button'];
-    let message = this.translations['modal.move.message'];
+    let headline = translate('modal.move.title');
+    let btnText = translate('modal.move.button');
+    let message = translate('modal.move.message');
 
     if ('copy' === this.mode) {
-      headline = this.translations['modal.copy.title'];
-      btnText = this.translations['modal.copy.button'];
-      message = this.translations['modal.move.message'];
+      headline = translate('modal.copy.title');
+      btnText = translate('modal.copy.button');
+      message = translate('modal.move.message');
     }
 
     message = message

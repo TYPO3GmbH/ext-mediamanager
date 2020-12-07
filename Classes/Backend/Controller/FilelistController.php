@@ -71,6 +71,7 @@ class FilelistController
 
         $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/CmsFilelistNg');
 
+        $this->addGlobalVars();
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('translations', \json_encode($this->getTranslations()));
         $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
@@ -97,6 +98,7 @@ class FilelistController
 
         $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
 
+        $this->addGlobalVars();
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
         $this->view->assign('fileActionUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'));
@@ -133,6 +135,16 @@ class FilelistController
                 'type' => $storage->getDriverType(),
             ];
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
+    }
+
+    private function addGlobalVars(): void
+    {
+        $appConfig = [
+            'translations' => $this->getTranslations(),
+            'iconUrls' => $this->getIconUrls(),
+        ];
+
+        $this->view->assign('app', \json_encode($appConfig));
     }
 
     /**

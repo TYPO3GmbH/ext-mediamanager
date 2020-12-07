@@ -1,14 +1,16 @@
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
+<script type="text/javascript">
+    window.app = <f:format.raw>{app}</f:format.raw>;
+</script>
 <style type="text/css">
     body {
         margin: 0;
     }
 </style>
+
 <div style="height:100vh">
     <typo3-storages
         storages="{storagesJson}"
-        translations="{translations}"
-        iconUrls="{iconUrls}"
         switchUserUrl="{switchUserUrl}"
         newStorageUrl="{newStorageUrl}"
         userName="{userName}"

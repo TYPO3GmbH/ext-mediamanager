@@ -11,12 +11,12 @@ import styles from './typo3-storages.pcss';
 import { Storage } from './types/storage';
 import { addSlotToRawHtml } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { translate } from './services/translation.service';
+import { getIconUrl } from './services/icon-url.service';
 
 @customElement('typo3-storages')
 export class Typo3Storages extends LitElement {
   @property({ type: Array }) private storages: Storage[] = [];
-  @property({ type: Object }) translations: { [key: string]: string } = {};
-  @property({ type: Object }) iconUrls: { [key: string]: string } = {};
   @property({ type: String }) switchUserUrl!: string;
   @property({ type: String }) newStorageUrl!: string;
   @property({ type: String }) userName!: string;
@@ -28,15 +28,15 @@ export class Typo3Storages extends LitElement {
       <div class="content_left">
         <div class="topbar-wrapper">
           <typo3-topbar>
-            <span slot="left">${this.translations['myStorages']}</span>
+            <span slot="left">${translate('myStorages')}</span>
           </typo3-topbar>
           <typo3-topbar>
             <div slot="left">
               <typo3-button @click="${this._onNewStorage}" slot="left">
                 <svg slot="icon">
-                  <use xlink:href="" xlink:href="${this.iconUrls['new']}"></use>
+                  <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
                 </svg>
-                ${this.translations['new']}
+                ${translate('new')}
               </typo3-button>
             </div>
           </typo3-topbar>
@@ -49,11 +49,9 @@ export class Typo3Storages extends LitElement {
   protected renderContent(): TemplateResult {
     if (0 === this.storages.length) {
       return html` <typo3-modal id="modal" open="true">
-        <h2>${this.translations['storagesAccessDeniedTitle']}</h2>
-        <p>${this.translations['storagesAccessDeniedMessage']}</p>
-        <p>
-          <strong>${this.translations['userName']}</strong> ${this.userName}
-        </p>
+        <h2>${translate('storagesAccessDeniedTitle')}</h2>
+        <p>${translate('storagesAccessDeniedMessage')}</p>
+        <p><strong>${translate('userName')}</strong> ${this.userName}</p>
         <div
           slot="footer"
           style="display: flex;width: 100%;align-items: center;flex-direction: column; gap: 10px;"
@@ -62,18 +60,16 @@ export class Typo3Storages extends LitElement {
             onclick="modal.close()"
             @click="${this._onSwitchUser}"
             style="width: 100%"
-            >${this.translations[
-              'storagesAccessDeniedSwitchUser'
-            ]}</typo3-button
+            >${translate('storagesAccessDeniedSwitchUser')}</typo3-button
           >
           <typo3-button
             color="success"
             @click="${this._onRefresh}"
             style="width: 100%"
           >
-            ${this.translations['storagesAccessDeniedRefresh']}
+            ${translate('storagesAccessDeniedRefresh')}
             <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
-              <use xlink:href="" xlink:href="${this.iconUrls['refresh']}"></use>
+              <use xlink:href="" xlink:href="${getIconUrl('refresh')}"></use>
             </svg>
           </typo3-button>
         </div>
@@ -81,9 +77,7 @@ export class Typo3Storages extends LitElement {
     }
 
     return html` <div class="main-content">
-      <typo3-alert color="info"
-        >${this.translations['selectStorageInfo']}</typo3-alert
-      >
+      <typo3-alert color="info">${translate('selectStorageInfo')}</typo3-alert>
       <typo3-grid>
         ${this.storages.map(storage => this.renderStoragCard(storage))}
       </typo3-grid>
