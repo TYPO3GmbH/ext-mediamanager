@@ -666,8 +666,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onDeleteClicked(): void {
     const action = new fromFileActions.DeleteFiles(
-      fromList.getSelectedItems(this.state).map(data => data.identifier),
-      this.fileActionUrl
+      fromList.getSelectedItems(this.state).map(data => data.identifier)
     ) as Action;
 
     let message = translate('deleteConfirmMessage');
@@ -692,15 +691,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onRename(identifier: string, name: string): void {
-    store.dispatch(
-      new fromFileActions.RenameFile(identifier, name, this.fileActionUrl)
-    );
+    store.dispatch(new fromFileActions.RenameFile(identifier, name));
   }
 
   _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
-    store.dispatch(
-      new fromFileActions.AddFolder(node, parentNode, this.fileActionUrl)
-    );
+    store.dispatch(new fromFileActions.AddFolder(node, parentNode));
   }
 
   _onDialogFileUpload(): void {
@@ -797,10 +792,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'pasteFileInto':
-        storeAction = new fromFileActions.ClipboardPaste(
-          identifier,
-          this.fileActionUrl
-        );
+        storeAction = new fromFileActions.ClipboardPaste(identifier);
         break;
       case 'editFileStorage':
         storeAction = new fromFileActions.EditFileStorage(identifier);
@@ -831,16 +823,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromFileActions.DragFilesEnd());
 
     const action = fromFileActions.isCopyDragMode(this.state)
-      ? new fromFileActions.CopyFiles(
-          identifiers,
-          e.detail.node,
-          this.fileActionUrl
-        )
-      : new fromFileActions.MoveFiles(
-          identifiers,
-          e.detail.node,
-          this.fileActionUrl
-        );
+      ? new fromFileActions.CopyFiles(identifiers, e.detail.node)
+      : new fromFileActions.MoveFiles(identifiers, e.detail.node);
     store.dispatch(action);
   }
 
@@ -872,13 +856,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       e.detail.mode === 'copy'
         ? new fromFileActions.CopyFiles(
             e.detail.files.map(item => item.identifier),
-            e.detail.target,
-            this.fileActionUrl
+            e.detail.target
           )
         : new fromFileActions.MoveFiles(
             e.detail.files.map(item => item.identifier),
-            e.detail.target,
-            this.fileActionUrl
+            e.detail.target
           );
 
     store.dispatch(action);
@@ -895,8 +877,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _onTreeNodeMove(event: MoveTreeNodeEvent): void {
     const action = new fromFileActions.MoveFiles(
       [event.detail.node.identifier],
-      event.detail.target,
-      this.fileActionUrl
+      event.detail.target
     );
     store.dispatch(action);
   }

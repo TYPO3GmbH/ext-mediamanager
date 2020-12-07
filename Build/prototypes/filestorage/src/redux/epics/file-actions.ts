@@ -315,6 +315,7 @@ export const fileActionFailure = (
             fromActions.ADD_FOLDER_FAILURE,
             fromActions.MOVE_FILES_FAILURE,
             fromActions.COPY_FILES_FAILURE,
+            fromActions.UPLOAD_FILES_FAILURE,
           ].indexOf(action.type) != -1
         ) {
           actions.push(new fromGlobal.Reload());
