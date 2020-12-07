@@ -13,12 +13,11 @@ import { addSlotToRawHtml } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
+import { getUrl } from './services/backend-url.service';
 
 @customElement('typo3-storages')
 export class Typo3Storages extends LitElement {
-  @property({ type: Array }) private storages: Storage[] = [];
-  @property({ type: String }) switchUserUrl!: string;
-  @property({ type: String }) newStorageUrl!: string;
+  @property({ type: Array }) storages: Storage[] = [];
   @property({ type: String }) userName!: string;
 
   public static styles = [themeStyles, defaultStyles, styles];
@@ -99,10 +98,10 @@ export class Typo3Storages extends LitElement {
   }
 
   _onSwitchUser(): void {
-    window.location.href = this.switchUserUrl;
+    window.location.href = getUrl('switchUserUrl');
   }
 
   _onNewStorage(): void {
-    window.location.href = this.newStorageUrl;
+    window.location.href = getUrl('newStorageUrl');
   }
 }

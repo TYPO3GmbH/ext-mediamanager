@@ -17,6 +17,7 @@ import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
+import { getUrl } from '../../services/backend-url.service';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>
@@ -26,7 +27,7 @@ export const renameFile = (
       const formData = new FormData();
       formData.append('data[rename][0][data]', action.identifier);
       formData.append('data[rename][0][target]', action.name);
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.RenameFileSuccess()),
         catchError(() => of(new fromActions.RenameFileFailure()))
       );
@@ -43,7 +44,7 @@ export const deleteFiles = (
       action.identifiers.forEach((identifier, index) => {
         formData.append('data[delete][' + index + '][data]', identifier);
       });
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.DeleteFilesSuccess()),
         catchError(() => of(new fromActions.DeleteFilesFailure()))
       );
@@ -74,7 +75,7 @@ export const addFolder = (
         'data[newfolder][0][target]',
         action.parentNode.identifier
       );
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.AddFolderSuccess()),
         catchError(() => of(new fromActions.AddFolderFailure()))
       );
@@ -99,7 +100,7 @@ export const uploadFiles = (
           action.dataTransfer.files.item(i) as File
         );
       }
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.UploadFilesSuccess()),
         catchError(() => of(new fromActions.UploadFilesFailure()))
       );
@@ -120,7 +121,7 @@ export const moveFiles = (
         );
         formData.append('data[move][' + i + '][data]', action.identifiers[i]);
       }
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.MoveFilesSuccess()),
         catchError(() => of(new fromActions.MoveFilesFailure()))
       );
@@ -141,7 +142,7 @@ export const copyFiles = (
         );
         formData.append('data[copy][' + i + '][data]', action.identifiers[i]);
       }
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.CopyFilesSuccess()),
         catchError(() => of(new fromActions.CopyFilesFailure()))
       );
@@ -162,7 +163,7 @@ export const clipboardSelectionAction = (
     .pipe(
       switchMap(action => {
         // @ts-ignore
-        const url: string = window.clipboardUrl;
+        const url: string = getUrl('clipboardUrl');
         const params = new URLSearchParams();
         params.append(
           'CB[el][_FILE|' + action.clipboardIdentifier + ']',
@@ -197,7 +198,7 @@ export const clipboardPaste = (
       const formData = new FormData();
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
       formData.append('CB[pad]', 'normal');
-      return ajax.post(action.fileActionUrl, formData).pipe(
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
         map(() => new fromActions.ClipboardPasteSuccess()),
         catchError(() => of(new fromActions.ClipboardPasteFailure()))
       );
@@ -216,7 +217,7 @@ export const downloadFiles = (
       });
 
       // @ts-ignore
-      const url: string = window.downloadFilesUrl;
+      const url: string = getUrl('downloadFilesUrl');
       return ajax({
         url: url,
         method: 'POST',
@@ -258,7 +259,7 @@ export const editFileStorage = (
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
       // @ts-ignore
-      const url: string = window.editFileStorageUrl;
+      const url: string = getUrl('editFileStorageUrl');
 
       const storageId = parseInt(action.identifier);
       const params = new URLSearchParams();

@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { Action } from 'redux';
 import * as fromList from '../ducks/list';
+import { getUrl } from '../../services/backend-url.service';
 
 export const fetchTreeData = (
   action$: ActionsObservable<fromTree.LoadTreeData>
@@ -13,8 +14,8 @@ export const fetchTreeData = (
   let isInit = false;
   return action$.ofType(fromTree.LOAD_TREE_DATA).pipe(
     tap(action => (isInit = action.init)),
-    switchMap(action =>
-      ajax.getJSON<Typo3Node[]>(action.url).pipe(
+    switchMap(() =>
+      ajax.getJSON<Typo3Node[]>(getUrl('treeUrl')).pipe(
         mergeMap(data => {
           const actions: Action[] = [new fromTree.LoadTreeDataSuccess(data)];
           if (isInit && data.length > 0) {

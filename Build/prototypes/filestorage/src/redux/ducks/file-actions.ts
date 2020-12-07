@@ -194,11 +194,7 @@ export const fileActionsReducer = (
 
 export class RenameFile implements Action {
   readonly type = RENAME_FILE;
-  constructor(
-    public identifier: string,
-    public name: string,
-    public fileActionUrl: string
-  ) {}
+  constructor(public identifier: string, public name: string) {}
 }
 
 export class RenameFileSuccess implements Action {
@@ -211,7 +207,7 @@ export class RenameFileFailure implements Action {
 
 export class DeleteFiles implements Action {
   readonly type = DELETE_FILES;
-  constructor(public identifiers: string[], public fileActionUrl: string) {}
+  constructor(public identifiers: string[]) {}
 }
 
 export class DeleteFilesSuccess implements Action {
@@ -229,11 +225,7 @@ export class ShowFileInfo implements Action {
 
 export class AddFolder implements Action {
   readonly type = ADD_FOLDER;
-  constructor(
-    public node: Typo3Node,
-    public parentNode: Typo3Node,
-    public fileActionUrl: string
-  ) {}
+  constructor(public node: Typo3Node, public parentNode: Typo3Node) {}
 }
 
 export class DragFilesEnd implements Action {
@@ -259,11 +251,7 @@ export class AddFolderFailure implements Action {
 
 export class UploadFiles implements Action {
   readonly type = UPLOAD_FILES;
-  constructor(
-    public dataTransfer: DataTransfer,
-    public node: Typo3Node,
-    public fileActionUrl: string
-  ) {}
+  constructor(public dataTransfer: DataTransfer, public node: Typo3Node) {}
 }
 
 export class UploadFilesSuccess implements Action {
@@ -276,11 +264,7 @@ export class UploadFilesFailure implements Action {
 
 export class MoveFiles implements Action {
   readonly type = MOVE_FILES;
-  constructor(
-    public identifiers: string[],
-    public target: Typo3Node,
-    public fileActionUrl: string
-  ) {}
+  constructor(public identifiers: string[], public target: Typo3Node) {}
 }
 
 export class MoveFilesFailure implements Action {
@@ -293,11 +277,7 @@ export class MoveFilesSuccess implements Action {
 
 export class CopyFiles implements Action {
   readonly type = COPY_FILES;
-  constructor(
-    public identifiers: string[],
-    public target: Typo3Node,
-    public fileActionUrl: string
-  ) {}
+  constructor(public identifiers: string[], public target: Typo3Node) {}
 }
 
 export class CopyFilesFailure implements Action {
@@ -332,7 +312,7 @@ export class ClipboardCutReleaseFile implements Action {
 
 export class ClipboardPaste implements Action {
   readonly type = CLIPBOARD_PASTE;
-  constructor(public targetIdentifier: string, public fileActionUrl: string) {}
+  constructor(public targetIdentifier: string) {}
 }
 
 export class ClipboardPasteFailure implements Action {

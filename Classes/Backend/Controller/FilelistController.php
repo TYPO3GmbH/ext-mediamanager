@@ -71,15 +71,14 @@ class FilelistController
 
         $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/CmsFilelistNg');
 
-        $this->addGlobalVars();
+        $this->addGlobalVars([
+            'switchUserUrl' => (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'),
+            'newStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
+                'edit[sys_file_storage][0]' => 'new',
+                'returnUrl' => (string) $fileListUrl,
+            ]),
+        ]);
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
-        $this->view->assign('translations', \json_encode($this->getTranslations()));
-        $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
-        $this->view->assign('switchUserUrl', (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'));
-        $this->view->assign('newStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
-            'edit[sys_file_storage][0]' => 'new',
-            'returnUrl' => (string) $fileListUrl,
-        ]));
         $this->view->assign('userName', $backendUser->user['username']);
 
         return new HtmlResponse($this->view->render());
@@ -96,20 +95,16 @@ class FilelistController
 
         $storages = $this->getStoragesData();
 
-        $ajaxTreeUrl = $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]);
-
-        $this->addGlobalVars();
+        $this->addGlobalVars([
+            'fileActionUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'),
+            'treeUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
+            'flashMessagesUrl' =>  (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
+            'clipboardUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
+            'downloadFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
+            'editFileStorageUrl' => (string) $this->uriBuilder->buildUriFromRoute('record_edit'),
+        ]);
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
-        $this->view->assign('fileActionUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'));
-        $this->view->assign('treeUrl', (string) $ajaxTreeUrl);
-        $this->view->assign('flashMessagesUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'));
-        $this->view->assign('clipboardUrl', (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'));
-        $this->view->assign('downloadFilesUrl', (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'));
-        $this->view->assign('editFileStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit'));
-
-        $this->view->assign('translations', \json_encode($this->getTranslations()));
-        $this->view->assign('iconUrls', \json_encode($this->getIconUrls()));
 
         return new HtmlResponse($this->view->render());
     }
@@ -137,11 +132,12 @@ class FilelistController
         }, $this->backendUserProvider->getBackendUser()->getFileStorages());
     }
 
-    private function addGlobalVars(): void
+    private function addGlobalVars(array $backendUrls): void
     {
         $appConfig = [
             'translations' => $this->getTranslations(),
             'iconUrls' => $this->getIconUrls(),
+            'backendUrls' => $backendUrls,
         ];
 
         $this->view->assign('app', \json_encode($appConfig));

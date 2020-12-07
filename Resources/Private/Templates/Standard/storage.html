@@ -1,13 +1,8 @@
-<script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
 <style type="text/css">
     body {
         margin: 0;
     }
 </style>
-<script type="text/javascript">
-    window.app = <f:format.raw>{app}</f:format.raw>;
-</script>
-
 <div style="height:100vh">
     <typo3-filestorage
         treeUrl="{treeUrl}"
@@ -16,12 +11,7 @@
         selectedStorageUid="{selectedStorageUid}"
     ></typo3-filestorage>
 </div>
-
-
+<script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
 <script type="text/javascript">
-    window.flashMessagesUrl = "<f:format.raw>{flashMessagesUrl}</f:format.raw>";
-    window.clipboardUrl = "<f:format.raw>{clipboardUrl}</f:format.raw>";
-    window.downloadFilesUrl = "<f:format.raw>{downloadFilesUrl}</f:format.raw>";
-    window.editFileStorageUrl = "<f:format.raw>{editFileStorageUrl}</f:format.raw>";
-
+    window.app = <f:format.raw>{app}</f:format.raw>;
 </script>

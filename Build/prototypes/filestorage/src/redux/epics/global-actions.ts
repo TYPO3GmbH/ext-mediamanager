@@ -20,9 +20,7 @@ export const reload = (
   return action$.ofType(fromActions.RELOAD).pipe(
     withLatestFrom(state$),
     mergeMap(([, state]) => {
-      const actions: Action[] = [
-        new fromTree.LoadTreeData(state.tree.url, false),
-      ];
+      const actions: Action[] = [new fromTree.LoadTreeData(false)];
       const selectedNode = fromTree.getSelectedTreeNode(state);
       if (selectedNode) {
         actions.push(new fromList.LoadListData(selectedNode.folderUrl));

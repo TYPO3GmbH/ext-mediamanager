@@ -46,12 +46,10 @@ import { getIconUrl } from './services/icon-url.service';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
-  @property({ type: String }) treeUrl!: string;
-  @property({ type: String }) fileActionUrl!: string;
-  @property({ type: Array }) private storages: Storage[] = [];
-  @property({ type: Number }) private selectedStorageUid = 0;
+  @property({ type: Array }) storages: Storage[] = [];
+  @property({ type: Number }) selectedStorageUid = 0;
 
-  @internalProperty() private state!: RootState;
+  @internalProperty() state!: RootState;
 
   @query('.content_left') contentLeft!: HTMLElement;
   @query('.content_right') contentRight!: HTMLElement;
@@ -70,7 +68,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    store.dispatch(new fromTree.LoadTreeData(this.treeUrl));
+    store.dispatch(new fromTree.LoadTreeData());
   }
 
   public connectedCallback(): void {
@@ -713,8 +711,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const action = new fromFileActions.UploadFiles(
       dataTransfer as DataTransfer,
-      currentNode as Typo3Node,
-      this.fileActionUrl
+      currentNode as Typo3Node
     ) as Action;
 
     store.dispatch(action);
@@ -724,8 +721,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const currentNode = fromTree.getSelectedTreeNode(this.state);
     const action = new fromFileActions.UploadFiles(
       event.detail.dataTransfer as DataTransfer,
-      currentNode as Typo3Node,
-      this.fileActionUrl
+      currentNode as Typo3Node
     ) as Action;
 
     store.dispatch(action);
@@ -766,10 +762,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'deleteFile':
-        storeAction = new fromFileActions.DeleteFiles(
-          [identifier],
-          this.fileActionUrl
-        );
+        storeAction = new fromFileActions.DeleteFiles([identifier]);
         this._confirmDelete(storeAction, {
           headline: additionalAttributes!['data-title'],
           message: additionalAttributes!['data-message'],

@@ -1,6 +1,7 @@
 import { ajax } from 'rxjs/ajax';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { getUrl } from './backend-url.service';
 
 interface Message {
   message: string;
@@ -13,7 +14,7 @@ export class FlashMessagesService {
 
   fetchFlashMessages(): Observable<Message[]> {
     // @ts-ignore
-    const flashMessagesUrl: string = window.flashMessagesUrl;
+    const flashMessagesUrl: string = getUrl('flashMessagesUrl');
 
     return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(
       tap(messages => {
