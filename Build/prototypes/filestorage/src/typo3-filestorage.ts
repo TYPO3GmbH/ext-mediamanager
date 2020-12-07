@@ -291,6 +291,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-files-modal
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
+      <typo3-snackbar placement="right"></typo3-snackbar>
     `;
   }
 
