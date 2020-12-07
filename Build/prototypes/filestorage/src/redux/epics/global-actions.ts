@@ -4,7 +4,6 @@ import {
   ignoreElements,
   mergeMap,
   switchMap,
-  tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import * as fromTree from '../ducks/tree';
@@ -12,7 +11,7 @@ import * as fromList from '../ducks/list';
 import { RootState } from '../ducks';
 import { Observable } from 'rxjs';
 import { Action } from 'redux';
-import { ajax } from 'rxjs/ajax';
+import { FlashMessagesService } from '../../services/flash-messages.service';
 
 export const reload = (
   action$: ActionsObservable<fromActions.Reload>,
@@ -34,37 +33,12 @@ export const reload = (
 };
 
 export const loadFlashMessages = (
-  action$: ActionsObservable<fromActions.LoadFlashMessages>
+  action$: ActionsObservable<fromActions.LoadFlashMessages>,
+  state$: StateObservable<RootState>,
+  dependencies: { flashMessagesService: FlashMessagesService }
 ): Observable<Action> => {
-  // @ts-ignore
-  const flashMessagesUrl: string = window.flashMessagesUrl;
-
   return action$.ofType(fromActions.LOAD_FLASH_MESSAGES).pipe(
-    switchMap(() => {
-      return ajax
-        .getJSON<
-          {
-            message: string;
-            title: string;
-            severity: number;
-          }[]
-        >(flashMessagesUrl)
-        .pipe(
-          tap(messages => {
-            messages.forEach(messageData => {
-              window.dispatchEvent(
-                new CustomEvent('typo3-add-snackbar', {
-                  detail: {
-                    message: messageData.message,
-                    title: messageData.title,
-                    variant: messageData.severity === 0 ? 'success' : 'danger',
-                  },
-                })
-              );
-            });
-          }),
-          ignoreElements()
-        );
-    })
+    switchMap(() => dependencies.flashMessagesService.fetchFlashMessages()),
+    ignoreElements()
   );
 };

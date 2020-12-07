@@ -11,6 +11,7 @@ import themeStyles from '../../../theme/index.pcss';
 import { PropertyValues } from 'lit-element/lib/updating-element';
 import { SnackbarValues } from './lib/snackbar-values';
 import { SnackbarVariants } from './lib/snackbar-variants';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 /**
  * @cssprop --typo3-snackbar-bottom
@@ -65,7 +66,7 @@ export class Typo3Snackbar extends LitElement {
           ${this.messageTitle
             ? html`<h4 class="snackbar__title">${this.messageTitle}</h4>`
             : html``}
-          <p class="snackbar__message">${this.message}</p>
+          <p class="snackbar__message">${unsafeHTML(this.message)}</p>
         </div>
         ${this.dismissible
           ? html`<typo3-button

@@ -9,23 +9,34 @@ interface Message {
 }
 
 export class FlashMessagesService {
+  constructor(private ignoreSuccessMessages = true) {}
+
   fetchFlashMessages(): Observable<Message[]> {
     // @ts-ignore
     const flashMessagesUrl: string = window.flashMessagesUrl;
 
     return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(
       tap(messages => {
-        messages.forEach(messageData => {
-          window.dispatchEvent(
-            new CustomEvent('typo3-add-snackbar', {
-              detail: {
-                message: messageData.message,
-                title: messageData.title,
-                variant: messageData.severity === 0 ? 'success' : 'danger',
-              },
-            })
-          );
-        });
+        const relevantMessages = this.ignoreSuccessMessages
+          ? messages.filter(messageData => messageData.severity != 0)
+          : messages;
+
+        if (0 === relevantMessages.length) {
+          return;
+        }
+
+        window.dispatchEvent(
+          new CustomEvent('typo3-add-snackbar', {
+            detail: {
+              message: relevantMessages
+                .map(errorMessage => errorMessage.message)
+                .join('<br />'),
+              title: relevantMessages[0].title,
+              variant:
+                relevantMessages[0].severity === 0 ? 'success' : 'danger',
+            },
+          })
+        );
       })
     );
   }

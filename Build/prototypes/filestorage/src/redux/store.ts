@@ -8,6 +8,7 @@ import {
 import { rootReducer } from './ducks';
 import { createEpicMiddleware } from 'redux-observable';
 import { rootEpic } from './epics';
+import { FlashMessagesService } from '../services/flash-messages.service';
 
 const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   action: Action
@@ -15,7 +16,11 @@ const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   next({ ...action });
 };
 
-const epicMiddleware = createEpicMiddleware();
+const epicMiddleware = createEpicMiddleware({
+  dependencies: {
+    flashMessagesService: new FlashMessagesService(),
+  },
+});
 
 const enhancer = [];
 if (
