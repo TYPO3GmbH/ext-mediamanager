@@ -314,7 +314,7 @@ export class CopyFilesFailure implements Action {
 
 export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
-  constructor(public message: string) {}
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class ClipboardCopyFile implements Action {
