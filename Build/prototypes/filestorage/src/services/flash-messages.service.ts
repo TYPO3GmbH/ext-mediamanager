@@ -15,7 +15,6 @@ export class FlashMessagesService {
   constructor(private ignoreSuccessMessages = true) {}
 
   fetchFlashMessages(): Observable<Message[]> {
-    // @ts-ignore
     const flashMessagesUrl: string = getUrl('flashMessagesUrl');
 
     return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(

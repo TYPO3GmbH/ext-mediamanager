@@ -1,4 +1,4 @@
-import { ActionsObservable } from 'redux-observable';
+import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
 import {
@@ -18,6 +18,11 @@ import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
+import { translate } from '../../services/translation.service';
+import { RootState } from '../ducks';
+import { FlashMessagesService } from '../../services/flash-messages.service';
+import { SnackbarValues } from '../../../../../packages/snackbar/src/lib/snackbar-values';
+import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>
@@ -28,7 +33,12 @@ export const renameFile = (
       formData.append('data[rename][0][data]', action.identifier);
       formData.append('data[rename][0][target]', action.name);
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.RenameFileSuccess()),
+        map(
+          () =>
+            new fromActions.RenameFileSuccess(
+              translate('message.header.fileRenamed')
+            )
+        ),
         catchError(() => of(new fromActions.RenameFileFailure()))
       );
     })
@@ -45,7 +55,12 @@ export const deleteFiles = (
         formData.append('data[delete][' + index + '][data]', identifier);
       });
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.DeleteFilesSuccess()),
+        map(
+          () =>
+            new fromActions.DeleteFilesSuccess(
+              translate('message.header.fileDeleted')
+            )
+        ),
         catchError(() => of(new fromActions.DeleteFilesFailure()))
       );
     })
@@ -76,7 +91,12 @@ export const addFolder = (
         action.parentNode.identifier
       );
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.AddFolderSuccess()),
+        map(
+          () =>
+            new fromActions.AddFolderSuccess(
+              translate('message.header.folderCreated')
+            )
+        ),
         catchError(() => of(new fromActions.AddFolderFailure()))
       );
     })
@@ -101,7 +121,12 @@ export const uploadFiles = (
         );
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.UploadFilesSuccess()),
+        map(
+          () =>
+            new fromActions.UploadFilesSuccess(
+              translate('message.header.filesUploaded')
+            )
+        ),
         catchError(() => of(new fromActions.UploadFilesFailure()))
       );
     })
@@ -122,7 +147,12 @@ export const moveFiles = (
         formData.append('data[move][' + i + '][data]', action.identifiers[i]);
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.MoveFilesSuccess()),
+        map(
+          () =>
+            new fromActions.MoveFilesSuccess(
+              translate('message.header.filesMoved')
+            )
+        ),
         catchError(() => of(new fromActions.MoveFilesFailure()))
       );
     })
@@ -143,7 +173,12 @@ export const copyFiles = (
         formData.append('data[copy][' + i + '][data]', action.identifiers[i]);
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.CopyFilesSuccess()),
+        map(
+          () =>
+            new fromActions.CopyFilesSuccess(
+              translate('message.header.filesCopied')
+            )
+        ),
         catchError(() => of(new fromActions.CopyFilesFailure()))
       );
     })
@@ -162,7 +197,6 @@ export const clipboardSelectionAction = (
     )
     .pipe(
       switchMap(action => {
-        // @ts-ignore
         const url: string = getUrl('clipboardUrl');
         const params = new URLSearchParams();
         params.append(
@@ -199,7 +233,12 @@ export const clipboardPaste = (
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
       formData.append('CB[pad]', 'normal');
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.ClipboardPasteSuccess()),
+        map(
+          () =>
+            new fromActions.ClipboardPasteSuccess(
+              translate('message.header.filesMoved')
+            )
+        ),
         catchError(() => of(new fromActions.ClipboardPasteFailure()))
       );
     })
@@ -215,8 +254,6 @@ export const downloadFiles = (
       action.identifiers.forEach((identifier, i) => {
         formData.append('identifiers[' + i + ']', identifier);
       });
-
-      // @ts-ignore
       const url: string = getUrl('downloadFilesUrl');
       return ajax({
         url: url,
@@ -258,7 +295,6 @@ export const editFileStorage = (
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
-      // @ts-ignore
       const url: string = getUrl('editFileStorageUrl');
 
       const storageId = parseInt(action.identifier);
@@ -266,7 +302,6 @@ export const editFileStorage = (
       params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
       params.append('returnUrl', window.document.location.href);
 
-      // @ts-ignore
       window.location.href = url + '&' + params.toString();
     }),
     ignoreElements()
@@ -274,7 +309,9 @@ export const editFileStorage = (
 };
 
 export const fileActionSuccess = (
-  action$: ActionsObservable<fromActions.Actions>
+  action$: ActionsObservable<fromActions.SuccessAction>,
+  state$: StateObservable<RootState>,
+  dependencies: { flashMessagesService: FlashMessagesService }
 ): Observable<Action> => {
   return action$
     .ofType(
@@ -287,6 +324,12 @@ export const fileActionSuccess = (
       fromActions.CLIPBOARD_PASTE_SUCCESS
     )
     .pipe(
+      tap(action => {
+        const message = new SnackbarValues();
+        message.message = action.message;
+        message.variant = SnackbarVariants.success;
+        dependencies.flashMessagesService.displayFlashMessage(message);
+      }),
       mergeMap(() => [
         new fromGlobal.Reload(),
         new fromGlobal.LoadFlashMessages(),
@@ -325,15 +368,22 @@ export const fileActionFailure = (
     );
 };
 
+interface Typo3Modal {
+  types: { [propName: string]: string };
+  sizes: { [propName: string]: string };
+  advanced(data: { type: string; size: string; content: string }): void;
+}
+
 export const editFileMetadata = (
   action$: ActionsObservable<fromActions.EditFileMetadata>
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_METADATA).pipe(
     tap(action => {
       // @ts-ignore
-      window.top.TYPO3.Modal.advanced({
-        type: window.top.TYPO3.Modal.types.iframe,
-        size: window.top.TYPO3.Modal.sizes.large,
+      const topModal: Typo3Modal = window.top.TYPO3.Modal;
+      topModal.advanced({
+        type: topModal.types.iframe,
+        size: topModal.sizes.large,
         content: action.metaDataUrl,
       });
     }),

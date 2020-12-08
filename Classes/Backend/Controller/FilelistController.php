@@ -194,6 +194,14 @@ class FilelistController
             'deleteConfirmMessage' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.delete'),
             'deleteConfirmCancelButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel'),
             'deleteConfirmSubmitButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete'),
+            'message.header.fileDeleted' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:message.header.fileDeleted'),
+            'message.header.filesMoved' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.filesMoved'),
+            'message.header.filesCopied' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.filesCopied'),
+            'message.header.folderCreated' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.folderCreated'),
+            'message.header.filesUploaded' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.filesUploaded'),
+            'message.header.fileRenamed' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.fileRenamed'),
+            'message.header.folderRenamed' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.folderRenamed'),
+            'message.header.genericError' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.genericError'),
         ];
     }
 

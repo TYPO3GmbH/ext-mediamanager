@@ -192,13 +192,18 @@ export const fileActionsReducer = (
   }
 };
 
+export interface SuccessAction extends Action {
+  message: string;
+}
+
 export class RenameFile implements Action {
   readonly type = RENAME_FILE;
   constructor(public identifier: string, public name: string) {}
 }
 
-export class RenameFileSuccess implements Action {
+export class RenameFileSuccess implements SuccessAction {
   readonly type = RENAME_FILE_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class RenameFileFailure implements Action {
@@ -210,8 +215,9 @@ export class DeleteFiles implements Action {
   constructor(public identifiers: string[]) {}
 }
 
-export class DeleteFilesSuccess implements Action {
+export class DeleteFilesSuccess implements SuccessAction {
   readonly type = DELETE_FILES_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class DeleteFilesFailure implements Action {
@@ -228,6 +234,15 @@ export class AddFolder implements Action {
   constructor(public node: Typo3Node, public parentNode: Typo3Node) {}
 }
 
+export class AddFolderSuccess implements SuccessAction {
+  readonly type = ADD_FOLDER_SUCCESS;
+  constructor(public message: string) {}
+}
+
+export class AddFolderFailure implements Action {
+  readonly type = ADD_FOLDER_FAILURE;
+}
+
 export class DragFilesEnd implements Action {
   readonly type = DRAG_FILES_END;
 }
@@ -241,21 +256,14 @@ export class DragFilesStart implements Action {
   readonly type = DRAG_FILES_START;
 }
 
-export class AddFolderSuccess implements Action {
-  readonly type = ADD_FOLDER_SUCCESS;
-}
-
-export class AddFolderFailure implements Action {
-  readonly type = ADD_FOLDER_FAILURE;
-}
-
 export class UploadFiles implements Action {
   readonly type = UPLOAD_FILES;
   constructor(public dataTransfer: DataTransfer, public node: Typo3Node) {}
 }
 
-export class UploadFilesSuccess implements Action {
+export class UploadFilesSuccess implements SuccessAction {
   readonly type = UPLOAD_FILES_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class UploadFilesFailure implements Action {
@@ -271,8 +279,9 @@ export class MoveFilesFailure implements Action {
   readonly type = MOVE_FILES_FAILURE;
 }
 
-export class MoveFilesSuccess implements Action {
+export class MoveFilesSuccess implements SuccessAction {
   readonly type = MOVE_FILES_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class CopyFiles implements Action {
@@ -286,6 +295,7 @@ export class CopyFilesFailure implements Action {
 
 export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class ClipboardCopyFile implements Action {
@@ -319,8 +329,9 @@ export class ClipboardPasteFailure implements Action {
   readonly type = CLIPBOARD_PASTE_FAILURE;
 }
 
-export class ClipboardPasteSuccess implements Action {
+export class ClipboardPasteSuccess implements SuccessAction {
   readonly type = CLIPBOARD_PASTE_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class DownloadFiles implements Action {

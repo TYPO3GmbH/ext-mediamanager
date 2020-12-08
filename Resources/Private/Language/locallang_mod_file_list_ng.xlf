@@ -198,6 +198,27 @@
 			<trans-unit id="targetNoDir" resname="targetNoDir">
 				<source>Target was not a directory!</source>
 			</trans-unit>
+			<trans-unit id="message.header.filesMoved" resname="message.header.filesMoved">
+				<source>Files moved</source>
+			</trans-unit>
+			<trans-unit id="message.header.filesCopied" resname="message.header.filesCopied">
+				<source>Files copied</source>
+			</trans-unit>
+			<trans-unit id="message.header.folderCreated" resname="message.header.folderCreated">
+				<source>Folder created</source>
+			</trans-unit>
+			<trans-unit id="message.header.filesUploaded" resname="message.header.filesUploaded">
+				<source>Files uploaded</source>
+			</trans-unit>
+			<trans-unit id="message.header.fileRenamed" resname="message.header.fileRenamed">
+				<source>File renamed</source>
+			</trans-unit>
+			<trans-unit id="message.header.folderRenamed" resname="message.header.folderRenamed">
+				<source>Folder renamed</source>
+			</trans-unit>
+			<trans-unit id="message.header.genericError" resname="message.header.genericError">
+				<source>Error</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
