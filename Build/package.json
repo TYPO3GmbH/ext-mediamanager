@@ -93,7 +93,7 @@
     "@types/lodash-es": "^4.17.3",
     "@typo3/icons": "^2.0.4",
     "@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
-    "canvas-datagrid": "^0.24.4",
+    "canvas-datagrid": "^0.25.4",
     "d3": "^6.2.0",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0",
