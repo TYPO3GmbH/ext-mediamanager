@@ -7,12 +7,22 @@ import * as fromTree from '../redux/ducks/tree';
 import * as fromList from '../redux/ducks/list';
 import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
 
+interface FileResponseItem {
+  identifier: string;
+}
+
+type FilesOrFoldersResponse = string[] | FileResponseItem[];
+
 interface RenameResponse {
-  rename: string[] | { identifier: string }[];
+  rename: FilesOrFoldersResponse;
 }
 
 interface MoveResponse {
-  move: string[] | { identifier: string }[];
+  move: FilesOrFoldersResponse;
+}
+
+interface CopyResponse {
+  copy: FilesOrFoldersResponse;
 }
 
 export class UndoActionResolverService {
@@ -26,6 +36,8 @@ export class UndoActionResolverService {
         return this.getUndoRenameAction(action, ajaxResponse.response, state);
       case fromFileActions.MOVE_FILES:
         return this.getUndoMoveAction(action, ajaxResponse.response, state);
+      case fromFileActions.COPY_FILES:
+        return this.getUndoCopyAction(action, ajaxResponse.response);
     }
   }
 
@@ -85,6 +97,34 @@ export class UndoActionResolverService {
         'data[move][' + index + '][target]'
       ] = oldItem.parentIdentifier as string;
     });
+
+    return new fromFileActions.UndoFilesAction(data);
+  }
+
+  private getUndoCopyAction(
+    action: fromFileActions.CopyFiles,
+    copyResponse: CopyResponse
+  ): fromFileActions.UndoFilesAction {
+    const data: { [key: string]: string } = {};
+
+    copyResponse.copy.forEach(
+      (copyItemResponse: string | FileResponseItem, index: number) => {
+        if (!Object.prototype.hasOwnProperty.call(action.identifiers, index)) {
+          return;
+        }
+        const identifier = action.identifiers[index];
+
+        const newIdentifierWithoutStorage = isString(copyItemResponse)
+          ? copyItemResponse
+          : copyItemResponse['identifier'];
+
+        const newIdentifier =
+          extractStorageFromIdentifier(identifier) +
+          newIdentifierWithoutStorage;
+
+        data['data[delete][' + index + '][data]'] = newIdentifier;
+      }
+    );
 
     return new fromFileActions.UndoFilesAction(data);
   }

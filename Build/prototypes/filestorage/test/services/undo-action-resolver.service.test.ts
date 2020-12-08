@@ -1,6 +1,7 @@
 import { expect } from '@open-wc/testing';
 import { UndoActionResolverService } from '../../src/services/undo-action-resolver.service';
 import {
+  CopyFiles,
   MoveFiles,
   RenameFile,
   UndoFilesAction,
@@ -71,6 +72,25 @@ describe('UndoActionResolverService', () => {
       'data[move][0][target]': '1:/test/',
       'data[move][1][data]': '1:/new_dir/dir',
       'data[move][1][target]': '1:/test/',
+    });
+  });
+
+  it('will return `UndoAction` for `CopyFiles` ', () => {
+    const action = new CopyFiles(['1:/test/hello.jpg', '1:/test/dir/'], {
+      identifier: '1:/new_dir',
+    } as Typo3Node);
+    const response = {
+      response: {
+        copy: [{ identifier: '/new_dir/hello.jpg' }, '/new_dir/dir'],
+      },
+    } as AjaxResponse;
+
+    const undoAction = service.getUndoAction(action, response, state);
+
+    expect(undoAction).to.be.instanceOf(UndoFilesAction);
+    expect(undoAction?.formData).to.be.eql({
+      'data[delete][0][data]': '1:/new_dir/hello.jpg',
+      'data[delete][1][data]': '1:/new_dir/dir',
     });
   });
 });
