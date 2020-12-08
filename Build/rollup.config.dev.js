@@ -48,7 +48,9 @@ const plugins = [
 baseConfig.plugins.unshift(...plugins);
 
 const configs = globby
-  .sync('(packages|prototypes)/**/(src|test)/*.ts')
+  .sync(
+    '(((packages|prototypes)/**/(src|test)/*.ts)|(packages|prototypes)/**/**/*.test.ts)'
+  )
   .map(inputFile => {
     return merge(baseConfig, {
       input: inputFile,
