@@ -90,6 +90,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $subFolder->method('getFileCount')
             ->willReturn(0);
 
+        $subFolder->method('getParentFolder')
+            ->willReturn($folderObject);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -104,6 +107,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $folderObject->method('getFiles')
             ->willReturn([]);
+
+        $folderObject->method('getCombinedIdentifier')
+            ->willReturn('1:/');
 
         $result = $this->generator->getFolderItems($folderObject);
 
@@ -120,6 +126,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'contextMenuUrl' => '/typo3/index.php?route=%2Fajax%2Fcontext-menu&token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder',
             'clipboardIdentifier' => '95ed07cec0',
             'sysType' => '_FOLDER',
+            'parentIdentifier' => '1:/',
         ]], $result);
     }
 
@@ -188,6 +195,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $file->method('checkActionPermission')
             ->willReturn(true);
 
+        $file->method('getParentFolder')
+            ->willReturn($folderObject);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -202,6 +212,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $folderObject->method('getStorage')
             ->willReturn($storage);
+
+        $folderObject->method('getCombinedIdentifier')
+            ->willReturn('1:/');
 
         $result = $this->generator->getFolderItems($folderObject);
 
@@ -220,6 +233,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'thumbnailUrl' => null,
             'sysType' => '_FILE',
             'metaDataUrl' => '/typo3/index.php?route=%2Frecord%2Fedit&token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit&returnUrl=typo3conf%2Fext%2Fcms_filelist_ng%2FResources%2FPublic%2FHtml%2FCloseModal.html',
+            'parentIdentifier' => '1:/',
         ]], $result);
     }
 }
