@@ -6,6 +6,7 @@ import {
   MoveFiles,
   RenameFile,
   UndoFilesAction,
+  UploadFiles,
 } from '../../src/redux/ducks/file-actions';
 import { AjaxResponse } from 'rxjs/ajax';
 import { RootState } from '../../src/redux/ducks';
@@ -111,6 +112,29 @@ describe('UndoActionResolverService', () => {
     expect(undoAction).to.be.instanceOf(UndoFilesAction);
     expect(undoAction?.formData).to.be.eql({
       'data[delete][0][data]': '1:/test/dir/new/',
+    });
+  });
+
+  it('will return `UndoAction` for `UploadFiles` ', () => {
+    const action = new UploadFiles(
+      {} as DataTransfer,
+      { identifier: '1:/test/dir/' } as Typo3Node
+    );
+    const response = {
+      response: {
+        upload: [
+          { id: '1:/test/dir/test1.jpg' },
+          { id: '1:/test/dir/test2.jpg' },
+        ],
+      },
+    } as AjaxResponse;
+
+    const undoAction = service.getUndoAction(action, response, state);
+
+    expect(undoAction).to.be.instanceOf(UndoFilesAction);
+    expect(undoAction?.formData).to.be.eql({
+      'data[delete][0][data]': '1:/test/dir/test1.jpg',
+      'data[delete][1][data]': '1:/test/dir/test2.jpg',
     });
   });
 });

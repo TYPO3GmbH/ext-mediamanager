@@ -8,6 +8,7 @@ import * as fromList from '../redux/ducks/list';
 import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
 
 interface FileResponseItem {
+  id: string;
   identifier: string;
 }
 
@@ -29,6 +30,10 @@ interface NewFolderResponse {
   newfolder: string[];
 }
 
+interface UploadFilesResponse {
+  upload: FileResponseItem[];
+}
+
 export class UndoActionResolverService {
   getUndoAction(
     action: fromFileActions.Actions,
@@ -44,6 +49,8 @@ export class UndoActionResolverService {
         return this.getUndoCopyAction(action, ajaxResponse.response);
       case fromFileActions.ADD_FOLDER:
         return this.getUndoAddFolderAction(action, ajaxResponse.response);
+      case fromFileActions.UPLOAD_FILES:
+        return this.getUndoUploadFilesAction(action, ajaxResponse.response);
     }
   }
 
@@ -148,6 +155,20 @@ export class UndoActionResolverService {
           extractStorageFromIdentifier(parentIdentifier) + newFolderIdentifier;
 
         data['data[delete][' + index + '][data]'] = newIdentifier;
+      }
+    );
+
+    return new fromFileActions.UndoFilesAction(data);
+  }
+
+  getUndoUploadFilesAction(
+    action: fromFileActions.UploadFiles,
+    uploadFilesResponse: UploadFilesResponse
+  ): fromFileActions.UndoFilesAction {
+    const data: { [key: string]: string } = {};
+    uploadFilesResponse.upload.forEach(
+      (fileResponseItem: FileResponseItem, index: number) => {
+        data['data[delete][' + index + '][data]'] = fileResponseItem.id;
       }
     );
 
