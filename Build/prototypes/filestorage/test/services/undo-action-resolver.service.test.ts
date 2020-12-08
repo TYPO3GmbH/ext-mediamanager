@@ -1,6 +1,7 @@
 import { expect } from '@open-wc/testing';
 import { UndoActionResolverService } from '../../src/services/undo-action-resolver.service';
 import {
+  AddFolder,
   CopyFiles,
   MoveFiles,
   RenameFile,
@@ -91,6 +92,25 @@ describe('UndoActionResolverService', () => {
     expect(undoAction?.formData).to.be.eql({
       'data[delete][0][data]': '1:/new_dir/hello.jpg',
       'data[delete][1][data]': '1:/new_dir/dir',
+    });
+  });
+
+  it('will return `UndoAction` for `AddFolder` ', () => {
+    const action = new AddFolder(
+      { name: 'New' } as Typo3Node,
+      { identifier: '1:/test/dir/' } as Typo3Node
+    );
+    const response = {
+      response: {
+        newfolder: ['/test/dir/new/'],
+      },
+    } as AjaxResponse;
+
+    const undoAction = service.getUndoAction(action, response, state);
+
+    expect(undoAction).to.be.instanceOf(UndoFilesAction);
+    expect(undoAction?.formData).to.be.eql({
+      'data[delete][0][data]': '1:/test/dir/new/',
     });
   });
 });

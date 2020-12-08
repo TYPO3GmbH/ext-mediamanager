@@ -25,6 +25,10 @@ interface CopyResponse {
   copy: FilesOrFoldersResponse;
 }
 
+interface NewFolderResponse {
+  newfolder: string[];
+}
+
 export class UndoActionResolverService {
   getUndoAction(
     action: fromFileActions.Actions,
@@ -38,6 +42,8 @@ export class UndoActionResolverService {
         return this.getUndoMoveAction(action, ajaxResponse.response, state);
       case fromFileActions.COPY_FILES:
         return this.getUndoCopyAction(action, ajaxResponse.response);
+      case fromFileActions.ADD_FOLDER:
+        return this.getUndoAddFolderAction(action, ajaxResponse.response);
     }
   }
 
@@ -121,6 +127,25 @@ export class UndoActionResolverService {
         const newIdentifier =
           extractStorageFromIdentifier(identifier) +
           newIdentifierWithoutStorage;
+
+        data['data[delete][' + index + '][data]'] = newIdentifier;
+      }
+    );
+
+    return new fromFileActions.UndoFilesAction(data);
+  }
+
+  getUndoAddFolderAction(
+    action: fromFileActions.AddFolder,
+    newFolderResponse: NewFolderResponse
+  ): fromFileActions.UndoFilesAction {
+    const data: { [key: string]: string } = {};
+
+    newFolderResponse.newfolder.forEach(
+      (newFolderIdentifier: string, index: number) => {
+        const parentIdentifier = action.parentNode.identifier;
+        const newIdentifier =
+          extractStorageFromIdentifier(parentIdentifier) + newFolderIdentifier;
 
         data['data[delete][' + index + '][data]'] = newIdentifier;
       }
