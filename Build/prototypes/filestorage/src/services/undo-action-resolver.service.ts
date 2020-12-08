@@ -5,9 +5,14 @@ import { extractStorageFromIdentifier } from '../lib/utils';
 import { RootState } from '../redux/ducks';
 import * as fromTree from '../redux/ducks/tree';
 import * as fromList from '../redux/ducks/list';
+import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
 
 interface RenameResponse {
   rename: string[] | { identifier: string }[];
+}
+
+interface MoveResponse {
+  move: string[] | { identifier: string }[];
 }
 
 export class UndoActionResolverService {
@@ -19,6 +24,8 @@ export class UndoActionResolverService {
     switch (action.type) {
       case fromFileActions.RENAME_FILE:
         return this.getUndoRenameAction(action, ajaxResponse.response, state);
+      case fromFileActions.MOVE_FILES:
+        return this.getUndoMoveAction(action, ajaxResponse.response, state);
     }
   }
 
@@ -27,9 +34,7 @@ export class UndoActionResolverService {
     renameResponse: RenameResponse,
     state: RootState
   ): fromFileActions.UndoFilesAction | undefined {
-    const oldItem =
-      fromTree.getTreeNodeByIdentifier(state)(action.identifier) ||
-      fromList.getListItemByIdentifier(state)(action.identifier);
+    const oldItem = this.getItemFromStore(state, action.identifier);
     if (null === oldItem) {
       return;
     }
@@ -48,5 +53,49 @@ export class UndoActionResolverService {
     };
 
     return new fromFileActions.UndoFilesAction(data);
+  }
+
+  private getUndoMoveAction(
+    action: fromFileActions.MoveFiles,
+    moveResponse: MoveResponse,
+    state: RootState
+  ): fromFileActions.UndoFilesAction {
+    const data: { [key: string]: string } = {};
+    action.identifiers.forEach((identifier: string, index) => {
+      const oldItem = this.getItemFromStore(state, identifier);
+
+      if (null === oldItem) {
+        return;
+      }
+
+      if (!Object.prototype.hasOwnProperty.call(moveResponse.move, index)) {
+        return;
+      }
+      const moveItemResponse = moveResponse.move[index];
+
+      const newIdentifierWithoutStorage = isString(moveItemResponse)
+        ? moveItemResponse
+        : moveItemResponse['identifier'];
+
+      const newIdentifier =
+        extractStorageFromIdentifier(identifier) + newIdentifierWithoutStorage;
+
+      data['data[move][' + index + '][data]'] = newIdentifier;
+      data[
+        'data[move][' + index + '][target]'
+      ] = oldItem.parentIdentifier as string;
+    });
+
+    return new fromFileActions.UndoFilesAction(data);
+  }
+
+  private getItemFromStore(
+    state: RootState,
+    identifier: string
+  ): Typo3Node | ListItem | null {
+    return (
+      fromTree.getTreeNodeByIdentifier(state)(identifier) ||
+      fromList.getListItemByIdentifier(state)(identifier)
+    );
   }
 }
