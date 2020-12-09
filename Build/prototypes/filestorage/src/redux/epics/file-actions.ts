@@ -1,4 +1,4 @@
-import { ActionsObservable } from 'redux-observable';
+import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
 import {
@@ -12,23 +12,44 @@ import {
   mergeMap,
   switchMap,
   tap,
+  withLatestFrom,
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
+import { translate } from '../../services/translation.service';
+import { RootState } from '../ducks';
+import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
+import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
 
 export const renameFile = (
-  action$: ActionsObservable<fromActions.RenameFile>
+  action$: ActionsObservable<fromActions.RenameFile>,
+  state$: StateObservable<RootState>,
+  dependencies: { undoActionResolverService: UndoActionResolverService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.RENAME_FILE).pipe(
-    switchMap(action => {
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
       const formData = new FormData();
       formData.append('data[rename][0][data]', action.identifier);
       formData.append('data[rename][0][target]', action.name);
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.RenameFileSuccess()),
+        map(response =>
+          dependencies.undoActionResolverService.getUndoAction(
+            action,
+            response,
+            state
+          )
+        ),
+        map(
+          undoAction =>
+            new fromActions.RenameFileSuccess(
+              translate('message.header.fileRenamed'),
+              undoAction
+            )
+        ),
         catchError(() => of(new fromActions.RenameFileFailure()))
       );
     })
@@ -45,7 +66,12 @@ export const deleteFiles = (
         formData.append('data[delete][' + index + '][data]', identifier);
       });
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.DeleteFilesSuccess()),
+        map(
+          () =>
+            new fromActions.DeleteFilesSuccess(
+              translate('message.header.fileDeleted')
+            )
+        ),
         catchError(() => of(new fromActions.DeleteFilesFailure()))
       );
     })
@@ -65,10 +91,13 @@ export const showFileInfo = (
 };
 
 export const addFolder = (
-  action$: ActionsObservable<fromActions.AddFolder>
+  action$: ActionsObservable<fromActions.AddFolder>,
+  state$: StateObservable<RootState>,
+  dependencies: { undoActionResolverService: UndoActionResolverService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.ADD_FOLDER).pipe(
-    switchMap(action => {
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
       const formData = new FormData();
       formData.append('data[newfolder][0][data]', action.node.name);
       formData.append(
@@ -76,7 +105,20 @@ export const addFolder = (
         action.parentNode.identifier
       );
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.AddFolderSuccess()),
+        map(response =>
+          dependencies.undoActionResolverService.getUndoAction(
+            action,
+            response,
+            state
+          )
+        ),
+        map(
+          undoAction =>
+            new fromActions.AddFolderSuccess(
+              translate('message.header.folderCreated'),
+              undoAction
+            )
+        ),
         catchError(() => of(new fromActions.AddFolderFailure()))
       );
     })
@@ -84,10 +126,13 @@ export const addFolder = (
 };
 
 export const uploadFiles = (
-  action$: ActionsObservable<fromActions.UploadFiles>
+  action$: ActionsObservable<fromActions.UploadFiles>,
+  state$: StateObservable<RootState>,
+  dependencies: { undoActionResolverService: UndoActionResolverService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.UPLOAD_FILES).pipe(
-    switchMap(action => {
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
       const formData = new FormData();
       for (let i = 0; i < action.dataTransfer.files.length; i++) {
         formData.append(
@@ -101,7 +146,20 @@ export const uploadFiles = (
         );
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.UploadFilesSuccess()),
+        map(response =>
+          dependencies.undoActionResolverService.getUndoAction(
+            action,
+            response,
+            state
+          )
+        ),
+        map(
+          undoAction =>
+            new fromActions.UploadFilesSuccess(
+              translate('message.header.filesUploaded'),
+              undoAction
+            )
+        ),
         catchError(() => of(new fromActions.UploadFilesFailure()))
       );
     })
@@ -109,10 +167,13 @@ export const uploadFiles = (
 };
 
 export const moveFiles = (
-  action$: ActionsObservable<fromActions.MoveFiles>
+  action$: ActionsObservable<fromActions.MoveFiles>,
+  state$: StateObservable<RootState>,
+  dependencies: { undoActionResolverService: UndoActionResolverService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.MOVE_FILES).pipe(
-    switchMap(action => {
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
       const formData = new FormData();
       for (let i = 0; i < action.identifiers.length; i++) {
         formData.append(
@@ -122,7 +183,20 @@ export const moveFiles = (
         formData.append('data[move][' + i + '][data]', action.identifiers[i]);
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.MoveFilesSuccess()),
+        map(response =>
+          dependencies.undoActionResolverService.getUndoAction(
+            action,
+            response,
+            state
+          )
+        ),
+        map(
+          undoAction =>
+            new fromActions.MoveFilesSuccess(
+              translate('message.header.filesMoved'),
+              undoAction
+            )
+        ),
         catchError(() => of(new fromActions.MoveFilesFailure()))
       );
     })
@@ -130,10 +204,13 @@ export const moveFiles = (
 };
 
 export const copyFiles = (
-  action$: ActionsObservable<fromActions.CopyFiles>
+  action$: ActionsObservable<fromActions.CopyFiles>,
+  state$: StateObservable<RootState>,
+  dependencies: { undoActionResolverService: UndoActionResolverService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.COPY_FILES).pipe(
-    switchMap(action => {
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
       const formData = new FormData();
       for (let i = 0; i < action.identifiers.length; i++) {
         formData.append(
@@ -143,7 +220,20 @@ export const copyFiles = (
         formData.append('data[copy][' + i + '][data]', action.identifiers[i]);
       }
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.CopyFilesSuccess()),
+        map(response =>
+          dependencies.undoActionResolverService.getUndoAction(
+            action,
+            response,
+            state
+          )
+        ),
+        map(
+          undoAction =>
+            new fromActions.CopyFilesSuccess(
+              translate('message.header.filesCopied'),
+              undoAction
+            )
+        ),
         catchError(() => of(new fromActions.CopyFilesFailure()))
       );
     })
@@ -162,7 +252,6 @@ export const clipboardSelectionAction = (
     )
     .pipe(
       switchMap(action => {
-        // @ts-ignore
         const url: string = getUrl('clipboardUrl');
         const params = new URLSearchParams();
         params.append(
@@ -199,7 +288,12 @@ export const clipboardPaste = (
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
       formData.append('CB[pad]', 'normal');
       return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(() => new fromActions.ClipboardPasteSuccess()),
+        map(
+          () =>
+            new fromActions.ClipboardPasteSuccess(
+              translate('message.header.filesMoved')
+            )
+        ),
         catchError(() => of(new fromActions.ClipboardPasteFailure()))
       );
     })
@@ -215,8 +309,6 @@ export const downloadFiles = (
       action.identifiers.forEach((identifier, i) => {
         formData.append('identifiers[' + i + ']', identifier);
       });
-
-      // @ts-ignore
       const url: string = getUrl('downloadFilesUrl');
       return ajax({
         url: url,
@@ -258,7 +350,6 @@ export const editFileStorage = (
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
-      // @ts-ignore
       const url: string = getUrl('editFileStorageUrl');
 
       const storageId = parseInt(action.identifier);
@@ -266,15 +357,37 @@ export const editFileStorage = (
       params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
       params.append('returnUrl', window.document.location.href);
 
-      // @ts-ignore
       window.location.href = url + '&' + params.toString();
     }),
     ignoreElements()
   );
 };
 
+export const undoFileAction = (
+  action$: ActionsObservable<fromActions.UndoFilesAction>
+): Observable<Action> => {
+  return action$.ofType(fromActions.UNDO_FILES_ACTION).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      for (const key in action.formData) {
+        formData.append(key, action.formData[key]);
+      }
+
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
+        map(
+          () =>
+            new fromActions.UndoFilesActionSuccess(
+              translate('message.header.undo')
+            )
+        ),
+        catchError(() => of(new fromActions.UndoFilesActionFailure()))
+      );
+    })
+  );
+};
+
 export const fileActionSuccess = (
-  action$: ActionsObservable<fromActions.Actions>
+  action$: ActionsObservable<fromActions.SuccessAction>
 ): Observable<Action> => {
   return action$
     .ofType(
@@ -284,12 +397,17 @@ export const fileActionSuccess = (
       fromActions.UPLOAD_FILES_SUCCESS,
       fromActions.MOVE_FILES_SUCCESS,
       fromActions.COPY_FILES_SUCCESS,
-      fromActions.CLIPBOARD_PASTE_SUCCESS
+      fromActions.CLIPBOARD_PASTE_SUCCESS,
+      fromActions.UNDO_FILES_ACTION_SUCCESS
     )
     .pipe(
-      mergeMap(() => [
+      mergeMap(action => [
         new fromGlobal.Reload(),
-        new fromGlobal.LoadFlashMessages(),
+        new fromGlobal.LoadFlashMessages(
+          SnackbarVariants.success,
+          action.message,
+          action.undoAction
+        ),
       ])
     );
 };
@@ -304,11 +422,17 @@ export const fileActionFailure = (
       fromActions.UPLOAD_FILES_FAILURE,
       fromActions.MOVE_FILES_FAILURE,
       fromActions.COPY_FILES_FAILURE,
-      fromActions.CLIPBOARD_PASTE_FAILURE
+      fromActions.CLIPBOARD_PASTE_FAILURE,
+      fromActions.UNDO_FILES_ACTION_FAILURE
     )
     .pipe(
       mergeMap(action => {
-        const actions: Action[] = [new fromGlobal.LoadFlashMessages()];
+        const actions: Action[] = [
+          new fromGlobal.LoadFlashMessages(
+            SnackbarVariants.danger,
+            translate('message.header.genericError')
+          ),
+        ];
         if (
           [
             fromActions.RENAME_FILE_FAILURE,
@@ -325,15 +449,22 @@ export const fileActionFailure = (
     );
 };
 
+interface Typo3Modal {
+  types: { [propName: string]: string };
+  sizes: { [propName: string]: string };
+  advanced(data: { type: string; size: string; content: string }): void;
+}
+
 export const editFileMetadata = (
   action$: ActionsObservable<fromActions.EditFileMetadata>
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_METADATA).pipe(
     tap(action => {
       // @ts-ignore
-      window.top.TYPO3.Modal.advanced({
-        type: window.top.TYPO3.Modal.types.iframe,
-        size: window.top.TYPO3.Modal.sizes.large,
+      const topModal: Typo3Modal = window.top.TYPO3.Modal;
+      topModal.advanced({
+        type: topModal.types.iframe,
+        size: topModal.sizes.large,
         content: action.metaDataUrl,
       });
     }),
@@ -355,5 +486,6 @@ export const fileActions = [
   moveFiles,
   renameFile,
   showFileInfo,
+  undoFileAction,
   uploadFiles,
 ];

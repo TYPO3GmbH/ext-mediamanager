@@ -142,6 +142,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
         $icon = $this->iconFactory->getIconForResource($resource, Icon::SIZE_SMALL);
         $isWritable = $resource->checkActionPermission('write');
         $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+        $parentFolder = $resource->getParentFolder();
 
         return [
             'identifier' => $combinedIdentifier,
@@ -155,6 +156,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             'clipboardIdentifier' => $clipboardIdentifier,
             'sysType' => $resource instanceof FileInterface ? '_FILE' : '_FOLDER',
+            'parentIdentifier' => $parentFolder instanceof Folder ? $parentFolder->getCombinedIdentifier() : null,
         ];
     }
 

@@ -540,12 +540,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title = translate('dnd.copy.title');
     }
 
-    title = title
-      ? title.replace(
-          /%\w*/gm,
-          '' + fromList.getSelectedItems(this.state).length
-        )
-      : '';
+    title = title.replace(
+      /%\w*/gm,
+      '' + fromList.getSelectedItems(this.state).length
+    );
 
     return html`
       <typo3-draghandler
@@ -671,16 +669,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     let message = translate('deleteConfirmMessage');
 
-    message = message
-      ? message.replace(
-          /%\w*/gm,
-          '' +
-            fromList
-              .getSelectedItems(this.state)
-              .map(item => item.name)
-              .join("', '")
-        )
-      : '';
+    const selctedFileNames = fromList
+      .getSelectedItems(this.state)
+      .map(item => item.name)
+      .join("', '");
+
+    message = message.replace(/%\w*/gm, selctedFileNames);
 
     this._confirmDelete(action, {
       headline: translate('deleteConfirmHeadline'),

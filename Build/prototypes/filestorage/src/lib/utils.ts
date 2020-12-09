@@ -26,3 +26,9 @@ export function resolveNodePath(
   }
   return path;
 }
+
+export function extractStorageFromIdentifier(identifier: string): string {
+  const matches = /(\d:).*/gm.exec(identifier);
+
+  return matches ? matches[1] : '';
+}

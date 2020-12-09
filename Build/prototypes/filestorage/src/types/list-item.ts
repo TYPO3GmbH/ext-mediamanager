@@ -14,4 +14,5 @@ interface ListItem {
   contextMenuUrl: string;
   clipboardIdentifier: string;
   metaDataUrl?: string;
+  parentIdentifier: string;
 }

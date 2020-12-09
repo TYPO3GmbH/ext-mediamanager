@@ -36,7 +36,9 @@ export const loadFlashMessages = (
   dependencies: { flashMessagesService: FlashMessagesService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.LOAD_FLASH_MESSAGES).pipe(
-    switchMap(() => dependencies.flashMessagesService.fetchFlashMessages()),
+    switchMap(action =>
+      dependencies.flashMessagesService.fetchFlashMessages(action)
+    ),
     ignoreElements()
   );
 };

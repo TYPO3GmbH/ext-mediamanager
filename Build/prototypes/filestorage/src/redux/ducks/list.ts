@@ -127,6 +127,13 @@ export const getSelectedItems = createSelector(listSelector, list =>
 
 export const getItems = createSelector(listSelector, list => list.items);
 
+export const getListItemByIdentifier = createSelector(getItems, items =>
+  memoize(
+    (identifier: string) =>
+      items.find(item => identifier === item.identifier) ?? null
+  )
+);
+
 export type Actions =
   | AddSelectionItem
   | RemoveSelectionItem

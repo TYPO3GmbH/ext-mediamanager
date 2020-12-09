@@ -50,6 +50,10 @@ export const UPLOAD_FILES = '[FILE] UPLOAD FILES';
 export const UPLOAD_FILES_SUCCESS = '[FILE] UPLOAD FILES SUCCESS';
 export const UPLOAD_FILES_FAILURE = '[FILE] UPLOAD FILES FAILURE';
 
+export const UNDO_FILES_ACTION = '[FILE] UNDO FILES ACTION';
+export const UNDO_FILES_ACTION_SUCCESS = '[FILE] UNDO FILES ACTION SUCCESS';
+export const UNDO_FILES_ACTION_FAILURE = '[FILE] UNDO FILES ACTION FAILURE';
+
 export type FileActionsState = Readonly<{
   isAddingFolder: boolean;
   isDeletingFiles: boolean;
@@ -60,6 +64,7 @@ export type FileActionsState = Readonly<{
   isCopyingFiles: boolean;
   isPastingFiles: boolean;
   isDownloadingFiles: boolean;
+  isUndoingFileAction: boolean;
   dragFilesMode: 'copy' | 'move';
 }>;
 
@@ -73,6 +78,7 @@ const initialState: FileActionsState = {
   isCopyingFiles: false,
   isPastingFiles: false,
   isDownloadingFiles: false,
+  isUndoingFileAction: false,
   dragFilesMode: 'move',
 };
 
@@ -187,18 +193,36 @@ export const fileActionsReducer = (
         ...state,
         isUploadingFiles: false,
       };
+    case UNDO_FILES_ACTION:
+      return {
+        ...state,
+        isUndoingFileAction: true,
+      };
+    case UNDO_FILES_ACTION_SUCCESS:
+    case UNDO_FILES_ACTION_FAILURE:
+      return {
+        ...state,
+        isUndoingFileAction: false,
+      };
+
     default:
       return state;
   }
 };
+
+export interface SuccessAction extends Action {
+  message: string;
+  undoAction?: Action;
+}
 
 export class RenameFile implements Action {
   readonly type = RENAME_FILE;
   constructor(public identifier: string, public name: string) {}
 }
 
-export class RenameFileSuccess implements Action {
+export class RenameFileSuccess implements SuccessAction {
   readonly type = RENAME_FILE_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class RenameFileFailure implements Action {
@@ -210,8 +234,9 @@ export class DeleteFiles implements Action {
   constructor(public identifiers: string[]) {}
 }
 
-export class DeleteFilesSuccess implements Action {
+export class DeleteFilesSuccess implements SuccessAction {
   readonly type = DELETE_FILES_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class DeleteFilesFailure implements Action {
@@ -228,6 +253,15 @@ export class AddFolder implements Action {
   constructor(public node: Typo3Node, public parentNode: Typo3Node) {}
 }
 
+export class AddFolderSuccess implements SuccessAction {
+  readonly type = ADD_FOLDER_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
+}
+
+export class AddFolderFailure implements Action {
+  readonly type = ADD_FOLDER_FAILURE;
+}
+
 export class DragFilesEnd implements Action {
   readonly type = DRAG_FILES_END;
 }
@@ -241,21 +275,14 @@ export class DragFilesStart implements Action {
   readonly type = DRAG_FILES_START;
 }
 
-export class AddFolderSuccess implements Action {
-  readonly type = ADD_FOLDER_SUCCESS;
-}
-
-export class AddFolderFailure implements Action {
-  readonly type = ADD_FOLDER_FAILURE;
-}
-
 export class UploadFiles implements Action {
   readonly type = UPLOAD_FILES;
   constructor(public dataTransfer: DataTransfer, public node: Typo3Node) {}
 }
 
-export class UploadFilesSuccess implements Action {
+export class UploadFilesSuccess implements SuccessAction {
   readonly type = UPLOAD_FILES_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class UploadFilesFailure implements Action {
@@ -271,8 +298,9 @@ export class MoveFilesFailure implements Action {
   readonly type = MOVE_FILES_FAILURE;
 }
 
-export class MoveFilesSuccess implements Action {
+export class MoveFilesSuccess implements SuccessAction {
   readonly type = MOVE_FILES_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class CopyFiles implements Action {
@@ -286,6 +314,7 @@ export class CopyFilesFailure implements Action {
 
 export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class ClipboardCopyFile implements Action {
@@ -319,8 +348,9 @@ export class ClipboardPasteFailure implements Action {
   readonly type = CLIPBOARD_PASTE_FAILURE;
 }
 
-export class ClipboardPasteSuccess implements Action {
+export class ClipboardPasteSuccess implements SuccessAction {
   readonly type = CLIPBOARD_PASTE_SUCCESS;
+  constructor(public message: string) {}
 }
 
 export class DownloadFiles implements Action {
@@ -344,6 +374,20 @@ export class EditFileMetadata implements Action {
 export class EditFileStorage implements Action {
   readonly type = EDIT_FILE_STORAGE;
   constructor(public identifier: string) {}
+}
+
+export class UndoFilesAction implements Action {
+  readonly type = UNDO_FILES_ACTION;
+  constructor(public formData: { [key: string]: string }) {}
+}
+
+export class UndoFilesActionSuccess implements SuccessAction {
+  readonly type = UNDO_FILES_ACTION_SUCCESS;
+  constructor(public message: string) {}
+}
+
+export class UndoFilesActionFailure implements Action {
+  readonly type = UNDO_FILES_ACTION_FAILURE;
 }
 
 export type Actions =
@@ -376,7 +420,10 @@ export type Actions =
   | ShowFileInfo
   | UploadFiles
   | UploadFilesFailure
-  | UploadFilesSuccess;
+  | UploadFilesSuccess
+  | UndoFilesAction
+  | UndoFilesActionSuccess
+  | UndoFilesActionFailure;
 
 export type ClipboardSelectionActions =
   | ClipboardCopyFile
@@ -393,7 +440,8 @@ export const isExecutingFileAction = createSelector(
     state.isRenamingFile ||
     state.isMovingFiles ||
     state.isCopyingFiles ||
-    state.isPastingFiles
+    state.isPastingFiles ||
+    state.isUndoingFileAction
 );
 
 const fileActionsSelector = (state: RootState) => state.fileActions;

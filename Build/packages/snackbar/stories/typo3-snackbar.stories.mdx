@@ -53,7 +53,7 @@ The `typo3-add-snackbar` event needs:
 | `variant`     | String  | Name of variant to use                                 | 'default', 'success', 'warning', 'danger', 'info' | 'default' |
 
 
-## Example of `typo3-add-snackbar` custom events
+### Example of `typo3-add-snackbar` custom events
 
 #### 'AutoHide' Snackbar.
 'AutoHide' Snackbars are dismissed automatically after a certain amount of time. The suggested values are between 3 and 10 seconds.
@@ -69,6 +69,14 @@ const addSnackbarEvent = new CustomEvent('typo3-add-snackbar', {
       variant: 'success'
    }
 })
+```
+
+## `typo3-remove-snackbar` event
+The typo3-snackbar element can be removed via the `typo3-remove-snackbar` custom event (which can be dispatch by any other elements).
+
+### Usage of `typo3-remove-snackbar` custom events
+```javascript
+    window.dispatchEvent(new CustomEvent('typo3-remove-snackbar'));
 ```
 
 #### 'Action' Snackbar.
