@@ -21,9 +21,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
-use function array_column;
-use function array_combine;
-use function array_map;
 
 class FileReferencesProvider implements FileReferencesProviderInterface
 {
@@ -55,7 +52,7 @@ class FileReferencesProvider implements FileReferencesProviderInterface
 
     private function getReferencesByFolderFromDatabase(FolderInterface $folder): array
     {
-        $fileUids = array_map(
+        $fileUids = \array_map(
             static function (File $file) {
                 return $file->getUid();
             },
@@ -85,9 +82,9 @@ class FileReferencesProvider implements FileReferencesProviderInterface
             ->execute()
             ->fetchAll();
 
-        return array_combine(
-            array_column($referenceCount, 'ref_uid'),
-            array_column($referenceCount, 'cnt_ref')
+        return \array_combine(
+            \array_column($referenceCount, 'ref_uid'),
+            \array_column($referenceCount, 'cnt_ref')
         );
     }
 }
