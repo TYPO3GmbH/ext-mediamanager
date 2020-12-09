@@ -28,8 +28,8 @@ export class FlashMessagesService {
         }
         const flashMessage = {
           message:
-            undoButton +
-            messages.map(errorMessage => errorMessage.message).join('<br />'),
+            messages.map(errorMessage => errorMessage.message).join('<br />') +
+            undoButton,
 
           title: action.message,
           variant: action.variant,
