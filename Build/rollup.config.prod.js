@@ -33,6 +33,7 @@ const plugins = [
   minifyHTML(),
   postcss({
     plugins: [postcssImport, postcssNano],
+    inject: false, // By default postcss also injects the head
   }),
   postcssLit(),
   commonjs(),

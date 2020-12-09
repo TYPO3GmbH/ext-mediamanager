@@ -33,6 +33,7 @@ const baseConfig = createBasicConfig({
 const plugins = [
   postcss({
     plugins: [postcssImport],
+    inject: false, // By default postcss also injects the head
   }),
   postcssLit(),
   commonjs(),
