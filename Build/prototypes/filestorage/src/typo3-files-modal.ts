@@ -47,9 +47,7 @@ export class Typo3FilesModal extends LitElement {
       message = translate('modal.move.message');
     }
 
-    message = message
-      ? message.replace(/%\w*/gm, '' + this.selectedFiles.length)
-      : '';
+    message = message.replace(/%\w*/gm, '' + this.selectedFiles.length);
 
     return html` <typo3-modal
       headline="${headline}"
