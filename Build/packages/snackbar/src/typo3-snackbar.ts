@@ -90,6 +90,10 @@ export class Typo3Snackbar extends LitElement {
       'typo3-add-snackbar',
       this._handleAddSnackbar as EventListener
     );
+    window.addEventListener('typo3-remove-snackbar', () =>
+      this._hideSnackbar()
+    );
+
     this._timer = this._timer.bind(this);
   }
 
@@ -98,6 +102,9 @@ export class Typo3Snackbar extends LitElement {
     window.removeEventListener(
       'typo3-add-snackbar',
       this._handleAddSnackbar as EventListener
+    );
+    window.removeEventListener('typo3-remove-snackbar', () =>
+      this._hideSnackbar()
     );
     super.disconnectedCallback();
   }

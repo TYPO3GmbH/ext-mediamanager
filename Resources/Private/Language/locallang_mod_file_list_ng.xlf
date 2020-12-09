@@ -12,6 +12,9 @@
 			<trans-unit id="cm.copyto" resname="cm.copyto">
 				<source>Copy To</source>
 			</trans-unit>
+			<trans-unit id="cm.undo" resname="cm.undo">
+				<source>Undo</source>
+			</trans-unit>
 			<trans-unit id="view.sorting" resname="view.sorting">
 				<source>Sorting</source>
 			</trans-unit>
@@ -215,6 +218,9 @@
 			</trans-unit>
 			<trans-unit id="message.header.folderRenamed" resname="message.header.folderRenamed">
 				<source>Folder renamed</source>
+			</trans-unit>
+			<trans-unit id="message.header.undo" resname="message.header.undo">
+				<source>Undo</source>
 			</trans-unit>
 			<trans-unit id="message.header.genericError" resname="message.header.genericError">
 				<source>Error</source>

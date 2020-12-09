@@ -377,7 +377,7 @@ export const undoFileAction = (
         map(
           () =>
             new fromActions.UndoFilesActionSuccess(
-              translate('message.header.undoFileAction')
+              translate('message.header.undo')
             )
         ),
         catchError(() => of(new fromActions.UndoFilesActionFailure()))
@@ -428,7 +428,10 @@ export const fileActionFailure = (
     .pipe(
       mergeMap(action => {
         const actions: Action[] = [
-          new fromGlobal.LoadFlashMessages(SnackbarVariants.danger),
+          new fromGlobal.LoadFlashMessages(
+            SnackbarVariants.danger,
+            translate('message.header.genericError')
+          ),
         ];
         if (
           [

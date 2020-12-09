@@ -3,7 +3,7 @@ import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
 import { SnackbarValues } from '../../../../packages/snackbar/src/lib/snackbar-values';
-import { SnackbarVariants } from '../../../../packages/snackbar/src/lib/snackbar-variants';
+import * as fromGlobalActions from '../redux/ducks/global-actions';
 
 interface Message {
   message: string;
@@ -12,30 +12,28 @@ interface Message {
 }
 
 export class FlashMessagesService {
-  constructor(private ignoreSuccessMessages = true) {}
-
-  fetchFlashMessages(): Observable<Message[]> {
+  fetchFlashMessages(
+    action: fromGlobalActions.LoadFlashMessages
+  ): Observable<Message[]> {
     const flashMessagesUrl: string = getUrl('flashMessagesUrl');
 
     return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(
       tap(messages => {
-        const relevantMessages = this.ignoreSuccessMessages
-          ? messages.filter(messageData => messageData.severity != 0)
-          : messages;
-
-        if (0 === relevantMessages.length) {
-          return;
+        let undoButton = '';
+        if (action.undoAction) {
+          undoButton =
+            "<typo3-file-action-undo-button undoAction='" +
+            JSON.stringify(action.undoAction) +
+            "'></typo3-file-action-undo-button>";
         }
-
         const flashMessage = {
-          message: relevantMessages
-            .map(errorMessage => errorMessage.message)
-            .join('<br />'),
-          title: relevantMessages[0].title,
-          variant:
-            relevantMessages[0].severity === 0
-              ? SnackbarVariants.success
-              : SnackbarVariants.danger,
+          message:
+            undoButton +
+            messages.map(errorMessage => errorMessage.message).join('<br />'),
+
+          title: action.message,
+          variant: action.variant,
+          duration: 5000,
         };
         this.displayFlashMessage(flashMessage as SnackbarValues);
       })
