@@ -7,7 +7,6 @@ import {
   TemplateResult,
 } from 'lit-element';
 
-import styles from './typo3-datagrid.pcss';
 import themeStyles from '../../../theme/index.pcss';
 
 import { RenderCellEvent } from './lib/event/RenderCellEvent';
@@ -41,13 +40,50 @@ export class Typo3Datagrid extends LitElement {
 
   @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
 
-  public static styles = [themeStyles, styles];
+  public static styles = [themeStyles];
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
 
   render(): TemplateResult {
     return html`
       <canvas-datagrid
+        style="
+        --cdg-active-cell-border-color: var(--typo3-global-datagrid-border-color);
+        --cdg-active-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-active-cell-font: var(--typo3-global-datagrid-font);
+        --cdg-active-cell-overlay-border-color: transparent;
+        --cdg-active-cell-overlay-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-active-column-header-cell-background-color: transparent;
+        --cdg-active-row-header-cell-background-color: transparent;
+        --cdg-cell-background-color: transparent;
+        --cdg-cell-border-color: var(--typo3-global-datagrid-border-color);
+        --cdg-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-cell-color: var(--typo3-global-datagrid-cell-color);
+        --cdg-cell-font: var(--typo3-global-datagrid-font);
+        --cdg-cell-height: var(--typo3-global-datagrid-cell-height);
+        --cdg-cell-hover-background-color: transparent;
+        --cdg-column-header-cell-background-color: transparent;
+        --cdg-column-header-cell-border-color: transparent;
+        --cdg-column-header-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-column-header-cell-cap-background-color: transparent;
+        --cdg-column-header-cell-cap-border-color: transparent;
+        --cdg-column-header-cell-color: var(--typo3-global-datagrid-cell-color);
+        --cdg-column-header-cell-font: var(--typo3-global-datagrid-font);
+        --cdg-column-header-cell-hover-background-color: transparent;
+        --cdg-column-header-order-by-arrow-border-color: var(--typo3-global-datagrid-order-arrow-color);
+        --cdg-column-header-order-by-arrow-border-width: 2;
+        --cdg-column-header-order-by-arrow-height: 4;
+        --cdg-column-header-order-by-arrow-width: 8;
+        --cdg-corner-cell-background-color: transparent;
+        --cdg-corner-cell-border-color: transparent;
+        --cdg-frozen-marker-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-grid-background-color: #fff;
+        --cdg-grid-border-color: transparent;
+        --cdg-grid-border-width: var(--typo3-global-datagrid-cell-border-width);
+        --cdg-row-header-cell-background-color: transparent;
+        --cdg-row-header-cell-border-color: transparent;
+        --cdg-row-header-cell-hover-background-color: transparent;
+        --cdg-selection-overlay-borderColor: transparent;"
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
         @afterrendercell="${this._onAfterRendercell}"
