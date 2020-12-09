@@ -15,7 +15,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-expand` on showChildren', async () => {
-    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Typo3Node;
 
     const listener = oneEvent(element, 'typo3-node-expand');
 
@@ -25,7 +25,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-collapse` on hideChildren', async () => {
-    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Typo3Node;
 
     const listener = oneEvent(element, 'typo3-node-collapse');
 
@@ -36,7 +36,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-select` on select', async () => {
-    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Typo3Node;
     const listener = oneEvent(element, 'typo3-node-select');
 
     element._selectNode(node);
@@ -46,7 +46,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-contextmenu` on contextmenu', async () => {
-    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Typo3Node;
     const listener = oneEvent(element, 'typo3-node-contextmenu');
     const mouseEvent = new MouseEvent('contextmenu');
 
@@ -58,7 +58,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-rename` on node rename', async () => {
-    const node = { expanded: false, identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Typo3Node;
     const listener = oneEvent(element, 'typo3-node-rename');
 
     element._sendEditNodeLabelCommand(node, 'New Name');
