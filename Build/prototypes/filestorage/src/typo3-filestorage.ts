@@ -78,6 +78,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     super.connectedCallback();
     this.addEventListener('dragleave', this._onDragLeave);
     this.addEventListener('dragover', this._onDragOver);
+
+    window.addEventListener('message', this._handlePostMessage);
   }
 
   public disconnectedCallback() {
@@ -909,4 +911,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       store.dispatch(new fromFileActions.EditFileMetadata(item.metaDataUrl));
     }
   }
+
+  _handlePostMessage = (event: MessageEvent) => {
+    switch (event.data) {
+      case 'typo3-tree-toggle':
+        store.dispatch(new fromLayout.ToggleSidebar());
+
+        console.log('tada');
+    }
+  };
 }

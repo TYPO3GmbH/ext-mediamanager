@@ -10,7 +10,7 @@ import merge from 'deepmerge';
 // use createSpaConfig for bundling a Single Page App
 //import {createSpaConfig} from '@open-wc/building-rollup';
 // use createBasicConfig to do regular JS to JS bundling
-import { createBasicConfig } from '@open-wc/building-rollup';
+import {createBasicConfig} from '@open-wc/building-rollup';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import commonjs from 'rollup-plugin-commonjs';
 
@@ -47,10 +47,19 @@ const plugins = [
 
 baseConfig.plugins.unshift(...plugins);
 
-export default merge(baseConfig, {
-  input: './bundle/index.ts',
-  output: {
-    sourcemap: true,
-    entryFileNames: 'es.js',
-  },
-});
+export default [
+  merge(baseConfig, {
+    input: './bundle/filestorage/index.ts',
+    output: {
+      sourcemap: true,
+      entryFileNames: 'es.js',
+    },
+  }),
+  merge(baseConfig, {
+    input: './bundle/top/index.ts',
+    output: {
+      sourcemap: true,
+      entryFileNames: 'top_es.js',
+    },
+  }),
+];
