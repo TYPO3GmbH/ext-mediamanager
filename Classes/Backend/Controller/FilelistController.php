@@ -73,7 +73,7 @@ class FilelistController
 
         $this->addGlobalVars([
             'switchUserUrl' => (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser'),
-            'newStorageUrl', (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
+            'newStorageUrl' =>  (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
                 'edit[sys_file_storage][0]' => 'new',
                 'returnUrl' => (string) $fileListUrl,
             ]),
