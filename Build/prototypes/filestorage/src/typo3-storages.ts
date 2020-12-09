@@ -55,10 +55,7 @@ export class Typo3Storages extends LitElement {
           slot="footer"
           style="display: flex;width: 100%;align-items: center;flex-direction: column; gap: 10px;"
         >
-          <typo3-button
-            onclick="modal.close()"
-            @click="${this._onSwitchUser}"
-            style="width: 100%"
+          <typo3-button @click="${this._onSwitchUser}" style="width: 100%"
             >${translate('storagesAccessDeniedSwitchUser')}</typo3-button
           >
           <typo3-button
