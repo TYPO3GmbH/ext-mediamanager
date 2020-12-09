@@ -3,13 +3,16 @@ import { RootState } from './index';
 import { createSelector } from 'reselect';
 
 export const SET_SIDEBAR_WIDTH = '[LAYOUT] SET SIDEBAR WIDTH';
+export const TOGGLE_SIDEBAR = '[LAYOUT] TOGGLE SIDEBAR';
 
 export type LayoutState = Readonly<{
   sidebarWidth: number;
+  sidebarVisible: boolean;
 }>;
 
 const initialState: LayoutState = {
   sidebarWidth: 25,
+  sidebarVisible: true,
 };
 
 export const layoutReducer = (
@@ -19,6 +22,8 @@ export const layoutReducer = (
   switch (action.type) {
     case SET_SIDEBAR_WIDTH:
       return { ...state, sidebarWidth: action.sidebarWidth };
+    case TOGGLE_SIDEBAR:
+      return { ...state, sidebarVisible: !state.sidebarVisible };
     default:
       return state;
   }
@@ -29,11 +34,20 @@ export class SetSidebarWidth implements Action {
   constructor(public sidebarWidth: number) {}
 }
 
-export type Actions = SetSidebarWidth;
+export class ToggleSidebar implements Action {
+  readonly type = TOGGLE_SIDEBAR;
+}
+
+export type Actions = SetSidebarWidth | ToggleSidebar;
 
 const layoutSelector = (state: RootState) => state.layout;
 
 export const getSidebarWidth = createSelector(
   layoutSelector,
   layout => layout.sidebarWidth
+);
+
+export const isSidebarVisible = createSelector(
+  layoutSelector,
+  layout => layout.sidebarVisible
 );

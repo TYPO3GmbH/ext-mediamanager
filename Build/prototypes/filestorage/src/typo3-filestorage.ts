@@ -34,15 +34,16 @@ import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-dragha
 import { Typo3FilesModal } from './typo3-files-modal';
 import { Typo3ConfirmModal } from './typo3-confirm-modal';
 import {
+  ContextMenuEvent,
   ContextMenuItemClickEvent,
   MoveFilesModalEvent,
   MoveTreeNodeEvent,
-  ContextMenuEvent,
   TreeNodeDropEvent,
 } from './types/events';
 import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
+import { styleMap } from 'lit-html/directives/style-map';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -69,6 +70,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     store.dispatch(new fromTree.LoadTreeData());
+
+    window.top.postMessage('typo3-enable-tree-toggle-button', '*');
   }
 
   public connectedCallback(): void {
@@ -134,7 +137,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >
         <div
           class="content_left"
-          style="${'flex: 1 1 ' + fromLayout.getSidebarWidth(this.state) + '%'}"
+          style=${styleMap({
+            flex: '1 1 ' + fromLayout.getSidebarWidth(this.state) + '%',
+            display: fromLayout.isSidebarVisible(this.state) ? '' : 'none',
+          })}
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
