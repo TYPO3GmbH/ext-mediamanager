@@ -54,6 +54,8 @@ export class Typo3Snackbar extends LitElement {
   private _animationStart!: number;
   private _duration!: number | null;
 
+  protected animationFrameHandle!: number;
+
   public static styles = [themeStyles, styles];
 
   render() {
@@ -166,9 +168,9 @@ export class Typo3Snackbar extends LitElement {
     const rightNow = Date.now();
     if (rightNow - this._animationStart >= (this._duration || 0)) {
       this._hideSnackbar();
-      cancelAnimationFrame(this._timer);
+      cancelAnimationFrame(this.animationFrameHandle!);
     } else {
-      requestAnimationFrame(this._timer);
+      this.animationFrameHandle = requestAnimationFrame(this._timer);
     }
   }
 

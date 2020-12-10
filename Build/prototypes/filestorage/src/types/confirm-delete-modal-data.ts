@@ -1,6 +1,3 @@
-export interface ConfirmDeleteModalData {
-  headline: string;
-  message: string;
-  submitButtonText: string;
-  cancelButtonText: string;
-}
+import { ConfirmModalData } from '../../../shared/types/confirm-modal-data';
+
+export type ConfirmDeleteModalData = ConfirmModalData;

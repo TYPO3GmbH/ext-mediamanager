@@ -32,17 +32,17 @@ import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3FilesModal } from './typo3-files-modal';
-import { Typo3ConfirmModal } from './typo3-confirm-modal';
 import {
+  ContextMenuEvent,
   ContextMenuItemClickEvent,
   MoveFilesModalEvent,
   MoveTreeNodeEvent,
-  ContextMenuEvent,
   TreeNodeDropEvent,
 } from './types/events';
-import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
+import { styleMap } from 'lit-html/directives/style-map';
+import { MessageData } from '../../shared/types/message-data';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -69,12 +69,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     store.dispatch(new fromTree.LoadTreeData());
+    window.top.postMessage(
+      new MessageData('typo3-enable-tree-toggle-button'),
+      '*'
+    );
   }
 
   public connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener('dragleave', this._onDragLeave);
     this.addEventListener('dragover', this._onDragOver);
+
+    window.addEventListener('message', this._handlePostMessage);
   }
 
   public disconnectedCallback() {
@@ -134,7 +140,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >
         <div
           class="content_left"
-          style="${'flex: 1 1 ' + fromLayout.getSidebarWidth(this.state) + '%'}"
+          style=${styleMap({
+            flex: '1 1 ' + fromLayout.getSidebarWidth(this.state) + '%',
+            display: fromLayout.isSidebarVisible(this.state) ? '' : 'none',
+          })}
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
@@ -663,25 +672,26 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDeleteClicked(): void {
-    const action = new fromFileActions.DeleteFiles(
-      fromList.getSelectedItems(this.state).map(data => data.identifier)
-    ) as Action;
-
     let message = translate('deleteConfirmMessage');
 
-    const selctedFileNames = fromList
+    const selectedFileNames = fromList
       .getSelectedItems(this.state)
       .map(item => item.name)
       .join("', '");
 
-    message = message.replace(/%\w*/gm, selctedFileNames);
+    message = message.replace(/%\w*/gm, selectedFileNames);
 
-    this._confirmDelete(action, {
-      headline: translate('deleteConfirmHeadline'),
-      message: message,
-      submitButtonText: translate('deleteConfirmSubmitButton'),
-      cancelButtonText: translate('deleteConfirmCancelButton'),
-    });
+    const action = new fromFileActions.DeleteFilesConfirm(
+      fromList.getSelectedItems(this.state).map(data => data.identifier),
+      {
+        headline: translate('deleteConfirmHeadline'),
+        message: message,
+        submitButtonText: translate('deleteConfirmSubmitButton'),
+        cancelButtonText: translate('deleteConfirmCancelButton'),
+      }
+    ) as Action;
+
+    store.dispatch(action);
   }
 
   _onRename(identifier: string, name: string): void {
@@ -751,14 +761,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'deleteFile':
-        storeAction = new fromFileActions.DeleteFiles([identifier]);
-        this._confirmDelete(storeAction, {
+        storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
           message: additionalAttributes!['data-message'],
           submitButtonText: additionalAttributes!['data-button-ok-text'],
           cancelButtonText: additionalAttributes!['data-button-close-text'],
         });
-        return;
+        break;
 
       case 'createFile':
         this.fileTree.addNode(identifier);
@@ -876,19 +885,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(action);
   }
 
-  _confirmDelete(action: Action, modalData: ConfirmDeleteModalData): void {
-    const confirmDeleteModal = document.createElement(
-      'typo3-confirm-modal'
-    ) as Typo3ConfirmModal;
-    this.shadowRoot!.append(confirmDeleteModal);
-    Object.assign(confirmDeleteModal, modalData);
-
-    confirmDeleteModal.addEventListener('typo3-confirm-submit', () =>
-      store.dispatch(action)
-    );
-    setTimeout(() => confirmDeleteModal.show(), 10);
-  }
-
   _onItemDblClick(item: ListItem): void {
     if (item.sysType === '_FOLDER') {
       const treeNode = fromTree.getTreeNodeByIdentifier(this.state)(
@@ -903,4 +899,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       store.dispatch(new fromFileActions.EditFileMetadata(item.metaDataUrl));
     }
   }
+
+  _handlePostMessage = (event: MessageEvent<MessageData>) => {
+    switch (event.data.type) {
+      case 'typo3-tree-toggle':
+        store.dispatch(new fromLayout.ToggleSidebar());
+    }
+  };
 }

@@ -55,17 +55,12 @@ export class Typo3Storages extends LitElement {
           slot="footer"
           style="display: flex;width: 100%;align-items: center;flex-direction: column; gap: 10px;"
         >
-          <typo3-button
-            onclick="modal.close()"
-            @click="${this._onSwitchUser}"
-            style="width: 100%"
-            >${translate('storagesAccessDeniedSwitchUser')}</typo3-button
-          >
-          <typo3-button
-            color="success"
-            @click="${this._onRefresh}"
-            style="width: 100%"
-          >
+          ${getUrl('switchUserUrl')
+            ? html`<typo3-button @click="${this._onSwitchUser}"
+                >${translate('storagesAccessDeniedSwitchUser')}</typo3-button
+              >`
+            : html``}
+          <typo3-button color="success" @click="${this._onRefresh}">
             ${translate('storagesAccessDeniedRefresh')}
             <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
               <use xlink:href="" xlink:href="${getIconUrl('refresh')}"></use>

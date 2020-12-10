@@ -1,2 +1,0 @@
-import '../packages';
-import '../prototypes';

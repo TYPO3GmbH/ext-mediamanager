@@ -2,6 +2,7 @@ import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
+import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
 
 export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
@@ -22,6 +23,7 @@ export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
 export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
 
 export const DELETE_FILES = '[FILE] DELETE FILES';
+export const DELETE_FILES_CONFIRM = '[FILE] DELETE FILES CONFIRM';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES FAILURE';
 
@@ -229,6 +231,14 @@ export class RenameFileFailure implements Action {
   readonly type = RENAME_FILE_FAILURE;
 }
 
+export class DeleteFilesConfirm implements Action {
+  readonly type = DELETE_FILES_CONFIRM;
+  constructor(
+    public identifiers: string[],
+    public modalData: ConfirmModalData
+  ) {}
+}
+
 export class DeleteFiles implements Action {
   readonly type = DELETE_FILES;
   constructor(public identifiers: string[]) {}
@@ -401,6 +411,7 @@ export type Actions =
   | CopyFilesFailure
   | CopyFilesSuccess
   | DeleteFiles
+  | DeleteFilesConfirm
   | DeleteFilesFailure
   | DeleteFilesSuccess
   | DownloadFiles
