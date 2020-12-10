@@ -1,10 +1,17 @@
-import { customElement, html, internalProperty, LitElement, TemplateResult, } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+  TemplateResult,
+} from 'lit-element';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-top-container.pcss';
 import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
+import { MessageData } from '../../shared/types/message-data';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -41,8 +48,8 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     `;
   }
 
-  _handlePostMessage = (event: MessageEvent) => {
-    switch (event.data) {
+  _handlePostMessage = (event: MessageEvent<MessageData>) => {
+    switch (event.data.type) {
       case 'typo3-enable-tree-toggle-button':
         this._enableTreeToggleButton(event);
         break;
@@ -83,7 +90,10 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     const scaffold = document.querySelector('.scaffold') as HTMLElement;
     scaffold.classList.remove('scaffold-content-navigation-expanded');
 
-    target.postMessage('typo3-tree-toggle', this.currentMessageOrigin);
+    target.postMessage(
+      new MessageData('typo3-tree-toggle'),
+      this.currentMessageOrigin
+    );
   };
 
   _showConfirmModal(): void {

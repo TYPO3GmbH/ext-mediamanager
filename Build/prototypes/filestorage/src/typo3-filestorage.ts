@@ -44,6 +44,7 @@ import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
+import { MessageData } from '../../shared/types/message-data';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -70,8 +71,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     store.dispatch(new fromTree.LoadTreeData());
-
-    window.top.postMessage('typo3-enable-tree-toggle-button', '*');
+    window.top.postMessage(
+      new MessageData('typo3-enable-tree-toggle-button'),
+      '*'
+    );
   }
 
   public connectedCallback(): void {
@@ -891,6 +894,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     this.shadowRoot!.append(confirmDeleteModal);
     Object.assign(confirmDeleteModal, modalData);
 
+    window.top.postMessage(new MessageData('typo3-show-modal'), '*');
+
     confirmDeleteModal.addEventListener('typo3-confirm-submit', () =>
       store.dispatch(action)
     );
@@ -912,12 +917,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
   }
 
-  _handlePostMessage = (event: MessageEvent) => {
-    switch (event.data) {
+  _handlePostMessage = (event: MessageEvent<MessageData>) => {
+    switch (event.data.type) {
       case 'typo3-tree-toggle':
         store.dispatch(new fromLayout.ToggleSidebar());
-
-        console.log('tada');
     }
   };
 }
