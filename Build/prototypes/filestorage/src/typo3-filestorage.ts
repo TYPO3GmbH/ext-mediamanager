@@ -32,7 +32,6 @@ import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { Typo3Filetree } from '../../../packages/filetree/src/typo3-filetree';
 import { Typo3Draghandler } from '../../../packages/draghandler/src/typo3-draghandler';
 import { Typo3FilesModal } from './typo3-files-modal';
-import { Typo3ConfirmModal } from './typo3-confirm-modal';
 import {
   ContextMenuEvent,
   ContextMenuItemClickEvent,
@@ -40,7 +39,6 @@ import {
   MoveTreeNodeEvent,
   TreeNodeDropEvent,
 } from './types/events';
-import { ConfirmDeleteModalData } from './types/confirm-delete-modal-data';
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
@@ -674,25 +672,26 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDeleteClicked(): void {
-    const action = new fromFileActions.DeleteFiles(
-      fromList.getSelectedItems(this.state).map(data => data.identifier)
-    ) as Action;
-
     let message = translate('deleteConfirmMessage');
 
-    const selctedFileNames = fromList
+    const selectedFileNames = fromList
       .getSelectedItems(this.state)
       .map(item => item.name)
       .join("', '");
 
-    message = message.replace(/%\w*/gm, selctedFileNames);
+    message = message.replace(/%\w*/gm, selectedFileNames);
 
-    this._confirmDelete(action, {
-      headline: translate('deleteConfirmHeadline'),
-      message: message,
-      submitButtonText: translate('deleteConfirmSubmitButton'),
-      cancelButtonText: translate('deleteConfirmCancelButton'),
-    });
+    const action = new fromFileActions.DeleteFilesConfirm(
+      fromList.getSelectedItems(this.state).map(data => data.identifier),
+      {
+        headline: translate('deleteConfirmHeadline'),
+        message: message,
+        submitButtonText: translate('deleteConfirmSubmitButton'),
+        cancelButtonText: translate('deleteConfirmCancelButton'),
+      }
+    ) as Action;
+
+    store.dispatch(action);
   }
 
   _onRename(identifier: string, name: string): void {
@@ -762,14 +761,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'deleteFile':
-        storeAction = new fromFileActions.DeleteFiles([identifier]);
-        this._confirmDelete(storeAction, {
+        storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
           message: additionalAttributes!['data-message'],
           submitButtonText: additionalAttributes!['data-button-ok-text'],
           cancelButtonText: additionalAttributes!['data-button-close-text'],
         });
-        return;
+        break;
 
       case 'createFile':
         this.fileTree.addNode(identifier);
@@ -885,21 +883,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       event.detail.target
     );
     store.dispatch(action);
-  }
-
-  _confirmDelete(action: Action, modalData: ConfirmDeleteModalData): void {
-    const confirmDeleteModal = document.createElement(
-      'typo3-confirm-modal'
-    ) as Typo3ConfirmModal;
-    this.shadowRoot!.append(confirmDeleteModal);
-    Object.assign(confirmDeleteModal, modalData);
-
-    window.top.postMessage(new MessageData('typo3-show-modal'), '*');
-
-    confirmDeleteModal.addEventListener('typo3-confirm-submit', () =>
-      store.dispatch(action)
-    );
-    setTimeout(() => confirmDeleteModal.show(), 10);
   }
 
   _onItemDblClick(item: ListItem): void {

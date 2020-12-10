@@ -1,28 +1,29 @@
 import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
-import {
-  DownloadFilesFailure,
-  DownloadFilesSuccess,
-} from '../ducks/file-actions';
+import { DownloadFilesFailure, DownloadFilesSuccess } from '../ducks/file-actions';
 import {
   catchError,
+  filter,
   ignoreElements,
   map,
   mergeMap,
   switchMap,
+  take,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, fromEvent, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
 import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
+import { MessageData } from '../../../../shared/types/message-data';
+import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -51,6 +52,29 @@ export const renameFile = (
             )
         ),
         catchError(() => of(new fromActions.RenameFileFailure()))
+      );
+    })
+  );
+};
+
+export const confirmDeleteFiles = (
+  action$: ActionsObservable<fromActions.DeleteFilesConfirm>
+): Observable<Action> => {
+  return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
+    switchMap(action => {
+      window.top.postMessage(
+        new MessageData<ConfirmModalData>('typo3-show-modal', action.modalData),
+        '*'
+      );
+      return fromEvent<MessageEvent<MessageData<{ confirm: boolean }>>>(
+        window,
+        'message'
+      ).pipe(
+        map(event => event.data),
+        filter(data => 'typo3-modal-closed' === data.type),
+        take(1),
+        filter(data => true === data.detail!.confirm),
+        map(() => new fromActions.DeleteFiles(action.identifiers))
       );
     })
   );
@@ -477,6 +501,7 @@ export const fileActions = [
   clipboardPaste,
   clipboardSelectionAction,
   copyFiles,
+  confirmDeleteFiles,
   deleteFiles,
   downloadFiles,
   editFileMetadata,

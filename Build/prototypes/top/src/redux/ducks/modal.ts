@@ -1,14 +1,13 @@
 import { Action } from 'redux';
+import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
 
 export const SHOW_MODAL = '[MODAL] SHOW';
 export const CLOSE_MODAL = '[MODAL] CLOSE';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ModalData {}
+export const CONFIRM_MODAL = '[MODAL] CONFIRM';
 
 export type ModalState = Readonly<{
   open: boolean;
-  data?: ModalData;
+  data?: ConfirmModalData;
 }>;
 
 const initialState: ModalState = {
@@ -27,6 +26,7 @@ export const modalReducer = (
         open: true,
       };
     case CLOSE_MODAL:
+    case CONFIRM_MODAL:
       return {
         ...state,
         open: false,
@@ -39,11 +39,15 @@ export const modalReducer = (
 
 export class ShowModal implements Action {
   readonly type = SHOW_MODAL;
-  constructor(public data: ModalData) {}
+  constructor(public data: ConfirmModalData) {}
 }
 
 export class CloseModal implements Action {
   readonly type = CLOSE_MODAL;
 }
 
-export type Actions = ShowModal | CloseModal;
+export class ConfirmModal implements Action {
+  readonly type = CONFIRM_MODAL;
+}
+
+export type Actions = ShowModal | CloseModal | ConfirmModal;

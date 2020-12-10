@@ -1,6 +1,7 @@
 import { Action, applyMiddleware, compose, createStore, Middleware, } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { rootReducer } from './ducks';
+import { rootEpic } from './epics';
 
 const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   action: Action
@@ -27,3 +28,5 @@ export const store = createStore(
     ...enhancer
   )
 );
+
+epicMiddleware.run(rootEpic);

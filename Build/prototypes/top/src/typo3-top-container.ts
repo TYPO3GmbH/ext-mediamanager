@@ -1,10 +1,4 @@
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, html, internalProperty, LitElement, TemplateResult, } from 'lit-element';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-top-container.pcss';
 import { connect } from 'pwa-helpers';
@@ -12,6 +6,7 @@ import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
 import { MessageData } from '../../shared/types/message-data';
+import { ConfirmModalData } from '../../shared/types/confirm-modal-data';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -41,9 +36,12 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       <typo3-confirm-modal
         ?open="${this.state.modal.open}"
         @typo3-modal-close="${this._onModalClose}"
-        headline="Confirm xyz"
+        @typo3-confirm-submit="${this._onModalConfirm}"
+        headline="${this.state.modal.data?.headline}"
+        submitButtonText="${this.state.modal.data?.submitButtonText}"
+        cancelbuttonText="${this.state.modal.data?.cancelButtonText}"
+        message="${this.state.modal.data?.message}"
       >
-        Are you sure you want to do this?
       </typo3-confirm-modal>
     `;
   }
@@ -54,7 +52,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         this._enableTreeToggleButton(event);
         break;
       case 'typo3-show-modal':
-        this._showConfirmModal();
+        this._showConfirmModal(event);
     }
   };
 
@@ -96,8 +94,9 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     );
   };
 
-  _showConfirmModal(): void {
-    store.dispatch(new fromModal.ShowModal({}));
+  _showConfirmModal(event: MessageEvent<MessageData<ConfirmModalData>>): void {
+    const modalData = event.data.detail as ConfirmModalData;
+    store.dispatch(new fromModal.ShowModal(modalData));
   }
 
   _getToggleButton(): HTMLElement {
@@ -105,7 +104,12 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       '.topbar-button-navigationcomponent'
     ) as HTMLButtonElement;
   }
+
   _onModalClose(): void {
     store.dispatch(new fromModal.CloseModal());
+  }
+
+  _onModalConfirm(): void {
+    store.dispatch(new fromModal.ConfirmModal());
   }
 }

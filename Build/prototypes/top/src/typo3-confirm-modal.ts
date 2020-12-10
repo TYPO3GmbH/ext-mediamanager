@@ -30,8 +30,7 @@ export class Typo3ConfirmModal extends Typo3Modal {
   }
 
   _onSubmit(): void {
-    const deleteEvent = new CustomEvent('typo3-confirm-submit');
-    this.dispatchEvent(deleteEvent);
-    this.close();
+    const commitEvent = new CustomEvent('typo3-confirm-submit');
+    this.dispatchEvent(commitEvent);
   }
 }
