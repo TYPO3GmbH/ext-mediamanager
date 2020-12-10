@@ -162,7 +162,7 @@
 				<source>Please contact your Administrator for assistance.</source>
 			</trans-unit>
 			<trans-unit id="storagesAccessDeniedSwitchUser" resname="storagesAccessDeniedSwitchUser">
-				<source>SwitchUser</source>
+				<source>Switch User</source>
 			</trans-unit>
 			<trans-unit id="storagesAccessDeniedRefresh" resname="storagesAccessDeniedRefresh">
 				<source>Refresh</source>
