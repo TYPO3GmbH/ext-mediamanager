@@ -1,11 +1,4 @@
-import {
-  customElement,
-  html,
-  LitElement,
-  property,
-  query,
-  TemplateResult,
-} from 'lit-element';
+import { customElement, html, LitElement, property, query, TemplateResult, } from 'lit-element';
 
 import styles from './typo3-modal.pcss';
 import themeStyles from '../../../theme/index.pcss';
@@ -64,12 +57,8 @@ export class Typo3Modal extends LitElement {
       <typo3-overlay fixed @click="${this.close}"></typo3-overlay>
       <div id="modal" class="modal" tabindex="-1">
         ${this.headerContent}
-        <div id="content" class="content">
-          <slot></slot>
-        </div>
-        <div id="footer" class="footer">
-          <slot name="footer"></slot>
-        </div>
+        <div id="content" class="content">${this.messageContent}</div>
+        <div id="footer" class="footer">${this.footerContent}</div>
       </div>
     </div>`;
   }
@@ -93,6 +82,14 @@ export class Typo3Modal extends LitElement {
           : html``}
       </div>
     `;
+  }
+
+  get messageContent(): TemplateResult {
+    return html`<slot></slot>`;
+  }
+
+  get footerContent(): TemplateResult {
+    return html`<slot name="footer"></slot>`;
   }
 
   show(): void {
