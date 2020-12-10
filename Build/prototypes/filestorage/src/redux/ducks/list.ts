@@ -3,8 +3,6 @@ import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
 import { RootState } from './index';
 
-export const ADD_SELECTION_ITEM = '[LIST] ADD ITEM TO SELECTION';
-export const REMOVE_SELECTION_ITEM = '[LIST] REMOVE ITEM FROM SELECTION';
 export const CLEAR_SELECTION = '[LIST] CLEAR SELECTION';
 export const SET_SELECTION = '[LLIST] SET SELECTION';
 
@@ -49,18 +47,6 @@ export const listReducer = (
         loading: false,
         error: action.error,
       };
-    case ADD_SELECTION_ITEM:
-      return {
-        ...state,
-        selectedItemIds: [...state.selectedItemIds, action.id],
-      };
-    case REMOVE_SELECTION_ITEM:
-      return {
-        ...state,
-        selectedItemIds: state.selectedItemIds.filter(
-          item => item !== action.id
-        ),
-      };
     case CLEAR_SELECTION:
       return {
         ...state,
@@ -75,16 +61,6 @@ export const listReducer = (
       return state;
   }
 };
-
-export class AddSelectionItem implements Action {
-  readonly type = ADD_SELECTION_ITEM;
-  constructor(public id: string) {}
-}
-
-export class RemoveSelectionItem implements Action {
-  readonly type = REMOVE_SELECTION_ITEM;
-  constructor(public id: string) {}
-}
 
 export class ClearSelection implements Action {
   readonly type = CLEAR_SELECTION;
@@ -135,8 +111,6 @@ export const getListItemByIdentifier = createSelector(getItems, items =>
 );
 
 export type Actions =
-  | AddSelectionItem
-  | RemoveSelectionItem
   | ClearSelection
   | SetSelection
   | LoadListData
