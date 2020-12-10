@@ -23,7 +23,7 @@ const baseConfig = createBasicConfig({
   // legacyBuild: true,
 
   // development mode creates a non-minified build for debugging or development
-  developmentMode: true,
+  developmentMode: false,
 
   // set to true to inject the service worker registration into your index.html
   injectServiceWorker: false,
@@ -36,11 +36,11 @@ const plugins = [
     inject: false, // By default postcss also injects the head
   }),
   postcssLit(),
-  commonjs(),
   typescriptPlugin({
     importHelpers: true,
     typescript,
   }),
+  commonjs(),
   injectProcessEnv({
     NODE_ENV: 'development',
   }),
