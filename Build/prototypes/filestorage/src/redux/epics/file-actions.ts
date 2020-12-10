@@ -1,7 +1,10 @@
 import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
-import { DownloadFilesFailure, DownloadFilesSuccess } from '../ducks/file-actions';
+import {
+  DownloadFilesFailure,
+  DownloadFilesSuccess,
+} from '../ducks/file-actions';
 import {
   catchError,
   filter,

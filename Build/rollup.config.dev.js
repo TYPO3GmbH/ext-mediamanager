@@ -7,7 +7,7 @@ import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import commonjs from 'rollup-plugin-commonjs';
-import {createBasicConfig} from '@open-wc/building-rollup';
+import { createBasicConfig } from '@open-wc/building-rollup';
 import merge from 'deepmerge';
 
 const globby = require('globby');

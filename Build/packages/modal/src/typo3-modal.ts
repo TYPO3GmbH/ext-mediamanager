@@ -1,4 +1,11 @@
-import { customElement, html, LitElement, property, query, TemplateResult, } from 'lit-element';
+import {
+  customElement,
+  html,
+  LitElement,
+  property,
+  query,
+  TemplateResult,
+} from 'lit-element';
 
 import styles from './typo3-modal.pcss';
 import themeStyles from '../../../theme/index.pcss';

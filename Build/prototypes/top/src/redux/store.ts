@@ -1,4 +1,10 @@
-import { Action, applyMiddleware, compose, createStore, Middleware, } from 'redux';
+import {
+  Action,
+  applyMiddleware,
+  compose,
+  createStore,
+  Middleware,
+} from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { rootReducer } from './ducks';
 import { rootEpic } from './epics';
