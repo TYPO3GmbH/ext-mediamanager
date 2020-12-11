@@ -137,7 +137,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
 
         $result = $this->generator->getNodes($storage);
 
-        $this->assertEquals([
+        self::assertEquals([
             [
                 'stateIdentifier' => '_157208700',
                 'identifier' => '1:/test-folder',

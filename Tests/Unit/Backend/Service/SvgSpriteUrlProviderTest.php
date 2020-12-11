@@ -41,7 +41,7 @@ class SvgSpriteUrlProviderTest extends TestCase
      */
     public function it_implements_IconUrlProviderInterface(): void
     {
-        $this->assertInstanceOf(IconUrlProviderInterface::class, $this->subject);
+        self::assertInstanceOf(IconUrlProviderInterface::class, $this->subject);
     }
 
     /**
@@ -49,7 +49,7 @@ class SvgSpriteUrlProviderTest extends TestCase
      */
     public function it_will_return_null_on_null_icon(): void
     {
-        $this->assertNull($this->subject->getUrl(null));
+        self::assertNull($this->subject->getUrl(null));
     }
 
     /**

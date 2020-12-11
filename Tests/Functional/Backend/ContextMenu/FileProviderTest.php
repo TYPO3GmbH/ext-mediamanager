@@ -60,7 +60,7 @@ class FileProviderTest extends FunctionalTestCase
     {
         $subject = new FileProvider('sys_file', '1:/fileA.jpg', 'tree');
 
-        $this->assertTrue($subject->canHandle());
+        self::assertTrue($subject->canHandle());
     }
 
     /**
@@ -69,7 +69,7 @@ class FileProviderTest extends FunctionalTestCase
     public function it_wont_handle_something_other_than_files(): void
     {
         $subject =  new FileProvider('something_different', '1:/fileA.jpg', 'tree');
-        $this->assertFalse($subject->canHandle());
+        self::assertFalse($subject->canHandle());
     }
 
     /**
@@ -86,7 +86,7 @@ class FileProviderTest extends FunctionalTestCase
 
         $itemKeys = \array_keys($subject->addItems([]));
 
-        $this->assertEquals($expectedItemsKeys, $itemKeys);
+        self::assertEquals($expectedItemsKeys, $itemKeys);
     }
 
     public function provideData(): iterable

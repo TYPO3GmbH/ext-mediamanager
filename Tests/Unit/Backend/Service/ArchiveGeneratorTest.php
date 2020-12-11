@@ -37,7 +37,7 @@ class ArchiveGeneratorTest extends UnitTestCase
      */
     public function it_implements_ArchiveGeneratorInterface(): void
     {
-        $this->assertInstanceOf(ArchiveGeneratorInterface::class, $this->subject);
+        self::assertInstanceOf(ArchiveGeneratorInterface::class, $this->subject);
     }
 
     /**
@@ -74,14 +74,14 @@ class ArchiveGeneratorTest extends UnitTestCase
             ->willReturn('fileA');
 
         $filePath = $this->subject->generateArchive([$subfolder, $fileInRootFolder]);
-        $this->assertIsString($filePath);
+        self::assertIsString($filePath);
 
         $zip = new \ZipArchive();
 
         $zip->open($filePath);
-        $this->assertSame(2, $zip->numFiles);
-        $this->assertEquals('fileA', $zip->getFromName('root/fileA.jpg'));
-        $this->assertEquals('fileB', $zip->getFromName('root/test/fileB.jpg'));
+        self::assertSame(2, $zip->numFiles);
+        self::assertEquals('fileA', $zip->getFromName('root/fileA.jpg'));
+        self::assertEquals('fileB', $zip->getFromName('root/test/fileB.jpg'));
 
         @\unlink($filePath);
     }

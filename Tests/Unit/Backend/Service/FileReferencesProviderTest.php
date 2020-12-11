@@ -39,6 +39,6 @@ class FileReferencesProviderTest extends UnitTestCase
      */
     public function it_implements_FileReferencesProviderInterface(): void
     {
-        $this->assertInstanceOf(FileReferencesProviderInterface::class, $this->subject);
+        self::assertInstanceOf(FileReferencesProviderInterface::class, $this->subject);
     }
 }

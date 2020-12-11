@@ -47,6 +47,6 @@ class SvgSpriteUrlProviderTest extends FunctionalTestCase
             ->willReturn('apps-filetree-mount');
 
         $result = $this->subject->getUrl($icon);
-        $this->assertEquals('typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/apps.svg#apps-filetree-mount', $result);
+        self::assertEquals('typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/apps.svg#apps-filetree-mount', $result);
     }
 }

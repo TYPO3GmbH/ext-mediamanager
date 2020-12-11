@@ -61,7 +61,7 @@ class FolderTreeControllerTest extends UnitTestCase
         $request = new ServerRequest();
         $response = $this->controller->fetchDataAction($request);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        self::assertEquals(400, $response->getStatusCode());
     }
 
     /**
@@ -83,7 +83,7 @@ class FolderTreeControllerTest extends UnitTestCase
         $request = $request->withQueryParams(['uid' => '123']);
         $response = $this->controller->fetchDataAction($request);
 
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
     }
 
     /**
@@ -118,7 +118,7 @@ class FolderTreeControllerTest extends UnitTestCase
         $request = $request->withQueryParams(['uid' => '123']);
         $response = $this->controller->fetchDataAction($request);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertInstanceOf(JsonResponse::class, $response);
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertInstanceOf(JsonResponse::class, $response);
     }
 }

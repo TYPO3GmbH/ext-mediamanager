@@ -66,8 +66,8 @@ class FileReferencesProviderTest extends FunctionalTestCase
         $folder->method('getFiles')
             ->willReturn([$fileA, $fileB, $fileC]);
 
-        $this->assertEquals(2, $this->subject->getReferencesCount($fileA));
-        $this->assertEquals(0, $this->subject->getReferencesCount($fileB));
-        $this->assertEquals(1, $this->subject->getReferencesCount($fileC));
+        self::assertEquals(2, $this->subject->getReferencesCount($fileA));
+        self::assertEquals(0, $this->subject->getReferencesCount($fileB));
+        self::assertEquals(1, $this->subject->getReferencesCount($fileC));
     }
 }

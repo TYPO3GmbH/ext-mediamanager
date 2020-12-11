@@ -78,7 +78,7 @@ class DownloadFilesControllerTest extends UnitTestCase
         $request = new ServerRequest();
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        self::assertEquals(400, $response->getStatusCode());
     }
 
     /**
@@ -91,7 +91,7 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        self::assertEquals(400, $response->getStatusCode());
     }
 
     /**
@@ -120,8 +120,8 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertEquals('http://www.typo3.example/fileadmin/file.jpg', $response->getHeader('location')[0]);
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertEquals('http://www.typo3.example/fileadmin/file.jpg', $response->getHeader('location')[0]);
     }
 
     /**
@@ -150,7 +150,7 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(403, $response->getStatusCode());
+        self::assertEquals(403, $response->getStatusCode());
     }
 
     /**
@@ -176,8 +176,8 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('Max download size exceeded', $response->getBody()->getContents());
+        self::assertEquals(400, $response->getStatusCode());
+        self::assertEquals('Max download size exceeded', $response->getBody()->getContents());
     }
 
     /**
@@ -202,7 +202,7 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(500, $response->getStatusCode());
+        self::assertEquals(500, $response->getStatusCode());
     }
 
     /**
@@ -230,6 +230,6 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $response = $this->controller->downloadAction($request);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        self::assertEquals(200, $response->getStatusCode());
     }
 }

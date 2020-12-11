@@ -113,7 +113,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $result = $this->generator->getFolderItems($folderObject);
 
-        $this->assertEquals([[
+        self::assertEquals([[
             'identifier' => '1:/test-folder',
             'icon' => 'icon',
             'name' => 'TestFolder',
@@ -153,7 +153,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             ->willReturn([]);
 
         $result = $this->generator->getFolderItems($folderObject);
-        $this->assertEquals([], $result);
+        self::assertEquals([], $result);
     }
 
     /**
@@ -218,7 +218,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
 
         $result = $this->generator->getFolderItems($folderObject);
 
-        $this->assertEquals([[
+        self::assertEquals([[
             'identifier' => '1:/test-file',
             'icon' => 'icon',
             'name' => 'Test-file',

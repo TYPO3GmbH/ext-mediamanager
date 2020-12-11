@@ -57,7 +57,7 @@ class FolderDetailControllerTest extends UnitTestCase
         $request = new ServerRequest();
         $response = $this->controller->fetchDataAction($request);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        self::assertEquals(400, $response->getStatusCode());
     }
 
     /**
@@ -74,7 +74,7 @@ class FolderDetailControllerTest extends UnitTestCase
             ->willReturn(null);
 
         $response = $this->controller->fetchDataAction($request);
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
     }
 
     /**
@@ -98,7 +98,7 @@ class FolderDetailControllerTest extends UnitTestCase
         $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
     }
 
     /**
@@ -126,7 +126,7 @@ class FolderDetailControllerTest extends UnitTestCase
         $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
         $response = $this->controller->fetchDataAction($request);
-        $this->assertEquals(405, $response->getStatusCode());
+        self::assertEquals(405, $response->getStatusCode());
     }
 
     /**
@@ -167,8 +167,8 @@ class FolderDetailControllerTest extends UnitTestCase
 
         $response = $this->controller->fetchDataAction($request);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals($sampleData, \json_decode($response->getBody()->getContents(), true));
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertInstanceOf(JsonResponse::class, $response);
+        self::assertEquals($sampleData, \json_decode($response->getBody()->getContents(), true));
     }
 }
