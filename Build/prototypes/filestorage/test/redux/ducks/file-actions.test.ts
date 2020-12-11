@@ -86,7 +86,7 @@ describe('File Actions reducer', () => {
   it('can handle `UploadFiles`', () => {
     const action = new fromFileActions.UploadFiles(
       {} as DataTransfer,
-      { identifer: 'id-1' } as Typo3Node
+      { identifier: 'id-1' } as Typo3Node
     );
     const state = fromFileActions.fileActionsReducer(undefined, action);
     expect(state.isUploadingFiles).to.be.true;
