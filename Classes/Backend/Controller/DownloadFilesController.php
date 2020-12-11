@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
+use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
 
 class DownloadFilesController
 {
@@ -33,12 +34,17 @@ class DownloadFilesController
     /** @var ArchiveGeneratorInterface */
     private $archiveGenerator;
 
+    /** @var DownloadSizeValidatorFactoryInterface */
+    private $downloadSizeValidatorFactory;
+
     public function __construct(
         ResourceFactory $resourceFactory,
-        ArchiveGeneratorInterface $archiveGenerator
+        ArchiveGeneratorInterface $archiveGenerator,
+        DownloadSizeValidatorFactoryInterface $downloadSizeValidatorFactory
     ) {
         $this->resourceFactory = $resourceFactory;
         $this->archiveGenerator = $archiveGenerator;
+        $this->downloadSizeValidatorFactory = $downloadSizeValidatorFactory;
     }
 
     public function downloadAction(ServerRequestInterface $request): ResponseInterface
@@ -67,6 +73,13 @@ class DownloadFilesController
         $resources = \array_map(function (string $identifier) {
             return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
         }, $identifiers);
+
+        $resourceSizeValidator = $this->downloadSizeValidatorFactory->createValidator();
+        $validationResult = $resourceSizeValidator->validate($resources);
+
+        if (true === $validationResult->hasErrors()) {
+            return new HtmlResponse($validationResult->getFirstError()->getMessage(), 400);
+        }
 
         try {
             $archiveFilePath = $this->archiveGenerator->generateArchive($resources);

@@ -27,7 +27,7 @@ class ResourcesSizeValidator extends AbstractValidator
      * {@inheritdoc}
      */
     protected $supportedOptions = [
-        'maximum' => [PHP_INT_MAX, 'Maximum size of resources', 'integer'],
+        'maximum' => [PHP_INT_MAX, 'Maximum size of resources in MB', 'integer'],
     ];
 
     /**
@@ -37,10 +37,12 @@ class ResourcesSizeValidator extends AbstractValidator
     {
         $rawSize = \array_sum(\array_map([$this, 'getResourceSize'], $value));
 
-        if ($rawSize > $this->options['maximum']) {
+        $maxSizeInBytes = $this->options['maximum'] * 1024 * 1024;
+
+        if ($rawSize > $maxSizeInBytes) {
             $this->addError(
                 $this->translateErrorMessage(
-                    'validator.resourcessize.exceed',
+                    'LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:validator.maxDownloadSize.exceed',
                     'cms_filelist_ng',
                     [
                         $this->options['maximum'],

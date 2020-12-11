@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Validator;
 
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\FilelistNg\Backend\Validator\ResourcesSizeValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -40,9 +41,17 @@ class ResourcesSizeValidatorTest extends UnitTestCase
     /**
      * @test
      */
+    public function it_extends_AbstractValidator(): void
+    {
+        self::assertInstanceOf(AbstractValidator::class, $this->validator);
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_error_if_resources_size_is_exceeded_for_simple_file(): void
     {
-        $file = $this->createConfiguredMock(File::class, ['getSize' => self::DEFAULT_MAX_SIZE + 1]);
+        $file = $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(self::DEFAULT_MAX_SIZE) + 1]);
         self::assertTrue($this->validator->validate([$file])->hasErrors());
     }
 
@@ -51,15 +60,15 @@ class ResourcesSizeValidatorTest extends UnitTestCase
      */
     public function it_returns_error_if_resources_size_is_exceeded_for_nested_files(): void
     {
-        $file = $this->createConfiguredMock(File::class, ['getSize' => 100]);
+        $file = $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(100)]);
         $subFolderAFiles = [
-            $this->createConfiguredMock(File::class, ['getSize' => 200]),
-            $this->createConfiguredMock(File::class, ['getSize' => 100]),
-            $this->createConfiguredMock(File::class, ['getSize' => 100]),
+            $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(200)]),
+            $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(100)]),
+            $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(100)]),
         ];
 
         $subFolderBFiles = [
-            $this->createConfiguredMock(File::class, ['getSize' => 1]),
+            $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(1)]),
         ];
 
         $subFolderA = $this->createConfiguredMock(Folder::class, ['getFiles' => $subFolderAFiles, 'getSubfolders' => []]);
@@ -75,8 +84,13 @@ class ResourcesSizeValidatorTest extends UnitTestCase
      */
     public function it_returns_no_error_if_resources_size_is_in_range(): void
     {
-        $file = $this->createConfiguredMock(File::class, ['getSize' => self::DEFAULT_MAX_SIZE -1]);
+        $file = $this->createConfiguredMock(File::class, ['getSize' => self::convertMBToBytes(self::DEFAULT_MAX_SIZE) -1]);
 
         self::assertFalse($this->validator->validate([$file])->hasErrors());
+    }
+
+    protected static function convertMBToBytes(int $bytes): int
+    {
+        return $bytes * 1024 * 1024;
     }
 }

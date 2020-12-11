@@ -23,8 +23,12 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Extbase\Error\Error;
+use TYPO3\CMS\Extbase\Error\Result;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\FilelistNg\Backend\Controller\DownloadFilesController;
 use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
+use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class DownloadFilesControllerTest extends UnitTestCase
@@ -41,13 +45,28 @@ class DownloadFilesControllerTest extends UnitTestCase
     /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $fsMock;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Result */
+    private $validationResult;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $this->archiveGeneratorMock = $this->createMock(ArchiveGeneratorInterface::class);
-        $this->controller = new DownloadFilesController($this->resourceFactoryMock, $this->archiveGeneratorMock);
+
+        $this->validationResult = $this->createMock(Result::class);
+
+        $downloadSizeValidator = $this->createMock(AbstractValidator::class);
+
+        $downloadSizeValidator->method('validate')
+            ->willReturn($this->validationResult);
+
+        $downloadSizeValidatorFactory = $this->createMock(DownloadSizeValidatorFactoryInterface::class);
+        $downloadSizeValidatorFactory->method('createValidator')
+            ->willReturn($downloadSizeValidator);
+
+        $this->controller = new DownloadFilesController($this->resourceFactoryMock, $this->archiveGeneratorMock, $downloadSizeValidatorFactory);
         $this->fsMock = vfsStream::setup();
     }
 
@@ -132,6 +151,33 @@ class DownloadFilesControllerTest extends UnitTestCase
         $response = $this->controller->downloadAction($request);
 
         $this->assertEquals(403, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_400_status_code_on_exceed_mas_download_size(): void
+    {
+        $request = new ServerRequest();
+        $request = $request->withParsedBody(['identifiers' => ['14', '20']]);
+
+        $fileMock = $this->createMock(File::class);
+        $folderMock = $this->createMock(Folder::class);
+
+        $this->resourceFactoryMock->method('retrieveFileOrFolderObject')
+            ->withConsecutive(['14'], ['20'])
+            ->willReturnOnConsecutiveCalls($fileMock, $folderMock);
+
+        $this->validationResult->method('hasErrors')
+            ->willReturn(true);
+
+        $this->validationResult->method('getFirstError')
+            ->willReturn(new Error('Max download size exceeded', 2000));
+
+        $response = $this->controller->downloadAction($request);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals('Max download size exceeded', $response->getBody()->getContents());
     }
 
     /**

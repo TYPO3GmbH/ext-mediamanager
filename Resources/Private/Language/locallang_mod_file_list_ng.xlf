@@ -225,6 +225,12 @@
 			<trans-unit id="message.header.genericError" resname="message.header.genericError">
 				<source>Error</source>
 			</trans-unit>
+			<trans-unit id="settings.maxDownloadSize" resname="settings.maxDownloadSize">
+				<source>Max download size</source>
+			</trans-unit>
+			<trans-unit id="validator.maxDownloadSize.exceed" resname="validator.maxDownloadSize.exceed">
+				<source>Max download size of %s MB exceeded</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
