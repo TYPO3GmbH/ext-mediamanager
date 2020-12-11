@@ -357,10 +357,14 @@ export const downloadFiles = (
         }),
         map(() => new DownloadFilesSuccess()),
         catchError((error: AjaxError) => {
+          const message = String.fromCharCode.apply(
+            null,
+            new Uint8Array(error.response) as never
+          );
           window.dispatchEvent(
             new CustomEvent('typo3-add-snackbar', {
               detail: {
-                message: error.message,
+                message: message,
                 variant: 'danger',
               },
             })
