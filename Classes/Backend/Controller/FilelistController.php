@@ -71,13 +71,16 @@ class FilelistController
 
         $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/CmsFilelistNg');
 
-        $backendUrls = [
-            'newStorageUrl' =>  (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
+        $backendUrls = [];
+
+        if ($backendUser->check('tables_modify', 'sys_file_storage')) {
+            $backendUrls['newStorageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
                 'edit[sys_file_storage][0]' => 'new',
                 'returnUrl' => (string) $fileListUrl,
-            ]),
-        ];
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('beuser')) {
+            ]);
+        }
+
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('beuser') && $backendUser->check('module', 'beuser')) {
             $backendUrls['switchUserUrl'] = (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser');
         }
 

@@ -23,6 +23,8 @@ export class Typo3Storages extends LitElement {
   public static styles = [themeStyles, defaultStyles, styles];
 
   protected render(): TemplateResult {
+    const newStorageUrl = getUrl('newStorageUrl');
+
     return html`
       <div class="content_left">
         <div class="topbar-wrapper">
@@ -31,12 +33,18 @@ export class Typo3Storages extends LitElement {
           </typo3-topbar>
           <typo3-topbar>
             <div slot="left">
-              <typo3-button @click="${this._onNewStorage}" slot="left">
-                <svg slot="icon">
-                  <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
-                </svg>
-                ${translate('new')}
-              </typo3-button>
+              ${newStorageUrl
+                ? html`<typo3-button
+                    @click="${() => this._onRelocate(newStorageUrl)}"
+                  >
+                    <svg slot="icon">
+                      <use xlink:href="" xlink:href="${getIconUrl(
+                        'new'
+                      )}"></use>
+                    </svg>
+                     ${translate('new')}
+                  </typo3-button`
+                : html``}
             </div>
           </typo3-topbar>
         </div>
@@ -47,6 +55,8 @@ export class Typo3Storages extends LitElement {
 
   protected renderContent(): TemplateResult {
     if (0 === this.storages.length) {
+      const switchUserUrl = getUrl('switchUserUrl');
+
       return html` <typo3-modal id="modal" open="true">
         <h2>${translate('storagesAccessDeniedTitle')}</h2>
         <p>${translate('storagesAccessDeniedMessage')}</p>
@@ -55,8 +65,9 @@ export class Typo3Storages extends LitElement {
           slot="footer"
           style="display: flex;width: 100%;align-items: center;flex-direction: column; gap: 10px;"
         >
-          ${getUrl('switchUserUrl')
-            ? html`<typo3-button @click="${this._onSwitchUser}"
+          ${switchUserUrl
+            ? html`<typo3-button
+                @click="${() => this._onRelocate(switchUserUrl)}"
                 >${translate('storagesAccessDeniedSwitchUser')}</typo3-button
               >`
             : html``}
@@ -92,11 +103,7 @@ export class Typo3Storages extends LitElement {
     window.location.reload();
   }
 
-  _onSwitchUser(): void {
-    window.location.href = getUrl('switchUserUrl');
-  }
-
-  _onNewStorage(): void {
-    window.location.href = getUrl('newStorageUrl');
+  _onRelocate(url: string): void {
+    window.location.href = url;
   }
 }
