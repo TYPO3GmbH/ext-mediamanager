@@ -1,0 +1,38 @@
+:host {
+  display: inline-block;
+  position: relative;
+  width: var(--typo3-search-width, 15rem);
+}
+
+#form {
+  margin: 0;
+}
+
+#input {
+  outline-offset: -0.125rem;
+  box-sizing: border-box;
+  text-indent: 0;
+  width: 100%;
+  vertical-align: top;
+  appearance: none;
+  color: var(--typo3-search-input-color, var(--typo3-global-gray-dark));
+  margin: 0;
+  overflow: visible;
+  outline: none;
+  line-height: var(--typo3-search-line-height, var(--typo3-global-btn-line-height));
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--typo3-search-input-border-radius, var(--typo3-global-default-border-radius));
+  border: var(--typo3-search-input-border-width, var(--typo3-global-default-border-width)) solid var(--typo3-search-input-border-color, var(--typo3-global-btn-default-border));
+  padding-right: calc(
+    var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size)) + (var(--typo3-search-icon-margin-right, 0.5rem) *2)
+  );
+  height: 1.875rem;
+}
+
+::slotted([slot='search-icon']) {
+  position: absolute;
+  right: var(--typo3-search-icon-margin-right, 0.5rem);
+  top: var(--typo3-search-icon-margin-top, 0.25rem);
+  width: var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size));
+  height: var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size));
+}

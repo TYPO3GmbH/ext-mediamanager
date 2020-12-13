@@ -1196,6 +1196,82 @@
           "type": "Color"
         }
       ]
+    },
+    {
+      "name": "typo3-search",
+      "properties": [
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "label",
+          "attribute": "label",
+          "type": "string",
+          "default": "\"Search\""
+        },
+        {
+          "name": "placeholder",
+          "attribute": "placeholder",
+          "type": "string",
+          "default": "\"Search\""
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string",
+          "default": "\"\""
+        }
+      ],
+      "events": [
+        {
+          "name": "typo3-search-change",
+          "description": "Dispatched on input change"
+        },
+        {
+          "name": "typo3-search-submit",
+          "description": "Dispatched on submit"
+        }
+      ],
+      "slots": [
+        {
+          "name": "search-icon",
+          "description": "Search icon"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-search-width"
+        },
+        {
+          "name": "--typo3-search-input-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-search-line-height"
+        },
+        {
+          "name": "--typo3-search-input-border-radius"
+        },
+        {
+          "name": "--typo3-search-input-border-width"
+        },
+        {
+          "name": "--typo3-search-input-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-search-icon-size"
+        },
+        {
+          "name": "--typo3-search-icon-margin-right"
+        },
+        {
+          "name": "--typo3-search-icon-margin-top"
+        }
+      ]
     }
   ]
 }

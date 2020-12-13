@@ -20,6 +20,7 @@ import './menu/src/typo3-menu';
 import './menu/src/typo3-menu-item';
 import './modal/src/typo3-modal';
 import './overlay/src/typo3-overlay';
+import './search/src/typo3-search';
 import './snackbar/src/typo3-snackbar';
 import './spinner/src/typo3-spinner';
 import './splitpane/src/typo3-splitpane';
