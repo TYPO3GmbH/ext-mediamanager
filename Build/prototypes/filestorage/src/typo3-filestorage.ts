@@ -69,18 +69,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     store.dispatch(new fromTree.LoadTreeData());
-    window.top.postMessage(
-      new MessageData('typo3-enable-tree-toggle-button'),
-      '*'
-    );
   }
 
   public connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener('dragleave', this._onDragLeave);
     this.addEventListener('dragover', this._onDragOver);
-
-    window.addEventListener('message', this._handlePostMessage);
   }
 
   public disconnectedCallback() {
@@ -973,11 +967,4 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     store.dispatch(action);
   }
-
-  _handlePostMessage = (event: MessageEvent<MessageData>) => {
-    switch (event.data.type) {
-      case 'typo3-tree-toggle':
-        store.dispatch(new fromLayout.ToggleSidebar());
-    }
-  };
 }
