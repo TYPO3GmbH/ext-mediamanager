@@ -23,15 +23,22 @@
   padding: 0.25rem 0.5rem;
   border-radius: var(--typo3-search-input-border-radius, var(--typo3-global-default-border-radius));
   border: var(--typo3-search-input-border-width, var(--typo3-global-default-border-width)) solid var(--typo3-search-input-border-color, var(--typo3-global-btn-default-border));
-  padding-right: calc(
-    var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size)) + (var(--typo3-search-icon-margin-right, 0.5rem) *2)
+  padding-left: calc(
+    var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size)) + (var(--typo3-search-icon-margin-left, 0.5rem) *2)
   );
   height: var(--typo3-search-height, 1.875rem);
 }
 
+#reset-button {
+  right: 0;
+  top:0;
+  position: absolute;
+  width: var(--typo3-search-reset-button-width, 1.875rem);
+}
+
 ::slotted([slot='search-icon']) {
   position: absolute;
-  right: var(--typo3-search-icon-margin-right, 0.5rem);
+  left: var(--typo3-search-icon-margin-left, 0.5rem);
 
   top: calc(
     var(--typo3-search-height, 1.875rem)/2

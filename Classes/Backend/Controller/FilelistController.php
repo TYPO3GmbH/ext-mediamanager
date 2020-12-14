@@ -243,7 +243,8 @@ class FilelistController
             'emptyFolder' =>  'apps-pagetree-folder-default',
             'refresh' => 'actions-refresh',
             'search' => 'actions-search',
-            'lockedFolder' => 'apps-filetree-folder-locked'
+            'lockedFolder' => 'apps-filetree-folder-locked',
+            'reset' => 'actions-close',
         ];
 
         return \array_map(function (string $identifier) {

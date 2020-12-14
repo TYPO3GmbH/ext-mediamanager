@@ -61,6 +61,13 @@
           "default": false
         },
         {
+          "name": "onlyIcon",
+          "type": "Boolean",
+          "attribute": "only-icon",
+          "description": "Renders button without border and background",
+          "default": false
+        },
+        {
           "name": "iconRight",
           "type": "Boolean",
           "attribute": "icon-right",
@@ -1269,7 +1276,10 @@
           "name": "--typo3-search-icon-size"
         },
         {
-          "name": "--typo3-search-icon-margin-right"
+          "name": "--typo3-search-icon-margin-left"
+        },
+        {
+          "name": "--typo3-search-reset-button-width"
         }
       ]
     }

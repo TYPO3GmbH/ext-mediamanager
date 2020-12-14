@@ -19,12 +19,14 @@ import styles from './typo3-search.pcss';
  * @cssprop --typo3-search-input-border-width
  * @cssprop --typo3-search-input-border-color
  * @cssprop --typo3-search-icon-size
- * @cssprop --typo3-search-icon-margin-right
+ * @cssprop --typo3-search-icon-margin-left
+ * @cssprop --typo3-search-reset-button-width
  *
  * @fires typo3-search-change - Dispatched on input change
  * @fires typo3-search-submit - Dispatched on submit
  *
  * @slot search-icon - Search icon
+ * @slot reset-icon - Reset icon
  */
 @customElement('typo3-search')
 export class Typo3Search extends LitElement {
@@ -56,7 +58,7 @@ export class Typo3Search extends LitElement {
         @keydown=${this.handleKeydown}
       >
         <slot name="search-icon"></slot>
-        ${this.renderInput}
+        ${this.renderInput} ${this.renderResetButton}
       </form>
     `;
   }
@@ -68,10 +70,26 @@ export class Typo3Search extends LitElement {
         id="input"
         placeholder=${this.placeholder}
         .value=${this.value}
-        @change=${this.onChange}
         @input=${this.onInput}
         ?disabled=${this.disabled}
       />
+    `;
+  }
+
+  private get renderResetButton(): TemplateResult {
+    if ('' === this.value) {
+      return html``;
+    }
+
+    return html`
+      <typo3-button
+        only-icon
+        id="reset-button"
+        tab-index="-1"
+        @click="${this.reset}"
+      >
+        <slot name="reset-icon" slot="icon"></slot>
+      </typo3-button>
     `;
   }
 
@@ -80,17 +98,14 @@ export class Typo3Search extends LitElement {
     const selectionStart = this.inputElement.selectionStart as number;
     this.updateComplete.then(() => {
       this.inputElement.setSelectionRange(selectionStart, selectionStart);
+      this.dispatchEvent(
+        new CustomEvent('typo3-search-change', {
+          bubbles: true,
+          composed: true,
+          detail: this.value,
+        })
+      );
     });
-  }
-
-  protected onChange(): void {
-    this.dispatchEvent(
-      new CustomEvent('typo3-search-change', {
-        bubbles: true,
-        composed: true,
-        detail: this.value,
-      })
-    );
   }
 
   private handleSubmit(event: Event): void {
@@ -118,7 +133,22 @@ export class Typo3Search extends LitElement {
     }
     this.value = '';
     this.form.reset();
+    this.inputElement.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+      })
+    );
+    // The native `change` event on an `input` element is not composed,
+    // so this synthetic replication of a `change` event must not be
+    // either as the `Textfield` baseclass should only need to handle
+    // the native variant of this interaction.
+    this.inputElement.dispatchEvent(
+      new InputEvent('change', {
+        bubbles: true,
+      })
+    );
+
     await this.updateComplete;
-    this.onChange();
   }
 }

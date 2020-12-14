@@ -47,7 +47,12 @@ import '../../../out-tsc/packages/button/src/typo3-button';
         </svg>
         Button with icon right
       </typo3-button>
-      <typo3-button label="only icon label">
+      <typo3-button label="icon without label">
+        <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
+            <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-filter"></use>
+        </svg>
+      </typo3-button>
+      <typo3-button only-icon label="only icon" title="only-icon">
         <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
             <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-filter"></use>
         </svg>

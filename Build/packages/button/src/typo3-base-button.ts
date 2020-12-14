@@ -17,6 +17,9 @@ export abstract class Typo3BaseButton extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'icon-right' })
   iconRight = false;
 
+  @property({ type: Boolean, reflect: true, attribute: 'only-icon' })
+  onlyicon = false;
+
   @property({ type: String, reflect: true }) color: Color = 'default';
 
   connectedCallback(): void {

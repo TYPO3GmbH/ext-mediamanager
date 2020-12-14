@@ -626,6 +626,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <svg slot="search-icon">
           <use xlink:href="" xlink:href="${getIconUrl('search')}"></use>
         </svg>
+        <svg slot="reset-icon">
+          <use xlink:href="" xlink:href="${getIconUrl('reset')}"></use>
+        </svg>
       </typo3-search>
     `;
   }
