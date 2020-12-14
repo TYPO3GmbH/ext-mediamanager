@@ -26,13 +26,17 @@
   padding-right: calc(
     var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size)) + (var(--typo3-search-icon-margin-right, 0.5rem) *2)
   );
-  height: 1.875rem;
+  height: var(--typo3-search-height, 1.875rem);
 }
 
 ::slotted([slot='search-icon']) {
   position: absolute;
   right: var(--typo3-search-icon-margin-right, 0.5rem);
-  top: var(--typo3-search-icon-margin-top, 0.25rem);
+
+  top: calc(
+    var(--typo3-search-height, 1.875rem)/2
+    - var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size))/2
+  );
   width: var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size));
   height: var(--typo3-search-icon-size, var(--typo3-global-btn-icon-size));
 }

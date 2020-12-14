@@ -10,6 +10,7 @@ import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-search.pcss';
 
 /**
+ * @cssprop --typo3-search-height
  * @cssprop --typo3-search-width
  * @cssprop --typo3-search-input-color
  * @cssprop --typo3-search-line-height
@@ -19,7 +20,6 @@ import styles from './typo3-search.pcss';
  * @cssprop --typo3-search-input-border-color
  * @cssprop --typo3-search-icon-size
  * @cssprop --typo3-search-icon-margin-right
- * @cssprop --typo3-search-icon-margin-top
  *
  * @fires typo3-search-change - Dispatched on input change
  * @fires typo3-search-submit - Dispatched on submit

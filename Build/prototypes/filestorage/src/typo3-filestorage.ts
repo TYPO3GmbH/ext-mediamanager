@@ -224,6 +224,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
                 ${this.breadcrumbContent}
               </typo3-breadcrumb>
               <div slot="right">
+                <typo3-search
+                  placeholder="${translate('labels.search')}"
+                  label="${translate('labels.search')}"
+                >
+                  <svg slot="search-icon">
+                    <use
+                      xlink:href=""
+                      xlink:href="${getIconUrl('search')}"
+                    ></use>
+                  </svg>
+                </typo3-search>
                 ${this.getSortingDropdown()} ${this.getViewModeDropDown()}
               </div>
             </typo3-topbar>

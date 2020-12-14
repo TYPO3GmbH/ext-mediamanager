@@ -1243,6 +1243,9 @@
       ],
       "cssProperties": [
         {
+          "name": "--typo3-search-height"
+        },
+        {
           "name": "--typo3-search-width"
         },
         {
@@ -1267,9 +1270,6 @@
         },
         {
           "name": "--typo3-search-icon-margin-right"
-        },
-        {
-          "name": "--typo3-search-icon-margin-top"
         }
       ]
     }

@@ -211,6 +211,7 @@ class FilelistController
             'message.header.folderRenamed' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.folderRenamed'),
             'message.header.undo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.undo'),
             'message.header.genericError' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.genericError'),
+            'labels.search' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.search'),
         ];
     }
 
@@ -232,6 +233,7 @@ class FilelistController
             'view.mode.tiles' => 'actions-viewmode-tiles',
             'emptyFolder' =>  'apps-pagetree-folder-default',
             'refresh' => 'actions-refresh',
+            'search' => 'actions-search',
         ];
 
         return \array_map(function (string $identifier) {
