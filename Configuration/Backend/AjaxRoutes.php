@@ -28,6 +28,6 @@ return [
     ],
     'filelist_ng_search_files' => [
         'path' => '/filelist_ng/searchFiles',
-        'target' => Controller\SearchFilesController::class . '::searchAction',
+        'target' => Controller\SearchFilesController::class . '::searchFilesAction',
     ],
 ];

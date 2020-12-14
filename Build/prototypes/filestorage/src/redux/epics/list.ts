@@ -14,6 +14,7 @@ import { ajax } from 'rxjs/ajax';
 import { Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { RootState } from '../ducks';
+import { getUrl } from '../../services/backend-url.service';
 
 export const fetchListData = (
   action$: ActionsObservable<fromList.LoadListData>
@@ -50,4 +51,43 @@ export const selectFirstNodeOnfetchListDataError = (
   );
 };
 
-export const listActions = [fetchListData, selectFirstNodeOnfetchListDataError];
+export const searchFiles = (
+  action$: ActionsObservable<fromList.SearchFiles>
+): Observable<Action> => {
+  return action$.ofType(fromList.SEARCH_FILES).pipe(
+    switchMap(action => {
+      const params = new URLSearchParams();
+      params.append('search', action.searchTerm);
+
+      const url = getUrl('searchFilesUrl') + '&' + params.toString();
+      return ajax.getJSON<ListItem[]>(url).pipe(
+        mergeMap(data => [
+          new fromList.ClearSelection(),
+          new fromList.SearchFilesSuccess(data),
+        ]),
+        catchError(error => of(new fromList.SearchFilesFailure(error.message)))
+      );
+    })
+  );
+};
+
+export const searchFilesReset = (
+  action$: ActionsObservable<fromList.SearchFilesReset>,
+  state$: StateObservable<RootState>
+): Observable<Action> => {
+  return action$.ofType(fromList.SEARCH_FILES_RESET).pipe(
+    withLatestFrom(state$),
+    map(
+      ([, state]) =>
+        fromTree.getSelectedTreeNode(state) || fromTree.getTreeNodes(state)[0]
+    ),
+    map(node => new fromList.LoadListData(node.folderUrl))
+  );
+};
+
+export const listActions = [
+  fetchListData,
+  selectFirstNodeOnfetchListDataError,
+  searchFiles,
+  searchFilesReset,
+];

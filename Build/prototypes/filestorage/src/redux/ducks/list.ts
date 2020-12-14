@@ -13,6 +13,7 @@ export const LOAD_LIST_DATA_FAILURE = '[LIST] LOAD DATA FAILURE';
 export const SEARCH_FILES = '[LIST] SEARCH FILES';
 export const SEARCH_FILES_SUCCESS = '[LIST] SEARCH FILES SUCCESS';
 export const SEARCH_FILES_FAILURE = '[LIST] SEARCH FILES FAILURE';
+export const SEARCH_FILES_RESET = '[LIST] SEARCH FILES RESET';
 
 export type ListState = Readonly<{
   items: ListItem[];
@@ -45,7 +46,7 @@ export const listReducer = (
     case SEARCH_FILES:
       return {
         ...state,
-        searchTerm: action.searchTermn,
+        searchTerm: action.searchTerm,
         loading: true,
         items: [],
       };
@@ -104,7 +105,7 @@ export class LoadListDataFailure implements Action {
 
 export class SearchFiles implements Action {
   readonly type = SEARCH_FILES;
-  constructor(public searchTermn: string) {}
+  constructor(public searchTerm: string) {}
 }
 
 export class SearchFilesSuccess implements Action {
@@ -115,6 +116,10 @@ export class SearchFilesSuccess implements Action {
 export class SearchFilesFailure implements Action {
   readonly type = SEARCH_FILES_FAILURE;
   constructor(public error: string) {}
+}
+
+export class SearchFilesReset implements Action {
+  readonly type = SEARCH_FILES_RESET;
 }
 
 const listSelector = (state: RootState) => state.list;
@@ -149,4 +154,5 @@ export type Actions =
   | LoadListDataFailure
   | SearchFiles
   | SearchFilesSuccess
-  | SearchFilesFailure;
+  | SearchFilesFailure
+  | SearchFilesReset;

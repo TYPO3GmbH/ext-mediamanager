@@ -65,6 +65,9 @@ class SearchFilesController
 
         $data = \array_map([$this->folderListGenerator, 'formatFile'], \iterator_to_array($files));
 
-        return new JsonResponse($data);
+        $response =  new JsonResponse();
+        $response->setPayload($data);
+
+        return $response;
     }
 }

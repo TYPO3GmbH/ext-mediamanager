@@ -597,6 +597,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-search
         placeholder="${translate('labels.search')}"
         label="${translate('labels.search')}"
+        @typo3-search-change="${this._onFilesSearch}"
       >
         <svg slot="search-icon">
           <use xlink:href="" xlink:href="${getIconUrl('search')}"></use>
@@ -935,6 +936,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     if (item.metaDataUrl) {
       store.dispatch(new fromFileActions.EditFileMetadata(item.metaDataUrl));
     }
+  }
+
+  _onFilesSearch(event: CustomEvent<string>): void {
+    const action =
+      '' !== event.detail
+        ? new fromList.SearchFiles(event.detail)
+        : new fromList.SearchFilesReset();
+
+    store.dispatch(action);
   }
 
   _handlePostMessage = (event: MessageEvent<MessageData>) => {
