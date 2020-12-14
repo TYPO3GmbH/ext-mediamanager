@@ -142,6 +142,10 @@
 			<trans-unit id="emptyFolder" resname="emptyFolder">
 				<source>This folder is empty</source>
 			</trans-unit>
+			<trans-unit id="readOnlyFolder" resname="readOnlyFolder">
+				<source>This is a read-only filestorage</source>
+			</trans-unit>
+
 			<trans-unit id="dragFilesUploadMessage" resname="dragFilesUploadMessage">
 				<source>Drag files here to upload them</source>
 			</trans-unit>
@@ -230,6 +234,9 @@
 			</trans-unit>
 			<trans-unit id="validator.maxDownloadSize.exceed" resname="validator.maxDownloadSize.exceed">
 				<source>Max download size of %s MB exceeded</source>
+			</trans-unit>
+			<trans-unit id="fileSearch.noResults" resname="fileSearch.noResults">
+				<source>No results found</source>
 			</trans-unit>
 		</body>
 	</file>

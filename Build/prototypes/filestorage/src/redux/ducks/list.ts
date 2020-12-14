@@ -122,6 +122,17 @@ export class SearchFilesReset implements Action {
   readonly type = SEARCH_FILES_RESET;
 }
 
+export type Actions =
+  | ClearSelection
+  | SetSelection
+  | LoadListData
+  | LoadListDataSuccess
+  | LoadListDataFailure
+  | SearchFiles
+  | SearchFilesSuccess
+  | SearchFilesFailure
+  | SearchFilesReset;
+
 const listSelector = (state: RootState) => state.list;
 
 export const isItemSelected = createSelector(listSelector, list =>
@@ -146,13 +157,12 @@ export const getListItemByIdentifier = createSelector(getItems, items =>
   )
 );
 
-export type Actions =
-  | ClearSelection
-  | SetSelection
-  | LoadListData
-  | LoadListDataSuccess
-  | LoadListDataFailure
-  | SearchFiles
-  | SearchFilesSuccess
-  | SearchFilesFailure
-  | SearchFilesReset;
+export const isInSearchMode = createSelector(
+  listSelector,
+  list => null !== list.searchTerm
+);
+
+export const getSearchTermString = createSelector(
+  listSelector,
+  list => list.searchTerm ?? ''
+);

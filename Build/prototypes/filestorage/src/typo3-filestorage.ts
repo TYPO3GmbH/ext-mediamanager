@@ -196,6 +196,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get renderBreadcrumb(): TemplateResult {
+    if (fromList.isInSearchMode(this.state)) {
+      return html` ${translate('labels.search')}:
+      "${fromList.getSearchTermString(this.state)}"`;
+    }
+
     const nodes = fromTree.getSelectedTreeNodePath(this.state) as Typo3Node[];
     const itemsHtml = nodes.map(
       node =>
@@ -212,17 +217,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get renderMainContent(): TemplateResult {
     if (fromList.getItems(this.state).length === 0) {
-      if (true === fromGlobalActions.isLoading(this.state)) {
-        return html``;
-      }
-
-      return html` <div class="main-content main-content-info">
-        <svg>
-          <use xlink:href="" xlink:href="${getIconUrl('emptyFolder')}"></use>
-        </svg>
-        <h3>${translate('emptyFolder')}</h3>
-        <span>${translate('dragFilesUploadMessage')}</span>
-      </div>`;
+      return this.renderEmptyContent;
     }
 
     if (fromView.isListMode(this.state)) {
@@ -310,6 +305,34 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         this._onRename(listData.identifier, e.detail)}"
       >${imageSlot} ${badge}
     </typo3-card>`;
+  }
+
+  protected get renderEmptyContent(): TemplateResult {
+    if (true === fromGlobalActions.isLoading(this.state)) {
+      return html``;
+    }
+    let iconKey = 'lockedFolder';
+    let titleKey = 'emptyFolder';
+    let messageKey = 'readOnlyFolder';
+
+    const currentNode = fromTree.getSelectedTreeNode(this.state);
+
+    if (fromList.isInSearchMode(this.state)) {
+      iconKey = 'search';
+      titleKey = 'fileSearch.noResults';
+      messageKey = '';
+    } else if (currentNode && currentNode.allowEdit) {
+      iconKey = 'emptyFolder';
+      messageKey = 'dragFilesUploadMessage';
+    }
+
+    return html` <div class="main-content main-content-info">
+      <svg>
+        <use xlink:href="" xlink:href="${getIconUrl(iconKey)}"></use>
+      </svg>
+      <h3>${translate(titleKey)}</h3>
+      <span>${translate(messageKey)}</span>
+    </div>`;
   }
 
   protected get renderViewModeDropDown(): TemplateResult {
@@ -597,6 +620,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-search
         placeholder="${translate('labels.search')}"
         label="${translate('labels.search')}"
+        value="${fromList.getSearchTermString(this.state)}"
         @typo3-search-change="${this._onFilesSearch}"
       >
         <svg slot="search-icon">
@@ -653,7 +677,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onContextMenuWithoutContext(event: MouseEvent): void {
     const currentNode = fromTree.getSelectedTreeNode(this.state);
-    if (null === currentNode) {
+    if (null === currentNode || fromList.isInSearchMode(this.state)) {
       return;
     }
     const customEvent = new CustomEvent<{

@@ -197,6 +197,7 @@ class FilelistController
             'modal.move.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.move.button'),
             'modal.copy.button' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:modal.copy.button'),
             'emptyFolder' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:emptyFolder'),
+            'readOnlyFolder' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:readOnlyFolder'),
             'dragFilesUploadMessage' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:dragFilesUploadMessage'),
             'selectStorageInfo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:selectStorageInfo'),
             'storagesAccessDeniedTitle' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:storagesAccessDeniedTitle'),
@@ -219,6 +220,7 @@ class FilelistController
             'message.header.undo' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.undo'),
             'message.header.genericError' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.genericError'),
             'labels.search' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.search'),
+            'fileSearch.noResults' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:fileSearch.noResults'),
         ];
     }
 
@@ -241,6 +243,7 @@ class FilelistController
             'emptyFolder' =>  'apps-pagetree-folder-default',
             'refresh' => 'actions-refresh',
             'search' => 'actions-search',
+            'lockedFolder' => 'apps-filetree-folder-locked'
         ];
 
         return \array_map(function (string $identifier) {
