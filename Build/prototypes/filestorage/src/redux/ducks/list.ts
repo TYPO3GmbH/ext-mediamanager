@@ -7,6 +7,7 @@ export const CLEAR_SELECTION = '[LIST] CLEAR SELECTION';
 export const SET_SELECTION = '[LLIST] SET SELECTION';
 
 export const LOAD_LIST_DATA = '[LIST] LOAD DATA';
+export const RELOAD_LIST_DATA = '[LIST] RELOAD DATA';
 export const LOAD_LIST_DATA_SUCCESS = '[LIST] LOAD DATA SUCCESS';
 export const LOAD_LIST_DATA_FAILURE = '[LIST] LOAD DATA FAILURE';
 
@@ -103,6 +104,10 @@ export class LoadListDataFailure implements Action {
   constructor(public error: string) {}
 }
 
+export class ReloadListData implements Action {
+  readonly type = RELOAD_LIST_DATA;
+}
+
 export class SearchFiles implements Action {
   readonly type = SEARCH_FILES;
   constructor(public searchTerm: string) {}
@@ -128,6 +133,7 @@ export type Actions =
   | LoadListData
   | LoadListDataSuccess
   | LoadListDataFailure
+  | ReloadListData
   | SearchFiles
   | SearchFilesSuccess
   | SearchFilesFailure

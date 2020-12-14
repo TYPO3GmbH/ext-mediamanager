@@ -89,9 +89,27 @@ export const searchFilesReset = (
   );
 };
 
+export const reloadListData = (
+  action$: ActionsObservable<fromList.ReloadListData>,
+  state$: StateObservable<RootState>
+): Observable<Action> => {
+  return action$.ofType(fromList.RELOAD_LIST_DATA).pipe(
+    withLatestFrom(state$),
+    map(([, state]) => {
+      if (fromList.isInSearchMode(state)) {
+        return new fromList.SearchFiles(fromList.getSearchTermString(state));
+      }
+      const node =
+        fromTree.getSelectedTreeNode(state) || fromTree.getTreeNodes(state)[0];
+      return new fromList.LoadListData(node.folderUrl);
+    })
+  );
+};
+
 export const listActions = [
   fetchListData,
   selectFirstNodeOnfetchListDataError,
   searchFiles,
   searchFilesReset,
+  reloadListData,
 ];
