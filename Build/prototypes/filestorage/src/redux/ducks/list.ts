@@ -10,11 +10,16 @@ export const LOAD_LIST_DATA = '[LIST] LOAD DATA';
 export const LOAD_LIST_DATA_SUCCESS = '[LIST] LOAD DATA SUCCESS';
 export const LOAD_LIST_DATA_FAILURE = '[LIST] LOAD DATA FAILURE';
 
+export const SEARCH_FILES = '[LIST] SEARCH FILES';
+export const SEARCH_FILES_SUCCESS = '[LIST] SEARCH FILES SUCCESS';
+export const SEARCH_FILES_FAILURE = '[LIST] SEARCH FILES FAILURE';
+
 export type ListState = Readonly<{
   items: ListItem[];
   selectedItemIds: string[];
   loading: boolean;
   error: string | null;
+  searchTerm: string | null;
 }>;
 
 const initialState: ListState = {
@@ -22,6 +27,7 @@ const initialState: ListState = {
   selectedItemIds: [],
   loading: false,
   error: null,
+  searchTerm: null,
 };
 
 export const listReducer = (
@@ -32,16 +38,26 @@ export const listReducer = (
     case LOAD_LIST_DATA:
       return {
         ...state,
+        searchTerm: null,
+        loading: true,
+        items: [],
+      };
+    case SEARCH_FILES:
+      return {
+        ...state,
+        searchTerm: action.searchTermn,
         loading: true,
         items: [],
       };
     case LOAD_LIST_DATA_SUCCESS:
+    case SEARCH_FILES_SUCCESS:
       return {
         ...state,
         items: action.data,
         loading: false,
       };
     case LOAD_LIST_DATA_FAILURE:
+    case SEARCH_FILES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -86,6 +102,21 @@ export class LoadListDataFailure implements Action {
   constructor(public error: string) {}
 }
 
+export class SearchFiles implements Action {
+  readonly type = SEARCH_FILES;
+  constructor(public searchTermn: string) {}
+}
+
+export class SearchFilesSuccess implements Action {
+  readonly type = SEARCH_FILES_SUCCESS;
+  constructor(public data: ListItem[]) {}
+}
+
+export class SearchFilesFailure implements Action {
+  readonly type = SEARCH_FILES_FAILURE;
+  constructor(public error: string) {}
+}
+
 const listSelector = (state: RootState) => state.list;
 
 export const isItemSelected = createSelector(listSelector, list =>
@@ -115,4 +146,7 @@ export type Actions =
   | SetSelection
   | LoadListData
   | LoadListDataSuccess
-  | LoadListDataFailure;
+  | LoadListDataFailure
+  | SearchFiles
+  | SearchFilesSuccess
+  | SearchFilesFailure;

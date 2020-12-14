@@ -1,5 +1,6 @@
 import { expect } from '@open-wc/testing';
 import * as fromList from '../../../src/redux/ducks/list';
+import { ListState } from '../../../src/redux/ducks/list';
 
 describe('List reducer', () => {
   it('can return the initial state', () => {
@@ -9,19 +10,26 @@ describe('List reducer', () => {
       selectedItemIds: [],
       loading: false,
       error: null,
+      searchTerm: null,
     };
 
     expect(state).to.be.eql(expectedState);
   });
 
-  it('sets list state to loading on `LoadListData`', () => {
+  it('can handle `LoadListData`', () => {
     const action = new fromList.LoadListData('http://typo3.test');
-    const state = fromList.listReducer(undefined, action);
+    const mockedState = {
+      searchTerm: 'foo',
+      items: [{ identifier: 'id-1' }],
+    } as ListState;
+    const state = fromList.listReducer(mockedState, action);
 
     expect(state.loading).to.be.true;
+    expect(state.searchTerm).to.be.null;
+    expect(state.items).to.have.length(0);
   });
 
-  it('sets list data on `LoadListDataSuccess`', () => {
+  it('can handle `LoadListDataSuccess`', () => {
     const listItems = [{ identifier: 'id_12' }] as ListItem[];
     const action = new fromList.LoadListDataSuccess(listItems);
     const state = fromList.listReducer(undefined, action);
@@ -30,7 +38,17 @@ describe('List reducer', () => {
     expect(state.loading).to.be.false;
   });
 
-  it('sets list state to error on `LoadListDataFailure`', () => {
+  it('can handle `ClearSelection`', () => {
+    const action = new fromList.ClearSelection();
+    const prevState = {
+      selectedItemIds: ['id1'],
+    } as ListState;
+    const state = fromList.listReducer(prevState, action);
+
+    expect(state.selectedItemIds).to.be.eqls([]);
+  });
+
+  it('can handle `LoadListDataFailure`', () => {
     const action = new fromList.LoadListDataFailure('error');
     const state = fromList.listReducer(undefined, action);
 
@@ -38,23 +56,29 @@ describe('List reducer', () => {
     expect(state.loading).to.be.false;
   });
 
-  it('sets selectedItemIds on `SetSelection`', () => {
-    const action = new fromList.SetSelection(['id']);
+  it('can handle `SearchFiles`', () => {
+    const action = new fromList.SearchFiles('foo');
     const state = fromList.listReducer(undefined, action);
 
-    expect(state.selectedItemIds).to.be.eqls(['id']);
+    expect(state.loading).to.be.true;
+    expect(state.searchTerm).to.be.eq('foo');
+    expect(state.items).to.have.length(0);
   });
 
-  it('clears selectedItemIds on `ClearSelection`', () => {
-    const action = new fromList.ClearSelection();
-    const prevState = {
-      items: [],
-      selectedItemIds: ['id1'],
-      loading: false,
-      error: null,
-    };
-    const state = fromList.listReducer(prevState, action);
+  it('can handle `SearchFilesSuccess`', () => {
+    const listItems = [{ identifier: 'id_12' }] as ListItem[];
+    const action = new fromList.SearchFilesSuccess(listItems);
+    const state = fromList.listReducer(undefined, action);
 
-    expect(state.selectedItemIds).to.be.eqls([]);
+    expect(state.items).to.be.eqls(listItems);
+    expect(state.loading).to.be.false;
+  });
+
+  it('can handle `SearchFilesFailure`', () => {
+    const action = new fromList.SearchFilesFailure('error');
+    const state = fromList.listReducer(undefined, action);
+
+    expect(state.error).to.be.eqls('error');
+    expect(state.loading).to.be.false;
   });
 });
