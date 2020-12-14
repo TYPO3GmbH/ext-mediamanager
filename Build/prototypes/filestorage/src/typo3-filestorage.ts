@@ -147,68 +147,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
-              <div slot="left">${this.getStorageDropDown()}</div>
+              <div slot="left">${this.renderStoragesDropDown}</div>
             </typo3-topbar>
             <typo3-topbar>
               <div slot="left">
-                <typo3-button
-                  .disabled="${fromTree.getSelectedTreeNode(this.state) ==
-                  null}"
-                  @click="${() =>
-                    this.fileTree.addNode(
-                      fromTree.getSelectedTreeNode(this.state)
-                        ?.identifier as string
-                    )}"
-                >
-                  <svg slot="icon">
-                    <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
-                  </svg>
-                  ${translate('new')}
-                </typo3-button>
-                <typo3-button
-                  .disabled="${fromTree.getSelectedTreeNode(this.state) ==
-                  null}"
-                  @click="${() => this.fileUploadInput.click()}"
-                >
-                  <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('upload')}"
-                    ></use>
-                  </svg>
-                  ${translate('upload')}
-                </typo3-button>
-                <input
-                  type="file"
-                  id="file_upload"
-                  style="display: none"
-                  multiple
-                  @change="${this._onDialogFileUpload}"
-                />
+                ${this.renderNewFolderButton} ${this.renderUploadButton}
               </div>
             </typo3-topbar>
           </div>
-          <typo3-filetree
-            .nodes="${fromTree.getTreeNodes(this.state)}"
-            .expandedNodeIds="${fromTree.getExpandedTreeNodeIds(this.state)}"
-            .selectedNodeIds="${fromTree.selectedTreeNodeIdentifiers(
-              this.state
-            )}"
-            ?editable="${true}"
-            ?dragDropEnabled="${true}"
-            ?inDropMode="${fromFileActions.isDraggingFiles(this.state)}"
-            @typo3-node-drop="${this._onTreeNodeDrop}"
-            @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>
-              this._onSelectedNode(e.detail)}"
-            @typo3-node-contextmenu="${this._onContextMenu}"
-            @typo3-node-expand="${this._onNodeExpand}"
-            @typo3-node-collapse="${this._onNodeCollapse}"
-            @typo3-node-move="${this._onTreeNodeMove}"
-            @typo3-node-rename="${(e: CustomEvent) =>
-              this._onRename(e.detail.node.identifier, e.detail.name)}"
-            @typo3-node-add="${(e: CustomEvent) =>
-              this._onFolderAdd(e.detail.node, e.detail.parentNode)}"
-          ></typo3-filetree>
+          ${this.renderFolderTree}
         </div>
         <typo3-dropzone
           class="content_right"
@@ -220,92 +167,27 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
-              <typo3-breadcrumb slot="left">
-                ${this.breadcrumbContent}
-              </typo3-breadcrumb>
+              <div slot="left">${this.renderBreadcrumb}</div>
               <div slot="right">
-                <typo3-search
-                  placeholder="${translate('labels.search')}"
-                  label="${translate('labels.search')}"
-                >
-                  <svg slot="search-icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('search')}"
-                    ></use>
-                  </svg>
-                </typo3-search>
-                ${this.getSortingDropdown()} ${this.getViewModeDropDown()}
+                ${this.renderSearchField} ${this.renderSortingDropdown}
+                ${this.renderViewModeDropDown}
               </div>
             </typo3-topbar>
             <typo3-topbar>
               <div slot="left">
-                <typo3-button
-                  @click="${this._onDownload}"
-                  .disabled="${fromList.isEmptySelection(this.state) ||
-                  fromFileActions.isDownloadingFiles(this.state)}"
-                >
-                  <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('download')}"
-                    ></use>
-                  </svg>
-                  ${translate('download')}
-                </typo3-button>
-                <typo3-button
-                  .disabled="${fromList.isEmptySelection(this.state)}"
-                  @click="${this._onDeleteClicked}"
-                >
-                  <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('delete')}"
-                    ></use>
-                  </svg>
-                  ${translate('delete')}
-                </typo3-button>
-                <typo3-button
-                  .disabled="${fromList.isEmptySelection(this.state)}"
-                  @click="${() => this._showFilesModalDialog('move')}"
-                >
-                  <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('moveTo')}"
-                    ></use>
-                  </svg>
-                  ${translate('moveTo')}
-                </typo3-button>
-                <typo3-button
-                  .disabled="${fromList.isEmptySelection(this.state)}"
-                  @click="${() => this._showFilesModalDialog('copy')}"
-                >
-                  <svg slot="icon">
-                    <use
-                      xlink:href=""
-                      xlink:href="${getIconUrl('copyTo')}"
-                    ></use>
-                  </svg>
-                  ${translate('copyTo')}
-                </typo3-button>
+                ${this.renderDownloadButton} ${this.renderDeleteButton}
+                ${this.renderMoveToButton} ${this.renderCopyToButton}
               </div>
-              <div slot="right">
-                <typo3-selection-button
-                  suffix="${translate('selected')}"
-                  count="${fromList.getSelectedItems(this.state).length}"
-                  @typo3-selection-clear="${this._onClearSelection}"
-                ></typo3-selection-button>
-              </div>
+              <div slot="right">${this.renderSelectionButton}</div>
             </typo3-topbar>
           </div>
-          ${this.mainContent}
+          ${this.renderMainContent}
         </typo3-dropzone>
       </typo3-splitpane>
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
-      ${this.getDragHandler()}
+      ${this.renderDragHandler}
       <typo3-files-modal
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
@@ -313,9 +195,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  protected get breadcrumbContent(): TemplateResult[] {
+  protected get renderBreadcrumb(): TemplateResult {
     const nodes = fromTree.getSelectedTreeNodePath(this.state) as Typo3Node[];
-    return nodes.map(
+    const itemsHtml = nodes.map(
       node =>
         html` <typo3-breadcrumb-item
           slot="item"
@@ -324,9 +206,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
         </typo3-breadcrumb-item>`
     );
+
+    return html`<typo3-breadcrumb>${itemsHtml}</typo3-breadcrumb>`;
   }
 
-  protected get mainContent(): TemplateResult {
+  protected get renderMainContent(): TemplateResult {
     if (fromList.getItems(this.state).length === 0) {
       if (true === fromGlobalActions.isLoading(this.state)) {
         return html``;
@@ -378,11 +262,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       @dragstart="${this._onDragStart}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
     >
-      ${orderedData.map(listData => this.getCardContent(listData))}
+      ${orderedData.map(listData => this.renderCardContent(listData))}
     </typo3-grid>`;
   }
 
-  protected getCardContent(listData: ListItem): TemplateResult {
+  protected renderCardContent(listData: ListItem): TemplateResult {
     const rawIcon = addSlotToRawHtml(listData.icon, 'image');
     let imageSlot = html`${unsafeHTML(rawIcon)}`;
     if (listData.thumbnailUrl) {
@@ -428,7 +312,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     </typo3-card>`;
   }
 
-  protected getViewModeDropDown(): TemplateResult {
+  protected get renderViewModeDropDown(): TemplateResult {
     return html`
       <typo3-dropdown activatable @selected="${this._onSelectViewMode}">
         <typo3-dropdown-button slot="button" color="default">
@@ -469,7 +353,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  protected getSortingDropdown(): TemplateResult {
+  protected get renderSortingDropdown(): TemplateResult {
     return html`
       <typo3-dropdown multi activatable>
         <typo3-dropdown-button
@@ -518,7 +402,74 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  protected getStorageDropDown(): TemplateResult {
+  protected get renderDownloadButton(): TemplateResult {
+    return html`
+      <typo3-button
+        @click="${this._onDownload}"
+        .disabled="${fromList.isEmptySelection(this.state) ||
+        fromFileActions.isDownloadingFiles(this.state)}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('download')}"></use>
+        </svg>
+        ${translate('download')}
+      </typo3-button>
+    `;
+  }
+
+  protected get renderDeleteButton(): TemplateResult {
+    return html`
+      <typo3-button
+        .disabled="${fromList.isEmptySelection(this.state)}"
+        @click="${this._onDeleteClicked}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('delete')}"></use>
+        </svg>
+        ${translate('delete')}
+      </typo3-button>
+    `;
+  }
+
+  protected get renderMoveToButton(): TemplateResult {
+    return html`
+      <typo3-button
+        .disabled="${fromList.isEmptySelection(this.state)}"
+        @click="${() => this._showFilesModalDialog('move')}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('moveTo')}"></use>
+        </svg>
+        ${translate('moveTo')}
+      </typo3-button>
+    `;
+  }
+
+  protected get renderCopyToButton(): TemplateResult {
+    return html`
+      <typo3-button
+        .disabled="${fromList.isEmptySelection(this.state)}"
+        @click="${() => this._showFilesModalDialog('copy')}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('copyTo')}"></use>
+        </svg>
+        ${translate('copyTo')}
+      </typo3-button>
+    `;
+  }
+
+  protected get renderSelectionButton(): TemplateResult {
+    return html`
+      <typo3-selection-button
+        suffix="${translate('selected')}"
+        count="${fromList.getSelectedItems(this.state).length}"
+        @typo3-selection-clear="${this._onClearSelection}"
+      ></typo3-selection-button>
+    `;
+  }
+
+  protected get renderStoragesDropDown(): TemplateResult {
     if (this.storages.length == 0) {
       return html``;
     }
@@ -549,7 +500,69 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  protected getDragHandler(): TemplateResult {
+  protected get renderNewFolderButton(): TemplateResult {
+    return html`
+      <typo3-button
+        .disabled="${fromTree.getSelectedTreeNode(this.state) == null}"
+        @click="${() =>
+          this.fileTree.addNode(
+            fromTree.getSelectedTreeNode(this.state)?.identifier as string
+          )}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
+        </svg>
+        ${translate('new')}
+      </typo3-button>
+    `;
+  }
+
+  protected get renderUploadButton(): TemplateResult {
+    return html`
+      <typo3-button
+        .disabled="${fromTree.getSelectedTreeNode(this.state) == null}"
+        @click="${() => this.fileUploadInput.click()}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('upload')}"></use>
+        </svg>
+        ${translate('upload')}
+      </typo3-button>
+      <input
+        type="file"
+        id="file_upload"
+        style="display: none"
+        multiple
+        @change="${this._onFileDialogUpload}"
+      />
+    `;
+  }
+
+  protected get renderFolderTree(): TemplateResult {
+    return html`
+      <typo3-filetree
+        .nodes="${fromTree.getTreeNodes(this.state)}"
+        .expandedNodeIds="${fromTree.getExpandedTreeNodeIds(this.state)}"
+        .selectedNodeIds="${fromTree.selectedTreeNodeIdentifiers(this.state)}"
+        ?editable="${true}"
+        ?dragDropEnabled="${true}"
+        ?inDropMode="${fromFileActions.isDraggingFiles(this.state)}"
+        @typo3-node-drop="${this._onTreeNodeDrop}"
+        @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>
+          this._onSelectedNode(e.detail)}"
+        @typo3-node-contextmenu="${this._onContextMenu}"
+        @typo3-node-expand="${this._onNodeExpand}"
+        @typo3-node-collapse="${this._onNodeCollapse}"
+        @typo3-node-move="${this._onTreeNodeMove}"
+        @typo3-node-rename="${(e: CustomEvent) =>
+          this._onRename(e.detail.node.identifier, e.detail.name)}"
+        @typo3-node-add="${(e: CustomEvent) =>
+          this._onFolderAdd(e.detail.node, e.detail.parentNode)}"
+      ></typo3-filetree>
+    `;
+  }
+
+  protected get renderDragHandler(): TemplateResult {
     let iconUrl = getIconUrl('moveTo');
     let message = translate('dnd.move.message');
     let title = translate('dnd.move.title');
@@ -576,6 +589,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         <span slot="title">${title}</span>
         <span slot="message">${unsafeHTML(message)}</span>
       </typo3-draghandler>
+    `;
+  }
+
+  private get renderSearchField(): TemplateResult {
+    return html`
+      <typo3-search
+        placeholder="${translate('labels.search')}"
+        label="${translate('labels.search')}"
+      >
+        <svg slot="search-icon">
+          <use xlink:href="" xlink:href="${getIconUrl('search')}"></use>
+        </svg>
+      </typo3-search>
     `;
   }
 
@@ -713,7 +739,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromFileActions.AddFolder(node, parentNode));
   }
 
-  _onDialogFileUpload(): void {
+  _onFileDialogUpload(): void {
     const currentNode = fromTree.getSelectedTreeNode(this.state);
     const dataTransfer = {
       files: this.fileUploadInput.files,
