@@ -91,9 +91,9 @@ class FolderListGenerator implements FolderListGeneratorInterface
     }
 
     /**
-     * @return array[string]string
+     * {@inheritdoc}
      */
-    protected function formatFile(File $file): array
+    public function formatFile(File $file): array
     {
         $thumbnailUrl = null;
         $thumbnailWidth = '490m';

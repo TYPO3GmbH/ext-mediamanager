@@ -16,13 +16,12 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Controller;
 
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Controller\FolderTreeController;
-use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FolderTreeControllerTest extends UnitTestCase
@@ -30,16 +29,16 @@ class FolderTreeControllerTest extends UnitTestCase
     /** @var FolderTreeController */
     private $controller;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|BackendUserProvider */
-    private $backendUserProviderMock;
-
     /** @var \PHPUnit\Framework\MockObject\MockObject|FolderTreeGeneratorInterface */
     private $folderTreeGeneratorMock;
+
+    /** @var \PHPUnit\Framework\MockObject\MockObject|StorageProviderInterface */
+    private $storageProviderMock;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->backendUserProviderMock = $this->getMockBuilder(BackendUserProvider::class)
+        $this->storageProviderMock = $this->getMockBuilder(StorageProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,7 +47,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->getMock();
 
         $this->controller = new FolderTreeController(
-            $this->backendUserProviderMock,
+            $this->storageProviderMock,
             $this->folderTreeGeneratorMock
         );
     }
@@ -69,15 +68,10 @@ class FolderTreeControllerTest extends UnitTestCase
      */
     public function it_returns_a_404_status_code_on_missing_storage_resource(): void
     {
-        $backendUserMock = $this->getMockBuilder(BackendUserAuthentication::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $backendUserMock->method('getFileStorages')
-            ->willReturn([]);
-
-        $this->backendUserProviderMock->method('getBackendUser')
-            ->willReturn($backendUserMock);
+        $this->storageProviderMock->expects(self::once())
+            ->method('getStorageForUserById')
+            ->with(123)
+            ->willReturn(null);
 
         $request = new ServerRequest();
         $request = $request->withQueryParams(['uid' => '123']);
@@ -98,15 +92,10 @@ class FolderTreeControllerTest extends UnitTestCase
         $fileStorageMock->method('getUid')
             ->willReturn(123);
 
-        $backendUserMock = $this->getMockBuilder(BackendUserAuthentication::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $backendUserMock->method('getFileStorages')
-            ->willReturn([$fileStorageMock]);
-
-        $this->backendUserProviderMock->method('getBackendUser')
-            ->willReturn($backendUserMock);
+        $this->storageProviderMock->expects(self::once())
+            ->method('getStorageForUserById')
+            ->with(123)
+            ->willReturn($fileStorageMock);
 
         $this->folderTreeGeneratorMock
             ->expects($this->once())

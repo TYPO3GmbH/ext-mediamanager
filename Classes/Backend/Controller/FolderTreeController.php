@@ -20,22 +20,22 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
-use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
 
 class FolderTreeController
 {
-    /** @var BackendUserProvider */
-    private $backendUserProvider;
+    /** @var StorageProviderInterface */
+    private $storageProvider;
 
     /** @var FolderTreeGeneratorInterface */
     private $folderTreeGenerator;
 
     public function __construct(
-        BackendUserProvider $backendUserProvider,
+        StorageProviderInterface $storageProvider,
         FolderTreeGeneratorInterface $folderTreeGenerator
     ) {
-        $this->backendUserProvider = $backendUserProvider;
+        $this->storageProvider = $storageProvider;
         $this->folderTreeGenerator = $folderTreeGenerator;
     }
 
@@ -47,16 +47,14 @@ class FolderTreeController
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
-        $storages = $this->backendUserProvider->getBackendUser()->getFileStorages();
-        $filteredStorages = \array_filter($storages, static function ($storage) use ($storageId) {
-            return $storage->getUid() === (int) $storageId;
-        });
+        $storage = $this->storageProvider->getStorageForUserById((int) $storageId);
 
-        if (1 !== \count($filteredStorages)) {
+        if (null === $storage) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);
         }
 
-        $nodes = $this->folderTreeGenerator->getNodes(\current($filteredStorages));
+        $nodes = $this->folderTreeGenerator->getNodes($storage);
+
         return new JsonResponse($nodes);
     }
 }

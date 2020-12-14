@@ -14,17 +14,16 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Service;
+namespace TYPO3\CMS\FilelistNg\Backend\Storage;
 
-use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
 
-interface FolderListGeneratorInterface
+interface StorageProviderInterface
 {
-    public function getFolderItems(Folder $folderObject): array;
-
     /**
-     * @return array[string]string
+     * @return ResourceStorage[]
      */
-    public function formatFile(File $file): array;
+    public function getStoragesForUser(): array;
+
+    public function getStorageForUserById(int $storageId): ?ResourceStorage;
 }

@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
@@ -47,13 +48,17 @@ class FilelistController
     /** @var IconUrlProviderInterface */
     private $iconUrlProvider;
 
+    /** @var StorageProviderInterface */
+    private $storageProvider;
+
     public function __construct(
         BackendTemplateView $view,
         UriBuilder $uriBuilder,
         BackendUserProvider $backendUserProvider,
         IconFactory $iconFactory,
         LanguageServiceProvider $languageServiceProvider,
-        IconUrlProviderInterface $iconUrlProvider
+        IconUrlProviderInterface $iconUrlProvider,
+        StorageProviderInterface $storageProvider
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
@@ -62,6 +67,7 @@ class FilelistController
         $this->iconFactory = $iconFactory;
         $this->languageServiceProvider = $languageServiceProvider;
         $this->iconUrlProvider = $iconUrlProvider;
+        $this->storageProvider = $storageProvider;
     }
 
     public function indexAction(): ResponseInterface
@@ -136,7 +142,7 @@ class FilelistController
                 'icon' => $storageIcon->getMarkup(),
                 'type' => $storage->getDriverType(),
             ];
-        }, $this->backendUserProvider->getBackendUser()->getFileStorages());
+        }, $this->storageProvider->getStoragesForUser());
     }
 
     private function addGlobalVars(array $backendUrls): void
