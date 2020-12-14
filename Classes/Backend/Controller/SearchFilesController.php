@@ -40,7 +40,7 @@ class SearchFilesController
         $this->folderListGenerator = $folderListGenerator;
     }
 
-    public function searchAction(ServerRequestInterface $request): ResponseInterface
+    public function searchFilesAction(ServerRequestInterface $request): ResponseInterface
     {
         $storageId = $request->getQueryParams()['uid'] ?? null;
         $searchTerm = $request->getQueryParams()['search'] ?? null;

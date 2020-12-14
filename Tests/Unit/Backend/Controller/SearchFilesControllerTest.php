@@ -59,7 +59,7 @@ class SearchFilesControllerTest extends UnitTestCase
     {
         $request = new ServerRequest();
         $request = $request->withQueryParams($params);
-        $response = $this->controller->searchAction($request);
+        $response = $this->controller->searchFilesAction($request);
 
         self::assertEquals(400, $response->getStatusCode());
     }
@@ -72,7 +72,7 @@ class SearchFilesControllerTest extends UnitTestCase
         $request = new ServerRequest();
         $request = $request->withQueryParams(['search' => 'foo', 'uid' => '42']);
 
-        $response = $this->controller->searchAction($request);
+        $response = $this->controller->searchFilesAction($request);
         self::assertEquals(404, $response->getStatusCode());
     }
 
@@ -103,7 +103,7 @@ class SearchFilesControllerTest extends UnitTestCase
             ->withConsecutive([$fileA], [$fileB])
             ->willReturnOnConsecutiveCalls(['id' => 1], ['id' => 2]);
 
-        $response = $this->controller->searchAction($request);
+        $response = $this->controller->searchFilesAction($request);
 
         self::assertEquals(200, $response->getStatusCode());
         self::assertInstanceOf(JsonResponse::class, $response);

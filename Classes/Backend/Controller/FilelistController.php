@@ -115,6 +115,7 @@ class FilelistController
             'clipboardUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
             'downloadFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
             'editFileStorageUrl' => (string) $this->uriBuilder->buildUriFromRoute('record_edit'),
+            'searchFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_search_files', ['uid' => $storageUid]),
         ]);
         $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
         $this->view->assign('selectedStorageUid', (int) $storageUid);
