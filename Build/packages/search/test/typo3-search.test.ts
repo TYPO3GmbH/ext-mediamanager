@@ -78,6 +78,22 @@ describe('Typo3Search', () => {
     expect(element.value).to.equal('');
   });
 
+  it('can be cleared via reset button', async () => {
+    element.value = 'SomeValue';
+
+    await elementUpdated(element);
+
+    const button = element.shadowRoot!.querySelector(
+      'typo3-button'
+    ) as HTMLElement;
+    const event = new MouseEvent('click');
+    button.dispatchEvent(event);
+
+    await elementUpdated(element);
+
+    expect(element.value).to.equal('');
+  });
+
   it('will dispatch `typo3-search-change` on "Escape"', async () => {
     element.value = 'SomeValue';
 
@@ -98,11 +114,13 @@ describe('Typo3Search', () => {
   it('will dispatch `typo3-search-change` on input change', async () => {
     element.value = 'SomeValue';
 
+    await elementUpdated(element);
+
     const listener = oneEvent(element, 'typo3-search-change');
 
     const input = element.shadowRoot!.querySelector('input') as HTMLElement;
 
-    const event = new Event('change');
+    const event = new Event('input');
     input.dispatchEvent(event);
 
     await elementUpdated(element);
