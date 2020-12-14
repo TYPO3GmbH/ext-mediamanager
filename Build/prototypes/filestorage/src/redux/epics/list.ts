@@ -4,6 +4,8 @@ import * as fromList from '../ducks/list';
 import * as fromTree from '../ducks/tree';
 import {
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   filter,
   map,
   mergeMap,
@@ -55,6 +57,8 @@ export const searchFiles = (
   action$: ActionsObservable<fromList.SearchFiles>
 ): Observable<Action> => {
   return action$.ofType(fromList.SEARCH_FILES).pipe(
+    debounceTime(500),
+    distinctUntilChanged(),
     switchMap(action => {
       const params = new URLSearchParams();
       params.append('search', action.searchTerm);
