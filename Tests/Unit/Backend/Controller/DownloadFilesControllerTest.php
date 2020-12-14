@@ -104,16 +104,16 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $fileMock = $this->createMock(File::class);
 
-        $fileMock->expects($this->once())
+        $fileMock->expects(self::once())
             ->method('checkActionPermission')
             ->with('read')
             ->willReturn(true);
 
-        $fileMock->expects($this->once())
+        $fileMock->expects(self::once())
             ->method('getPublicUrl')
             ->willReturn('http://www.typo3.example/fileadmin/file.jpg');
 
-        $this->resourceFactoryMock->expects($this->once())
+        $this->resourceFactoryMock->expects(self::once())
             ->method('retrieveFileOrFolderObject')
             ->with('14')
             ->willReturn($fileMock);
@@ -134,16 +134,16 @@ class DownloadFilesControllerTest extends UnitTestCase
 
         $fileMock = $this->createMock(File::class);
 
-        $fileMock->expects($this->once())
+        $fileMock->expects(self::once())
             ->method('checkActionPermission')
             ->with('read')
             ->willReturn(false);
 
-        $fileMock->expects($this->once())
+        $fileMock->expects(self::once())
             ->method('getName')
             ->willReturn('file.jpg');
 
-        $this->resourceFactoryMock->expects($this->once())
+        $this->resourceFactoryMock->expects(self::once())
             ->method('retrieveFileOrFolderObject')
             ->with('14')
             ->willReturn($fileMock);
@@ -195,7 +195,7 @@ class DownloadFilesControllerTest extends UnitTestCase
             ->withConsecutive(['14'], ['20'])
             ->willReturnOnConsecutiveCalls($fileMock, $folderMock);
 
-        $this->archiveGeneratorMock->expects($this->once())
+        $this->archiveGeneratorMock->expects(self::once())
             ->method('generateArchive')
             ->with([$fileMock, $folderMock])
             ->willThrowException(new \Exception('Something bad happened'));
@@ -223,7 +223,7 @@ class DownloadFilesControllerTest extends UnitTestCase
             ->withConsecutive(['14'], ['20'])
             ->willReturnOnConsecutiveCalls($fileMock, $folderMock);
 
-        $this->archiveGeneratorMock->expects($this->once())
+        $this->archiveGeneratorMock->expects(self::once())
             ->method('generateArchive')
             ->with([$fileMock, $folderMock])
             ->willReturn($vfsFileMock->url());

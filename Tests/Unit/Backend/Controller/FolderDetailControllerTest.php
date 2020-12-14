@@ -68,7 +68,7 @@ class FolderDetailControllerTest extends UnitTestCase
         $request = new ServerRequest();
         $request = $request->withQueryParams(['identifier' => '1:/introduction/']);
 
-        $this->resourceFactory->expects($this->once())
+        $this->resourceFactory->expects(self::once())
             ->method('getStorageObjectFromCombinedIdentifier')
             ->with('1:/introduction/')
             ->willReturn(null);
@@ -84,12 +84,12 @@ class FolderDetailControllerTest extends UnitTestCase
     {
         $storage = $this->createMock(ResourceStorage::class);
 
-        $storage->expects($this->once())
+        $storage->expects(self::once())
             ->method('hasFolder')
             ->with('/introduction/')
             ->willReturn(false);
 
-        $this->resourceFactory->expects($this->once())
+        $this->resourceFactory->expects(self::once())
             ->method('getStorageObjectFromCombinedIdentifier')
             ->with('1:/introduction/')
             ->willReturn($storage);
@@ -108,16 +108,16 @@ class FolderDetailControllerTest extends UnitTestCase
     {
         $storage = $this->createMock(ResourceStorage::class);
 
-        $storage->expects($this->once())
+        $storage->expects(self::once())
             ->method('hasFolder')
             ->with('/introduction/')
             ->willReturn(true);
 
-        $storage->expects($this->once())
+        $storage->expects(self::once())
             ->method('getUid')
             ->willReturn(0);
 
-        $this->resourceFactory->expects($this->once())
+        $this->resourceFactory->expects(self::once())
             ->method('getStorageObjectFromCombinedIdentifier')
             ->with('1:/introduction/')
             ->willReturn($storage);
@@ -138,26 +138,26 @@ class FolderDetailControllerTest extends UnitTestCase
         $folder = $this->createMock(Folder::class);
         $sampleData = [['id' => '123']];
 
-        $storage->expects($this->once())
+        $storage->expects(self::once())
             ->method('hasFolder')
             ->with('/introduction/')
             ->willReturn(true);
 
-        $storage->expects($this->once())
+        $storage->expects(self::once())
             ->method('getUid')
             ->willReturn(123);
 
-        $this->resourceFactory->expects($this->once())
+        $this->resourceFactory->expects(self::once())
             ->method('getStorageObjectFromCombinedIdentifier')
             ->with('1:/introduction/')
             ->willReturn($storage);
 
-        $this->resourceFactory->expects($this->once())
+        $this->resourceFactory->expects(self::once())
             ->method('getFolderObjectFromCombinedIdentifier')
             ->with('1:/introduction/')
             ->willReturn($folder);
 
-        $this->folderListGenerator->expects($this->once())
+        $this->folderListGenerator->expects(self::once())
             ->method('getFolderItems')
             ->with($folder)
             ->willReturn($sampleData);

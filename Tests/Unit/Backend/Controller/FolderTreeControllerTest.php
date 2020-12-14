@@ -98,7 +98,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->willReturn($fileStorageMock);
 
         $this->folderTreeGeneratorMock
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getNodes')
             ->with($fileStorageMock)
             ->willReturn([]);
