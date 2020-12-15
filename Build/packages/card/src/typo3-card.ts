@@ -38,7 +38,6 @@ export class Typo3Card extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="card" ?selected="${this.selected}">
-        ${this.selected ? html`<slot name="selected-badge"></slot> ` : html``}
         <div class="image">
           <slot name="image"></slot>
           <slot name="badge"></slot>
@@ -55,6 +54,7 @@ export class Typo3Card extends LitElement {
           </div>
           <div class="subtitle">${this.subtitle}</div>
         </div>
+        ${this.selected ? html`<slot name="selected-badge"></slot> ` : html``}
       </div>
     `;
   }
