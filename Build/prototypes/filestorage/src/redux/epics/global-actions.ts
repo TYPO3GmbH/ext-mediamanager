@@ -1,6 +1,6 @@
 import { ActionsObservable, StateObservable } from 'redux-observable';
 import * as fromActions from '../ducks/global-actions';
-import { ignoreElements, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { ignoreElements, mergeMap, switchMap } from 'rxjs/operators';
 import * as fromTree from '../ducks/tree';
 import * as fromList from '../ducks/list';
 import { RootState } from '../ducks';
@@ -11,13 +11,14 @@ import { FlashMessagesService } from '../../services/flash-messages.service';
 export const reload = (
   action$: ActionsObservable<fromActions.Reload>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.RELOAD).pipe(
-    tap(action => console.log(action)),
-    mergeMap(() => [
-      new fromTree.LoadTreeData(false),
-      new fromList.ReloadListData(),
-    ])
-  );
+  return action$
+    .ofType(fromActions.RELOAD)
+    .pipe(
+      mergeMap(() => [
+        new fromTree.LoadTreeData(false),
+        new fromList.ReloadListData(),
+      ])
+    );
 };
 
 export const loadFlashMessages = (
