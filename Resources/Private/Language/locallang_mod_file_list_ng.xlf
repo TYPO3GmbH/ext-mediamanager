@@ -238,6 +238,13 @@
 			<trans-unit id="fileSearch.noResults" resname="fileSearch.noResults">
 				<source>No results found</source>
 			</trans-unit>
+
+			<trans-unit id="fileTree.collapse" resname="fileTree.collapse">
+				<source>Collapse file tree</source>
+			</trans-unit>
+			<trans-unit id="fileTree.expand" resname="fileTree.expand">
+				<source>Expand file tree</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

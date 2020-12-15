@@ -161,7 +161,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         >
           <div class="topbar-wrapper">
             <typo3-topbar>
-              <div slot="left">${this.renderBreadcrumb}</div>
+              <div slot="left">
+                ${this.renderTreeToggleButton} ${this.renderBreadcrumb}
+              </div>
               <div slot="right">
                 ${this.renderSearchField} ${this.renderSortingDropdown}
                 ${this.renderViewModeDropDown}
@@ -552,6 +554,24 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         multiple
         @change="${this._onFileDialogUpload}"
       />
+    `;
+  }
+
+  protected get renderTreeToggleButton(): TemplateResult {
+    const translationKey = fromLayout.isSidebarVisible(this.state)
+      ? 'fileTree.collapse'
+      : 'fileTree.expand';
+
+    return html`
+      <typo3-button
+        title="${translate(translationKey)}"
+        label="${translate(translationKey)}"
+        @click="${this._onToggleFileTree}"
+      >
+        <svg slot="icon">
+          <use xlink:href="" xlink:href="${getIconUrl('toggleTree')}"></use>
+        </svg>
+      </typo3-button>
     `;
   }
 
@@ -966,5 +986,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         : new fromList.SearchFilesReset();
 
     store.dispatch(action);
+  }
+
+  _onToggleFileTree(): void {
+    store.dispatch(new fromLayout.ToggleSidebar());
   }
 }
