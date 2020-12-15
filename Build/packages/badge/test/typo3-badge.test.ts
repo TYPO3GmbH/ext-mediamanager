@@ -5,7 +5,7 @@ import { Typo3Badge } from '../src/typo3-badge';
 describe('Typo3Badge', () => {
   let element: Typo3Badge;
   beforeEach(async () => {
-    element = await fixture(html` <typo3-badge title="500"></typo3-badge> `);
+    element = await fixture(html` <typo3-badge>500</typo3-badge> `);
   });
 
   it('can create component', () => {
@@ -13,7 +13,7 @@ describe('Typo3Badge', () => {
     expect(element).to.be.instanceOf(Typo3Badge);
   });
 
-  it('displays the `title` attribute', () => {
+  it('displays the slot content', () => {
     const root = element.shadowRoot ? element.shadowRoot : element;
 
     expect(root).to.not.be.null;

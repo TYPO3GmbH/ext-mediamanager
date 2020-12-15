@@ -248,6 +248,7 @@ class FilelistController
             'lockedFolder' => 'apps-filetree-folder-locked',
             'reset' => 'actions-close',
             'toggleTree' => 'apps-pagetree-category-expand-all',
+            'checkmark' => 'actions-check',
         ];
 
         return \array_map(function (string $identifier) {

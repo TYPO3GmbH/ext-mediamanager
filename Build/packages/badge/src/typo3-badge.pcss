@@ -3,7 +3,8 @@
   font-weight: var(--typo3-badge-font-weight, var(--typo3-global-badge-font-weight));
   vertical-align: baseline;
   text-align: center;
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
   border-radius: var(--typo3-global-badge-border-radius);
   overflow: hidden;
   white-space: nowrap;
@@ -45,4 +46,19 @@
 :host([color='danger']) {
   color: var(--typo3-badge-danger-color, var(--typo3-global-badge-danger-color));
   background-color: var(--typo3-badge-danger-background-color, var(--typo3-global-badge-danger-bg));
+}
+
+:host([size='small']) {
+  padding: var(--typo3-badge-padding-small, 0.0625rem);
+  width: var(--typo3-badge-size-small, 1rem);
+  height: var(--typo3-badge-size-small, 1rem);
+  line-height: var(--typo3-badge-size-small, 1rem);
+  font-size: var(--typo3-badge-font-size-small, 0.5rem);
+}
+
+::slotted(svg) {
+  fill: currentColor;
+  width: 75%;
+  height: 75%;
+  margin: auto;
 }

@@ -17,15 +17,17 @@ export type Color =
   | 'warning'
   | 'danger';
 
+export type Size = 'small' | 'medium';
+
 @customElement('typo3-badge')
 export class Typo3Badge extends LitElement {
-  @property({ type: String }) title = '';
-
   @property({ type: String, reflect: true }) color: Color = 'default';
+
+  @property({ type: String, reflect: true }) size: Size = 'medium';
 
   public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
-    return html` ${this.title} `;
+    return html` <slot></slot> `;
   }
 }

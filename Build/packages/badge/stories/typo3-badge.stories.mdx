@@ -13,12 +13,27 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
 <Preview>
     <Story name="Basic Badge" height="220px">
     {html`
-        <typo3-badge title="D"></typo3-badge>
-        <typo3-badge color="primary" title="P"></typo3-badge>
-        <typo3-badge color="success" title="S"></typo3-badge>
-        <typo3-badge color="info" title="I"></typo3-badge>
-        <typo3-badge color="warning" title="W"></typo3-badge>
-        <typo3-badge color="danger" title="X"></typo3-badge>
+        <typo3-badge>D</typo3-badge>
+        <typo3-badge color="primary">P</typo3-badge>
+        <typo3-badge color="success">S</typo3-badge>
+        <typo3-badge color="info">I</typo3-badge>
+        <typo3-badge color="warning">W</typo3-badge>
+        <typo3-badge color="danger">X</typo3-badge>
+    `}
+    </Story>
+    <Story name="Icon Badge" height="220px">
+    {html`
+        <typo3-badge color="primary">
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-check"></use>
+            </svg>
+        </typo3-badge>
+    `}
+    </Story>
+    <Story name="Badge Sizes" height="220px">
+    {html`
+        <typo3-badge color="primary">m</typo3-badge>
+        <typo3-badge color="primary" size="small">s</typo3-badge>
     `}
     </Story>
 </Preview>

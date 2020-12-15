@@ -273,10 +273,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     if (listData.sysType === '_FOLDER') {
       const sizeNumeric = parseInt(listData.size.replace(/^\D+/g, ''));
-      badge = html`<typo3-badge
-        slot="badge"
-        title="${sizeNumeric}"
-      ></typo3-badge>`;
+      badge = html`<typo3-badge slot="badge">${sizeNumeric}</typo3-badge>`;
     }
 
     const contextMenuCallback = (e: MouseEvent) => {
@@ -299,7 +296,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
         this._onRename(listData.identifier, e.detail)}"
-      >${imageSlot} ${badge}
+    >
+      <typo3-badge slot="selected-badge" color="primary" size="small">
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <use xlink:href="" xlink:href="${getIconUrl('checkmark')}"></use>
+        </svg>
+      </typo3-badge>
+      ${imageSlot} ${badge}
     </typo3-card>`;
   }
 
