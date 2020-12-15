@@ -53,12 +53,29 @@ export const selectFirstNodeOnfetchListDataError = (
   );
 };
 
+export const searchTermChanged = (
+  action$: ActionsObservable<fromList.SearchTermChanged>,
+  state$: StateObservable<RootState>
+): Observable<Action> => {
+  return action$.ofType(fromList.SEARCH_TERM_CHANGED).pipe(
+    debounceTime(500),
+    distinctUntilChanged(),
+    withLatestFrom(state$),
+    map(([action, state]) => {
+      if ('' !== action.searchTerm) {
+        return new fromList.SearchFiles(action.searchTerm);
+      }
+      const node =
+        fromTree.getSelectedTreeNode(state) || fromTree.getTreeNodes(state)[0];
+      return new fromList.LoadListData(node.folderUrl);
+    })
+  );
+};
+
 export const searchFiles = (
   action$: ActionsObservable<fromList.SearchFiles>
 ): Observable<Action> => {
   return action$.ofType(fromList.SEARCH_FILES).pipe(
-    debounceTime(500),
-    distinctUntilChanged(),
     switchMap(action => {
       const params = new URLSearchParams();
       params.append('search', action.searchTerm);
@@ -72,20 +89,6 @@ export const searchFiles = (
         catchError(error => of(new fromList.SearchFilesFailure(error.message)))
       );
     })
-  );
-};
-
-export const searchFilesReset = (
-  action$: ActionsObservable<fromList.SearchFilesReset>,
-  state$: StateObservable<RootState>
-): Observable<Action> => {
-  return action$.ofType(fromList.SEARCH_FILES_RESET).pipe(
-    withLatestFrom(state$),
-    map(
-      ([, state]) =>
-        fromTree.getSelectedTreeNode(state) || fromTree.getTreeNodes(state)[0]
-    ),
-    map(node => new fromList.LoadListData(node.folderUrl))
   );
 };
 
@@ -109,7 +112,7 @@ export const reloadListData = (
 export const listActions = [
   fetchListData,
   selectFirstNodeOnfetchListDataError,
+  searchTermChanged,
   searchFiles,
-  searchFilesReset,
   reloadListData,
 ];

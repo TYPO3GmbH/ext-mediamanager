@@ -980,12 +980,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onFilesSearch(event: CustomEvent<string>): void {
-    const action =
-      '' !== event.detail
-        ? new fromList.SearchFiles(event.detail)
-        : new fromList.SearchFilesReset();
-
-    store.dispatch(action);
+    store.dispatch(new fromList.SearchTermChanged(event.detail));
   }
 
   _onToggleFileTree(): void {

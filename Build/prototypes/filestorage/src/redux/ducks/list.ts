@@ -11,10 +11,10 @@ export const RELOAD_LIST_DATA = '[LIST] RELOAD DATA';
 export const LOAD_LIST_DATA_SUCCESS = '[LIST] LOAD DATA SUCCESS';
 export const LOAD_LIST_DATA_FAILURE = '[LIST] LOAD DATA FAILURE';
 
+export const SEARCH_TERM_CHANGED = '[LIST] SEARCH TERM CHANGED';
 export const SEARCH_FILES = '[LIST] SEARCH FILES';
 export const SEARCH_FILES_SUCCESS = '[LIST] SEARCH FILES SUCCESS';
 export const SEARCH_FILES_FAILURE = '[LIST] SEARCH FILES FAILURE';
-export const SEARCH_FILES_RESET = '[LIST] SEARCH FILES RESET';
 
 export type ListState = Readonly<{
   items: ListItem[];
@@ -108,6 +108,11 @@ export class ReloadListData implements Action {
   readonly type = RELOAD_LIST_DATA;
 }
 
+export class SearchTermChanged implements Action {
+  readonly type = SEARCH_TERM_CHANGED;
+  constructor(public searchTerm: string) {}
+}
+
 export class SearchFiles implements Action {
   readonly type = SEARCH_FILES;
   constructor(public searchTerm: string) {}
@@ -123,10 +128,6 @@ export class SearchFilesFailure implements Action {
   constructor(public error: string) {}
 }
 
-export class SearchFilesReset implements Action {
-  readonly type = SEARCH_FILES_RESET;
-}
-
 export type Actions =
   | ClearSelection
   | SetSelection
@@ -135,9 +136,9 @@ export type Actions =
   | LoadListDataFailure
   | ReloadListData
   | SearchFiles
+  | SearchTermChanged
   | SearchFilesSuccess
-  | SearchFilesFailure
-  | SearchFilesReset;
+  | SearchFilesFailure;
 
 const listSelector = (state: RootState) => state.list;
 
