@@ -105,10 +105,10 @@
 			</trans-unit>
 
 			<trans-unit id="dnd.move.message" resname="dnd.move.message">
-				<source><![CDATA[Hold &lt;STRG&gt; to copy <br /> Press &lt;ESC&gt; to cancel]]></source>
+				<source><![CDATA[Hold &lt;CTRL&gt; to copy <br /> Press &lt;ESC&gt; to cancel]]></source>
 			</trans-unit>
 			<trans-unit id="dnd.copy.message" resname="dnd.copy.message">
-				<source><![CDATA[Release &lt;STRG&gt; to move <br /> Press &lt;ESC&gt; to cancel]]></source>
+				<source><![CDATA[Release &lt;CTRL&gt; to move <br /> Press &lt;ESC&gt; to cancel]]></source>
 			</trans-unit>
 			<trans-unit id="dnd.copy.title" resname="dnd.copy.title">
 				<source>Copy %1s Files</source>
