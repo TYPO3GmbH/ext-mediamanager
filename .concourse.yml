@@ -157,5 +157,5 @@ jobs:
                 echo "NPM Version: $(npm --version)"
 
                 cd workspace/Build
-                npm rebuild --quiet
+                npm rebuild --quiet > /dev/null
                 npm run test:ci
