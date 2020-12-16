@@ -44,6 +44,11 @@ class FileProvider extends AbstractProvider
             'iconIdentifier' => 'actions-document-info',
             'callbackAction' => 'openInfoPopUp',
         ],
+        'replace' => [
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.replace',
+            'iconIdentifier' => 'actions-replace',
+            'callbackAction' => 'replaceFile',
+        ],
         'divider' => [
             'type' => 'divider',
         ],
@@ -109,6 +114,9 @@ class FileProvider extends AbstractProvider
             case 'info':
                 $canRender = $this->canShowInfo();
                 break;
+            case 'replace':
+                $canRender = $this->canReplace();
+                break;
 
             //just for folders
             case 'new':
@@ -146,6 +154,11 @@ class FileProvider extends AbstractProvider
     protected function canShowInfo(): bool
     {
         return $this->isFile();
+    }
+
+    protected function canReplace(): bool
+    {
+        return $this->isFile() && $this->record->checkActionPermission('replace');
     }
 
     protected function canCreateNew(): bool
