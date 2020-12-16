@@ -12,25 +12,19 @@ import {
   map,
   mergeMap,
   switchMap,
-  take,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { EMPTY, fromEvent, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
 import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
-import {
-  MessageData,
-  MODAL_CLOSED_MESSAGE_TYPE,
-  SHOW_MODAL_MESSAGE_TYPE,
-} from '../../../../shared/types/message-data';
-import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
+import { ModalData, ModalType } from '../../../../shared/types/modal-data';
 import { ModalService } from '../../services/modal.service';
 
 export const renameFile = (
@@ -74,6 +68,7 @@ export const confirmDeleteFiles = (
     switchMap(action => {
       const modalData = {
         ...action.modalData,
+        type: ModalType.CONFIRM,
         modalButtons: [
           {
             label: translate('deleteConfirmCancelButton'),
@@ -86,9 +81,9 @@ export const confirmDeleteFiles = (
             action: 'typo3-confirm-delete',
           },
         ],
-      };
+      } as ModalData;
       return dependencies.modalService.openModal(modalData).pipe(
-        filter(data => 'typo3-confirm-delete' === data.detail.action),
+        filter(data => 'typo3-confirm-delete' === data.action),
         map(() => new fromActions.DeleteFiles(action.identifiers))
       );
     })

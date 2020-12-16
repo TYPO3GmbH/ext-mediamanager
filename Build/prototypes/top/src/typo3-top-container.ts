@@ -11,11 +11,8 @@ import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
-import {
-  MessageData,
-  SHOW_MODAL_MESSAGE_TYPE,
-} from '../../shared/types/message-data';
-import { ConfirmModalData } from '../../shared/types/confirm-modal-data';
+import { SHOW_MODAL_MESSAGE_TYPE } from '../../shared/types/message';
+import { ShowModalMessage } from '../../shared/types/show-modal-message';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -48,7 +45,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         @typo3-modal-close="${this._onModalClose}"
         headline="${this.state.modal.data?.headline}"
       >
-        <p>${this.state.modal.data?.message}</p>
+        <p>${this.state.modal.data?.content}</p>
         ${this.renderModalButtons}
       </typo3-modal>
     `;
@@ -65,12 +62,10 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     });
   }
 
-  _handlePostMessage = (event: MessageEvent<MessageData<unknown>>) => {
+  _handlePostMessage = (event: MessageEvent<ShowModalMessage>) => {
     switch (event.data.type) {
       case SHOW_MODAL_MESSAGE_TYPE:
-        store.dispatch(
-          new fromModal.ShowModal(event.data.detail as ConfirmModalData)
-        );
+        store.dispatch(new fromModal.ShowModal(event.data.data));
     }
   };
 

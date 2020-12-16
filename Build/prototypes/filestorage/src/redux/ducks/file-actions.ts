@@ -2,7 +2,7 @@ import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
-import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
+import { ModalData } from '../../../../shared/types/modal-data';
 
 export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
@@ -251,10 +251,7 @@ export class ReplaceFileFailure implements Action {
 
 export class DeleteFilesConfirm implements Action {
   readonly type = DELETE_FILES_CONFIRM;
-  constructor(
-    public identifiers: string[],
-    public modalData: ConfirmModalData
-  ) {}
+  constructor(public identifiers: string[], public modalData: ModalData) {}
 }
 
 export class DeleteFiles implements Action {

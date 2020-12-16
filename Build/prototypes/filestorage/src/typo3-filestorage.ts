@@ -778,7 +778,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       fromList.getSelectedItems(this.state).map(data => data.identifier),
       {
         headline: translate('deleteConfirmHeadline'),
-        message: message,
+        content: message,
       }
     ) as Action;
 
@@ -854,7 +854,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'deleteFile':
         storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
-          message: additionalAttributes!['data-message'],
+          content: additionalAttributes!['data-message'],
         });
         break;
 

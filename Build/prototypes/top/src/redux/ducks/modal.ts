@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
+import { ModalData } from '../../../../shared/types/modal-data';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
 
@@ -9,7 +9,7 @@ export const MODAL_ACTION = '[MODAL] ACTION';
 
 export type ModalState = Readonly<{
   open: boolean;
-  data?: ConfirmModalData;
+  data?: ModalData;
 }>;
 
 const initialState: ModalState = {
@@ -41,10 +41,11 @@ export const modalReducer = (
 
 export class ShowModal implements Action {
   readonly type = SHOW_MODAL;
-  constructor(public data: ConfirmModalData) {}
+  constructor(public data: ModalData) {}
 }
 
 export class CloseModal implements Action {
+  readonly action = 'close';
   readonly type = CLOSE_MODAL;
 }
 
