@@ -236,7 +236,7 @@ class FilelistController
     private function getIconUrls(): array
     {
         $iconIdentifiers = [
-            'new' => 'actions-document-new',
+            'addFolder' => 'actions-folder-add',
             'upload' => 'actions-edit-upload',
             'download' => 'actions-download',
             'delete' => 'actions-delete',

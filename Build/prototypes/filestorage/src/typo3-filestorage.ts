@@ -543,7 +543,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           )}"
       >
         <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
+          <use xlink:href="" xlink:href="${getIconUrl('addFolder')}"></use>
         </svg>
         ${translate('new')}
       </typo3-button>
@@ -862,7 +862,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         });
         break;
 
-      case 'createFile':
+      case 'addFolder':
         this.fileTree.addNode(identifier);
         break;
       case 'copyFile':
