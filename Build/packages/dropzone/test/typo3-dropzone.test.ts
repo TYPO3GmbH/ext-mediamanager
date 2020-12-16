@@ -48,11 +48,18 @@ describe('Typo3Dropzone', () => {
     expect(element.isDragged).to.be.false;
 
     element.dispatchEvent(new DragEvent('dragover'));
-
     expect(element.isDragged).to.be.false;
 
-    const dataTransfer = new DataTransfer();
+    const emptyDataTransfer = new DataTransfer();
+    const emptyDragOverEvent = new DragEvent('dragover', {
+      dataTransfer: emptyDataTransfer,
+    });
+    element.dispatchEvent(emptyDragOverEvent);
+    expect(element.isDragged).to.be.false;
 
+    const file = new File([''], 'sample.html', { type: 'text/html' });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
     const dragOverEvent = new DragEvent('dragover', {
       dataTransfer,
     });

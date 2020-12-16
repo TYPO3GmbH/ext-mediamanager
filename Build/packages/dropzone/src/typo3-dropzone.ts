@@ -59,7 +59,8 @@ export class Typo3Dropzone extends LitElement {
     });
     // dispatch event returns true if preventDefault() is not called
     this.dropAllowed = !!this.dispatchEvent(shouldAcceptEvent);
-    if (!event.dataTransfer) {
+
+    if (!event.dataTransfer || 0 === event.dataTransfer.files.length) {
       return;
     }
 
