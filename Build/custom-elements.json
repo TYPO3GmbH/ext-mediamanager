@@ -291,6 +291,12 @@
           "name": "isDragged",
           "type": "Boolean",
           "default": "false"
+        },
+        {
+          "name": "dropAllowed",
+          "type": "Boolean",
+          "default": "false",
+          "attribute": "drop-allowed"
         }
       ],
       "events": [
@@ -310,6 +316,14 @@
       "slots": [
         {
           "description": "The content of the dropzone"
+        },
+        {
+          "name": "allowed-drop-message",
+          "description": "Content displayed, when file drop is allowed"
+        },
+        {
+          "name": "denied-drop-message",
+          "description": "Content displayed, when file drop is denied"
         }
       ],
       "cssProperties": [

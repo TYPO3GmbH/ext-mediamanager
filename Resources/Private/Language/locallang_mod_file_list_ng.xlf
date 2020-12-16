@@ -146,8 +146,20 @@
 				<source>This is a read-only filestorage</source>
 			</trans-unit>
 
-			<trans-unit id="dragFilesUploadMessage" resname="dragFilesUploadMessage">
+			<trans-unit id="dragFiles.message.upload" resname="dragFiles.message.upload">
 				<source>Drag files here to upload them</source>
+			</trans-unit>
+			<trans-unit id="dragFiles.allowed.header" resname="dragFiles.allowed.header">
+				<source>Drag items here to upload</source>
+			</trans-unit>
+			<trans-unit id="dragFiles.allowed.message" resname="dragFiles.allowed.message">
+				<source>Dropping items outside the marked area will cancel the upload</source>
+			</trans-unit>
+			<trans-unit id="dragFiles.denied.header" resname="dragFiles.denied.header">
+				<source>Sorry, you cannot upload files here</source>
+			</trans-unit>
+			<trans-unit id="dragFiles.denied.message" resname="dragFiles.denied.message">
+				<source>This is a read-only filestorage. Please select a different storage that is not read-only</source>
 			</trans-unit>
 
 			<trans-unit id="myStorages" resname="myStorages">

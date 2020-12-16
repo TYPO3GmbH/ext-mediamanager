@@ -19,6 +19,12 @@ import '../../../out-tsc/packages/dropzone/src/typo3-dropzone';
             @typo3-dropzone-drop="${(e) => action(`typo3-dropzone-drop`)(e.detail)}"
             @typo3-dropzone-should-accept="${(e) => action(`typo3-dropzone-should-accept`)(e.detail)}"
             style="border: dashed 0.125rem #e1e1e1;padding: 4.5rem;border-radius: 0.25rem;">
+            <div slot="allowed-drop-message" class="dropzone-drop-message">
+                <h3>Drag items here to upload</h3>
+            </div>
+            <div slot="denied-drop-message" class="dropzone-drop-message">
+                <h3>Sorry, you cannot upload files here</h3>
+            </div>
             <div>
                 <h2>Drag and Drop Your File</h2>
             </div>

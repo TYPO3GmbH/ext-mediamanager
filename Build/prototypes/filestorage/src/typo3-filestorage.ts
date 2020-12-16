@@ -42,7 +42,6 @@ import {
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
-import { MessageData } from '../../shared/types/message-data';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -159,6 +158,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
           @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
         >
+          <div slot="allowed-drop-message" class="dropzone-drop-message">
+            <span class="dropzone-drop-message__title"
+              >${translate('dragFiles.allowed.header')}</span
+            >
+            <span>${translate('dragFiles.allowed.message')}</span>
+          </div>
+          <div slot="denied-drop-message" class="dropzone-drop-message">
+            <span class="dropzone-drop-message__title"
+              >${translate('dragFiles.denied.header')}</span
+            >
+            <span>${translate('dragFiles.denied.message')}</span>
+          </div>
           <div class="topbar-wrapper">
             <typo3-topbar>
               <div slot="left">
@@ -322,7 +333,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       messageKey = '';
     } else if (currentNode && currentNode.allowEdit) {
       iconKey = 'emptyFolder';
-      messageKey = 'dragFilesUploadMessage';
+      messageKey = 'dragFiles.message.upload';
     }
 
     return html` <div class="main-content main-content-info">

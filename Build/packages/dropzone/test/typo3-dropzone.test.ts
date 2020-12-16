@@ -87,7 +87,7 @@ describe('Typo3Dropzone', () => {
 
     el.dispatchEvent(dragOverEvent);
 
-    expect(el.isDragged).to.be.false;
+    expect(el.dropAllowed).to.be.false;
     expect(dataTransfer.dropEffect).to.not.equal(el.dropEffect);
     expect(dataTransfer.dropEffect).to.equal('none');
   });

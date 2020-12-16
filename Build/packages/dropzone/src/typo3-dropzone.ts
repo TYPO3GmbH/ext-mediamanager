@@ -8,7 +8,6 @@ import {
 
 import styles from './typo3-dropzone.pcss';
 import themeStyles from '../../../theme/index.pcss';
-
 export type DropEffects = 'copy' | 'move' | 'link' | 'none';
 
 @customElement('typo3-dropzone')
@@ -29,6 +28,9 @@ export class Typo3Dropzone extends LitElement {
 
   @property({ type: Boolean, reflect: true, attribute: 'dragged' })
   public isDragged = false;
+
+  @property({ type: Boolean, reflect: true, attribute: 'drop-allowed' })
+  public dropAllowed = true;
 
   private debouncedDragLeave: number | null = null;
 
@@ -56,12 +58,8 @@ export class Typo3Dropzone extends LitElement {
       detail: event,
     });
     // dispatch event returns true if preventDefault() is not called
-    const shouldAccept = this.dispatchEvent(shouldAcceptEvent);
+    this.dropAllowed = !!this.dispatchEvent(shouldAcceptEvent);
     if (!event.dataTransfer) {
-      return;
-    }
-    if (!shouldAccept) {
-      event.dataTransfer.dropEffect = 'none';
       return;
     }
 
@@ -97,10 +95,13 @@ export class Typo3Dropzone extends LitElement {
 
   public onDrop(event: DragEvent): void {
     event.preventDefault();
-
     this.clearDebouncedDragLeave();
-
     this.isDragged = false;
+
+    if (false === this.dropAllowed) {
+      return;
+    }
+
     const dropEvent = new CustomEvent('typo3-dropzone-drop', {
       bubbles: true,
       composed: true,
@@ -112,9 +113,12 @@ export class Typo3Dropzone extends LitElement {
   protected render(): TemplateResult {
     return html`
       ${this.isDragged
-        ? html` <typo3-overlay
-            style="--typo3-modal-overlay-color: var(--typo3-global-brand-primary)"
-          ></typo3-overlay>`
+        ? html` <div class="message">
+              ${this.dropAllowed
+                ? html`<slot name="allowed-drop-message"></slot>`
+                : html`<slot name="denied-drop-message"></slot>`}
+            </div>
+            <typo3-overlay></typo3-overlay>`
         : html``}
       <slot></slot>
     `;
