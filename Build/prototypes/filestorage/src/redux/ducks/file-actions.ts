@@ -27,6 +27,10 @@ export const DELETE_FILES_CONFIRM = '[FILE] DELETE FILES CONFIRM';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES FAILURE';
 
+export const REPLACE_FILE = '[FILE] REPLACE FILE';
+export const REPLACE_FILE_SUCCESS = '[FILE] REPLACE FILES SUCCESS';
+export const REPLACE_FILE_FAILURE = '[FILE] REPLACE FILES FAILURE';
+
 export const DOWNLOAD_FILES = '[FILE] DOWNLOAD FILES';
 export const DOWNLOAD_FILES_SUCCESS = '[FILE] DOWNLOAD FILES SUCCESS';
 export const DOWNLOAD_FILES_FAILURE = '[FILE] DOWNLOAD FILES FAILURE';
@@ -231,6 +235,20 @@ export class RenameFileFailure implements Action {
   readonly type = RENAME_FILE_FAILURE;
 }
 
+export class ReplaceFile implements Action {
+  readonly type = REPLACE_FILE;
+  constructor(public identifier: string) {}
+}
+
+export class ReplaceFileSuccess implements SuccessAction {
+  readonly type = REPLACE_FILE_SUCCESS;
+  constructor(public message: string, public undoAction?: Action) {}
+}
+
+export class ReplaceFileFailure implements Action {
+  readonly type = REPLACE_FILE_FAILURE;
+}
+
 export class DeleteFilesConfirm implements Action {
   readonly type = DELETE_FILES_CONFIRM;
   constructor(
@@ -425,6 +443,7 @@ export type Actions =
   | MoveFiles
   | MoveFilesFailure
   | MoveFilesSuccess
+  | ReplaceFile
   | RenameFile
   | RenameFileFailure
   | RenameFileSuccess

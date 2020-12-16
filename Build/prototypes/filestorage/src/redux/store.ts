@@ -10,6 +10,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { rootEpic } from './epics';
 import { FlashMessagesService } from '../services/flash-messages.service';
 import { UndoActionResolverService } from '../services/undo-action-resolver.service';
+import { ModalService } from '../services/modal.service';
 
 const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   action: Action
@@ -21,6 +22,7 @@ const epicMiddleware = createEpicMiddleware({
   dependencies: {
     flashMessagesService: new FlashMessagesService(),
     undoActionResolverService: new UndoActionResolverService(),
+    modalService: new ModalService(),
   },
 });
 

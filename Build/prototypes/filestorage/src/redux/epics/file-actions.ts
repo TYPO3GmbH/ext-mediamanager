@@ -31,6 +31,7 @@ import {
   SHOW_MODAL_MESSAGE_TYPE,
 } from '../../../../shared/types/message-data';
 import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
+import { ModalService } from '../../services/modal.service';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -65,7 +66,9 @@ export const renameFile = (
 };
 
 export const confirmDeleteFiles = (
-  action$: ActionsObservable<fromActions.DeleteFilesConfirm>
+  action$: ActionsObservable<fromActions.DeleteFilesConfirm>,
+  state$: StateObservable<RootState>,
+  dependencies: { modalService: ModalService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
     switchMap(action => {
@@ -84,18 +87,7 @@ export const confirmDeleteFiles = (
           },
         ],
       };
-
-      window.top.postMessage(
-        new MessageData<ConfirmModalData>(SHOW_MODAL_MESSAGE_TYPE, modalData),
-        '*'
-      );
-      return fromEvent<MessageEvent<MessageData<{ confirm: boolean }>>>(
-        window,
-        'message'
-      ).pipe(
-        map(event => event.data),
-        filter(data => MODAL_CLOSED_MESSAGE_TYPE === data.type),
-        take(1),
+      return dependencies.modalService.openModal(modalData).pipe(
         filter(data => 'typo3-confirm-delete' === data.detail.action),
         map(() => new fromActions.DeleteFiles(action.identifiers))
       );
