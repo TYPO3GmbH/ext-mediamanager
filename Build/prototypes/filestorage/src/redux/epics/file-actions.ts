@@ -25,7 +25,11 @@ import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
 import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
-import { MessageData } from '../../../../shared/types/message-data';
+import {
+  MessageData,
+  MODAL_CLOSED_MESSAGE_TYPE,
+  SHOW_MODAL_MESSAGE_TYPE,
+} from '../../../../shared/types/message-data';
 import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
 
 export const renameFile = (
@@ -65,8 +69,24 @@ export const confirmDeleteFiles = (
 ): Observable<Action> => {
   return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
     switchMap(action => {
+      const modalData = {
+        ...action.modalData,
+        modalButtons: [
+          {
+            label: translate('deleteConfirmCancelButton'),
+            color: 'default',
+            action: 'typo3-delete-cancel',
+          },
+          {
+            label: translate('deleteConfirmSubmitButton'),
+            color: 'danger',
+            action: 'typo3-confirm-delete',
+          },
+        ],
+      };
+
       window.top.postMessage(
-        new MessageData<ConfirmModalData>('typo3-show-modal', action.modalData),
+        new MessageData<ConfirmModalData>(SHOW_MODAL_MESSAGE_TYPE, modalData),
         '*'
       );
       return fromEvent<MessageEvent<MessageData<{ confirm: boolean }>>>(
@@ -74,9 +94,9 @@ export const confirmDeleteFiles = (
         'message'
       ).pipe(
         map(event => event.data),
-        filter(data => 'typo3-modal-closed' === data.type),
+        filter(data => MODAL_CLOSED_MESSAGE_TYPE === data.type),
         take(1),
-        filter(data => true === data.detail!.confirm),
+        filter(data => 'typo3-confirm-delete' === data.detail.action),
         map(() => new fromActions.DeleteFiles(action.identifiers))
       );
     })

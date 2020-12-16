@@ -11,7 +11,10 @@ import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
-import { MessageData } from '../../shared/types/message-data';
+import {
+  MessageData,
+  SHOW_MODAL_MESSAGE_TYPE,
+} from '../../shared/types/message-data';
 import { ConfirmModalData } from '../../shared/types/confirm-modal-data';
 
 @customElement('typo3-top-container')
@@ -40,22 +43,31 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
 
   protected render(): TemplateResult {
     return html`
-      <typo3-confirm-modal
+      <typo3-modal
         ?open="${this.state.modal.open}"
         @typo3-modal-close="${this._onModalClose}"
-        @typo3-confirm-submit="${this._onModalConfirm}"
         headline="${this.state.modal.data?.headline}"
-        submitButtonText="${this.state.modal.data?.submitButtonText}"
-        cancelbuttonText="${this.state.modal.data?.cancelButtonText}"
-        message="${this.state.modal.data?.message}"
       >
-      </typo3-confirm-modal>
+        <p>${this.state.modal.data?.message}</p>
+        ${this.renderModalButtons}
+      </typo3-modal>
     `;
+  }
+
+  private get renderModalButtons(): TemplateResult[] {
+    return fromModal.getActionButtons(this.state).map(buttonData => {
+      return html` <typo3-button
+        slot="footer"
+        color="${buttonData.color}"
+        @click="${() => this._onModalConfirm(buttonData.action)}"
+        >${buttonData.label}</typo3-button
+      >`;
+    });
   }
 
   _handlePostMessage = (event: MessageEvent<MessageData<unknown>>) => {
     switch (event.data.type) {
-      case 'typo3-show-modal':
+      case SHOW_MODAL_MESSAGE_TYPE:
         store.dispatch(
           new fromModal.ShowModal(event.data.detail as ConfirmModalData)
         );
@@ -66,7 +78,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     store.dispatch(new fromModal.CloseModal());
   }
 
-  _onModalConfirm(): void {
-    store.dispatch(new fromModal.ConfirmModal());
+  _onModalConfirm(action: string): void {
+    store.dispatch(new fromModal.ModalAction(action));
   }
 }

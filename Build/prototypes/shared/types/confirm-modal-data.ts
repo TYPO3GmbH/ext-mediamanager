@@ -1,6 +1,12 @@
+export interface ModalButton {
+  label: string;
+  color: string;
+  action: string;
+}
+
 export interface ConfirmModalData {
   headline: string;
   message: string;
-  submitButtonText: string;
-  cancelButtonText: string;
+  modalButtons?: ModalButton[];
+  content?: string;
 }

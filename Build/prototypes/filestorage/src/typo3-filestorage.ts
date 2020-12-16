@@ -779,8 +779,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       {
         headline: translate('deleteConfirmHeadline'),
         message: message,
-        submitButtonText: translate('deleteConfirmSubmitButton'),
-        cancelButtonText: translate('deleteConfirmCancelButton'),
       }
     ) as Action;
 
@@ -857,8 +855,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
           message: additionalAttributes!['data-message'],
-          submitButtonText: additionalAttributes!['data-button-ok-text'],
-          cancelButtonText: additionalAttributes!['data-button-close-text'],
         });
         break;
 
@@ -892,6 +888,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         break;
       case 'editFileStorage':
         storeAction = new fromFileActions.EditFileStorage(identifier);
+        break;
+      case 'replaceFile':
+        storeAction = new fromFileActions.ReplaceFile(identifier);
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
