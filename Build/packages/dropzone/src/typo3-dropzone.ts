@@ -63,6 +63,8 @@ export class Typo3Dropzone extends LitElement {
       return;
     }
 
+    this.dropEffect = this.dropAllowed ? 'copy' : 'none';
+
     event.preventDefault();
 
     this.clearDebouncedDragLeave();
