@@ -14,9 +14,6 @@ describe('Typo3Badge', () => {
   });
 
   it('displays the slot content', () => {
-    const root = element.shadowRoot ? element.shadowRoot : element;
-
-    expect(root).to.not.be.null;
-    expect(root.textContent).to.contain('500');
+    expect(element.textContent).to.contain('500');
   });
 });
