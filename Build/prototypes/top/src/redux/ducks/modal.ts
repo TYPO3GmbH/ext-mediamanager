@@ -46,19 +46,26 @@ export class ShowModal implements Action {
 
 export class CloseModal implements Action {
   readonly action = 'close';
+  readonly data = {};
   readonly type = CLOSE_MODAL;
 }
 
 export class ModalAction implements Action {
-  constructor(public action: string) {}
   readonly type = MODAL_ACTION;
+  constructor(public action: string, public data?: unknown) {}
 }
 
 export type Actions = ShowModal | CloseModal | ModalAction;
 
 const modalSelector = (state: RootState) => state.modal;
 
-export const getActionButtons = createSelector(
+export const getModalData = createSelector(
   modalSelector,
-  modal => modal.data?.modalButtons ?? []
+  modal => modal.data ?? null
 );
+
+export const getActionButtons = createSelector(
+  getModalData,
+  modalData => modalData?.modalButtons ?? []
+);
+

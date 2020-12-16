@@ -441,6 +441,8 @@ export type Actions =
   | MoveFilesFailure
   | MoveFilesSuccess
   | ReplaceFile
+  | ReplaceFileSuccess
+  | ReplaceFileFailure
   | RenameFile
   | RenameFileFailure
   | RenameFileSuccess

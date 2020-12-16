@@ -8,10 +8,11 @@ export interface ModalButton {
 
 export enum ModalType {
   CONFIRM = 'confirm',
-  FORM = 'form',
+  HTML = 'html',
 }
 
 export interface ModalData {
+  isForm?: boolean;
   type: ModalType;
   headline: string;
   content: string;

@@ -11,7 +11,7 @@ export const closeModal = (
 ): Observable<Action> => {
   return action$.ofType(fromModal.CLOSE_MODAL, fromModal.MODAL_ACTION).pipe(
     tap(action => {
-      const messageData = new CloseModalMessage(action.action);
+      const messageData = new CloseModalMessage(action.action, action.data);
       IframeHelper.getContentIframe()?.postMessage(messageData, '*');
     }),
     ignoreElements()
