@@ -23,7 +23,9 @@
 }
 
 .modal {
-  width: var(--typo3-modal-width, var(--typo3-global-modal-width));
+  width: var(--typo3-modal-width, auto);
+  max-height: calc(100vh - 2.5rem);
+  max-width: calc(100vw - 2.5rem);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -87,7 +89,7 @@
   align-items: center;
   padding: var(--typo3-modal-footer-padding, var(--typo3-global-modal-padding));
   flex-wrap: wrap;
-  gap: 0.25rem;
+  gap: var(--typo3-global-default-gap);
   flex-grow: 1;
   justify-content: flex-end;
 }

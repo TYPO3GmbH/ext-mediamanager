@@ -890,7 +890,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         storeAction = new fromFileActions.EditFileStorage(identifier);
         break;
       case 'replaceFile':
-        storeAction = new fromFileActions.ReplaceFile(identifier);
+        storeAction = new fromFileActions.ReplaceFileConfirm(identifier);
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);

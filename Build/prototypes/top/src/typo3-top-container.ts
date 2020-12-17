@@ -1,4 +1,11 @@
-import { customElement, html, internalProperty, LitElement, query, TemplateResult, } from 'lit-element';
+import {
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+  query,
+  TemplateResult,
+} from 'lit-element';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-top-container.pcss';
 import { connect } from 'pwa-helpers';
@@ -44,8 +51,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         @typo3-modal-close="${this._onModalClose}"
         headline="${this.state.modal.data?.headline}"
       >
-        ${this.renderModalContent}
-        ${this.renderModalButtons}
+        ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>
     `;
   }
@@ -54,11 +60,11 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     const modalData = fromModal.getModalData(this.state);
     switch (modalData?.type) {
       case ModalType.HTML:
-        return html ` ${unsafeHTML(modalData?.content)} `;
+        return html` ${unsafeHTML(modalData?.content)} `;
       case ModalType.CONFIRM:
-        return html `<p>${modalData?.content}</p>`;
+        return html`<p>${modalData?.content}</p>`;
       default:
-        return html ``;
+        return html``;
     }
   }
 
@@ -85,13 +91,12 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
   }
 
   _onModalConfirm(action: string): void {
-    let data = {};
+    const obj: { [key: string]: string | Blob | null } = {};
     if (fromModal.getModalData(this.state)?.isForm) {
       const formElement = this.modal.querySelector('form') as HTMLFormElement;
-      data = new FormData(formElement);
-      var obj = {};
-      for (var key of data.keys()) {
-        obj[key] = data.get(key);
+      const formData = new FormData(formElement);
+      for (const key of Object.keys(formData)) {
+        obj[key] = formData.get(key);
       }
     }
 

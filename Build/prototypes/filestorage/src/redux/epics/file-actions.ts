@@ -83,7 +83,7 @@ export const confirmDeleteFiles = (
         ],
       } as ModalData;
       return dependencies.modalService.openModal(modalData).pipe(
-        filter(data => 'typo3-confirm-delete' === data.action),
+        filter(data => 'typo3-confirm-delete' === data.actionName),
         map(() => new fromActions.DeleteFiles(action.identifiers))
       );
     })
@@ -400,28 +400,27 @@ export const editFileStorage = (
   );
 };
 
-export const replaceFile = (
-  action$: ActionsObservable<fromActions.ReplaceFile>,
+export const replaceFileConfirm = (
+  action$: ActionsObservable<fromActions.ReplaceFileConfirm>,
   state$: StateObservable<RootState>,
   dependencies: { modalService: ModalService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.REPLACE_FILE).pipe(
+  return action$.ofType(fromActions.REPLACE_FILE_CONFIRM).pipe(
     switchMap(action => {
       const formContent = `
         <form enctype="multipart/form-data">
-          <div class="form-group">
-            <input type="checkbox" value="1" id="keepFilename" name="data[replace][1][keepFilename]">
-            <label for="keepFilename">${translate(
-              'file_replace.keepfiletitle'
-            )}</label>
+          <div>
+            <typo3-formfield
+              label="${translate('file_replace.keepfiletitle')}"
+              label-align="right"
+            >
+              <input type="checkbox" value="1" name="data[replace][1][keepFilename]">
+            </typo3-formfield>
           </div>
-          <div class="form-group">
-            <label for="file_replace">${translate(
-              'file_replace.selectfile'
-            )}</label>
-            <div class="input-group col-xs-6">
-              <input required class="form-control" type="file" id="file_replace" name="replace_1">
-            </div>
+          <div>
+            <typo3-formfield label="${translate('file_replace.selectfile')}">
+              <input required type="file" name="replace_1">
+            </typo3-formfield>
           </div>
           <input type="hidden" name="data[replace][1][data]" value="1">
           <input type="hidden" name="overwriteExistingFiles" value="replace">
@@ -450,24 +449,31 @@ export const replaceFile = (
           ],
         })
         .pipe(
-          filter(data => 'typo3-replace-confirm' === data.action),
-          switchMap(data => {
-            const formData = new FormData();
-            for (const key in data.data) {
-              formData.append(key, data.data[key]);
-            }
-
-            return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-              map(
-                () =>
-                  new fromActions.ReplaceFileSuccess(
-                    translate('message.header.undo')
-                  )
-              ),
-              catchError(() => of(new fromActions.ReplaceFileFailure()))
-            );
-          })
+          filter(data => 'typo3-replace-confirm' === data.actionName),
+          map(data => new fromActions.ReplaceFile(data.actionData ?? {}))
         );
+    })
+  );
+};
+
+export const replaceFile = (
+  action$: ActionsObservable<fromActions.ReplaceFile>
+): Observable<Action> => {
+  return action$.ofType(fromActions.REPLACE_FILE).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      for (const key in action.formData) {
+        formData.append(key, action.formData[key]);
+      }
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
+        map(
+          () =>
+            new fromActions.ReplaceFileSuccess(
+              translate('file_replace.pagetitle')
+            )
+        ),
+        catchError(() => of(new fromActions.ReplaceFileFailure()))
+      );
     })
   );
 };
@@ -598,6 +604,7 @@ export const fileActions = [
   moveFiles,
   renameFile,
   replaceFile,
+  replaceFileConfirm,
   showFileInfo,
   undoFileAction,
   uploadFiles,

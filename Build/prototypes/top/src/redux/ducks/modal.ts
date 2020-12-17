@@ -52,7 +52,10 @@ export class CloseModal implements Action {
 
 export class ModalAction implements Action {
   readonly type = MODAL_ACTION;
-  constructor(public action: string, public data?: unknown) {}
+  constructor(
+    public action: string,
+    public data?: { [key: string]: string | Blob }
+  ) {}
 }
 
 export type Actions = ShowModal | CloseModal | ModalAction;
@@ -68,4 +71,3 @@ export const getActionButtons = createSelector(
   getModalData,
   modalData => modalData?.modalButtons ?? []
 );
-

@@ -27,6 +27,7 @@ export const DELETE_FILES_CONFIRM = '[FILE] DELETE FILES CONFIRM';
 export const DELETE_FILES_SUCCESS = '[FILE] DELETE FILES SUCCESS';
 export const DELETE_FILES_FAILURE = '[FILE] DELETE FILES FAILURE';
 
+export const REPLACE_FILE_CONFIRM = '[FILE] REPLACE FILE CONFIRM';
 export const REPLACE_FILE = '[FILE] REPLACE FILE';
 export const REPLACE_FILE_SUCCESS = '[FILE] REPLACE FILES SUCCESS';
 export const REPLACE_FILE_FAILURE = '[FILE] REPLACE FILES FAILURE';
@@ -64,6 +65,7 @@ export type FileActionsState = Readonly<{
   isAddingFolder: boolean;
   isDeletingFiles: boolean;
   isRenamingFile: boolean;
+  isReplacingFile: boolean;
   isUploadingFiles: boolean;
   isDraggingFiles: boolean;
   isMovingFiles: boolean;
@@ -78,6 +80,7 @@ const initialState: FileActionsState = {
   isAddingFolder: false,
   isDeletingFiles: false,
   isRenamingFile: false,
+  isReplacingFile: false,
   isUploadingFiles: false,
   isDraggingFiles: false,
   isMovingFiles: false,
@@ -188,6 +191,18 @@ export const fileActionsReducer = (
         ...state,
         isRenamingFile: false,
       };
+    case REPLACE_FILE:
+      return {
+        ...state,
+        isReplacingFile: true,
+      };
+    case REPLACE_FILE_SUCCESS:
+    case REPLACE_FILE_FAILURE:
+      return {
+        ...state,
+        isReplacingFile: false,
+      };
+
     case UPLOAD_FILES:
       return {
         ...state,
@@ -235,9 +250,13 @@ export class RenameFileFailure implements Action {
   readonly type = RENAME_FILE_FAILURE;
 }
 
+export class ReplaceFileConfirm implements Action {
+  readonly type = REPLACE_FILE_CONFIRM;
+  constructor(public identifier: string) {}
+}
 export class ReplaceFile implements Action {
   readonly type = REPLACE_FILE;
-  constructor(public identifier: string) {}
+  constructor(public formData: { [key: string]: string | Blob }) {}
 }
 
 export class ReplaceFileSuccess implements SuccessAction {
@@ -440,6 +459,7 @@ export type Actions =
   | MoveFiles
   | MoveFilesFailure
   | MoveFilesSuccess
+  | ReplaceFileConfirm
   | ReplaceFile
   | ReplaceFileSuccess
   | ReplaceFileFailure
@@ -470,7 +490,8 @@ export const isExecutingFileAction = createSelector(
     state.isMovingFiles ||
     state.isCopyingFiles ||
     state.isPastingFiles ||
-    state.isUndoingFileAction
+    state.isUndoingFileAction ||
+    state.isReplacingFile
 );
 
 const fileActionsSelector = (state: RootState) => state.fileActions;
