@@ -1,0 +1,32 @@
+import {Meta, action, Preview, Props, Story, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
+import {html} from 'lit-html';
+import '../../../out-tsc/packages/formfield/src/typo3-formfield';
+
+<Meta
+  title="Components/typo3-formfield"
+  decorators={[withKnobs, withWebComponentsKnobs]}
+  parameters={{ component: 'typo3-formfield', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+  />
+
+# Demo Typo3Formfield.ts
+
+<Preview>
+    <Story name="Basic Formfield" height="220px">
+    {html`
+        <div>
+            <typo3-formfield label="Checkbox" label-align="right">
+               <input type="checkbox" value="">
+            </typo3-formfield>
+        </div>
+        <div>
+            <typo3-formfield label="Textfield">
+               <input type="text" value="">
+            </typo3-formfield>
+        </div>
+    `}
+    </Story>
+</Preview>
+
+# API
+
+<Props of="typo3-formfield" />
