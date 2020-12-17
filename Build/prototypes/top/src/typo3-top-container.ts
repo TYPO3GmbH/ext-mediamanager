@@ -91,12 +91,15 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
   }
 
   _onModalConfirm(action: string): void {
-    const obj: { [key: string]: string | Blob | null } = {};
+    const obj: { [key: string]: string | Blob } = {};
     if (fromModal.getModalData(this.state)?.isForm) {
       const formElement = this.modal.querySelector('form') as HTMLFormElement;
       const formData = new FormData(formElement);
       for (const key of Object.keys(formData)) {
-        obj[key] = formData.get(key);
+        const value = formData.get(key);
+        if (null !== value) {
+          obj[key] = value;
+        }
       }
     }
 

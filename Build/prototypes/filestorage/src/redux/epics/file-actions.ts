@@ -26,6 +26,7 @@ import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snack
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
 import { ModalData, ModalType } from '../../../../shared/types/modal-data';
 import { ModalService } from '../../services/modal.service';
+import { openInTab } from '../../lib/utils';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -120,6 +121,15 @@ export const showFileInfo = (
       // @ts-ignore
       window.top.TYPO3.InfoWindow.showItem(action.sysType, action.identifier);
     }),
+    ignoreElements()
+  );
+};
+
+export const showFile = (
+  action$: ActionsObservable<fromActions.ShowFile>
+): Observable<Action> => {
+  return action$.ofType(fromActions.SHOW_FILE).pipe(
+    tap(action => openInTab(action.fileUrl)),
     ignoreElements()
   );
 };
@@ -359,7 +369,7 @@ export const downloadFiles = (
             window.navigator.msSaveOrOpenBlob(file);
           } else {
             const fileURL = URL.createObjectURL(file);
-            window.open(fileURL);
+            openInTab(fileURL);
           }
         }),
         map(() => new DownloadFilesSuccess()),
@@ -608,4 +618,5 @@ export const fileActions = [
   showFileInfo,
   undoFileAction,
   uploadFiles,
+  showFile,
 ];

@@ -52,6 +52,7 @@ export const RENAME_FILE_SUCCESS = '[FILE] RENAME SUCCESS';
 export const RENAME_FILE_FAILURE = '[FILE] RENAME FAILURE';
 
 export const SHOW_FILE_INFO = '[FILE] SHOW FILE INFO';
+export const SHOW_FILE = '[FILE] SHOW FILE';
 
 export const UPLOAD_FILES = '[FILE] UPLOAD FILES';
 export const UPLOAD_FILES_SUCCESS = '[FILE] UPLOAD FILES SUCCESS';
@@ -270,7 +271,10 @@ export class ReplaceFileFailure implements Action {
 
 export class DeleteFilesConfirm implements Action {
   readonly type = DELETE_FILES_CONFIRM;
-  constructor(public identifiers: string[], public modalData: ModalData) {}
+  constructor(
+    public identifiers: string[],
+    public modalData: { headline: string; content: string }
+  ) {}
 }
 
 export class DeleteFiles implements Action {
@@ -285,6 +289,11 @@ export class DeleteFilesSuccess implements SuccessAction {
 
 export class DeleteFilesFailure implements Action {
   readonly type = DELETE_FILES_FAILURE;
+}
+
+export class ShowFile implements Action {
+  readonly type = SHOW_FILE;
+  constructor(public fileUrl: string) {}
 }
 
 export class ShowFileInfo implements Action {
@@ -466,6 +475,7 @@ export type Actions =
   | RenameFile
   | RenameFileFailure
   | RenameFileSuccess
+  | ShowFile
   | ShowFileInfo
   | UploadFiles
   | UploadFilesFailure

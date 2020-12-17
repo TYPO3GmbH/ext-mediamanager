@@ -44,10 +44,10 @@ class FileProvider extends AbstractProvider
             'iconIdentifier' => 'actions-document-info',
             'callbackAction' => 'openInfoPopUp',
         ],
-        'replace' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.replace',
-            'iconIdentifier' => 'actions-replace',
-            'callbackAction' => 'replaceFile',
+        'show' => [
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.view',
+            'iconIdentifier' => 'actions-eye',
+            'callbackAction' => 'showFile',
         ],
         'divider' => [
             'type' => 'divider',
@@ -79,6 +79,11 @@ class FileProvider extends AbstractProvider
         ],
         'divider2' => [
             'type' => 'divider',
+        ],
+        'replace' => [
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.replace',
+            'iconIdentifier' => 'actions-replace',
+            'callbackAction' => 'replaceFile',
         ],
         'delete' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.delete',
@@ -112,6 +117,7 @@ class FileProvider extends AbstractProvider
         switch ($itemName) {
             //just for files
             case 'info':
+            case 'show':
                 $canRender = $this->canShowInfo();
                 break;
             case 'replace':
@@ -304,6 +310,11 @@ class FileProvider extends AbstractProvider
                 'data-message' => \htmlspecialchars($confirmMessage),
                 'data-button-close-text' => \htmlspecialchars($closeText),
                 'data-button-ok-text' => \htmlspecialchars($okText),
+            ];
+        }
+        if ('show' === $itemName) {
+            $attributes += [
+                'data-url' => $this->record->getPublicUrl(true),
             ];
         }
 

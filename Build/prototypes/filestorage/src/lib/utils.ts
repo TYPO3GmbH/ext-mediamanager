@@ -32,3 +32,10 @@ export function extractStorageFromIdentifier(identifier: string): string {
 
   return matches ? matches[1] : '';
 }
+
+export function openInTab(url: string): void {
+  Object.assign(document.createElement('a'), {
+    target: '_blank',
+    href: url,
+  }).click();
+}

@@ -851,6 +851,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           contextItem.sysType
         );
         break;
+      case 'showFile':
+        storeAction = new fromFileActions.ShowFile(
+          additionalAttributes!['data-url']
+        );
+        break;
       case 'deleteFile':
         storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
