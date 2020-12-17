@@ -72,6 +72,7 @@ export class Typo3Search extends LitElement {
         .value=${this.value}
         @input=${this.onInput}
         ?disabled=${this.disabled}
+        autocomplete="off"
       />
     `;
   }

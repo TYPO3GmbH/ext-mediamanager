@@ -13,6 +13,7 @@ describe('File Actions reducer', () => {
       isAddingFolder: false,
       isDeletingFiles: false,
       isRenamingFile: false,
+      isReplacingFile: false,
       isUploadingFiles: false,
       isDraggingFiles: false,
       isMovingFiles: false,
@@ -162,7 +163,7 @@ describe('File Actions reducer', () => {
   });
 
   it('can handle `ClipboardPaste`', () => {
-    const action = new fromFileActions.ClipboardPaste({} as Typo3Node);
+    const action = new fromFileActions.ClipboardPaste('target');
     const state = fromFileActions.fileActionsReducer(undefined, action);
     expect(state.isPastingFiles).to.be.true;
   });
@@ -213,5 +214,23 @@ describe('File Actions reducer', () => {
     const action = new fromFileActions.UndoFilesActionFailure();
     const state = fromFileActions.fileActionsReducer(undefined, action);
     expect(state.isUndoingFileAction).to.be.false;
+  });
+
+  it('can handle `ReplaceFile`', () => {
+    const action = new fromFileActions.ReplaceFile({});
+    const state = fromFileActions.fileActionsReducer(undefined, action);
+    expect(state.isReplacingFile).to.be.true;
+  });
+
+  it('can handle `ReplaceFileSuccess`', () => {
+    const action = new fromFileActions.ReplaceFileSuccess('success');
+    const state = fromFileActions.fileActionsReducer(undefined, action);
+    expect(state.isReplacingFile).to.be.false;
+  });
+
+  it('can handle `ReplaceFileFailure`', () => {
+    const action = new fromFileActions.ReplaceFileFailure();
+    const state = fromFileActions.fileActionsReducer(undefined, action);
+    expect(state.isReplacingFile).to.be.false;
   });
 });

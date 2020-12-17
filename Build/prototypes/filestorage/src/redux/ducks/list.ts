@@ -4,7 +4,7 @@ import { memoize } from 'lodash-es';
 import { RootState } from './index';
 
 export const CLEAR_SELECTION = '[LIST] CLEAR SELECTION';
-export const SET_SELECTION = '[LLIST] SET SELECTION';
+export const SET_SELECTION = '[LIST] SET SELECTION';
 
 export const LOAD_LIST_DATA = '[LIST] LOAD DATA';
 export const RELOAD_LIST_DATA = '[LIST] RELOAD DATA';

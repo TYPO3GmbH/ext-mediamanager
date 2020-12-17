@@ -3,6 +3,7 @@ import {
   html,
   internalProperty,
   LitElement,
+  query,
   TemplateResult,
 } from 'lit-element';
 import themeStyles from '../../../theme/index.pcss';
@@ -11,12 +12,17 @@ import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
-import { MessageData } from '../../shared/types/message-data';
-import { ConfirmModalData } from '../../shared/types/confirm-modal-data';
+import { SHOW_MODAL_MESSAGE_TYPE } from '../../shared/types/message';
+import { ShowModalMessage } from '../../shared/types/show-modal-message';
+import { ModalType } from '../../shared/types/modal-data';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
   @internalProperty() state!: RootState;
+
+  @query('typo3-modal') modal!: Typo3Modal;
 
   public static styles = [themeStyles, styles];
 
@@ -40,25 +46,43 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
 
   protected render(): TemplateResult {
     return html`
-      <typo3-confirm-modal
+      <typo3-modal
         ?open="${this.state.modal.open}"
         @typo3-modal-close="${this._onModalClose}"
-        @typo3-confirm-submit="${this._onModalConfirm}"
         headline="${this.state.modal.data?.headline}"
-        submitButtonText="${this.state.modal.data?.submitButtonText}"
-        cancelbuttonText="${this.state.modal.data?.cancelButtonText}"
-        message="${this.state.modal.data?.message}"
       >
-      </typo3-confirm-modal>
+        ${this.renderModalContent} ${this.renderModalButtons}
+      </typo3-modal>
     `;
   }
 
-  _handlePostMessage = (event: MessageEvent<MessageData<unknown>>) => {
+  private get renderModalContent(): TemplateResult {
+    const modalData = fromModal.getModalData(this.state);
+    switch (modalData?.type) {
+      case ModalType.HTML:
+        return html` ${unsafeHTML(modalData?.content)} `;
+      case ModalType.CONFIRM:
+        return html`<p>${modalData?.content}</p>`;
+      default:
+        return html``;
+    }
+  }
+
+  private get renderModalButtons(): TemplateResult[] {
+    return fromModal.getActionButtons(this.state).map(buttonData => {
+      return html` <typo3-button
+        slot="footer"
+        color="${buttonData.color}"
+        @click="${() => this._onModalConfirm(buttonData.action)}"
+        >${buttonData.label}</typo3-button
+      >`;
+    });
+  }
+
+  _handlePostMessage = (event: MessageEvent<ShowModalMessage>) => {
     switch (event.data.type) {
-      case 'typo3-show-modal':
-        store.dispatch(
-          new fromModal.ShowModal(event.data.detail as ConfirmModalData)
-        );
+      case SHOW_MODAL_MESSAGE_TYPE:
+        store.dispatch(new fromModal.ShowModal(event.data.data));
     }
   };
 
@@ -66,7 +90,16 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     store.dispatch(new fromModal.CloseModal());
   }
 
-  _onModalConfirm(): void {
-    store.dispatch(new fromModal.ConfirmModal());
+  _onModalConfirm(action: string): void {
+    const obj: { [key: string]: string | Blob | null } = {};
+    if (fromModal.getModalData(this.state)?.isForm) {
+      const formElement = this.modal.querySelector('form') as HTMLFormElement;
+      const formData = new FormData(formElement);
+      for (const key of Object.keys(formData)) {
+        obj[key] = formData.get(key);
+      }
+    }
+
+    store.dispatch(new fromModal.ModalAction(action, obj));
   }
 }

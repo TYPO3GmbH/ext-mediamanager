@@ -1321,6 +1321,57 @@
           "name": "--typo3-search-reset-button-width"
         }
       ]
+    },
+    {
+      "name": "typo3-formfield",
+      "properties": [
+        {
+          "name": "label",
+          "attribute": "label",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "labelAlign",
+          "attribute": "label-align",
+          "type": "string",
+          "default": "\"top\""
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Form element"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--typo3-formfield-line-height"
+        },
+        {
+          "name": "--typo3-formfield-padding"
+        },
+        {
+          "name": "--typo3-formfield-label-input-gap"
+        },
+        {
+          "name": "--typo3-formfield-input-padding"
+        },
+        {
+          "name": "--typo3-formfield-input-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-formfield-input-border-width"
+        },
+        {
+          "name": "--typo3-formfield-input-border-color",
+          "type": "Color"
+        },
+        {
+          "name": "--typo3-formfield-input-border-radius"
+        }
+      ]
     }
   ]
 }

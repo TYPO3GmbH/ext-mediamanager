@@ -12,21 +12,20 @@ import {
   map,
   mergeMap,
   switchMap,
-  take,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { EMPTY, fromEvent, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
 import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
-import { MessageData } from '../../../../shared/types/message-data';
-import { ConfirmModalData } from '../../../../shared/types/confirm-modal-data';
+import { ModalData, ModalType } from '../../../../shared/types/modal-data';
+import { ModalService } from '../../services/modal.service';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -61,22 +60,30 @@ export const renameFile = (
 };
 
 export const confirmDeleteFiles = (
-  action$: ActionsObservable<fromActions.DeleteFilesConfirm>
+  action$: ActionsObservable<fromActions.DeleteFilesConfirm>,
+  state$: StateObservable<RootState>,
+  dependencies: { modalService: ModalService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
     switchMap(action => {
-      window.top.postMessage(
-        new MessageData<ConfirmModalData>('typo3-show-modal', action.modalData),
-        '*'
-      );
-      return fromEvent<MessageEvent<MessageData<{ confirm: boolean }>>>(
-        window,
-        'message'
-      ).pipe(
-        map(event => event.data),
-        filter(data => 'typo3-modal-closed' === data.type),
-        take(1),
-        filter(data => true === data.detail!.confirm),
+      const modalData = {
+        ...action.modalData,
+        type: ModalType.CONFIRM,
+        modalButtons: [
+          {
+            label: translate('button.cancel'),
+            color: 'default',
+            action: 'typo3-delete-cancel',
+          },
+          {
+            label: translate('button.delete'),
+            color: 'danger',
+            action: 'typo3-confirm-delete',
+          },
+        ],
+      } as ModalData;
+      return dependencies.modalService.openModal(modalData).pipe(
+        filter(data => 'typo3-confirm-delete' === data.actionName),
         map(() => new fromActions.DeleteFiles(action.identifiers))
       );
     })
@@ -382,7 +389,6 @@ export const editFileStorage = (
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
       const url: string = getUrl('editFileStorageUrl');
-
       const storageId = parseInt(action.identifier);
       const params = new URLSearchParams();
       params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
@@ -391,6 +397,84 @@ export const editFileStorage = (
       window.location.href = url + '&' + params.toString();
     }),
     ignoreElements()
+  );
+};
+
+export const replaceFileConfirm = (
+  action$: ActionsObservable<fromActions.ReplaceFileConfirm>,
+  state$: StateObservable<RootState>,
+  dependencies: { modalService: ModalService }
+): Observable<Action> => {
+  return action$.ofType(fromActions.REPLACE_FILE_CONFIRM).pipe(
+    switchMap(action => {
+      const formContent = `
+        <form enctype="multipart/form-data">
+          <div>
+            <typo3-formfield
+              label="${translate('file_replace.keepfiletitle')}"
+              label-align="right"
+            >
+              <input type="checkbox" value="1" name="data[replace][1][keepFilename]">
+            </typo3-formfield>
+          </div>
+          <div>
+            <typo3-formfield label="${translate('file_replace.selectfile')}">
+              <input required type="file" name="replace_1">
+            </typo3-formfield>
+          </div>
+          <input type="hidden" name="data[replace][1][data]" value="1">
+          <input type="hidden" name="overwriteExistingFiles" value="replace">
+          <input type="hidden" name="data[replace][1][uid]" value="${
+            action.identifier
+          }">
+        </form>`;
+
+      return dependencies.modalService
+        .openModal({
+          headline: translate('file_replace.pagetitle'),
+          type: ModalType.HTML,
+          isForm: true,
+          content: formContent,
+          modalButtons: [
+            {
+              label: translate('button.cancel'),
+              color: 'default',
+              action: 'typo3-replace-cancel',
+            },
+            {
+              label: translate('file_replace.submit'),
+              color: 'primary',
+              action: 'typo3-replace-confirm',
+            },
+          ],
+        })
+        .pipe(
+          filter(data => 'typo3-replace-confirm' === data.actionName),
+          map(data => new fromActions.ReplaceFile(data.actionData ?? {}))
+        );
+    })
+  );
+};
+
+export const replaceFile = (
+  action$: ActionsObservable<fromActions.ReplaceFile>
+): Observable<Action> => {
+  return action$.ofType(fromActions.REPLACE_FILE).pipe(
+    switchMap(action => {
+      const formData = new FormData();
+      for (const key in action.formData) {
+        formData.append(key, action.formData[key]);
+      }
+      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
+        map(
+          () =>
+            new fromActions.ReplaceFileSuccess(
+              translate('file_replace.pagetitle')
+            )
+        ),
+        catchError(() => of(new fromActions.ReplaceFileFailure()))
+      );
+    })
   );
 };
 
@@ -429,6 +513,7 @@ export const fileActionSuccess = (
       fromActions.MOVE_FILES_SUCCESS,
       fromActions.COPY_FILES_SUCCESS,
       fromActions.CLIPBOARD_PASTE_SUCCESS,
+      fromActions.REPLACE_FILE_SUCCESS,
       fromActions.UNDO_FILES_ACTION_SUCCESS
     )
     .pipe(
@@ -454,6 +539,7 @@ export const fileActionFailure = (
       fromActions.MOVE_FILES_FAILURE,
       fromActions.COPY_FILES_FAILURE,
       fromActions.CLIPBOARD_PASTE_FAILURE,
+      fromActions.REPLACE_FILE_FAILURE,
       fromActions.UNDO_FILES_ACTION_FAILURE
     )
     .pipe(
@@ -517,6 +603,8 @@ export const fileActions = [
   fileActionSuccess,
   moveFiles,
   renameFile,
+  replaceFile,
+  replaceFileConfirm,
   showFileInfo,
   undoFileAction,
   uploadFiles,

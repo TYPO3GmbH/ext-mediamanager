@@ -114,7 +114,7 @@ class FileProviderTest extends FunctionalTestCase
             ->willReturn(true);
 
         yield 'Writable file' => [
-            ['info', 'divider', 'copy', 'cut', 'divider2', 'delete'],
+            ['info', 'replace', 'divider', 'copy', 'cut', 'divider2', 'delete'],
             $writableFile,
         ];
 

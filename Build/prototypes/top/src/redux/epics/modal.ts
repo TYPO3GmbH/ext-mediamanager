@@ -4,17 +4,14 @@ import { Observable } from 'rxjs';
 import { Action } from 'redux';
 import { ignoreElements, tap } from 'rxjs/operators';
 import { IframeHelper } from '../../lib/iframe-helper';
-import { MessageData } from '../../../../shared/types/message-data';
+import { CloseModalMessage } from '../../../../shared/types/close-modal-message';
 
 export const closeModal = (
-  action$: ActionsObservable<fromModal.CloseModal | fromModal.ConfirmModal>
+  action$: ActionsObservable<fromModal.CloseModal | fromModal.ModalAction>
 ): Observable<Action> => {
-  return action$.ofType(fromModal.CLOSE_MODAL, fromModal.CONFIRM_MODAL).pipe(
+  return action$.ofType(fromModal.CLOSE_MODAL, fromModal.MODAL_ACTION).pipe(
     tap(action => {
-      const confirm = fromModal.CONFIRM_MODAL === action.type;
-      const messageData = new MessageData('typo3-modal-closed', {
-        confirm: confirm,
-      });
+      const messageData = new CloseModalMessage(action.action, action.data);
       IframeHelper.getContentIframe()?.postMessage(messageData, '*');
     }),
     ignoreElements()

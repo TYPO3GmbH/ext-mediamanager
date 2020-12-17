@@ -212,8 +212,8 @@ class FilelistController
             'myStorages' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:myStorages'),
             'deleteConfirmHeadline' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:delete'),
             'deleteConfirmMessage' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.delete'),
-            'deleteConfirmCancelButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel'),
-            'deleteConfirmSubmitButton' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete'),
+            'button.cancel' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel'),
+            'button.delete' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete'),
             'message.header.fileDeleted' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:message.header.fileDeleted'),
             'message.header.filesMoved' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.filesMoved'),
             'message.header.filesCopied' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:message.header.filesCopied'),
@@ -227,6 +227,10 @@ class FilelistController
             'fileSearch.noResults' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:fileSearch.noResults'),
             'fileTree.collapse' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:fileTree.collapse'),
             'fileTree.expand' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:fileTree.expand'),
+            'file_replace.pagetitle' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.pagetitle'),
+            'file_replace.selectfile' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.selectfile'),
+            'file_replace.keepfiletitle' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.keepfiletitle'),
+            'file_replace.submit' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.submit'),
         ];
     }
 
@@ -236,7 +240,7 @@ class FilelistController
     private function getIconUrls(): array
     {
         $iconIdentifiers = [
-            'new' => 'actions-document-new',
+            'addFolder' => 'actions-folder-add',
             'upload' => 'actions-edit-upload',
             'download' => 'actions-download',
             'delete' => 'actions-delete',

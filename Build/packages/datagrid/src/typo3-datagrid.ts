@@ -102,11 +102,6 @@ export class Typo3Datagrid extends LitElement {
     `;
   }
 
-  firstUpdated(): void {
-    this.focus();
-    this.canvasGrid!.focus();
-  }
-
   updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has('selectedRows')) {
       const expectedRowNumbers = this.selectedRows.map(row =>

@@ -39,7 +39,7 @@ export class Typo3Storages extends LitElement {
                   >
                     <svg slot="icon">
                       <use xlink:href="" xlink:href="${getIconUrl(
-                        'new'
+                        'addFolder'
                       )}"></use>
                     </svg>
                      ${translate('new')}

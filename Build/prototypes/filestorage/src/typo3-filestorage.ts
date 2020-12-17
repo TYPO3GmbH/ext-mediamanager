@@ -543,7 +543,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           )}"
       >
         <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('new')}"></use>
+          <use xlink:href="" xlink:href="${getIconUrl('addFolder')}"></use>
         </svg>
         ${translate('new')}
       </typo3-button>
@@ -778,9 +778,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       fromList.getSelectedItems(this.state).map(data => data.identifier),
       {
         headline: translate('deleteConfirmHeadline'),
-        message: message,
-        submitButtonText: translate('deleteConfirmSubmitButton'),
-        cancelButtonText: translate('deleteConfirmCancelButton'),
+        content: message,
       }
     ) as Action;
 
@@ -856,13 +854,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'deleteFile':
         storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
           headline: additionalAttributes!['data-title'],
-          message: additionalAttributes!['data-message'],
-          submitButtonText: additionalAttributes!['data-button-ok-text'],
-          cancelButtonText: additionalAttributes!['data-button-close-text'],
+          content: additionalAttributes!['data-message'],
         });
         break;
 
-      case 'createFile':
+      case 'addFolder':
         this.fileTree.addNode(identifier);
         break;
       case 'copyFile':
@@ -892,6 +888,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         break;
       case 'editFileStorage':
         storeAction = new fromFileActions.EditFileStorage(identifier);
+        break;
+      case 'replaceFile':
+        storeAction = new fromFileActions.ReplaceFileConfirm(identifier);
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);
