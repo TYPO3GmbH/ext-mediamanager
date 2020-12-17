@@ -44,6 +44,8 @@ export class Typo3Datagrid extends LitElement {
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
 
+  protected clicks = 0;
+
   render(): TemplateResult {
     return html`
       <canvas-datagrid
@@ -92,6 +94,7 @@ export class Typo3Datagrid extends LitElement {
         @selectionchanged="${this._onSelectionChanged}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
         @endedit="${this._onEndEdit}"
+        @click="${this._onClick}"
         @dblclick="${this._onDblClick}"
         selectionmode="row"
         showrowheaders="false"
@@ -119,6 +122,11 @@ export class Typo3Datagrid extends LitElement {
         expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
       }
     }
+  }
+
+  disconnectedCallback() {
+    this._endEdit();
+    super.disconnectedCallback();
   }
 
   _onRenderText(e: RenderCellEvent): void {
@@ -231,16 +239,42 @@ export class Typo3Datagrid extends LitElement {
       return;
     }
 
-    if (this._isEditableCell(e.cell)) {
+    // will be handled in _onClick
+    e.preventDefault();
+  }
+
+  _onClick(e: CanvasDataGridEvent): void {
+    if (true === e.cell.isHeader) {
       return;
     }
 
-    const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
-      bubbles: true,
-      composed: true,
-      detail: e.cell.data,
-    });
-    this.dispatchEvent(dblClickEvent);
+    this.clicks += 1;
+
+    if (this.clicks === 1) {
+      setTimeout(() => {
+        if (this.clicks === 1) {
+          this._handleSingleClick(e);
+        } else {
+          const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
+            bubbles: true,
+            composed: true,
+            detail: e.cell.data,
+          });
+          this.dispatchEvent(dblClickEvent);
+        }
+        this.clicks = 0;
+      }, 300);
+    }
+  }
+
+  _handleSingleClick(e: CanvasDataGridEvent): void {
+    if (false === this._isEditableCell(e.cell)) {
+      return;
+    }
+    if (true != e.cell.selected) {
+      return;
+    }
+    this.canvasGrid.beginEditAt(e.cell.columnIndex, e.cell.rowIndex);
   }
 
   _onRenderOrderByArrow(e: RenderOrderByArrowEvent): void {
@@ -323,5 +357,13 @@ export class Typo3Datagrid extends LitElement {
 
   _isEditableCell(cell: Cell): boolean {
     return this.editableColumns.indexOf(cell.header.name) !== -1;
+  }
+
+  _endEdit(): void {
+    try {
+      this.canvasGrid.endEdit(true);
+    } catch (e) {
+      // catch edit cell is undefined error
+    }
   }
 }

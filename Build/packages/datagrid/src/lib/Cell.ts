@@ -1,4 +1,6 @@
 export interface Cell {
+  columnIndex: number;
+  selected?: boolean;
   formattedValue: string;
   type: string;
   rowIndex: number;
