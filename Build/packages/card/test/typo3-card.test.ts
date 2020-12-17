@@ -39,25 +39,27 @@ describe('Typo3Card', () => {
     );
   });
 
-  it('toggles edit mode on `dblclick` if `titleEditable`', async () => {
+  it('toggles edit mode on `click` if `titleEditable`', async () => {
     element.titleEditable = true;
     await elementUpdated(element);
-
     const root = element.shadowRoot ? element.shadowRoot : element;
     const titleElement = root.querySelector('.title') as HTMLElement;
 
-    titleElement.dispatchEvent(new MouseEvent('dblclick'));
+    titleElement.dispatchEvent(new MouseEvent('click'));
 
     await elementUpdated(element);
 
     expect(titleElement.contentEditable).to.be.eq('true');
+    expect(element.inEditMode).to.be.true;
   });
 
-  it('wont toggle edit mode on `dblclick` if `titleEditable` is false', async () => {
+  it('wont toggle edit mode on `click` if `titleEditable` is false', async () => {
+    element.titleEditable = false;
+
     const root = element.shadowRoot ? element.shadowRoot : element;
     const titleElement = root.querySelector('.title') as HTMLElement;
 
-    titleElement.dispatchEvent(new MouseEvent('dblclick'));
+    titleElement.dispatchEvent(new MouseEvent('click'));
 
     await elementUpdated(element);
 

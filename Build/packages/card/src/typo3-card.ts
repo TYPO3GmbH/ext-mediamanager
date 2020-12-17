@@ -45,8 +45,9 @@ export class Typo3Card extends LitElement {
         <div class="body">
           <div
             class="title"
-            ?contentEditable="${this.inEditMode}"
-            @dblclick="${this._onDoubleClick}"
+            ?contentEditable="${this.titleEditable}"
+            @click="${this._onClick}"
+            @dblclick="${this._onDblclick}"
             @blur="${() => this._onBlur()}"
             @keydown="${this._onKeyDown}"
           >
@@ -59,20 +60,26 @@ export class Typo3Card extends LitElement {
     `;
   }
 
-  _onDoubleClick(event: MouseEvent): void {
+  _onClick(event: MouseEvent): void {
     if (this.titleEditable) {
       this.inEditMode = true;
       event.stopImmediatePropagation();
     }
   }
+  _onDblclick(event: MouseEvent): void {
+    if (this.inEditMode) {
+      event.stopImmediatePropagation();
+    }
+  }
 
   _onBlur(skipChangeEvent = false): void {
-    if (this.titleEditable && this.inEditMode) {
+    if (this.inEditMode) {
       this.inEditMode = false;
       const newTitle = this.titleElement.innerText.trim();
       this.titleElement.innerHTML = this.title;
 
       if (skipChangeEvent || newTitle === this.title) {
+        this.titleElement.blur();
         return;
       }
 

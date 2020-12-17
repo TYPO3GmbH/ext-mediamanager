@@ -296,14 +296,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       );
     };
 
+    const isSelected = fromList.isItemSelected(this.state)(listData.identifier);
+
     return html` <typo3-card
       slot="item"
-      ?selected="${fromList.isItemSelected(this.state)(listData.identifier)}"
+      ?selected="${isSelected}"
       value="${listData.identifier}"
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
-      ?titleEditable="${true}"
+      ?titleEditable="${isSelected}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
