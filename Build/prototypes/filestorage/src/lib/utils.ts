@@ -33,9 +33,13 @@ export function extractStorageFromIdentifier(identifier: string): string {
   return matches ? matches[1] : '';
 }
 
-export function openInTab(url: string): void {
+export function openAsLink(
+  url: string,
+  attributes: { [key: string]: string } = {}
+): void {
   Object.assign(document.createElement('a'), {
-    target: '_blank',
     href: url,
+    target: '_blank',
+    ...attributes,
   }).click();
 }

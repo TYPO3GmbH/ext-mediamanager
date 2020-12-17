@@ -26,7 +26,7 @@ import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snack
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
 import { ModalData, ModalType } from '../../../../shared/types/modal-data';
 import { ModalService } from '../../services/modal.service';
-import { openInTab } from '../../lib/utils';
+import { openAsLink } from '../../lib/utils';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -129,7 +129,7 @@ export const showFile = (
   action$: ActionsObservable<fromActions.ShowFile>
 ): Observable<Action> => {
   return action$.ofType(fromActions.SHOW_FILE).pipe(
-    tap(action => openInTab(action.fileUrl)),
+    tap(action => openAsLink(action.fileUrl)),
     ignoreElements()
   );
 };
@@ -368,8 +368,14 @@ export const downloadFiles = (
             // IE
             window.navigator.msSaveOrOpenBlob(file);
           } else {
-            const fileURL = URL.createObjectURL(file);
-            openInTab(fileURL);
+            const downloadUrl = URL.createObjectURL(file);
+            openAsLink(downloadUrl, {
+              target: '_self',
+              download: '',
+            });
+            setTimeout(function () {
+              URL.revokeObjectURL(downloadUrl);
+            }, 100); // cleanup
           }
         }),
         map(() => new DownloadFilesSuccess()),
