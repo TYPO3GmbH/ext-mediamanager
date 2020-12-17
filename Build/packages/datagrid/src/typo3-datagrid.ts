@@ -46,6 +46,8 @@ export class Typo3Datagrid extends LitElement {
 
   protected clicks = 0;
 
+  private latestSelectedRowIndex?: number;
+
   render(): TemplateResult {
     return html`
       <canvas-datagrid
@@ -249,11 +251,19 @@ export class Typo3Datagrid extends LitElement {
     }
 
     this.clicks += 1;
+    const selectedIndex = e.cell.selected ? e.cell.rowIndex : undefined;
 
     if (this.clicks === 1) {
+      this.latestSelectedRowIndex = selectedIndex;
+
       setTimeout(() => {
         if (this.clicks === 1) {
-          this._handleSingleClick(e);
+          if (
+            selectedIndex != undefined &&
+            selectedIndex === this.latestSelectedRowIndex
+          ) {
+            this._handleSingleClick(e);
+          }
         } else {
           const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
             bubbles: true,

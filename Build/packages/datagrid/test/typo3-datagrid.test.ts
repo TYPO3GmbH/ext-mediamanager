@@ -158,7 +158,7 @@ describe('Typo3Datagrid', () => {
     expect(contextMenuEvents).to.equal(0);
   });
 
-  it('will fire a `typo3-datagrid-dblclick` on dblclick on a non-editable content cell', async () => {
+  it('will fire a `typo3-datagrid-dblclick` on two consecutive clicks', async () => {
     const event: CanvasDataGridEvent | {} = {
       cell: {
         header: {
@@ -174,34 +174,10 @@ describe('Typo3Datagrid', () => {
 
     const listener = oneEvent(element, 'typo3-datagrid-dblclick');
 
-    element._onDblClick(event as ContextMenuEvent);
+    element._onClick(event as CanvasDataGridEvent);
+    element._onClick(event as CanvasDataGridEvent);
 
     const { detail } = await listener;
     expect(detail).to.be.eql({ identifier: 1 });
-  });
-
-  it('wont fire a `typo3-datagrid-dblclick` on dblclick on a non-editable content cell', async () => {
-    let dblClickEvents = 0;
-
-    element.addEventListener('typo3-datagrid-dblclick', () => {
-      dblClickEvents += 1;
-    });
-
-    element.editableColumns = ['identifier'];
-
-    const event: CanvasDataGridEvent | {} = {
-      cell: {
-        header: {
-          name: 'identifier',
-        },
-        isHeader: false,
-        data: { identifier: 1 },
-      },
-    };
-
-    element._onDblClick(event as CanvasDataGridEvent);
-    await elementUpdated(element);
-
-    expect(dblClickEvents).to.equal(0);
   });
 });
