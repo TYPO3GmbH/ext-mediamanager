@@ -95,12 +95,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     if (fromModal.getModalData(this.state)?.isForm) {
       const formElement = this.modal.querySelector('form') as HTMLFormElement;
       const formData = new FormData(formElement);
-      for (const key of Object.keys(formData)) {
-        const value = formData.get(key);
-        if (null !== value) {
-          obj[key] = value;
-        }
-      }
+      formData.forEach((value, key) => (obj[key] = value));
     }
 
     store.dispatch(new fromModal.ModalAction(action, obj));
