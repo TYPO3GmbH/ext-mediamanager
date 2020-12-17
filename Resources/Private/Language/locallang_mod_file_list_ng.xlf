@@ -257,6 +257,18 @@
 			<trans-unit id="fileTree.expand" resname="fileTree.expand">
 				<source>Expand file tree</source>
 			</trans-unit>
+			<trans-unit id="file_replace.pagetitle" resname="file_replace.pagetitle">
+				<source>Replace</source>
+			</trans-unit>
+			<trans-unit id="file_replace.selectfile" resname="file_replace.selectfile">
+				<source>Select new file</source>
+			</trans-unit>
+			<trans-unit id="file_replace.keepfiletitle" resname="file_replace.keepfiletitle">
+				<source>Keep the current filename?</source>
+			</trans-unit>
+			<trans-unit id="file_replace.submit" resname="file_replace.submit">
+				<source>Replace</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

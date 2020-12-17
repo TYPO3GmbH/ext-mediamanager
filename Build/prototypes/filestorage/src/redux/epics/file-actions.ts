@@ -71,12 +71,12 @@ export const confirmDeleteFiles = (
         type: ModalType.CONFIRM,
         modalButtons: [
           {
-            label: translate('deleteConfirmCancelButton'),
+            label: translate('button.cancel'),
             color: 'default',
             action: 'typo3-delete-cancel',
           },
           {
-            label: translate('deleteConfirmSubmitButton'),
+            label: translate('button.delete'),
             color: 'danger',
             action: 'typo3-confirm-delete',
           },
@@ -411,61 +411,66 @@ export const replaceFile = (
         <form enctype="multipart/form-data">
           <div class="form-group">
             <input type="checkbox" value="1" id="keepFilename" name="data[replace][1][keepFilename]">
-            <label for="keepFilename">Keep the current filename?</label>
+            <label for="keepFilename">${translate(
+              'file_replace.keepfiletitle'
+            )}</label>
           </div>
           <div class="form-group">
-            <label for="file_replace">Select new file</label>
+            <label for="file_replace">${translate(
+              'file_replace.selectfile'
+            )}</label>
             <div class="input-group col-xs-6">
               <input required class="form-control" type="file" id="file_replace" name="replace_1">
             </div>
           </div>
           <input type="hidden" name="data[replace][1][data]" value="1">
           <input type="hidden" name="overwriteExistingFiles" value="replace">
-          <input type="hidden" name="data[replace][1][uid]" value="${action.identifier}">
+          <input type="hidden" name="data[replace][1][uid]" value="${
+            action.identifier
+          }">
+        </form>`;
 
-        </form>`
-
-      return dependencies.modalService.openModal({
-        headline: 'Replace',
-        type: ModalType.HTML,
-        isForm: true,
-        content: formContent,
-        modalButtons: [
-          {
-            label: translate('deleteConfirmCancelButton'),
-            color: 'default',
-            action: 'typo3-replace-cancel',
-          },
-          {
-            label: translate('deleteConfirmSubmitButton'),
-            color: 'primary',
-            action: 'typo3-replace-confirm',
-          },
-        ],
-
-      }).pipe(
-        filter(data => 'typo3-replace-confirm' === data.action),
-        switchMap(data => {
-          const formData = new FormData();
-          for (const key in data.data) {
-            formData.append(key, data.data[key]);
-          }
-
-          return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-            map(
-              () =>
-                new fromActions.ReplaceFileSuccess(
-                  translate('message.header.undo')
-                )
-            ),
-            catchError(() => of(new fromActions.ReplaceFileFailure()))
-          );
+      return dependencies.modalService
+        .openModal({
+          headline: translate('file_replace.pagetitle'),
+          type: ModalType.HTML,
+          isForm: true,
+          content: formContent,
+          modalButtons: [
+            {
+              label: translate('button.cancel'),
+              color: 'default',
+              action: 'typo3-replace-cancel',
+            },
+            {
+              label: translate('file_replace.submit'),
+              color: 'primary',
+              action: 'typo3-replace-confirm',
+            },
+          ],
         })
-      );
+        .pipe(
+          filter(data => 'typo3-replace-confirm' === data.action),
+          switchMap(data => {
+            const formData = new FormData();
+            for (const key in data.data) {
+              formData.append(key, data.data[key]);
+            }
+
+            return ajax.post(getUrl('fileActionUrl'), formData).pipe(
+              map(
+                () =>
+                  new fromActions.ReplaceFileSuccess(
+                    translate('message.header.undo')
+                  )
+              ),
+              catchError(() => of(new fromActions.ReplaceFileFailure()))
+            );
+          })
+        );
     })
   );
 };
-
 
 export const undoFileAction = (
   action$: ActionsObservable<fromActions.UndoFilesAction>
@@ -503,7 +508,7 @@ export const fileActionSuccess = (
       fromActions.COPY_FILES_SUCCESS,
       fromActions.CLIPBOARD_PASTE_SUCCESS,
       fromActions.REPLACE_FILE_SUCCESS,
-      fromActions.UNDO_FILES_ACTION_SUCCESS,
+      fromActions.UNDO_FILES_ACTION_SUCCESS
     )
     .pipe(
       mergeMap(action => [
@@ -529,8 +534,7 @@ export const fileActionFailure = (
       fromActions.COPY_FILES_FAILURE,
       fromActions.CLIPBOARD_PASTE_FAILURE,
       fromActions.REPLACE_FILE_FAILURE,
-      fromActions.UNDO_FILES_ACTION_FAILURE,
-
+      fromActions.UNDO_FILES_ACTION_FAILURE
     )
     .pipe(
       mergeMap(action => {
