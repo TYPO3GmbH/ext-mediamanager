@@ -263,6 +263,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       @contextmenu="${this._onContextMenuWithoutContext}"
       @dragstart="${this._onDragStart}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
+      @click="${this._onClearSelection}"
     >
       ${orderedData.map(listData => this.renderCardContent(listData))}
     </typo3-grid>`;

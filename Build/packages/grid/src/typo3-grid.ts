@@ -78,6 +78,7 @@ export class Typo3Grid extends LitElement {
   }
 
   _onItemClick = (event: MouseEvent) => {
+    event.stopPropagation();
     const element = event.target as HTMLElement;
     if (false === this.selectable) {
       return;
