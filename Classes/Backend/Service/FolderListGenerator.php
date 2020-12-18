@@ -121,6 +121,8 @@ class FolderListGenerator implements FolderListGeneratorInterface
             $metaDataUrl = (string) $this->uriBuilder->buildUriFromRoute('record_edit', $urlParameters);
         }
 
+        $parentFolder = $file->getParentFolder();
+
         return \array_merge(
             $this->formatResource($file),
             [
@@ -129,6 +131,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'references' => $this->fileReferencesProvider->getReferencesCount($file),
                 'thumbnailUrl' => $thumbnailUrl,
                 'metaDataUrl' => $metaDataUrl,
+                'path' => $parentFolder instanceof Folder ? $parentFolder->getReadablePath() : '',
             ]
         );
     }

@@ -94,7 +94,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     hidden?: boolean;
     sortable?: boolean;
   }[] {
-    return [
+    const fields = [
       { name: 'identifier', type: 'text', title: ' ', hidden: true },
       { name: 'icon', type: 'html', title: ' ', width: '24' },
       { name: 'name', title: translate('field.name'), sortable: true },
@@ -123,6 +123,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       },
       { name: 'rw', title: translate('field.rw'), width: '50' },
     ];
+
+    if (fromList.isInSearchMode(this.state)) {
+      fields.splice(2, 0, {
+        name: 'path',
+        title: translate('field.path'),
+        width: '150',
+      });
+    }
+
+    return fields;
   }
 
   protected render(): TemplateResult {

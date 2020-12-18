@@ -33,6 +33,9 @@
 			<trans-unit id="view.mode.tiles" resname="view.mode.tiles">
 				<source>Tiles</source>
 			</trans-unit>
+			<trans-unit id="field.path" resname="field.path">
+				<source>Path</source>
+			</trans-unit>
 			<trans-unit id="field.name" resname="field.name">
 				<source>Name</source>
 			</trans-unit>
