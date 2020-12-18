@@ -260,9 +260,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       class="main-content"
       hash="${hash}"
       selectable
-      draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
       @contextmenu="${this._onContextMenuWithoutContext}"
-      @dragstart="${this._onDragStart}"
       @typo3-grid-selection-changed="${this._onCardgridSelectionChange}"
       @click="${this._onClearSelection}"
     >
@@ -307,6 +305,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
       ?titleEditable="${isSelected}"
+      draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
+      @dragstart="${this._onDragStart}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>

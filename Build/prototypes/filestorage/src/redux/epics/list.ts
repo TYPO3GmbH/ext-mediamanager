@@ -34,12 +34,13 @@ export const fetchListData = (
   );
 };
 
-export const selectFirstNodeOnfetchListDataError = (
+export const selectFirstNodeOnFetchListDataError = (
   action$: ActionsObservable<fromList.LoadListDataFailure>,
   state$: StateObservable<RootState>
 ): Observable<Action> => {
   return action$.ofType(fromList.LOAD_LIST_DATA_FAILURE).pipe(
     filter(action => action.error.includes('404')),
+    debounceTime(100),
     withLatestFrom(state$),
     map(([, state]) => state),
     filter(state => fromTree.getTreeNodes(state).length > 0),
@@ -111,7 +112,7 @@ export const reloadListData = (
 
 export const listActions = [
   fetchListData,
-  selectFirstNodeOnfetchListDataError,
+  selectFirstNodeOnFetchListDataError,
   searchTermChanged,
   searchFiles,
   reloadListData,
