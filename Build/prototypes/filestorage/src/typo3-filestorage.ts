@@ -215,6 +215,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           slot="item"
           title="${node.name}"
           @click="${() => this._onSelectedNode(node)}"
+          ?active="${node === fromTree.getSelectedTreeNode(this.state)}"
         >
         </typo3-breadcrumb-item>`
     );
