@@ -54,7 +54,10 @@ export class Typo3Grid extends LitElement {
     this.setAttribute('tabIndex', '-1');
     this._masonry = new Masonry(this, {
       useContainerWidth: true,
+      columns: 8,
       columnBreakpoints: {
+        1800: 7,
+        1600: 6,
         1400: 5,
         1200: 4,
         940: 3,
