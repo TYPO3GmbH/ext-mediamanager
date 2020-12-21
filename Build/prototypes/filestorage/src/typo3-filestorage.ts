@@ -48,6 +48,7 @@ import { createSVGElement } from './lib/svg-helper';
 export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: Array }) storages: Storage[] = [];
   @property({ type: Number }) selectedStorageUid = 0;
+  @property({ type: Boolean }) itemsDragDropEnabled = false;
 
   @internalProperty() state!: RootState;
 
@@ -239,7 +240,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     if (fromView.isListMode(this.state)) {
       return html` <typo3-datagrid
         class="main-content"
-        draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
+        draggable="${!this.itemsDragDropEnabled ||
+        fromList.isEmptySelection(this.state)
+          ? 'false'
+          : 'true'}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(fromList.getItems(this.state))}"
         editableColumns='["name"]'
@@ -312,7 +316,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
       ?titleEditable="${isSelected}"
-      draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
+      draggable="${!this.itemsDragDropEnabled ||
+      fromList.isEmptySelection(this.state)
+        ? 'false'
+        : 'true'}"
       @dragstart="${this._onDragStart}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
@@ -568,7 +575,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .expandedNodeIds="${fromTree.getExpandedTreeNodeIds(this.state)}"
         .selectedNodeIds="${fromTree.selectedTreeNodeIdentifiers(this.state)}"
         ?editable="${true}"
-        ?dragDropEnabled="${true}"
+        ?dragDropEnabled="${this.itemsDragDropEnabled}"
         ?inDropMode="${fromFileActions.isDraggingFiles(this.state)}"
         @typo3-node-drop="${this._onTreeNodeDrop}"
         @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>

@@ -11,7 +11,6 @@ export class Typo3Filebrowser extends Typo3Filestorage {
 
   connectedCallback() {
     super.connectedCallback();
-
     // trigger resize event (after modal is visible)
     setTimeout(() => dispatchEvent(new Event('resize')), 200);
   }
