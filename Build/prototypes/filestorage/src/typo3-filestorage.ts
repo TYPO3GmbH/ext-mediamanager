@@ -138,10 +138,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected render(): TemplateResult {
     return html`
-      <typo3-splitpane
-        @splitter-dragend="${this._onSplitterDragend}"
-        style="height: 100%;"
-      >
+      <typo3-splitpane @splitter-dragend="${this._onSplitterDragend}">
         <div
           class="content_left"
           style=${styleMap({
@@ -242,7 +239,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     if (fromView.isListMode(this.state)) {
       return html` <typo3-datagrid
         class="main-content"
-        style="width: 100%; overflow: auto;"
         draggable="${fromList.isEmptySelection(this.state) ? 'false' : 'true'}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(fromList.getItems(this.state))}"
@@ -542,7 +538,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <input
         type="file"
         id="file_upload"
-        style="display: none"
+        hidden
         multiple
         @change="${this._onFileDialogUpload}"
       />
@@ -608,7 +604,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return html`
       <typo3-draghandler
         .hidden="${fromFileActions.isDraggingFiles(this.state) !== true}"
-        style="position: absolute; top: -1000px:"
       >
         ${createSVGElement(iconUrl, 'icon')}
         <span slot="title">${title}</span>
