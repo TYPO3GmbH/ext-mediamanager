@@ -676,7 +676,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSplitterDragend(): void {
-    window.dispatchEvent(new Event('resize'));
+    dispatchEvent(new Event('resize'));
 
     const width = this.contentLeft.offsetWidth + this.contentRight.offsetWidth;
     store.dispatch(
@@ -702,7 +702,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         return response.json();
       })
       .then(data => {
-        window.dispatchEvent(
+        dispatchEvent(
           new CustomEvent('typo3-show-context-menu', {
             detail: {
               sourceEvent: event.detail.event,

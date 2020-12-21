@@ -41,10 +41,17 @@ export class FlashMessagesService {
   }
 
   displayFlashMessage(data: SnackbarValues): void {
-    window.dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: data,
-      })
-    );
+    try {
+      dispatchEvent(
+        new CustomEvent('typo3-add-snackbar', {
+          bubbles: true,
+          detail: data,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+      console.log(window.dispatchEvent.prototype);
+      console.log('can not dispatch custom event ?');
+    }
   }
 }

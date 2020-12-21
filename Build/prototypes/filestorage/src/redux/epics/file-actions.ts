@@ -384,7 +384,7 @@ export const downloadFiles = (
             null,
             new Uint8Array(error.response) as never
           );
-          window.dispatchEvent(
+          dispatchEvent(
             new CustomEvent('typo3-add-snackbar', {
               detail: {
                 message: message,
