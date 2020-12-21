@@ -42,6 +42,7 @@ import {
 import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
+import { createSVGElement } from './lib/svg-helper';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -323,9 +324,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         this._onRename(listData.identifier, e.detail)}"
     >
       <typo3-badge slot="selected-badge" color="primary" size="small">
-        <svg xmlns="http://www.w3.org/2000/svg">
-          <use xlink:href="" xlink:href="${getIconUrl('checkmark')}"></use>
-        </svg>
+        ${createSVGElement('checkmark')}
       </typo3-badge>
       ${imageSlot} ${badge}
     </typo3-card>`;
@@ -351,9 +350,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     return html` <div class="main-content main-content-info">
-      <svg>
-        <use xlink:href="" xlink:href="${getIconUrl(iconKey)}"></use>
-      </svg>
+      ${createSVGElement(iconKey)}
       <h3>${translate(titleKey)}</h3>
       <span>${translate(messageKey)}</span>
     </div>`;
@@ -363,21 +360,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return html`
       <typo3-dropdown activatable @selected="${this._onSelectViewMode}">
         <typo3-dropdown-button slot="button" color="default">
-          <svg slot="icon">
-            <use xlink:href="" xlink:href="${getIconUrl('view.mode')}"></use>
-          </svg>
-          ${translate('view.mode')}
+          ${createSVGElement('view.mode', 'icon')} ${translate('view.mode')}
         </typo3-dropdown-button>
         <typo3-dropdown-item
           value="${fromView.ViewMode.LIST}"
           ?selected="${fromView.isListMode(this.state)}"
         >
-          <svg slot="icon">
-            <use
-              xlink:href=""
-              xlink:href="${getIconUrl('view.mode.list')}"
-            ></use>
-          </svg>
+          ${createSVGElement('view.mode.list', 'icon')}
           <span>${translate('view.mode.list')}</span>
         </typo3-dropdown-item>
         <li divider></li>
@@ -385,12 +374,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           value="${fromView.ViewMode.TILES}"
           ?selected="${fromView.isTilesMode(this.state)}"
         >
-          <svg slot="icon">
-            <use
-              xlink:href=""
-              xlink:href="${getIconUrl('view.mode.tiles')}"
-            ></use>
-          </svg>
+          ${createSVGElement('view.mode.tiles', 'icon')}
           <span>${translate('view.mode.tiles')}</span>
         </typo3-dropdown-item>
       </typo3-dropdown>
@@ -408,9 +392,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           color="default"
           .disabled="${fromView.isListMode(this.state)}"
         >
-          <svg slot="icon">
-            <use xlink:href="" xlink:href="${getIconUrl('view.sorting')}"></use>
-          </svg>
+          ${createSVGElement('view.sorting', 'icon')}
           <span>${translate('view.sorting')}</span>
         </typo3-dropdown-button>
         ${this.listHeader
@@ -456,10 +438,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .disabled="${fromList.isEmptySelection(this.state) ||
         fromFileActions.isDownloadingFiles(this.state)}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('download')}"></use>
-        </svg>
-        ${translate('download')}
+        ${createSVGElement('download', 'icon')} ${translate('download')}
       </typo3-button>
     `;
   }
@@ -470,10 +449,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .disabled="${fromList.isEmptySelection(this.state)}"
         @click="${this._onDeleteClicked}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('delete')}"></use>
-        </svg>
-        ${translate('delete')}
+        ${createSVGElement('delete', 'icon')} ${translate('delete')}
       </typo3-button>
     `;
   }
@@ -484,10 +460,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .disabled="${fromList.isEmptySelection(this.state)}"
         @click="${() => this._showFilesModalDialog('move')}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('moveTo')}"></use>
-        </svg>
-        ${translate('moveTo')}
+        ${createSVGElement('moveTo', 'icon')} ${translate('moveTo')}
       </typo3-button>
     `;
   }
@@ -498,10 +471,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .disabled="${fromList.isEmptySelection(this.state)}"
         @click="${() => this._showFilesModalDialog('copy')}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('copyTo')}"></use>
-        </svg>
-        ${translate('copyTo')}
+        ${createSVGElement('copyTo', 'icon')} ${translate('copyTo')}
       </typo3-button>
     `;
   }
@@ -556,10 +526,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             fromTree.getSelectedTreeNode(this.state)?.identifier as string
           )}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('addFolder')}"></use>
-        </svg>
-        ${translate('new')}
+        ${createSVGElement('addFolder', 'icon')} ${translate('new')}
       </typo3-button>
     `;
   }
@@ -570,10 +537,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .disabled="${fromTree.getSelectedTreeNode(this.state) == null}"
         @click="${() => this.fileUploadInput.click()}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('upload')}"></use>
-        </svg>
-        ${translate('upload')}
+        ${createSVGElement('upload', 'icon')} ${translate('upload')}
       </typo3-button>
       <input
         type="file"
@@ -596,9 +560,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         label="${translate(translationKey)}"
         @click="${this._onToggleFileTree}"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${getIconUrl('toggleTree')}"></use>
-        </svg>
+        ${createSVGElement('toggleTree', 'icon')}
       </typo3-button>
     `;
   }
@@ -648,9 +610,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .hidden="${fromFileActions.isDraggingFiles(this.state) !== true}"
         style="position: absolute; top: -1000px:"
       >
-        <svg slot="icon">
-          <use xlink:href="" xlink:href="${iconUrl}"></use>
-        </svg>
+        ${createSVGElement(iconUrl, 'icon')}
         <span slot="title">${title}</span>
         <span slot="message">${unsafeHTML(message)}</span>
       </typo3-draghandler>
@@ -665,12 +625,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         value="${fromList.getSearchTermString(this.state)}"
         @typo3-search-change="${this._onFilesSearch}"
       >
-        <svg slot="search-icon">
-          <use xlink:href="" xlink:href="${getIconUrl('search')}"></use>
-        </svg>
-        <svg slot="reset-icon">
-          <use xlink:href="" xlink:href="${getIconUrl('reset')}"></use>
-        </svg>
+        ${createSVGElement('search', 'search-icon')}
+        ${createSVGElement('reset', 'reset-icon')}
       </typo3-search>
     `;
   }

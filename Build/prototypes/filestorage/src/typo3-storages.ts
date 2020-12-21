@@ -12,8 +12,8 @@ import { Storage } from './types/storage';
 import { addSlotToRawHtml } from './lib/utils';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { translate } from './services/translation.service';
-import { getIconUrl } from './services/icon-url.service';
 import { getUrl } from './services/backend-url.service';
+import { createSVGElement } from './lib/svg-helper';
 
 @customElement('typo3-storages')
 export class Typo3Storages extends LitElement {
@@ -37,11 +37,7 @@ export class Typo3Storages extends LitElement {
                 ? html`<typo3-button
                     @click="${() => this._onRelocate(newStorageUrl)}"
                   >
-                    <svg slot="icon">
-                      <use xlink:href="" xlink:href="${getIconUrl(
-                        'addFolder'
-                      )}"></use>
-                    </svg>
+                     ${createSVGElement('addFolder', 'icon')}
                      ${translate('new')}
                   </typo3-button`
                 : html``}
@@ -73,9 +69,7 @@ export class Typo3Storages extends LitElement {
             : html``}
           <typo3-button color="success" @click="${this._onRefresh}">
             ${translate('storagesAccessDeniedRefresh')}
-            <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
-              <use xlink:href="" xlink:href="${getIconUrl('refresh')}"></use>
-            </svg>
+            ${createSVGElement('refresh', 'icon')}
           </typo3-button>
         </div>
       </typo3-modal>`;
