@@ -1,16 +1,10 @@
-<style type="text/css">
-    body {
-        margin: 0;
-    }
-</style>
-<div style="height:100vh">
-    <typo3-filestorage
-        treeUrl="{treeUrl}"
-        fileActionUrl="{fileActionUrl}"
-        storages="{storagesJson}"
-        selectedStorageUid="{selectedStorageUid}"
-    ></typo3-filestorage>
-</div>
+<link href="{f:uri.resource(path:'Css/fileliest-ng.css')}" rel="stylesheet" />
+<typo3-filestorage
+    treeUrl="{treeUrl}"
+    fileActionUrl="{fileActionUrl}"
+    storages="{storagesJson}"
+    selectedStorageUid="{selectedStorageUid}"
+></typo3-filestorage>
 <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
 <script type="text/javascript">
     window.app = <f:format.raw>{app}</f:format.raw>;

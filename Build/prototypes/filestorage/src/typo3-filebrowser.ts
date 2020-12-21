@@ -1,8 +1,8 @@
-import { html, LitElement, TemplateResult } from 'lit-element';
-import { connect } from 'pwa-helpers';
-import { store } from './redux/store';
+import { customElement, html, TemplateResult } from 'lit-element';
+import { Typo3Filestorage } from './typo3-filestorage';
 
-export class Typo3Filebrowser extends connect(store)(LitElement) {
+@customElement('typo3-filebrowser')
+export class Typo3Filebrowser extends Typo3Filestorage {
   protected get renderNewFolderButton(): TemplateResult {
     return html``;
   }

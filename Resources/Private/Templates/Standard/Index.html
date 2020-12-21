@@ -1,15 +1,8 @@
-<style type="text/css">
-    body {
-        margin: 0;
-    }
-</style>
-
-<div style="height:100vh">
-    <typo3-storages
-        storages="{storagesJson}"
-        userName="{userName}"
-    ></typo3-storages>
-</div>
+<link href="{f:uri.resource(path:'Css/fileliest-ng.css')}" rel="stylesheet" />
+<typo3-storages
+    storages="{storagesJson}"
+    userName="{userName}"
+></typo3-storages>
 <script type="text/javascript">
     window.app = <f:format.raw>{app}</f:format.raw>;
 </script>

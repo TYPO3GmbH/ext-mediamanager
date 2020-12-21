@@ -90,29 +90,24 @@ class FileBrowser extends AbstractElementBrowser implements ElementBrowserInterf
             'backendUrls' => $backendUrls,
         ];
 
-        $file = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/JavaScript/es.js');
+        $jsFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/JavaScript/es.js');
+        $cssFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/Css/filelist.css');
 
         // todo use template
         return "
         <html>
             <head>
                 <title>NG File Browser</title>
-                <style type='text/css'>
-                    body {
-                        margin: 0;
-                        height:100%; 
-                        overflow:hidden;
-                    }
-                </style>
-                <script type='text/javascript' src='$file'></script>
+                <link rel='stylesheet' href='$cssFile'>
+                <script type='text/javascript' src='$jsFile'></script>
                 <script type='text/javascript'>var app = " . \json_encode($appConfig) . ";</script>
             </head>
             <body>
-                <typo3-filestorage
+                <typo3-filebrowser
                         treeUrl='" . $backendUrls['treeUrl'] . "'
                         storages='" . \json_encode(\array_values($storages)) . "'
                         selectedStorageUid='" . $storageUid . "'
-                ></typo3-filestorage>
+                ></typo3-filebrowser>
             </body>
         </html>
         ";
