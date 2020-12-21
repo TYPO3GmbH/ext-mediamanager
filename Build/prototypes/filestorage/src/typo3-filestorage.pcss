@@ -1,6 +1,7 @@
 :host {
   height: 100%;
-  overflow:hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar-wrapper {
@@ -16,7 +17,7 @@
 }
 
 typo3-splitpane {
-  height: 100%;
+  flex: 1;
 }
 
 .content_left, .content_right {
@@ -63,9 +64,10 @@ typo3-filetree {
   flex-direction: column;
 }
 
-typo3-datagrid {
+typo3-datagrid.main-content  {
   width: 100%;
   overflow: auto;
+  margin-bottom: 0;
 }
 
 #storage_select a {
@@ -92,7 +94,7 @@ typo3-breadcrumb-item {
   font-size: 2rem;
 }
 
-typo3-draghandler {
+typo3-draghandler, typo3-files-modal {
   position: absolute;
   top: -1000px;
 }
