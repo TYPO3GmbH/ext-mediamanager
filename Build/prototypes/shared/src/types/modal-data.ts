@@ -1,4 +1,4 @@
-import { Color } from '../../../packages/button/src/typo3-base-button';
+import { Color } from '../../../../packages/button/src/typo3-base-button';
 
 export interface ModalButton {
   label: string;

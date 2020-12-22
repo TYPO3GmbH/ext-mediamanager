@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ModalData } from '../../../../shared/types/modal-data';
+import { ModalData } from '../../../../shared/src/types/modal-data';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
 
