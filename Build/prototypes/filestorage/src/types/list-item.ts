@@ -1,4 +1,5 @@
 interface ListItem {
+  uid: string;
   identifier: string;
   icon: string;
   name: string;
