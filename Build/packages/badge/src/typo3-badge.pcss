@@ -10,7 +10,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   pointer-events: none;
-  width: var(--typo3-badge-size, var(--typo3-global-badge-size));
+  min-width: var(--typo3-badge-size, var(--typo3-global-badge-size));
   height: var(--typo3-badge-size, var(--typo3-global-badge-size));
   line-height: var(--typo3-badge-size, var(--typo3-global-badge-size));
   font-size: var(--typo3-badge-font-size, var(--typo3-global-badge-font-size));
@@ -50,7 +50,7 @@
 
 :host([size='small']) {
   padding: var(--typo3-badge-padding-small, 0.0625rem);
-  width: var(--typo3-badge-size-small, 1rem);
+  min-width: var(--typo3-badge-size-small, 1rem);
   height: var(--typo3-badge-size-small, 1rem);
   line-height: var(--typo3-badge-size-small, 1rem);
   font-size: var(--typo3-badge-font-size-small, 0.5rem);
@@ -58,7 +58,12 @@
 
 ::slotted(svg) {
   fill: currentColor;
-  width: 75%;
-  height: 75%;
   margin: auto;
+  width: var(--typo3-badge-size, var(--typo3-global-badge-size));
+  height: var(--typo3-badge-size, var(--typo3-global-badge-size));
+}
+
+:host([size='small']) ::slotted(svg) {
+  width: var(--typo3-badge-size-small, 1rem);
+  height: var(--typo3-badge-size-small, 1rem);
 }

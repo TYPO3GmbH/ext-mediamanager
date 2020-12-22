@@ -22,27 +22,46 @@ export class Typo3Filebrowser extends Typo3Filestorage {
   }
 
   protected render(): TemplateResult {
-    return html`${super.render()} ${this.footer}`;
+    return html`${super.render()} ${this.renderFooter}`;
   }
 
-  protected get footer(): TemplateResult {
+  protected get renderFooter(): TemplateResult {
     return html`
       <div class="topbar-wrapper footer">
         <typo3-topbar>
+          <div slot="left" class="allowed-extensions">
+            ${this.renderAllowedFileExtensions}
+          </div>
           <div slot="right">
             <typo3-button @click="${this._closeModal}"
-              >${translate('button.cancel')}</typo3-button
-            >
+              >${translate('button.cancel')}
+            </typo3-button>
             <typo3-button
               color="primary"
               .disabled="${fromList.isEmptySelection(this.state)}"
               @click="${this._onInsert}"
-              >${translate('file_browser.button.insert')}</typo3-button
-            >
+              >${translate('file_browser.button.insert')}
+            </typo3-button>
           </div>
         </typo3-topbar>
       </div>
     `;
+  }
+
+  protected get renderAllowedFileExtensions(): TemplateResult {
+    if (this.allowedFileExtensions.length === 0) {
+      return html``;
+    }
+
+    const allowedFileExtensionsHtml = this.allowedFileExtensions.map(
+      fileExtension =>
+        html`<typo3-badge color="success" size="small"
+          >${fileExtension}</typo3-badge
+        >`
+    );
+
+    return html`<div>${translate('cm.allowedFileExtensions')}</div>
+      ${allowedFileExtensionsHtml}`;
   }
 
   _onItemDblClick(item: ListItem): void {
