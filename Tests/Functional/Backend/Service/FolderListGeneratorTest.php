@@ -239,6 +239,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'parentIdentifier' => '1:/',
             'path' => '/',
             'uid' => 13,
+            'extension' => 'xls',
         ]], $result);
     }
 }
