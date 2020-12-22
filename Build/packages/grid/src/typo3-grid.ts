@@ -73,7 +73,9 @@ export class Typo3Grid extends LitElement {
   }
 
   get items(): HTMLElement[] {
-    return this.slotElement!.assignedElements() as HTMLElement[];
+    return (this.slotElement!.assignedElements() as HTMLElement[]).filter(
+      element => element.hasAttribute('selectable')
+    );
   }
 
   get selectedItems(): HTMLElement[] {
@@ -83,7 +85,7 @@ export class Typo3Grid extends LitElement {
   _onItemClick = (event: MouseEvent) => {
     event.stopPropagation();
     const element = event.target as HTMLElement;
-    if (false === this.selectable) {
+    if (false === this.selectable || false === this.items.includes(element)) {
       return;
     }
 

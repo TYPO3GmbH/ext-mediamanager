@@ -310,7 +310,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const isSelected = fromList.isItemSelected(this.state)(listData.identifier);
 
     return html` <typo3-card
+      ?disabled="${this._itemIsDisabled(listData)}"
       slot="item"
+      ?selectable="${this._itemIsSelectable(listData)}"
       ?selected="${isSelected}"
       value="${listData.identifier}"
       title="${listData.name}"
@@ -976,5 +978,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onToggleFileTree(): void {
     store.dispatch(new fromLayout.ToggleSidebar());
+  }
+
+  _itemIsSelectable(item: ListItem): boolean {
+    return true;
+  }
+
+  _itemIsDisabled(item: ListItem): boolean {
+    return false;
   }
 }

@@ -7,6 +7,8 @@ import * as fromList from './redux/ducks/list';
 import { IframeHelper } from '../../shared/src/lib/iframe-helper';
 import { MessageHandler } from '../../shared/src/lib/message-handler';
 import { translate } from './services/translation.service';
+import { store } from './redux/store';
+import { Typo3Card } from '../../../packages/card/src/typo3-card';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
@@ -94,5 +96,31 @@ export class Typo3Filebrowser extends Typo3Filestorage {
       };
       MessageHandler.sendPostMessage(IframeHelper.getContentIframe(), action);
     });
+  }
+
+  _itemIsSelectable(item: ListItem): boolean {
+    return this.allowedFileExtensions.includes(item.extension);
+  }
+
+  _itemIsDisabled(item: ListItem): boolean {
+    return item.sysType === '_FILE' && false === this._itemIsSelectable(item);
+  }
+
+  _onDatagridSelectionChange(event: CustomEvent<ListItem[]>): void {
+    const identifier = event.detail
+      .filter(item => this._itemIsSelectable(item))
+      .map(item => item.identifier);
+
+    store.dispatch(new fromList.SetSelection(identifier));
+  }
+
+  _onCardgridSelectionChange(event: CustomEvent<Typo3Card[]>): void {
+    const identifier = event.detail
+      .map((element: Typo3Card) => '' + element.value)
+      .map(identifer => fromList.getListItemByIdentifier(this.state)(identifer))
+      .filter(item => item && this._itemIsSelectable(item))
+      .map(item => (item as ListItem).identifier);
+
+    store.dispatch(new fromList.SetSelection(identifier));
   }
 }
