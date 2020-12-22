@@ -80,6 +80,7 @@ export class Typo3Filebrowser extends Typo3Filestorage {
   }
 
   _closeModal(): void {
+    // @ts-ignore
     parent.TYPO3.Modal.currentModal.trigger('modal-dismiss');
   }
 

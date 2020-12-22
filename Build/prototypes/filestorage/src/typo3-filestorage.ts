@@ -49,6 +49,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @property({ type: Array }) storages: Storage[] = [];
   @property({ type: Number }) selectedStorageUid = 0;
   @property({ type: Boolean }) itemsDragDropEnabled = false;
+  @property({ type: Boolean }) itemsEditEnabled = false;
 
   @internalProperty() state!: RootState;
 
@@ -246,7 +247,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           : 'true'}"
         schema="${JSON.stringify(this.listHeader)}"
         data="${JSON.stringify(fromList.getItems(this.state))}"
-        editableColumns='["name"]'
+        .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
         .selectedRows="${fromList.getSelectedItems(this.state)}"
         @dragstart="${this._onDragStart}"
         @contextmenu="${this._onContextMenuWithoutContext}"
@@ -315,7 +316,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
-      ?titleEditable="${isSelected}"
+      ?titleEditable="${this.itemsEditEnabled && isSelected}"
       draggable="${!this.itemsDragDropEnabled ||
       fromList.isEmptySelection(this.state)
         ? 'false'
@@ -574,7 +575,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .nodes="${fromTree.getTreeNodes(this.state)}"
         .expandedNodeIds="${fromTree.getExpandedTreeNodeIds(this.state)}"
         .selectedNodeIds="${fromTree.selectedTreeNodeIdentifiers(this.state)}"
-        ?editable="${true}"
+        ?editable="${this.itemsEditEnabled}"
         ?dragDropEnabled="${this.itemsDragDropEnabled}"
         ?inDropMode="${fromFileActions.isDraggingFiles(this.state)}"
         @typo3-node-drop="${this._onTreeNodeDrop}"
