@@ -272,6 +272,12 @@
 			<trans-unit id="file_replace.submit" resname="file_replace.submit">
 				<source>Replace</source>
 			</trans-unit>
+			<trans-unit id="file_browser.title" resname="file_browser.title">
+				<source>File Selector</source>
+			</trans-unit>
+			<trans-unit id="file_browser.button.insert" resname="file_browser.button.insert">
+				<source>Insert Items</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

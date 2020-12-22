@@ -59,6 +59,13 @@ class FileBrowser extends AbstractElementBrowser implements ElementBrowserInterf
 
     public function render()
     {
+        // The key number 3 of the bparams contains the "allowed" string. Disallowed is not passed to
+        // the element browser at all but only filtered out in DataHandler afterwards
+        $allowedFileExtensions = GeneralUtility::trimExplode(',', \explode('|', $this->bparams)[3], true);
+
+        // The key number 3 of the bparams contains the irre (Inline Relational Record Editing) object id
+        $irreObjectId = \explode('|', $this->bparams)[4];
+
         $request = ServerRequestFactory::fromGlobals();
         $storageUid = $request->getQueryParams()['uid'] ?? \current($this->storageProvider->getStoragesForUser())->getUid();
 
@@ -74,16 +81,6 @@ class FileBrowser extends AbstractElementBrowser implements ElementBrowserInterf
             'searchFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
         ];
 
-        $this->pageRenderer->setTitle('New File Browser');
-        $this->pageRenderer->setBodyContent("<typo3-filestorage
-            treeUrl='" . $backendUrls['treeUrl'] . "'
-            storages='" . \json_encode(\array_values($storages)) . "'
-            selectedStorageUid='" . $storageUid . "'
-        ></typo3-filestorage>
-        ");
-        $this->pageRenderer->addJsFile('EXT:cms_filelist_ng/Resources/Public/JavaScript/es.js');
-        $this->pageRenderer->addCssInlineBlock('default', 'html {font-size: 16px;}');
-
         $appConfig = [
             'translations' => $this->getTranslations(),
             'iconUrls' => $this->getIconUrls(),
@@ -93,23 +90,26 @@ class FileBrowser extends AbstractElementBrowser implements ElementBrowserInterf
         $jsFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/JavaScript/es.js');
         $cssFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/Css/filelist.css');
 
-        // todo use template
+        $title = $this->getLanguageService()->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.title');
+
         return "
-        <html>
-            <head>
-                <title>NG File Browser</title>
-                <link rel='stylesheet' href='$cssFile'>
-                <script type='text/javascript' src='$jsFile'></script>
-                <script type='text/javascript'>var app = " . \json_encode($appConfig) . ";</script>
-            </head>
-            <body>
-                <typo3-filebrowser
+            <html>
+                <head>
+                    <title>$title</title>
+                    <link rel='stylesheet' href='$cssFile'>
+                    <script type='text/javascript' src='$jsFile'></script>
+                    <script type='text/javascript'>var app = " . \json_encode($appConfig) . ";</script>
+                </head>
+                <body>
+                    <typo3-filebrowser
+                        irreObjectId='" . $irreObjectId . "'
+                        allowedFileExtensions='" . \json_encode($allowedFileExtensions) . "'
                         treeUrl='" . $backendUrls['treeUrl'] . "'
                         storages='" . \json_encode(\array_values($storages)) . "'
                         selectedStorageUid='" . $storageUid . "'
-                ></typo3-filebrowser>
-            </body>
-        </html>
+                    ></typo3-filebrowser>
+                </body>
+            </html>
         ";
     }
 
@@ -208,6 +208,8 @@ class FileBrowser extends AbstractElementBrowser implements ElementBrowserInterf
             'file_replace.selectfile' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.selectfile'),
             'file_replace.keepfiletitle' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.keepfiletitle'),
             'file_replace.submit' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_replace.submit'),
+            'file_browser.button.insert' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.button.insert'),
+            'file_browser.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.title'),
         ];
     }
 
