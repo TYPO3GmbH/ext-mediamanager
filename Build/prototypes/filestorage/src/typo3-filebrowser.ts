@@ -10,6 +10,7 @@ import { translate } from './services/translation.service';
 import { store } from './redux/store';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { orderBy } from 'lodash-es';
+import * as fromView from './redux/ducks/view-mode';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
@@ -65,6 +66,18 @@ export class Typo3Filebrowser extends Typo3Filestorage {
 
     return html`<div>${translate('cm.allowedFileExtensions')}</div>
       ${allowedFileExtensionsHtml}`;
+  }
+
+  protected get listItems(): ListItem[] {
+    const extendedListItems = super.listItems.map(listItem => {
+      return {
+        ...listItem,
+        disabled: this._itemIsDisabled(listItem),
+        notSelectable: !this._itemIsSelectable(listItem),
+      };
+    });
+
+    return orderBy(extendedListItems, ['disabled'], ['asc']);
   }
 
   _onItemDblClick(item: ListItem): void {
@@ -131,15 +144,15 @@ export class Typo3Filebrowser extends Typo3Filestorage {
     store.dispatch(new fromList.SetSelection(identifier));
   }
 
-  protected get listItems(): ListItem[] {
-    const extendedListItems = super.listItems.map(listItem => {
-      return {
-        ...listItem,
-        disabled: this._itemIsDisabled(listItem),
-        notSelectable: !this._itemIsSelectable(listItem),
-      };
-    });
-
-    return orderBy(extendedListItems, ['disabled'], ['asc']);
+  _orderItemsForCardgridView(listItems: ListItem[]): ListItem[] {
+    return orderBy(
+      listItems,
+      [
+        'disabled',
+        item => item.sysType === '_FOLDER',
+        fromView.getSortField(this.state),
+      ],
+      ['asc', 'desc', fromView.getSortDirection(this.state)]
+    );
   }
 }

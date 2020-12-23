@@ -263,11 +263,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ></typo3-datagrid>`;
     }
 
-    const orderedData = orderBy(
-      listItems,
-      [item => item.sysType === '_FOLDER', fromView.getSortField(this.state)],
-      ['desc', fromView.getSortDirection(this.state)]
-    );
+    const orderedData = this._orderItemsForCardgridView(listItems);
 
     const hash = orderedData.map(item => item.identifier).join(',');
 
@@ -985,5 +981,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onToggleFileTree(): void {
     store.dispatch(new fromLayout.ToggleSidebar());
+  }
+
+  _orderItemsForCardgridView(listItems: ListItem[]): ListItem[] {
+    return orderBy(
+      listItems,
+      [item => item.sysType === '_FOLDER', fromView.getSortField(this.state)],
+      ['desc', fromView.getSortDirection(this.state)]
+    );
   }
 }
