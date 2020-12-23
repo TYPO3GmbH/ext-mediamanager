@@ -9,6 +9,7 @@ import { MessageHandler } from '../../shared/src/lib/message-handler';
 import { translate } from './services/translation.service';
 import { store } from './redux/store';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
+import { orderBy } from 'lodash-es';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
@@ -124,5 +125,17 @@ export class Typo3Filebrowser extends Typo3Filestorage {
       .map(item => (item as ListItem).identifier);
 
     store.dispatch(new fromList.SetSelection(identifier));
+  }
+
+  protected get listItems(): ListItem[] {
+    const extendedListItems = super.listItems.map(listItem => {
+      return {
+        ...listItem,
+        disabled: this._itemIsDisabled(listItem),
+        notSelectable: !this._itemIsSelectable(listItem),
+      };
+    });
+
+    return orderBy(extendedListItems, ['disabled'], ['asc']);
   }
 }

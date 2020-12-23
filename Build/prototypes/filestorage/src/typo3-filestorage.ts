@@ -234,7 +234,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get renderMainContent(): TemplateResult {
-    if (fromList.getItems(this.state).length === 0) {
+    const listItems = this.listItems;
+
+    if (listItems.length === 0) {
       return this.renderEmptyContent;
     }
 
@@ -246,7 +248,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           ? 'false'
           : 'true'}"
         schema="${JSON.stringify(this.listHeader)}"
-        data="${JSON.stringify(fromList.getItems(this.state))}"
+        data="${JSON.stringify(listItems)}"
         .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
         .selectedRows="${fromList.getSelectedItems(this.state)}"
         @dragstart="${this._onDragStart}"
@@ -261,7 +263,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     const orderedData = orderBy(
-      fromList.getItems(this.state),
+      listItems,
       [item => item.sysType === '_FOLDER', fromView.getSortField(this.state)],
       ['desc', fromView.getSortDirection(this.state)]
     );
@@ -634,6 +636,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         ${createSVGElement('reset', 'reset-icon')}
       </typo3-search>
     `;
+  }
+
+  protected get listItems(): ListItem[] {
+    return fromList.getItems(this.state);
   }
 
   _onSplitterDragend(): void {
