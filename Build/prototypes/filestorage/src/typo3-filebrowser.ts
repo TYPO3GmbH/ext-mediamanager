@@ -1,4 +1,12 @@
-import { customElement, html, property, TemplateResult } from 'lit-element';
+import {
+  customElement,
+  html,
+  property,
+  PropertyValues,
+  query,
+  queryAll,
+  TemplateResult,
+} from 'lit-element';
 import { Typo3Filestorage } from './typo3-filestorage';
 import themeStyles from '../../../theme/index.pcss';
 import fileStorageStyles from './typo3-filestorage.pcss';
@@ -11,13 +19,28 @@ import { store } from './redux/store';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { orderBy } from 'lodash-es';
 import * as fromView from './redux/ducks/view-mode';
+import { Typo3Tooltip } from '../../../packages/tooltip/src/typo3-tooltip';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
   @property({ type: String }) irreObjectId = '';
   @property({ type: Array }) allowedFileExtensions: string[] = [];
 
+  @query('typo3-tooltip') disabledFileTooltip!: Typo3Tooltip;
+
+  @queryAll('typo3-card[disabled]') disabledCards!: Typo3Card[];
+
   public static styles = [themeStyles, fileStorageStyles, styles];
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    this.disabledCards.forEach(card =>
+      card.addEventListener('mouseover', () => {
+        this.disabledFileTooltip.anchor = card;
+      })
+    );
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -26,7 +49,8 @@ export class Typo3Filebrowser extends Typo3Filestorage {
   }
 
   protected render(): TemplateResult {
-    return html`${super.render()} ${this.renderFooter}`;
+    return html`${super.render()} ${this.renderFooter}
+    ${this.renderDisabledTooltip}`;
   }
 
   protected get renderFooter(): TemplateResult {
@@ -66,6 +90,12 @@ export class Typo3Filebrowser extends Typo3Filestorage {
 
     return html`<div>${translate('cm.allowedFileExtensions')}</div>
       ${allowedFileExtensionsHtml}`;
+  }
+
+  protected get renderDisabledTooltip(): TemplateResult {
+    return html` <typo3-tooltip
+      >${translate('file_browser.fileNotAllowed')}</typo3-tooltip
+    >`;
   }
 
   protected get listItems(): ListItem[] {
