@@ -4,6 +4,7 @@ import {
   internalProperty,
   LitElement,
   property,
+  PropertyValues,
   query,
   TemplateResult,
 } from 'lit-element';
@@ -15,8 +16,7 @@ export type Position = 'top' | 'right' | 'bottom' | 'left';
 
 @customElement('typo3-tooltip')
 export class Typo3Tooltip extends LitElement {
-  @property({ type: String, attribute: 'anchor-element-id' })
-  anchorElementId?: string;
+  @property({ type: HTMLElement }) anchor!: HTMLElement;
 
   @property({ type: Number }) offset = 14;
 
@@ -36,10 +36,9 @@ export class Typo3Tooltip extends LitElement {
     `;
   }
 
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    const anchorElement = this.anchorElement;
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    const anchorElement = this.anchor;
     anchorElement?.addEventListener('mouseenter', () => this.show());
     anchorElement?.addEventListener('focus', () => this.show());
     anchorElement?.addEventListener('mouseleave', () => this.hide());
@@ -50,7 +49,7 @@ export class Typo3Tooltip extends LitElement {
   disconnectedCallback(): void {
     super.disconnectedCallback();
 
-    const anchorElement = this.anchorElement;
+    const anchorElement = this.anchor;
     anchorElement?.removeEventListener('mouseenter', () => this.show());
     anchorElement?.removeEventListener('focus', () => this.show());
     anchorElement?.removeEventListener('mouseleave', () => this.hide());
@@ -68,15 +67,14 @@ export class Typo3Tooltip extends LitElement {
   }
 
   protected updatePosition(): void {
-    const anchorElement = this.anchorElement;
-    if (null === this.anchorElement) {
+    if (!this.anchor) {
       return;
     }
 
     const offset = this.offset;
 
     const parentRect = this.offsetParent!.getBoundingClientRect();
-    const targetRect = anchorElement!.getBoundingClientRect();
+    const targetRect = this.anchor!.getBoundingClientRect();
     const thisRect = this.tooltipHtmlElement!.getBoundingClientRect();
 
     const horizontalCenterOffset = (targetRect.width - thisRect.width) / 2;
@@ -108,19 +106,5 @@ export class Typo3Tooltip extends LitElement {
 
     this.style.left = tooltipLeft + 'px';
     this.style.top = tooltipTop + 'px';
-  }
-
-  protected get anchorElement(): HTMLElement | null {
-    const parentElement = this.parentElement;
-
-    if (null === parentElement) {
-      return null;
-    }
-
-    if (this.anchorElementId) {
-      return parentElement.querySelector('#' + this.anchorElementId);
-    }
-
-    return parentElement;
   }
 }
