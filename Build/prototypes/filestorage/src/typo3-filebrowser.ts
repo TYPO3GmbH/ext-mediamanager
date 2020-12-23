@@ -69,6 +69,8 @@ export class Typo3Filebrowser extends Typo3Filestorage {
   _onItemDblClick(item: ListItem): void {
     if (item.sysType != '_FOLDER') {
       this._sendForeignInsertCommand([item.uid]);
+      // @ts-ignore
+      top.TYPO3.Notification.success('Success', 'Element added');
       return;
     }
 

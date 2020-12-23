@@ -7,6 +7,7 @@ describe('SvgHelper', () => {
     const configService = new AppConfigService();
     const config = configService.getAppConfig();
     config.iconUrls['test.svg'] = 'xo.test';
+    // @ts-ignore
     window.app = config;
   });
 
