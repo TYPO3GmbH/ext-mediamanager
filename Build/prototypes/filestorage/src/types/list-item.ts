@@ -17,4 +17,6 @@ interface ListItem {
   clipboardIdentifier: string;
   metaDataUrl?: string;
   parentIdentifier: string;
+  notSelectable?: boolean;
+  disabled?: boolean;
 }

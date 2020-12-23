@@ -11,6 +11,7 @@ import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
 import { Masonry } from '@fristys/masonry';
 import { PropertyValues } from 'lit-element/lib/updating-element';
+import { Typo3Card } from '../../card/src/typo3-card';
 
 /**
  * @fires typo3-grid-selection-changed - Dispatched when selection has changed
@@ -72,19 +73,19 @@ export class Typo3Grid extends LitElement {
     this._masonry.init();
   }
 
-  get items(): HTMLElement[] {
-    return (this.slotElement!.assignedElements() as HTMLElement[]).filter(
-      element => element.hasAttribute('selectable')
+  get items(): Typo3Card[] {
+    return (this.slotElement!.assignedElements() as Typo3Card[]).filter(
+      element => false === element.notSelectable
     );
   }
 
-  get selectedItems(): HTMLElement[] {
+  get selectedItems(): Typo3Card[] {
     return this.items.filter(element => element.hasAttribute('selected'));
   }
 
   _onItemClick = (event: MouseEvent) => {
     event.stopPropagation();
-    const element = event.target as HTMLElement;
+    const element = event.target as Typo3Card;
     if (false === this.selectable || false === this.items.includes(element)) {
       return;
     }

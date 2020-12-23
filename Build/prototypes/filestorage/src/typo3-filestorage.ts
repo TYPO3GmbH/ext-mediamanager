@@ -43,6 +43,7 @@ import { translate } from './services/translation.service';
 import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
 import { createSVGElement } from './lib/svg-helper';
+import { ifDefined } from 'lit-html/directives/if-defined';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -312,9 +313,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const isSelected = fromList.isItemSelected(this.state)(listData.identifier);
 
     return html` <typo3-card
-      ?disabled="${this._itemIsDisabled(listData)}"
       slot="item"
-      ?selectable="${this._itemIsSelectable(listData)}"
+      ?disabled="${ifDefined(listData.disabled)}"
+      ?notSelectable="${ifDefined(listData.notSelectable)}"
       ?selected="${isSelected}"
       value="${listData.identifier}"
       title="${listData.name}"
@@ -984,13 +985,5 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onToggleFileTree(): void {
     store.dispatch(new fromLayout.ToggleSidebar());
-  }
-
-  _itemIsSelectable(item: ListItem): boolean {
-    return true;
-  }
-
-  _itemIsDisabled(item: ListItem): boolean {
-    return false;
   }
 }

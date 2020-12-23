@@ -29,6 +29,10 @@ export class Typo3Card extends LitElement {
 
   @property({ type: Boolean, reflect: true }) titleEditable = false;
 
+  @property({ type: Boolean, reflect: true }) disabled = false;
+
+  @property({ type: Boolean, reflect: true }) notSelectable = false;
+
   @query('.title') titleElement!: HTMLElement;
 
   public static styles = [themeStyles, styles];
