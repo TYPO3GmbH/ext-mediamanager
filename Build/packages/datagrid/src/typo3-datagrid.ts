@@ -44,6 +44,8 @@ export class Typo3Datagrid extends LitElement {
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
 
+  protected additionalStyles: { disabledCellOpacity?: number } = {};
+
   protected clicks = 0;
 
   private latestSelectedRowIndex?: number;
@@ -370,12 +372,27 @@ export class Typo3Datagrid extends LitElement {
   }
 
   _handleDisabledRow(e: RenderCellEvent): void {
-    if (this._isDisabledRow(e.cell)) {
-      const opacity = getComputedStyle(this.canvasGrid).getPropertyValue(
-        '--cdg-disabled-cell-opacity'
-      );
+    if (
+      false ==
+      Object.prototype.hasOwnProperty.call(
+        this.additionalStyles,
+        'disabledCellOpacity'
+      )
+    ) {
+      this.additionalStyles = {
+        disabledCellOpacity: parseFloat(
+          getComputedStyle(this.canvasGrid).getPropertyValue(
+            '--cdg-disabled-cell-opacity'
+          )
+        ),
+      };
+    }
 
-      e.ctx.globalAlpha = parseFloat(opacity);
+    if (
+      this._isDisabledRow(e.cell) &&
+      this.additionalStyles.disabledCellOpacity
+    ) {
+      e.ctx.globalAlpha = this.additionalStyles.disabledCellOpacity;
     }
   }
 
