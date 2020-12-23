@@ -63,9 +63,10 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
         },
         {
           "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\"><use xlink:href=\\"node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel\\"></use></svg>",
-          "title": "row 8 column 1",
-          "description": "row 8 column 2",
-          "foo": "row 8 column 3"
+          "title": "not selectable row 8 column 1",
+          "description": "not selectable 8 column 2",
+          "foo": "not selectable 8 column 3",
+          "notSelectable": true
         }
       ]'></typo3-datagrid>
     `}
@@ -100,5 +101,16 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
 </Preview>
 
 # API
+
+Wrapper for https://canvas-datagrid.js.org/
+
+## Special data fields
+
+In order to accomplish row-specific handling or formatting specific data fields were introduced:
+
+| Property        | Type    | Description                                                                 |
+|-----------------|---------|-----------------------------------------------------------------------------|
+| `disabled`      | Boolean | Opacity of the row will be set to the css var `--cdg-disabled-cell-opacity` |
+| `notSelectable` | Boolean | Selection of row will be prevented                                          |
 
 <Props of="typo3-datagrid" />

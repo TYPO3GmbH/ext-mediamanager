@@ -102,6 +102,7 @@ export class Typo3Datagrid extends LitElement {
         @endedit="${this._onEndEdit}"
         @click="${this._onClick}"
         @dblclick="${this._onDblClick}"
+        @mousedown="${this._onMousedown}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -241,6 +242,13 @@ export class Typo3Datagrid extends LitElement {
 
     // will be handled in _onClick
     e.preventDefault();
+  }
+
+  _onMousedown(e: CanvasDataGridEvent): void {
+    if (this._isNotSelectableRow(e.cell)) {
+      e.preventDefault();
+      return;
+    }
   }
 
   _onClick(e: CanvasDataGridEvent): void {
@@ -405,6 +413,13 @@ export class Typo3Datagrid extends LitElement {
       false === cell.isHeader &&
       Object.prototype.hasOwnProperty.call(cell.data, 'disabled') &&
       true === (cell.data as { disabled: boolean }).disabled
+    );
+  }
+
+  _isNotSelectableRow(cell: Cell): boolean {
+    return (
+      Object.prototype.hasOwnProperty.call(cell.data, 'notSelectable') &&
+      true === (cell.data as { notSelectable: boolean }).notSelectable
     );
   }
 
