@@ -18,8 +18,9 @@ export const snackbarAction = (
         action.action,
         action.data as SnackbarButton
       );
+
       MessageHandler.sendPostMessage(
-        IframeHelper.getContentIframe(),
+        [IframeHelper.getContentIframe(), IframeHelper.getModalIframe()],
         messageData
       );
     }),

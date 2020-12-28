@@ -120,7 +120,7 @@ export class Typo3Filebrowser extends Typo3Filestorage {
 
       this._sendForeignInsertCommand([item.uid]);
       MessageHandler.sendPostMessage(
-        top,
+        [top],
         new ShowSnackbarMessage({
           duration: 2500,
           title: '',
@@ -154,7 +154,7 @@ export class Typo3Filebrowser extends Typo3Filestorage {
         table: 'sys_file',
         uid: uid,
       };
-      MessageHandler.sendPostMessage(IframeHelper.getContentIframe(), action);
+      MessageHandler.sendPostMessage([IframeHelper.getContentIframe()], action);
     });
   }
 

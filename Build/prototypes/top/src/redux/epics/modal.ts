@@ -14,7 +14,7 @@ export const closeModal = (
     tap(action => {
       const messageData = new CloseModalMessage(action.action, action.data);
       MessageHandler.sendPostMessage(
-        IframeHelper.getContentIframe(),
+        [IframeHelper.getContentIframe() as Window],
         messageData
       );
     }),

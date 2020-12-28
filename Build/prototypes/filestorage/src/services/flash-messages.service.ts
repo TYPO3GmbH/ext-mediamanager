@@ -52,7 +52,7 @@ export class FlashMessagesService {
           ];
         }
 
-        MessageHandler.sendPostMessage(top, showSnackbarMessage);
+        MessageHandler.sendPostMessage([top], showSnackbarMessage);
         return action.undoAction;
       }),
       filter(undoAction => typeof undoAction != 'undefined'),
@@ -63,7 +63,7 @@ export class FlashMessagesService {
         ).pipe(
           map(event => event.data),
           filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
-          timeout(2000),
+          timeout(5000),
           take(1),
           catchError(() => EMPTY),
           map(() => action.undoAction)
