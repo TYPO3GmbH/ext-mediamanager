@@ -29,8 +29,8 @@ class FileStorageProvider extends FileProvider
         ],
         'new' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.new',
-            'iconIdentifier' => 'actions-document-new',
-            'callbackAction' => 'createFile',
+            'iconIdentifier' => 'actions-folder-add',
+            'callbackAction' => 'addFolder',
         ],
         'info' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.info',
