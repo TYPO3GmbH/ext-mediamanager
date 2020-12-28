@@ -21,21 +21,21 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 
 class FolderTreeController
 {
-    /** @var StorageProviderInterface */
-    private $storageProvider;
+    /** @var StoragesProviderInterface */
+    private $storagesProvider;
 
     /** @var FolderTreeGeneratorInterface */
     private $folderTreeGenerator;
 
     public function __construct(
-        StorageProviderInterface $storageProvider,
+        StoragesProviderInterface $storagesProvider,
         FolderTreeGeneratorInterface $folderTreeGenerator
     ) {
-        $this->storageProvider = $storageProvider;
+        $this->storagesProvider = $storagesProvider;
         $this->folderTreeGenerator = $folderTreeGenerator;
     }
 
@@ -47,7 +47,7 @@ class FolderTreeController
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
-        $storage = $this->storageProvider->getStorageForUserById((int) $storageId);
+        $storage = $this->storagesProvider->getStorageForUserById((int) $storageId);
 
         if (null === $storage) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);

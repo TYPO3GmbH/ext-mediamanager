@@ -612,10 +612,10 @@
       "description": "Tooltip",
       "properties": [
         {
-          "name": "AnchorElementId",
-          "type": "String",
-          "attribute": "anchor-element-id",
-          "description": "ID of the element that the tooltip is anchored to"
+          "name": "anchor",
+          "type": "HtmlElement",
+          "attribute": "anchor",
+          "description": "Anchor element for tooltip"
         },
         {
           "name": "offset",

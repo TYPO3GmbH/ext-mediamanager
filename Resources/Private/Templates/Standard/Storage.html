@@ -1,17 +1,19 @@
-<style type="text/css">
-    body {
-        margin: 0;
-    }
-</style>
-<div style="height:100vh">
-    <typo3-filestorage
-        treeUrl="{treeUrl}"
-        fileActionUrl="{fileActionUrl}"
-        storages="{storagesJson}"
-        selectedStorageUid="{selectedStorageUid}"
-    ></typo3-filestorage>
-</div>
-<script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
-<script type="text/javascript">
-    window.app = <f:format.raw>{app}</f:format.raw>;
-</script>
+<html>
+    <head>
+        <link rel='stylesheet' href="{f:uri.resource(path:'Css/filelist.css')}">
+        <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
+        <script type="text/javascript">
+            var app = {f:format.json(value: appConfig) -> f:format.raw()}
+        </script>
+    </head>
+    <body>
+        <typo3-filestorage
+            treeUrl="{treeUrl}"
+            fileActionUrl="{fileActionUrl}"
+            storages="{f:format.json(value: storages)}"
+            selectedStorageUid="{selectedStorageUid}"
+            itemsDragDropEnabled
+            itemsEditEnabled
+        ></typo3-filestorage>
+    </body>
+</html>

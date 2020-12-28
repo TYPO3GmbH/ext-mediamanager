@@ -1,4 +1,6 @@
 interface ListItem {
+  uid: string;
+  extension: string;
   identifier: string;
   icon: string;
   name: string;
@@ -15,4 +17,6 @@ interface ListItem {
   clipboardIdentifier: string;
   metaDataUrl?: string;
   parentIdentifier: string;
+  notSelectable?: boolean;
+  disabled?: boolean;
 }

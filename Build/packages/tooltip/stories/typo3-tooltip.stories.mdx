@@ -15,8 +15,8 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     <Story name="Basic Tooltip" height="220px">
     {html`
         <div style="padding: 45px 15px 15px; text-align: center;">
-            <typo3-button id="test-btn">Button with Tooltyp</typo3-button>
-            <typo3-tooltip anchor-element-id="test-btn">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</typo3-tooltip>
+            <typo3-button id="anchor" onmouseover="tooltip.anchor = anchor;">Button with Tooltyp</typo3-button>
+            <typo3-tooltip id="tooltip">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</typo3-tooltip>
         </div>
     `}
     </Story>

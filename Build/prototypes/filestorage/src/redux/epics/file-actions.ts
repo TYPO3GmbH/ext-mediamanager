@@ -24,7 +24,7 @@ import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
 import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
-import { ModalData, ModalType } from '../../../../shared/types/modal-data';
+import { ModalData, ModalType } from '../../../../shared/src/types/modal-data';
 import { ModalService } from '../../services/modal.service';
 import { openAsLink } from '../../lib/utils';
 
@@ -384,7 +384,7 @@ export const downloadFiles = (
             null,
             new Uint8Array(error.response) as never
           );
-          window.dispatchEvent(
+          dispatchEvent(
             new CustomEvent('typo3-add-snackbar', {
               detail: {
                 message: message,

@@ -34,6 +34,6 @@ export class Typo3FileActionUndoButton extends connect(store)(LitElement) {
 
   _onUndo(): void {
     store.dispatch(this.undoAction!);
-    window.dispatchEvent(new CustomEvent('typo3-remove-snackbar'));
+    dispatchEvent(new CustomEvent('typo3-remove-snackbar'));
   }
 }

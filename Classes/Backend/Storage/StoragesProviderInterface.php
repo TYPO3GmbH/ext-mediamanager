@@ -18,12 +18,17 @@ namespace TYPO3\CMS\FilelistNg\Backend\Storage;
 
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 
-interface StorageProviderInterface
+interface StoragesProviderInterface
 {
     /**
      * @return ResourceStorage[]
      */
     public function getStoragesForUser(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getFormattedStoragesForUser(): array;
 
     public function getStorageForUserById(int $storageId): ?ResourceStorage;
 }

@@ -1,6 +1,7 @@
 :host {
   height: 100%;
-  overflow:hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar-wrapper {
@@ -13,6 +14,10 @@
   border-top: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
   background-color: #F4F4F4;
   height: 3rem;
+}
+
+typo3-splitpane {
+  flex: 1;
 }
 
 .content_left, .content_right {
@@ -59,6 +64,12 @@ typo3-filetree {
   flex-direction: column;
 }
 
+typo3-datagrid.main-content  {
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 0;
+}
+
 #storage_select a {
   text-decoration: none;
 }
@@ -82,3 +93,9 @@ typo3-breadcrumb-item {
 .dropzone-drop-message__title {
   font-size: 2rem;
 }
+
+typo3-draghandler, typo3-files-modal {
+  position: absolute;
+  top: -1000px;
+}
+

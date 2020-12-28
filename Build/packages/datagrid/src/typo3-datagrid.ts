@@ -44,6 +44,8 @@ export class Typo3Datagrid extends LitElement {
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
 
+  protected additionalStyles: { disabledCellOpacity?: number } = {};
+
   protected clicks = 0;
 
   private latestSelectedRowIndex?: number;
@@ -52,42 +54,44 @@ export class Typo3Datagrid extends LitElement {
     return html`
       <canvas-datagrid
         style="
-        --cdg-active-cell-border-color: var(--typo3-global-datagrid-border-color);
-        --cdg-active-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-active-cell-font: var(--typo3-global-datagrid-font);
-        --cdg-active-cell-overlay-border-color: transparent;
-        --cdg-active-cell-overlay-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-active-column-header-cell-background-color: transparent;
-        --cdg-active-row-header-cell-background-color: transparent;
-        --cdg-cell-background-color: transparent;
-        --cdg-cell-border-color: var(--typo3-global-datagrid-border-color);
-        --cdg-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-cell-color: var(--typo3-global-datagrid-cell-color);
-        --cdg-cell-font: var(--typo3-global-datagrid-font);
-        --cdg-cell-height: var(--typo3-global-datagrid-cell-height);
-        --cdg-cell-hover-background-color: transparent;
-        --cdg-column-header-cell-background-color: transparent;
-        --cdg-column-header-cell-border-color: transparent;
-        --cdg-column-header-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-column-header-cell-cap-background-color: transparent;
-        --cdg-column-header-cell-cap-border-color: transparent;
-        --cdg-column-header-cell-color: var(--typo3-global-datagrid-cell-color);
-        --cdg-column-header-cell-font: var(--typo3-global-datagrid-font);
-        --cdg-column-header-cell-hover-background-color: transparent;
-        --cdg-column-header-order-by-arrow-border-color: var(--typo3-global-datagrid-order-arrow-color);
-        --cdg-column-header-order-by-arrow-border-width: 2;
-        --cdg-column-header-order-by-arrow-height: 4;
-        --cdg-column-header-order-by-arrow-width: 8;
-        --cdg-corner-cell-background-color: transparent;
-        --cdg-corner-cell-border-color: transparent;
-        --cdg-frozen-marker-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-grid-background-color: #fff;
-        --cdg-grid-border-color: transparent;
-        --cdg-grid-border-width: var(--typo3-global-datagrid-cell-border-width);
-        --cdg-row-header-cell-background-color: transparent;
-        --cdg-row-header-cell-border-color: transparent;
-        --cdg-row-header-cell-hover-background-color: transparent;
-        --cdg-selection-overlay-borderColor: transparent;"
+          --cdg-active-cell-border-color: var(--typo3-global-datagrid-border-color);
+          --cdg-active-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-active-cell-font: var(--typo3-global-datagrid-font);
+          --cdg-active-cell-overlay-border-color: transparent;
+          --cdg-active-cell-overlay-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-active-column-header-cell-background-color: transparent;
+          --cdg-active-row-header-cell-background-color: transparent;
+          --cdg-cell-background-color: transparent;
+          --cdg-cell-border-color: var(--typo3-global-datagrid-border-color);
+          --cdg-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-cell-color: var(--typo3-global-datagrid-cell-color);
+          --cdg-cell-font: var(--typo3-global-datagrid-font);
+          --cdg-cell-height: var(--typo3-global-datagrid-cell-height);
+          --cdg-cell-hover-background-color: transparent;
+          --cdg-column-header-cell-background-color: transparent;
+          --cdg-column-header-cell-border-color: transparent;
+          --cdg-column-header-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-column-header-cell-cap-background-color: transparent;
+          --cdg-column-header-cell-cap-border-color: transparent;
+          --cdg-column-header-cell-color: var(--typo3-global-datagrid-cell-color);
+          --cdg-column-header-cell-font: var(--typo3-global-datagrid-font);
+          --cdg-column-header-cell-hover-background-color: transparent;
+          --cdg-column-header-order-by-arrow-border-color: var(--typo3-global-datagrid-order-arrow-color);
+          --cdg-column-header-order-by-arrow-border-width: 2;
+          --cdg-column-header-order-by-arrow-height: 4;
+          --cdg-column-header-order-by-arrow-width: 8;
+          --cdg-corner-cell-background-color: transparent;
+          --cdg-corner-cell-border-color: transparent;
+          --cdg-frozen-marker-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-grid-background-color: #fff;
+          --cdg-grid-border-color: transparent;
+          --cdg-grid-border-width: var(--typo3-global-datagrid-cell-border-width);
+          --cdg-row-header-cell-background-color: transparent;
+          --cdg-row-header-cell-border-color: transparent;
+          --cdg-row-header-cell-hover-background-color: transparent;
+          --cdg-selection-overlay-borderColor: transparent;
+          --cdg-disabled-cell-opacity: 0.5
+        "
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
         @afterrendercell="${this._onAfterRendercell}"
@@ -98,6 +102,7 @@ export class Typo3Datagrid extends LitElement {
         @endedit="${this._onEndEdit}"
         @click="${this._onClick}"
         @dblclick="${this._onDblClick}"
+        @mousedown="${this._onMousedown}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -132,23 +137,14 @@ export class Typo3Datagrid extends LitElement {
   }
 
   _onRenderText(e: RenderCellEvent): void {
-    if (
-      e.cell.type === 'html' &&
-      e.cell.value &&
-      e.cell.rowIndex > -1 &&
-      /img/.test(e.cell.value)
-    ) {
+    if (this._isSvgCell(e.cell)) {
       e.cell.formattedValue = '';
     }
+    this._handleDisabledRow(e);
   }
 
   _onAfterRendercell(e: RenderCellEvent): void {
-    if (
-      e.cell.type === 'html' &&
-      e.cell.value &&
-      e.cell.rowIndex > -1 &&
-      /use/.test(e.cell.value)
-    ) {
+    if (this._isSvgCell(e.cell)) {
       if (!this.imageBuffer[e.cell.value]) {
         const domElement = new DOMParser().parseFromString(
           e.cell.value,
@@ -202,6 +198,9 @@ export class Typo3Datagrid extends LitElement {
 
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
+
+        this._handleDisabledRow(e);
+
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }
     }
@@ -243,6 +242,13 @@ export class Typo3Datagrid extends LitElement {
 
     // will be handled in _onClick
     e.preventDefault();
+  }
+
+  _onMousedown(e: CanvasDataGridEvent): void {
+    if (this._isNotSelectableRow(e.cell)) {
+      e.preventDefault();
+      return;
+    }
   }
 
   _onClick(e: CanvasDataGridEvent): void {
@@ -365,15 +371,64 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
-  _isEditableCell(cell: Cell): boolean {
-    return this.editableColumns.indexOf(cell.header.name) !== -1;
-  }
-
   _endEdit(): void {
     try {
       this.canvasGrid.endEdit(true);
     } catch (e) {
       // catch edit cell is undefined error
     }
+  }
+
+  _handleDisabledRow(e: RenderCellEvent): void {
+    if (
+      false ==
+      Object.prototype.hasOwnProperty.call(
+        this.additionalStyles,
+        'disabledCellOpacity'
+      )
+    ) {
+      this.additionalStyles = {
+        disabledCellOpacity: parseFloat(
+          getComputedStyle(this.canvasGrid).getPropertyValue(
+            '--cdg-disabled-cell-opacity'
+          )
+        ),
+      };
+    }
+
+    if (
+      this._isDisabledRow(e.cell) &&
+      this.additionalStyles.disabledCellOpacity
+    ) {
+      e.ctx.globalAlpha = this.additionalStyles.disabledCellOpacity;
+    }
+  }
+
+  _isEditableCell(cell: Cell): boolean {
+    return this.editableColumns.indexOf(cell.header.name) !== -1;
+  }
+
+  _isDisabledRow(cell: Cell): boolean {
+    return (
+      false === cell.isHeader &&
+      Object.prototype.hasOwnProperty.call(cell.data, 'disabled') &&
+      true === (cell.data as { disabled: boolean }).disabled
+    );
+  }
+
+  _isNotSelectableRow(cell: Cell): boolean {
+    return (
+      Object.prototype.hasOwnProperty.call(cell.data, 'notSelectable') &&
+      true === (cell.data as { notSelectable: boolean }).notSelectable
+    );
+  }
+
+  _isSvgCell(cell: Cell): boolean {
+    return (
+      cell.type === 'html' &&
+      '' !== cell.value &&
+      cell.rowIndex > -1 &&
+      /use/.test(cell.value)
+    );
   }
 }

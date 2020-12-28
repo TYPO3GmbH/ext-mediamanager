@@ -126,6 +126,8 @@ class FolderListGenerator implements FolderListGeneratorInterface
         return \array_merge(
             $this->formatResource($file),
             [
+                'uid' => $file->getUid(),
+                'extension' => $file->getExtension(),
                 'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
                 'type' => \strtoupper($file->getExtension()),
                 'references' => $this->fileReferencesProvider->getReferencesCount($file),

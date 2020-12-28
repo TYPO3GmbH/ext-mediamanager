@@ -12,9 +12,9 @@ import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
 import { RootState } from './redux/ducks';
-import { SHOW_MODAL_MESSAGE_TYPE } from '../../shared/types/message';
-import { ShowModalMessage } from '../../shared/types/show-modal-message';
-import { ModalType } from '../../shared/types/modal-data';
+import { SHOW_MODAL_MESSAGE_TYPE } from '../../shared/src/types/message';
+import { ShowModalMessage } from '../../shared/src/types/show-modal-message';
+import { ModalType } from '../../shared/src/types/modal-data';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
 

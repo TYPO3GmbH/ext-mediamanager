@@ -1,5 +1,6 @@
 <html>
     <head>
+        <title>{f:translate(key: 'LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.title')}</title>
         <link rel="stylesheet" href="{f:uri.resource(path:'Css/filelist.css')}">
         <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
         <script type="text/javascript">
@@ -7,9 +8,13 @@
         </script>
     </head>
     <body>
-        <typo3-storages
+        <typo3-filebrowser
+            irreObjectId="{irreObjectId}"
+            allowedFileExtensions='{f:format.json(value: allowedFileExtensions)}'
+            treeUrl="{treeUrl}"
             storages="{f:format.json(value: storages)}"
-            userName="{userName}"
-        ></typo3-storages>
+            selectedStorageUid="{selectedStorageUid}"
+        ></typo3-filebrowser>
     </body>
 </html>
+

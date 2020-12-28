@@ -17,15 +17,16 @@ declare(strict_types=1);
 namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Storage;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProvider;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class StorageProviderTest extends UnitTestCase
+class StoragesProviderTest extends UnitTestCase
 {
-    /** @var StorageProvider */
+    /** @var StoragesProvider */
     private $subject;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|BackendUserAuthentication */
@@ -47,15 +48,18 @@ class StorageProviderTest extends UnitTestCase
         $backendUserProviderMock->method('getBackendUser')
             ->willReturn($this->backendUserMock);
 
-        $this->subject = new StorageProvider($backendUserProviderMock);
+        $this->subject = new StoragesProvider(
+            $backendUserProviderMock,
+            $this->createMock(IconFactory::class)
+        );
     }
 
     /**
      * @test
      */
-    public function it_implements_StorageProviderInterface(): void
+    public function it_implements_StoragesProviderInterface(): void
     {
-        self::assertInstanceOf(StorageProviderInterface::class, $this->subject);
+        self::assertInstanceOf(StoragesProviderInterface::class, $this->subject);
     }
 
     /**
