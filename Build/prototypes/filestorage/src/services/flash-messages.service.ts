@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
 import { SnackbarValues } from '../../../../packages/snackbar/src/lib/snackbar-values';
 import * as fromGlobalActions from '../redux/ducks/global-actions';
+import { MessageHandler } from '../../../shared/src/lib/message-handler';
+import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
 
 interface Message {
   message: string;
@@ -42,16 +44,9 @@ export class FlashMessagesService {
 
   displayFlashMessage(data: SnackbarValues): void {
     try {
-      dispatchEvent(
-        new CustomEvent('typo3-add-snackbar', {
-          bubbles: true,
-          detail: data,
-        })
-      );
+      MessageHandler.sendPostMessage(top, new ShowSnackbarMessage(data));
     } catch (e) {
       console.log(e);
-      console.log(window.dispatchEvent.prototype);
-      console.log('can not dispatch custom event ?');
     }
   }
 }

@@ -17,6 +17,10 @@ import { ShowModalMessage } from '../../shared/src/types/show-modal-message';
 import { ModalType } from '../../shared/src/types/modal-data';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
+import {
+  SHOW_SNACKBAR_MESSAGE_TYPE,
+  ShowSnackbarMessage,
+} from '../../shared/src/types/show-snackbar-message';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -80,10 +84,21 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     });
   }
 
-  _handlePostMessage = (event: MessageEvent<ShowModalMessage>) => {
+  _handlePostMessage = (
+    event: MessageEvent<ShowModalMessage | ShowSnackbarMessage>
+  ) => {
     switch (event.data.type) {
       case SHOW_MODAL_MESSAGE_TYPE:
         store.dispatch(new fromModal.ShowModal(event.data.data));
+        break;
+      case SHOW_SNACKBAR_MESSAGE_TYPE:
+        dispatchEvent(
+          new CustomEvent('typo3-add-snackbar', {
+            bubbles: true,
+            detail: event.data.data,
+          })
+        );
+        break;
     }
   };
 
