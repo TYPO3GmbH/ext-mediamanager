@@ -11,6 +11,7 @@ import styles from './typo3-top-container.pcss';
 import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
+import * as fromSnackbar from './redux/ducks/snackbar';
 import { RootState } from './redux/ducks';
 import { SHOW_MODAL_MESSAGE_TYPE } from '../../shared/src/types/message';
 import { ShowModalMessage } from '../../shared/src/types/show-modal-message';
@@ -57,7 +58,15 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       >
         ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>
-      <typo3-snackbar placement="right"></typo3-snackbar>
+      <typo3-snackbar
+        ?visible="${this.state.snackbar.open}"
+        placement="right"
+        messageTitle="${this.state.snackbar.data?.title}"
+        message="${this.state.snackbar.data?.message}"
+        variant="${this.state.snackbar.data?.variant}"
+        duration="${this.state.snackbar.data?.duration}"
+        @typo3-snackbar-close="${this._onSnackbarClose}"
+      ></typo3-snackbar>
     `;
   }
 
@@ -92,12 +101,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         store.dispatch(new fromModal.ShowModal(event.data.data));
         break;
       case SHOW_SNACKBAR_MESSAGE_TYPE:
-        dispatchEvent(
-          new CustomEvent('typo3-add-snackbar', {
-            bubbles: true,
-            detail: event.data.data,
-          })
-        );
+        store.dispatch(new fromSnackbar.ShowSnackbar(event.data.data));
         break;
     }
   };
@@ -115,5 +119,9 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     }
 
     store.dispatch(new fromModal.ModalAction(action, obj));
+  }
+
+  _onSnackbarClose(): void {
+    store.dispatch(new fromSnackbar.CloseSnackbar());
   }
 }

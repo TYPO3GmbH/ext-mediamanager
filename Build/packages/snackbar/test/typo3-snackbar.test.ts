@@ -1,7 +1,6 @@
 import { elementUpdated, expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-snackbar.js';
 import { Typo3Snackbar } from '../src/typo3-snackbar';
-import { SnackbarValues } from '../src/lib/snackbar-values';
 
 describe('Typo3Snackbar', () => {
   let element: Typo3Snackbar;
@@ -18,12 +17,8 @@ describe('Typo3Snackbar', () => {
     expect(element.visible).to.be.false;
   });
 
-  it('will show snackbar on `typo3-add-snackbar`', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: new SnackbarValues(),
-      })
-    );
+  it('will show snackbar on `visible: true`', async () => {
+    Object.assign(element, { visible: true });
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);
@@ -32,13 +27,8 @@ describe('Typo3Snackbar', () => {
   });
 
   it('will set snackbar message', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: Object.assign(new SnackbarValues(), {
-          message: 'Hello World',
-        }),
-      })
-    );
+    Object.assign(element, { visible: true, message: 'Hello World' });
+
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);
@@ -50,14 +40,12 @@ describe('Typo3Snackbar', () => {
   });
 
   it('will display snackbar button if dismissible', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: Object.assign(new SnackbarValues(), {
-          buttonText: 'Hello',
-          dismissible: true,
-        }),
-      })
-    );
+    Object.assign(element, {
+      visible: true,
+      buttonText: 'Hello',
+      dismissible: true,
+    });
+
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);
@@ -69,13 +57,8 @@ describe('Typo3Snackbar', () => {
   });
 
   it('wont render snackbar button if not dismissible', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: Object.assign(new SnackbarValues(), {
-          dismissible: false,
-        }),
-      })
-    );
+    Object.assign(element, { visible: true, dismissible: false });
+
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);
@@ -87,13 +70,8 @@ describe('Typo3Snackbar', () => {
   });
 
   it('shows and hide snackbar after defined duration', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: Object.assign(new SnackbarValues(), {
-          duration: 15,
-        }),
-      })
-    );
+    Object.assign(element, { visible: true, message: 'Hello', duration: 15 });
+
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);
@@ -107,15 +85,15 @@ describe('Typo3Snackbar', () => {
     expect(element.visible).to.be.false;
   });
 
-  it('will set `variant` by event', async () => {
-    dispatchEvent(
-      new CustomEvent('typo3-add-snackbar', {
-        detail: Object.assign(new SnackbarValues(), {
-          variant: 'success',
-          dismissible: true,
-        }),
-      })
-    );
+  it('will set passed `variant`', async () => {
+    Object.assign(element, {
+      visible: true,
+      message: 'Hello',
+      variant: 'success',
+      buttonText: 'Hello',
+      dismissible: true,
+    });
+
     await new Promise(resolve => setTimeout(resolve, 5));
 
     await elementUpdated(element);

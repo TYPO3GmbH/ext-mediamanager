@@ -12,4 +12,5 @@ export interface SnackbarData {
   title: string | null;
   variant: SnackbarVariants;
   buttons?: SnackbarButton[];
+  duration: number;
 }
