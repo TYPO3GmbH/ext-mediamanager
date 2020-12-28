@@ -61,7 +61,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       <typo3-snackbar
         ?visible="${this.state.snackbar.open}"
         placement="right"
-        messageTitle="${this.state.snackbar.data?.title}"
+        title="${this.state.snackbar.data?.title}"
         message="${this.state.snackbar.data?.message}"
         variant="${this.state.snackbar.data?.variant}"
         duration="${this.state.snackbar.data?.duration}"

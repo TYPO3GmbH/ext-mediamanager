@@ -8,8 +8,8 @@ export interface SnackbarButton {
 }
 
 export interface SnackbarData {
-  message: string | null;
-  title: string | null;
+  message?: string;
+  title?: string;
   variant: SnackbarVariants;
   buttons?: SnackbarButton[];
   duration: number;
