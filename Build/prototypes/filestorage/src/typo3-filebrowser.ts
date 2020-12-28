@@ -149,7 +149,11 @@ export class Typo3Filebrowser extends Typo3Filestorage {
   }
 
   _itemIsSelectable(item: ListItem): boolean {
-    return this.allowedFileExtensions.includes(item.extension);
+    return (
+      item.sysType === '_FILE' &&
+      (this.allowedFileExtensions.length == 0 ||
+        this.allowedFileExtensions.includes(item.extension))
+    );
   }
 
   _itemIsDisabled(item: ListItem): boolean {
