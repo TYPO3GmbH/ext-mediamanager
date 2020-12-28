@@ -78,7 +78,7 @@ class FilelistController
         }
 
         $this->addGlobalVars($backendUrls);
-        $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
+        $this->view->assign('storages', $storages);
         $this->view->assign('userName', $backendUser->user['username']);
 
         return new HtmlResponse($this->view->render());
@@ -104,7 +104,7 @@ class FilelistController
             'editFileStorageUrl' => (string) $this->uriBuilder->buildUriFromRoute('record_edit'),
             'searchFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
         ]);
-        $this->view->assign('storagesJson', \json_encode(\array_values($storages)));
+        $this->view->assign('storages', $storages);
         $this->view->assign('selectedStorageUid', (int) $storageUid);
 
         return new HtmlResponse($this->view->render());
@@ -126,6 +126,6 @@ class FilelistController
         $appConfig = $this->appConfigProvider->getConfig();
         $appConfig['backendUrls'] = $backendUrls;
 
-        $this->view->assign('app', \json_encode($appConfig));
+        $this->view->assign('appConfig', $appConfig);
     }
 }
