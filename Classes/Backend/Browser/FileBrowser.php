@@ -20,7 +20,6 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
 use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
@@ -44,8 +43,7 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
         BackendTemplateView $view,
         UriBuilder $uriBuilder,
         AppConfigProviderInterface $appConfigProvider,
-        StoragesProviderInterface $storagesProvider,
-        LanguageServiceProvider $languageServiceProvider
+        StoragesProviderInterface $storagesProvider
     ) {
         $this->uriBuilder = $uriBuilder;
         $this->appConfigProvider = $appConfigProvider;
