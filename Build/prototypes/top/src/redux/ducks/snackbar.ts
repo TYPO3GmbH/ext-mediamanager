@@ -1,5 +1,8 @@
 import { Action } from 'redux';
-import { SnackbarData } from '../../../../shared/src/types/snackbar-data';
+import {
+  SnackbarButton,
+  SnackbarData,
+} from '../../../../shared/src/types/snackbar-data';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
 
@@ -52,10 +55,7 @@ export class CloseSnackbar implements Action {
 
 export class SnackbarAction implements Action {
   readonly type = SNACKBAR_ACTION;
-  constructor(
-    public action: string,
-    public data?: { [key: string]: string | Blob }
-  ) {}
+  constructor(public action: string, public data?: SnackbarButton) {}
 }
 
 export type Actions = ShowSnackbar | CloseSnackbar | SnackbarAction;

@@ -57,24 +57,15 @@ export class Typo3Snackbar extends LitElement {
             : html``}
           <p class="snackbar__message">${unsafeHTML(this.message)}</p>
         </div>
-        ${this.dismissible
-          ? html`<typo3-button
-              color="${this.variant}"
-              class="snackbar__button"
-              @click="${this._handleButtonClick}"
-              >${this.buttonText}</typo3-button
-            >`
-          : html``}
+        <slot name="footer"></slot>
       </typo3-alert>
     `;
   }
 
   protected updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-
+    clearTimeout(this.timerAutoHide);
     if (true === this.visible) {
-      clearTimeout(this.timerAutoHide);
-
       if (this.duration) {
         this.timerAutoHide = window.setTimeout(() => {
           this._hideSnackbar();
@@ -83,11 +74,8 @@ export class Typo3Snackbar extends LitElement {
     }
   }
 
-  _handleButtonClick(): void {
-    this._hideSnackbar();
-  }
-
   _hideSnackbar(): void {
+    clearTimeout(this.timerAutoHide);
     this.visible = false;
     this.addEventListener('transitionend', this._afterHide);
   }

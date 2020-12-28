@@ -22,6 +22,7 @@ import {
   SHOW_SNACKBAR_MESSAGE_TYPE,
   ShowSnackbarMessage,
 } from '../../shared/src/types/show-snackbar-message';
+import { SnackbarButton } from '../../shared/src/types/snackbar-data';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -66,7 +67,9 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         variant="${this.state.snackbar.data?.variant}"
         duration="${this.state.snackbar.data?.duration}"
         @typo3-snackbar-close="${this._onSnackbarClose}"
-      ></typo3-snackbar>
+      >
+        ${this.renderSnackbarButtons}
+      </typo3-snackbar>
     `;
   }
 
@@ -87,7 +90,18 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       return html` <typo3-button
         slot="footer"
         color="${buttonData.color}"
-        @click="${() => this._onModalConfirm(buttonData.action)}"
+        @click="${() => this._onModalAction(buttonData.action)}"
+        >${buttonData.label}</typo3-button
+      >`;
+    });
+  }
+
+  private get renderSnackbarButtons(): TemplateResult[] {
+    return fromSnackbar.getActionButtons(this.state).map(buttonData => {
+      return html` <typo3-button
+        slot="footer"
+        color="${buttonData.color}"
+        @click="${() => this.onSnackbarAction(buttonData)}"
         >${buttonData.label}</typo3-button
       >`;
     });
@@ -110,15 +124,18 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     store.dispatch(new fromModal.CloseModal());
   }
 
-  _onModalConfirm(action: string): void {
+  _onModalAction(action: string): void {
     const obj: { [key: string]: string | Blob } = {};
     if (fromModal.getModalData(this.state)?.isForm) {
       const formElement = this.modal.querySelector('form') as HTMLFormElement;
       const formData = new FormData(formElement);
       formData.forEach((value, key) => (obj[key] = value));
     }
-
     store.dispatch(new fromModal.ModalAction(action, obj));
+  }
+
+  onSnackbarAction(button: SnackbarButton): void {
+    store.dispatch(new fromSnackbar.SnackbarAction(button.action, button));
   }
 
   _onSnackbarClose(): void {

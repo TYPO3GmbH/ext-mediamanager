@@ -5,6 +5,7 @@ export interface SnackbarButton {
   label: string;
   color: Color;
   action: string;
+  data?: Record<string, any>;
 }
 
 export interface SnackbarData {
