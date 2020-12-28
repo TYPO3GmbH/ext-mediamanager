@@ -42,7 +42,9 @@ class StoragesProvider implements StoragesProviderInterface
      */
     public function getStoragesForUser(): array
     {
-        return $this->backendUserProvider->getBackendUser()->getFileStorages();
+        return \array_values(
+            $this->backendUserProvider->getBackendUser()->getFileStorages()
+        );
     }
 
     public function getFormattedStoragesForUser(): array

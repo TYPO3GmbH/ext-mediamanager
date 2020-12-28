@@ -19,10 +19,10 @@ namespace TYPO3\CMS\FilelistNg\Backend\Browser;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
 use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
 use TYPO3\CMS\Recordlist\Tree\View\LinkParameterProviderInterface;
 
@@ -37,10 +37,11 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
     /** @var AppConfigProviderInterface */
     private $appConfigProvider;
 
-    /** @var LanguageServiceProvider */
-    private $languageServiceProvider;
+    /** @var BackendTemplateView */
+    private $view;
 
     public function __construct(
+        BackendTemplateView $view,
         UriBuilder $uriBuilder,
         AppConfigProviderInterface $appConfigProvider,
         StoragesProviderInterface $storagesProvider,
@@ -49,12 +50,15 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
         $this->uriBuilder = $uriBuilder;
         $this->appConfigProvider = $appConfigProvider;
         $this->storagesProvider = $storagesProvider;
-        $this->languageServiceProvider = $languageServiceProvider;
+        $this->view = $view;
+        $this->view->initializeView();
     }
 
     public function render()
     {
         $bparams = GeneralUtility::_GP('bparams');
+
+        $this->view->getRenderingContext()->setControllerAction('FileBrowser');
 
         // The key number 3 of the bparams contains the "allowed" string. Disallowed is not passed to
         // the element browser at all but only filtered out in DataHandler afterwards
@@ -81,30 +85,30 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
         $appConfig = $this->appConfigProvider->getConfig();
         $appConfig['backendUrls'] = $backendUrls;
 
-        $jsFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/JavaScript/es.js');
-        $cssFile = $this->getStreamlinedFileName('EXT:cms_filelist_ng/Resources/Public/Css/filelist.css');
+        $this->view->assign('appConfig', $appConfig);
+        $this->view->assign('irreObjectId', $irreObjectId);
+        $this->view->assign('allowedFileExtensions', $allowedFileExtensions);
+        $this->view->assign('treeUrl', $backendUrls['treeUrl']);
+        $this->view->assign('storages', $storages);
 
-        $title = $this->languageServiceProvider->getLanguageService()->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.title');
+        $this->view->assign('selectedStorageUid', (int) $storageUid);
 
-        return "
-            <html>
-                <head>
-                    <title>$title</title>
-                    <link rel='stylesheet' href='$cssFile'>
-                    <script type='text/javascript' src='$jsFile'></script>
-                    <script type='text/javascript'>var app = " . \json_encode($appConfig) . ";</script>
-                </head>
-                <body>
-                    <typo3-filebrowser
-                        irreObjectId='" . $irreObjectId . "'
-                        allowedFileExtensions='" . \json_encode($allowedFileExtensions) . "'
-                        treeUrl='" . $backendUrls['treeUrl'] . "'
-                        storages='" . \json_encode(\array_values($storages)) . "'
-                        selectedStorageUid='" . $storageUid . "'
-                    ></typo3-filebrowser>
-                </body>
-            </html>
-        ";
+        return $this->view->render();
+    }
+
+    /***
+     * @return mixed[]
+     */
+    private function getStoragesData(): array
+    {
+        $serverRequest = ServerRequestFactory::fromGlobals();
+        $uri = (string) $serverRequest->getUri();
+
+        return \array_map(static function (array $storage) use ($uri) {
+            $storage['storageUrl'] = $uri . '&uid=' . $storage['uid'];
+
+            return $storage;
+        }, $this->storagesProvider->getFormattedStoragesForUser());
     }
 
     public function processSessionData($data)
@@ -125,58 +129,5 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
     public function isCurrentlySelectedItem(array $values)
     {
         // TODO: Implement isCurrentlySelectedItem() method.
-    }
-
-    /**
-     * @todo simlify getSotragesData
-     *
-     * @return mixed[]
-     */
-    private function getStoragesData(): array
-    {
-        $serverRequest = ServerRequestFactory::fromGlobals();
-        $uri = (string) $serverRequest->getUri();
-
-        return \array_map(static function (array $storage) use ($uri) {
-            $storage['storageUrl'] = $uri . '&uid=' . $storage['uid'];
-
-            return $storage;
-        }, $this->storagesProvider->getFormattedStoragesForUser());
-    }
-
-    protected function getStreamlinedFileName($file, $prepareForOutput = true)
-    {
-        if (0 === \strpos($file, 'EXT:')) {
-            $file = GeneralUtility::getFileAbsFileName($file);
-            // as the path is now absolute, make it "relative" to the current script to stay compatible
-            $file = PathUtility::getRelativePathTo($file) ?? '';
-            $file = \rtrim($file, '/');
-        } else {
-            $file = GeneralUtility::resolveBackPath($file);
-        }
-        if ($prepareForOutput) {
-            $file = GeneralUtility::createVersionNumberedFilename($file);
-            $file = $this->getAbsoluteWebPath($file);
-        }
-        return $file;
-    }
-
-    /**
-     * Gets absolute web path of filename for backend disposal.
-     * Resolving the absolute path in the frontend with conflict with
-     * applying config.absRefPrefix in frontend rendering process.
-     *
-     * @param string $file
-     *
-     * @return string
-     *
-     * @see \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::setAbsRefPrefix()
-     */
-    protected function getAbsoluteWebPath(string $file): string
-    {
-        if (TYPO3_MODE === 'FE') {
-            return $file;
-        }
-        return PathUtility::getAbsoluteWebPath($file);
     }
 }
