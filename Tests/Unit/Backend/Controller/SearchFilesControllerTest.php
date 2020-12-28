@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Search\Result\FileSearchResultInterface;
 use TYPO3\CMS\FilelistNg\Backend\Controller\SearchFilesController;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class SearchFilesControllerTest extends UnitTestCase
@@ -31,8 +31,8 @@ class SearchFilesControllerTest extends UnitTestCase
     /** @var SearchFilesController */
     private $controller;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|StorageProviderInterface */
-    private $storageProviderMock;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|StoragesProviderInterface */
+    private $StoragesProviderMock;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|FolderListGeneratorInterface */
     private $folderListGeneratorMock;
@@ -41,11 +41,11 @@ class SearchFilesControllerTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->storageProviderMock = $this->createMock(StorageProviderInterface::class);
+        $this->StoragesProviderMock = $this->createMock(StoragesProviderInterface::class);
         $this->folderListGeneratorMock = $this->createMock(FolderListGeneratorInterface::class);
 
         $this->controller = new SearchFilesController(
-            $this->storageProviderMock,
+            $this->StoragesProviderMock,
             $this->folderListGeneratorMock
         );
     }
@@ -93,7 +93,7 @@ class SearchFilesControllerTest extends UnitTestCase
             ->method('searchFiles')
             ->willReturn(new FileSearchResult([$fileA, $fileB]));
 
-        $this->storageProviderMock->expects(self::once())
+        $this->StoragesProviderMock->expects(self::once())
             ->method('getStorageForUserById')
             ->with(42)
             ->willReturn($storage);

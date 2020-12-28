@@ -18,13 +18,11 @@ namespace TYPO3\CMS\FilelistNg\Backend\Browser;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
 use TYPO3\CMS\Recordlist\Tree\View\LinkParameterProviderInterface;
 
@@ -33,29 +31,24 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
     /** @var UriBuilder */
     private $uriBuilder;
 
-    /** @var StorageProviderInterface */
-    private $storageProvider;
+    /** @var StoragesProviderInterface */
+    private $storagesProvider;
 
     /** @var AppConfigProviderInterface */
     private $appConfigProvider;
-
-    /** @var IconFactory */
-    private $iconFactory;
 
     /** @var LanguageServiceProvider */
     private $languageServiceProvider;
 
     public function __construct(
         UriBuilder $uriBuilder,
-        IconFactory $iconFactory,
         AppConfigProviderInterface $appConfigProvider,
-        StorageProviderInterface $storageProvider,
+        StoragesProviderInterface $storagesProvider,
         LanguageServiceProvider $languageServiceProvider
     ) {
         $this->uriBuilder = $uriBuilder;
-        $this->iconFactory = $iconFactory;
         $this->appConfigProvider = $appConfigProvider;
-        $this->storageProvider = $storageProvider;
+        $this->storagesProvider = $storagesProvider;
         $this->languageServiceProvider = $languageServiceProvider;
     }
 
@@ -71,7 +64,7 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
         $irreObjectId = \explode('|', $bparams)[4];
 
         $request = ServerRequestFactory::fromGlobals();
-        $storageUid = $request->getQueryParams()['uid'] ?? \current($this->storageProvider->getStoragesForUser())->getUid();
+        $storageUid = $request->getQueryParams()['uid'] ?? \current($this->storagesProvider->getStoragesForUser())->getUid();
 
         $storages = $this->getStoragesData();
 
@@ -144,22 +137,11 @@ class FileBrowser implements ElementBrowserInterface, LinkParameterProviderInter
         $serverRequest = ServerRequestFactory::fromGlobals();
         $uri = (string) $serverRequest->getUri();
 
-        return \array_map(function ($storage) use ($uri) {
-            $storageIcon =  $this->iconFactory->getIconForResource(
-                $storage->getRootLevelFolder(),
-                Icon::SIZE_SMALL,
-                null,
-                ['mount-root' => true]
-            );
+        return \array_map(static function (array $storage) use ($uri) {
+            $storage['storageUrl'] = $uri . '&uid=' . $storage['uid'];
 
-            return [
-                'uid' => $storage->getUid(),
-                'name' => $storage->getName(),
-                'storageUrl' => $uri . '&uid=' . $storage->getUid(),
-                'icon' => $storageIcon->getMarkup(),
-                'type' => $storage->getDriverType(),
-            ];
-        }, $this->storageProvider->getStoragesForUser());
+            return $storage;
+        }, $this->storagesProvider->getFormattedStoragesForUser());
     }
 
     protected function getStreamlinedFileName($file, $prepareForOutput = true)

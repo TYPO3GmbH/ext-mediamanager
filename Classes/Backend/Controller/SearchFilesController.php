@@ -22,21 +22,21 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\Search\FileSearchDemand;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 
 class SearchFilesController
 {
-    /** @var StorageProviderInterface */
-    private $storageProvider;
+    /** @var StoragesProviderInterface */
+    private $storagesProvider;
 
     /** @var FolderListGeneratorInterface */
     private $folderListGenerator;
 
     public function __construct(
-        StorageProviderInterface $storageProvider,
+        StoragesProviderInterface $storagesProvider,
         FolderListGeneratorInterface $folderListGenerator
     ) {
-        $this->storageProvider = $storageProvider;
+        $this->storagesProvider = $storagesProvider;
         $this->folderListGenerator = $folderListGenerator;
     }
 
@@ -53,7 +53,7 @@ class SearchFilesController
             return new HtmlResponse('Parameter "search" is missing', 400);
         }
 
-        $storage = $this->storageProvider->getStorageForUserById((int) $storageId);
+        $storage = $this->storagesProvider->getStorageForUserById((int) $storageId);
 
         if (null === $storage) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);

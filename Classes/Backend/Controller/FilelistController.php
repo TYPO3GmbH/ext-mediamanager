@@ -20,11 +20,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 
 class FilelistController
@@ -38,29 +36,24 @@ class FilelistController
     /** @var BackendUserProvider */
     private $backendUserProvider;
 
-    /** @var IconFactory */
-    private $iconFactory;
-
     /** @var AppConfigProviderInterface */
     private $appConfigProvider;
 
-    /** @var StorageProviderInterface */
-    private $storageProvider;
+    /** @var StoragesProviderInterface */
+    private $storagesProvider;
 
     public function __construct(
         BackendTemplateView $view,
         UriBuilder $uriBuilder,
         BackendUserProvider $backendUserProvider,
-        IconFactory $iconFactory,
         AppConfigProviderInterface $appConfigProvider,
-        StorageProviderInterface $storageProvider
+        StoragesProviderInterface $storagesProvider
     ) {
         $this->view = $view;
         $this->uriBuilder = $uriBuilder;
         $this->backendUserProvider = $backendUserProvider;
         $this->view->initializeView();
-        $this->iconFactory = $iconFactory;
-        $this->storageProvider = $storageProvider;
+        $this->storagesProvider = $storagesProvider;
         $this->appConfigProvider = $appConfigProvider;
     }
 
@@ -122,22 +115,10 @@ class FilelistController
      */
     private function getStoragesData(): array
     {
-        return \array_map(function ($storage) {
-            $storageIcon =  $this->iconFactory->getIconForResource(
-                $storage->getRootLevelFolder(),
-                Icon::SIZE_SMALL,
-                null,
-                ['mount-root' => true]
-            );
-
-            return [
-                'uid' => $storage->getUid(),
-                'name' => $storage->getName(),
-                'storageUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage->getUid()]),
-                'icon' => $storageIcon->getMarkup(),
-                'type' => $storage->getDriverType(),
-            ];
-        }, $this->storageProvider->getStoragesForUser());
+        return \array_map(function (array $storage) {
+            $storage['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage['uid']]);
+            return $storage;
+        }, $this->storagesProvider->getFormattedStoragesForUser());
     }
 
     private function addGlobalVars(array $backendUrls): void

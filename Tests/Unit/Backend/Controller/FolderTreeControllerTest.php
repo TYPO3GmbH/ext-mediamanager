@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Controller\FolderTreeController;
 use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StorageProviderInterface;
+use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FolderTreeControllerTest extends UnitTestCase
@@ -32,13 +32,13 @@ class FolderTreeControllerTest extends UnitTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|FolderTreeGeneratorInterface */
     private $folderTreeGeneratorMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|StorageProviderInterface */
-    private $storageProviderMock;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|StoragesProviderInterface */
+    private $StoragesProviderMock;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->storageProviderMock = $this->getMockBuilder(StorageProviderInterface::class)
+        $this->StoragesProviderMock = $this->getMockBuilder(StoragesProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,7 +47,7 @@ class FolderTreeControllerTest extends UnitTestCase
             ->getMock();
 
         $this->controller = new FolderTreeController(
-            $this->storageProviderMock,
+            $this->StoragesProviderMock,
             $this->folderTreeGeneratorMock
         );
     }
@@ -68,7 +68,7 @@ class FolderTreeControllerTest extends UnitTestCase
      */
     public function it_returns_a_404_status_code_on_missing_storage_resource(): void
     {
-        $this->storageProviderMock->expects(self::once())
+        $this->StoragesProviderMock->expects(self::once())
             ->method('getStorageForUserById')
             ->with(123)
             ->willReturn(null);
@@ -92,7 +92,7 @@ class FolderTreeControllerTest extends UnitTestCase
         $fileStorageMock->method('getUid')
             ->willReturn(123);
 
-        $this->storageProviderMock->expects(self::once())
+        $this->StoragesProviderMock->expects(self::once())
             ->method('getStorageForUserById')
             ->with(123)
             ->willReturn($fileStorageMock);

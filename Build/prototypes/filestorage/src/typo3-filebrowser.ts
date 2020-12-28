@@ -118,7 +118,7 @@ export class Typo3Filebrowser extends Typo3Filestorage {
 
       this._sendForeignInsertCommand([item.uid]);
       // @ts-ignore
-      top.TYPO3.Notification.success('Success', 'Element added');
+      top.TYPO3.Notification.success('Media added');
       return;
     }
 

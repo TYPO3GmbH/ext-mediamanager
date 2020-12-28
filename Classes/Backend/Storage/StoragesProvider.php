@@ -16,17 +16,25 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FilelistNg\Backend\Storage;
 
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
 
-class StorageProvider implements StorageProviderInterface
+class StoragesProvider implements StoragesProviderInterface
 {
     /** @var BackendUserProvider */
     private $backendUserProvider;
 
-    public function __construct(BackendUserProvider $backendUserProvider)
-    {
+    /** @var IconFactory */
+    private $iconFactory;
+
+    public function __construct(
+        BackendUserProvider $backendUserProvider,
+        IconFactory $iconFactory
+    ) {
         $this->backendUserProvider = $backendUserProvider;
+        $this->iconFactory = $iconFactory;
     }
 
     /**
@@ -35,6 +43,25 @@ class StorageProvider implements StorageProviderInterface
     public function getStoragesForUser(): array
     {
         return $this->backendUserProvider->getBackendUser()->getFileStorages();
+    }
+
+    public function getFormattedStoragesForUser(): array
+    {
+        return \array_map(function ($storage) {
+            $storageIcon =  $this->iconFactory->getIconForResource(
+                $storage->getRootLevelFolder(),
+                Icon::SIZE_SMALL,
+                null,
+                ['mount-root' => true]
+            );
+
+            return [
+                'uid' => $storage->getUid(),
+                'name' => $storage->getName(),
+                'icon' => $storageIcon->getMarkup(),
+                'type' => $storage->getDriverType(),
+            ];
+        }, $this->getStoragesForUser());
     }
 
     public function getStorageForUserById(int $storageId): ?ResourceStorage
