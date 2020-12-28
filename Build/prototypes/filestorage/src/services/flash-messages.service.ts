@@ -17,6 +17,7 @@ import {
   SNACKBAR_ACTION_MESSAGE_TYPE,
   SnackbarActionMessage,
 } from '../../../shared/src/types/snackbar-action-message';
+import { isEqual } from 'lodash-es';
 
 interface Message {
   message: string;
@@ -63,6 +64,9 @@ export class FlashMessagesService {
         ).pipe(
           map(event => event.data),
           filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
+          filter(data =>
+            isEqual(data.actionData.data.formData, undoAction.formData)
+          ),
           timeout(5000),
           take(1),
           catchError(() => EMPTY),

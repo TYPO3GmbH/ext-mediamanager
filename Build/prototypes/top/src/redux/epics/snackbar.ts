@@ -13,7 +13,6 @@ export const snackbarAction = (
 ): Observable<Action> => {
   return action$.ofType(fromSnackbar.SNACKBAR_ACTION).pipe(
     tap(action => {
-      // @todo send post message to content frame and modal iframe
       const messageData = new SnackbarActionMessage(
         action.action,
         action.data as SnackbarButton
