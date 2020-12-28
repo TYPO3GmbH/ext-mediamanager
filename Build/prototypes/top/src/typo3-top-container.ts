@@ -53,6 +53,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       >
         ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>
+      <typo3-snackbar placement="right"></typo3-snackbar>
     `;
   }
 
