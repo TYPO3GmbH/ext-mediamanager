@@ -68,13 +68,13 @@ export class Typo3Snackbar extends LitElement {
     if (true === this.visible) {
       if (this.duration) {
         this.timerAutoHide = window.setTimeout(() => {
-          this._hideSnackbar();
+          this.hideSnackbar();
         }, this.duration);
       }
     }
   }
 
-  _hideSnackbar(): void {
+  hideSnackbar(): void {
     clearTimeout(this.timerAutoHide);
     this.visible = false;
     this.addEventListener('transitionend', this._afterHide);

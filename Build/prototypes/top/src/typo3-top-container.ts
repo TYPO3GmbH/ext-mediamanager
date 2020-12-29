@@ -23,12 +23,15 @@ import {
   ShowSnackbarMessage,
 } from '../../shared/src/types/show-snackbar-message';
 import { SnackbarButton } from '../../shared/src/types/snackbar-data';
+import { Typo3Snackbar } from '../../../packages/snackbar/src/typo3-snackbar';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
   @internalProperty() state!: RootState;
 
   @query('typo3-modal') modal!: Typo3Modal;
+
+  @query('typo3-snackbar') snackbar!: Typo3Snackbar;
 
   public static styles = [themeStyles, styles];
 
@@ -132,6 +135,8 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       formData.forEach((value, key) => (obj[key] = value));
     }
     store.dispatch(new fromModal.ModalAction(action, obj));
+
+    this.snackbar.hideSnackbar();
   }
 
   onSnackbarAction(button: SnackbarButton): void {

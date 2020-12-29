@@ -31,7 +31,6 @@ export const snackbarReducer = (
         open: true,
       };
     case CLOSE_SNACKBAR:
-    case SNACKBAR_ACTION:
       return {
         ...state,
         open: false,
