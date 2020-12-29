@@ -76,13 +76,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   public connectedCallback(): void {
     super.connectedCallback();
-    this.addEventListener('dragleave', this._onDragLeave);
+    this.addEventListener('dragend', this._onDragEnd);
     this.addEventListener('dragover', this._onDragOver);
   }
 
   public disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('dragleave', this._onDragLeave);
+    this.removeEventListener('dragend', this._onDragEnd);
     this.addEventListener('dragover', this._onDragOver);
   }
 
@@ -905,7 +905,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(action);
   }
 
-  _onDragLeave(): void {
+  _onDragEnd(): void {
     store.dispatch(new fromFileActions.DragFilesEnd());
   }
 
