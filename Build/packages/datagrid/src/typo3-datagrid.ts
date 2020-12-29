@@ -143,6 +143,7 @@ export class Typo3Datagrid extends LitElement {
       direction: string
     ) => {
       const asc = direction === 'asc';
+
       return (a: { [key: string]: string }, b: { [key: string]: string }) => {
         if (a[columnName] === undefined || a[columnName] === null) {
           return 1;
@@ -150,6 +151,16 @@ export class Typo3Datagrid extends LitElement {
         if (b[columnName] === undefined || b[columnName] === null) {
           return 0;
         }
+        const typeColumn = 'sysType';
+
+        if (a[typeColumn] != b[typeColumn]) {
+          if ('_FILE' === a[typeColumn]) {
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+
         const columnDef = find(this.schema, ['name', columnName]);
         if (columnDef && has(columnDef, 'sortField')) {
           const sortField = columnDef['sortField'];
@@ -369,7 +380,7 @@ export class Typo3Datagrid extends LitElement {
     x = x + ml;
     y = y + mt;
 
-    if (this.canvasGrid.orderDirection === 'asc') {
+    if (this.canvasGrid.orderDirection === 'desc') {
       e.ctx.moveTo(x + aw, y);
       e.ctx.lineTo(x + aw * 0.5, y + ah);
       e.ctx.lineTo(x, y);
