@@ -1,18 +1,23 @@
 import { ActionsObservable } from 'redux-observable';
-import * as fromModal from '../ducks/modal';
+import * as fromSnackbar from '../ducks/snackbar';
 import { Observable } from 'rxjs';
 import { Action } from 'redux';
 import { ignoreElements, tap } from 'rxjs/operators';
 import { IframeHelper } from '../../../../shared/src/lib/iframe-helper';
-import { CloseModalMessage } from '../../../../shared/src/types/close-modal-message';
 import { MessageHandler } from '../../../../shared/src/lib/message-handler';
+import { SnackbarActionMessage } from '../../../../shared/src/types/snackbar-action-message';
+import { SnackbarButton } from '../../../../shared/src/types/snackbar-data';
 
-export const closeModal = (
-  action$: ActionsObservable<fromModal.CloseModal | fromModal.ModalAction>
+export const snackbarAction = (
+  action$: ActionsObservable<fromSnackbar.SnackbarAction>
 ): Observable<Action> => {
-  return action$.ofType(fromModal.CLOSE_MODAL, fromModal.MODAL_ACTION).pipe(
+  return action$.ofType(fromSnackbar.SNACKBAR_ACTION).pipe(
     tap(action => {
-      const messageData = new CloseModalMessage(action.action, action.data);
+      const messageData = new SnackbarActionMessage(
+        action.action,
+        action.data as SnackbarButton
+      );
+
       MessageHandler.sendPostMessage(
         [IframeHelper.getContentIframe(), IframeHelper.getModalIframe()],
         messageData

@@ -281,6 +281,9 @@
 			<trans-unit id="file_browser.fileNotAllowed" resname="file_browser.fileNotAllowed">
 				<source>Only files with the allowed file extensions can be selected</source>
 			</trans-unit>
+			<trans-unit id="file_browser.fileAdded" resname="file_browser.fileAdded">
+				<source>File added</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

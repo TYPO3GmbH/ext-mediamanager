@@ -20,6 +20,8 @@ import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { orderBy } from 'lodash-es';
 import * as fromView from './redux/ducks/view-mode';
 import { Typo3Tooltip } from '../../../packages/tooltip/src/typo3-tooltip';
+import { ShowSnackbarMessage } from '../../shared/src/types/show-snackbar-message';
+import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
@@ -117,8 +119,16 @@ export class Typo3Filebrowser extends Typo3Filestorage {
       }
 
       this._sendForeignInsertCommand([item.uid]);
-      // @ts-ignore
-      top.TYPO3.Notification.success('Media added');
+      MessageHandler.sendPostMessage(
+        [top],
+        new ShowSnackbarMessage({
+          duration: 2500,
+          title: '',
+          message: translate('file_browser.fileAdded'),
+          variant: SnackbarVariants.success,
+        })
+      );
+
       return;
     }
 
@@ -144,7 +154,7 @@ export class Typo3Filebrowser extends Typo3Filestorage {
         table: 'sys_file',
         uid: uid,
       };
-      MessageHandler.sendPostMessage(IframeHelper.getContentIframe(), action);
+      MessageHandler.sendPostMessage([IframeHelper.getContentIframe()], action);
     });
   }
 

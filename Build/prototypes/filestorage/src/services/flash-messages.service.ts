@@ -1,9 +1,23 @@
 import { ajax } from 'rxjs/ajax';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  take,
+  timeout,
+} from 'rxjs/operators';
+import { EMPTY, fromEvent, Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
-import { SnackbarValues } from '../../../../packages/snackbar/src/lib/snackbar-values';
 import * as fromGlobalActions from '../redux/ducks/global-actions';
+import { MessageHandler } from '../../../shared/src/lib/message-handler';
+import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
+import { translate } from './translation.service';
+import {
+  SNACKBAR_ACTION_MESSAGE_TYPE,
+  SnackbarActionMessage,
+} from '../../../shared/src/types/snackbar-action-message';
+import { isEqual } from 'lodash-es';
 
 interface Message {
   message: string;
@@ -14,44 +28,51 @@ interface Message {
 export class FlashMessagesService {
   fetchFlashMessages(
     action: fromGlobalActions.LoadFlashMessages
-  ): Observable<Message[]> {
+  ): Observable<any> {
     const flashMessagesUrl: string = getUrl('flashMessagesUrl');
 
     return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(
-      tap(messages => {
-        let undoButton = '';
-        if (action.undoAction) {
-          undoButton =
-            "<typo3-file-action-undo-button undoAction='" +
-            JSON.stringify(action.undoAction) +
-            "'></typo3-file-action-undo-button>";
-        }
-        const flashMessage = {
-          message:
-            messages.map(errorMessage => errorMessage.message).join('<br />') +
-            undoButton,
-
+      map(messages => {
+        const showSnackbarMessage = new ShowSnackbarMessage({
           title: action.message,
+          message: messages
+            .map(errorMessage => errorMessage.message)
+            .join('<br />'),
           variant: action.variant,
           duration: 5000,
-        };
-        this.displayFlashMessage(flashMessage as SnackbarValues);
+        });
+
+        if (action.undoAction) {
+          showSnackbarMessage.data.buttons = [
+            {
+              label: translate('undo'),
+              color: 'default',
+              action: 'undo',
+              data: action.undoAction,
+            },
+          ];
+        }
+
+        MessageHandler.sendPostMessage([top], showSnackbarMessage);
+        return action.undoAction;
+      }),
+      filter(undoAction => typeof undoAction != 'undefined'),
+      switchMap(undoAction => {
+        return fromEvent<MessageEvent<SnackbarActionMessage>>(
+          window,
+          'message'
+        ).pipe(
+          map(event => event.data),
+          filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
+          filter(data =>
+            isEqual(data.actionData.data.formData, undoAction.formData)
+          ),
+          timeout(5000),
+          take(1),
+          catchError(() => EMPTY),
+          map(() => action.undoAction)
+        );
       })
     );
-  }
-
-  displayFlashMessage(data: SnackbarValues): void {
-    try {
-      dispatchEvent(
-        new CustomEvent('typo3-add-snackbar', {
-          bubbles: true,
-          detail: data,
-        })
-      );
-    } catch (e) {
-      console.log(e);
-      console.log(window.dispatchEvent.prototype);
-      console.log('can not dispatch custom event ?');
-    }
   }
 }
