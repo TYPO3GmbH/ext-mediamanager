@@ -15,6 +15,7 @@ import { CanvasDatagrid } from './lib/CanvasDatagrid';
 import 'canvas-datagrid';
 import { PropertyValues } from 'lit-element/lib/updating-element';
 import * as _ from 'lodash-es';
+import { find, has } from 'lodash-es';
 import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
 import { EndEditEvent } from './lib/event/EndEditEvent';
 import { ContextMenuEvent } from './lib/event/ContextMenuEvent';
@@ -28,9 +29,9 @@ import { Cell } from './lib/Cell';
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
-  @property({ type: String }) schema = '';
+  @property({ type: Object }) schema = {};
 
-  @property({ type: String }) data = '';
+  @property({ type: Object }) data = {};
 
   @property({ type: Array }) editableColumns: string[] = [];
 
@@ -109,8 +110,8 @@ export class Typo3Datagrid extends LitElement {
         borderdragbehavior="${borderDragMode}"
         selectionmode="row"
         showrowheaders="false"
-        schema="${this.schema}"
-        data="${this.data}"
+        schema="${JSON.stringify(this.schema)}"
+        data="${JSON.stringify(this.data)}"
         editable="${this.editableColumns.length > 0}"
       ></canvas-datagrid>
     `;
@@ -133,6 +134,43 @@ export class Typo3Datagrid extends LitElement {
         expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
       }
     }
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.canvasGrid.sorters.string = (
+      columnName: string,
+      direction: string
+    ) => {
+      const asc = direction === 'asc';
+      return (a: { [key: string]: string }, b: { [key: string]: string }) => {
+        if (a[columnName] === undefined || a[columnName] === null) {
+          return 1;
+        }
+        if (b[columnName] === undefined || b[columnName] === null) {
+          return 0;
+        }
+        const columnDef = find(this.schema, ['name', columnName]);
+        if (columnDef && has(columnDef, 'sortField')) {
+          const sortField = columnDef['sortField'];
+          if (asc) {
+            return a[sortField] - b[sortField];
+          }
+          return b[sortField] - a[sortField];
+        }
+
+        if (asc) {
+          if (!a[columnName].localeCompare) {
+            return 1;
+          }
+          return a[columnName].localeCompare(b[columnName]);
+        }
+        if (!b[columnName].localeCompare) {
+          return 1;
+        }
+        return b[columnName].localeCompare(a[columnName]);
+      };
+    };
   }
 
   disconnectedCallback() {

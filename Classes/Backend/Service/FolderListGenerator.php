@@ -86,6 +86,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             $this->formatResource($folder),
             [
                 'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
+                'sizeRaw' => (int) $numFiles,
                 'type' => $this->languageService->getLL('folder'),
             ]
         );
@@ -136,6 +137,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'uid' => $file->getUid(),
                 'extension' => $file->getExtension(),
                 'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
+                'sizeRaw' => (int) $file->getSize(),
                 'type' => \strtoupper($file->getExtension()),
                 'references' => $this->fileReferencesProvider->getReferencesCount($file),
                 'thumbnailUrl' => $thumbnailUrl,
@@ -161,6 +163,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             'icon' => $icon->getMarkup(),
             'name' => $resource->getName(),
             'modified' => BackendUtility::date($resource->getModificationTime()),
+            'modifiedRaw' => $resource->getModificationTime(),
             //todo detect variants
             'variants' => '-',
             'references' => '-',

@@ -97,6 +97,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     title: string;
     hidden?: boolean;
     sortable?: boolean;
+    sortField?: string;
   }[] {
     const fields = [
       { name: 'identifier', type: 'text', title: ' ', hidden: true },
@@ -107,12 +108,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         title: translate('field.modified'),
         width: '150',
         sortable: true,
+        sortField: 'modifiedRaw',
       },
       {
         name: 'size',
         title: translate('field.size'),
         width: '100',
         sortable: true,
+        sortField: 'sizeRaw',
       },
       { name: 'type', title: translate('field.type'), width: '150' },
       {
@@ -122,6 +125,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       },
       {
         name: 'references',
+        type: 'number',
         title: translate('field.references'),
         width: '100',
       },
@@ -247,8 +251,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         fromList.isEmptySelection(this.state)
           ? 'false'
           : 'true'}"
-        schema="${JSON.stringify(this.listHeader)}"
-        data="${JSON.stringify(listItems)}"
+        .schema="${this.listHeader}"
+        .data="${listItems}"
         .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
         .selectedRows="${fromList.getSelectedItems(this.state)}"
         @dragstart="${this._onDragStart}"
@@ -402,13 +406,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         ${this.listHeader
           .filter(header => header.sortable === true)
           .map(listHeader => {
+            const sortField = listHeader.sortField ?? listHeader.name;
+
             return html`
               <typo3-dropdown-item
                 activated
                 group="sort_field"
-                ?selected="${fromView.isSortField(this.state)(listHeader.name)}"
-                value="${listHeader.name}"
-                @click="${() => this._onSelectSortField(listHeader.name)}"
+                ?selected="${fromView.isSortField(this.state)(sortField)}"
+                value="${sortField}"
+                @click="${() => this._onSelectSortField(sortField)}"
               >
                 <span>${listHeader.title}</span>
               </typo3-dropdown-item>
