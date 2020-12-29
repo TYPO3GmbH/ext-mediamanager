@@ -8,6 +8,8 @@ import {
 
 import styles from './typo3-dropzone.pcss';
 import themeStyles from '../../../theme/index.pcss';
+import { isEqual } from 'lodash-es';
+
 export type DropEffects = 'copy' | 'move' | 'link' | 'none';
 
 @customElement('typo3-dropzone')
@@ -60,7 +62,7 @@ export class Typo3Dropzone extends LitElement {
     // dispatch event returns true if preventDefault() is not called
     this.dropAllowed = !!this.dispatchEvent(shouldAcceptEvent);
 
-    if (!event.dataTransfer || 0 === event.dataTransfer.items.length) {
+    if (!event.dataTransfer || !isEqual(['Files'], event.dataTransfer.types)) {
       return;
     }
 
@@ -97,6 +99,7 @@ export class Typo3Dropzone extends LitElement {
   }
 
   public onDrop(event: DragEvent): void {
+    console.log('on Drop...?');
     event.preventDefault();
     this.clearDebouncedDragLeave();
     this.isDragged = false;
