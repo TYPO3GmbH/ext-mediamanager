@@ -177,7 +177,7 @@ export class Typo3Datagrid extends LitElement {
               .replace('symbol', 'svg');
 
             const svg = new Blob([svgURL], {
-              type: 'image/svg+xml;charset=utf-8',
+              type: 'image/svg+xml',
             });
             const domURL = self.URL || self.webkitURL || self;
             const url = domURL.createObjectURL(svg);
