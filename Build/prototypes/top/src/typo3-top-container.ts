@@ -42,10 +42,6 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('message', this._handlePostMessage);
-    // todo: use em/adjust rems or wait for bootstrap 4
-    // bootstrap 3 defines 10px as base unit via html {font-size: 10px;}
-    // use 16px as base unit to make sure elements have the correct size
-    window.document.documentElement.style.fontSize = '16px';
   }
 
   disconnectedCallback() {
