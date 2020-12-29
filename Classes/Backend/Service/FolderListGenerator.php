@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -100,7 +101,13 @@ class FolderListGenerator implements FolderListGeneratorInterface
         $thumbnailHeight = '300m';
 
         if ($file->isImage() || $file->isMediaFile()) {
-            $thumbnailUrl = BackendUtility::getThumbnailUrl($file->getUid(), ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]);
+            $processedFile = $file->process(
+                ProcessedFile::CONTEXT_IMAGEPREVIEW,
+                ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]
+            );
+            if ($processedFile) {
+                $thumbnailUrl = PathUtility::getAbsoluteWebPath($processedFile->getPublicUrl());
+            }
         }
 
         // todo: potential bottleneck: (either perform request to get metadata url or retrieve all metadataIds via queryProvider)
