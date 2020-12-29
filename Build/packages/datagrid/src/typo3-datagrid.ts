@@ -51,6 +51,8 @@ export class Typo3Datagrid extends LitElement {
   private latestSelectedRowIndex?: number;
 
   render(): TemplateResult {
+    const borderDragMode = this.draggable ? 'move' : 'none';
+
     return html`
       <canvas-datagrid
         style="
@@ -90,7 +92,7 @@ export class Typo3Datagrid extends LitElement {
           --cdg-row-header-cell-border-color: transparent;
           --cdg-row-header-cell-hover-background-color: transparent;
           --cdg-selection-overlay-borderColor: transparent;
-          --cdg-disabled-cell-opacity: 0.5
+          --cdg-disabled-cell-opacity: 0.5;
         "
         @rendercell="${this._onRendercell}"
         @contextmenu="${this._onContextmenu}"
@@ -99,10 +101,12 @@ export class Typo3Datagrid extends LitElement {
         @renderorderbyarrow="${this._onRenderOrderByArrow}"
         @selectionchanged="${this._onSelectionChanged}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
+        @beginmove="${this._onBeginmove}"
         @endedit="${this._onEndEdit}"
         @click="${this._onClick}"
         @dblclick="${this._onDblClick}"
         @mousedown="${this._onMousedown}"
+        borderdragbehavior="${borderDragMode}"
         selectionmode="row"
         showrowheaders="false"
         schema="${this.schema}"
@@ -251,6 +255,14 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
+  _onBeginmove(e: CanvasDataGridEvent): void {
+    // trigger mouseup to prevent default move handling
+    setTimeout(
+      () => document.body.dispatchEvent(new MouseEvent('mouseup')),
+      10
+    );
+  }
+
   _onClick(e: CanvasDataGridEvent): void {
     if (true === e.cell.isHeader) {
       return;
@@ -349,11 +361,13 @@ export class Typo3Datagrid extends LitElement {
       })
     );
   }
+
   _onBeforeBeginEdit(event: CanvasDataGridEvent): void {
     if (false === this._isEditableCell(event.cell)) {
       event.preventDefault();
     }
   }
+
   _onEndEdit(event: EndEditEvent): void {
     if (event.aborted === true) {
       return;
