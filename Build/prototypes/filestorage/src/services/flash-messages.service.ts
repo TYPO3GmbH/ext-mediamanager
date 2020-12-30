@@ -1,4 +1,3 @@
-import { ajax } from 'rxjs/ajax';
 import {
   catchError,
   filter,
@@ -11,13 +10,14 @@ import { EMPTY, fromEvent, Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
 import * as fromGlobalActions from '../redux/ducks/global-actions';
 import { MessageHandler } from '../../../shared/src/lib/message-handler';
-import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
 import { translate } from './translation.service';
 import {
   SNACKBAR_ACTION_MESSAGE_TYPE,
   SnackbarActionMessage,
 } from '../../../shared/src/types/snackbar-action-message';
 import { isEqual } from 'lodash-es';
+import { ApiService } from './api.service';
+import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
 
 interface Message {
   message: string;
@@ -26,12 +26,13 @@ interface Message {
 }
 
 export class FlashMessagesService {
+  constructor(protected apiService: ApiService) {}
+
   fetchFlashMessages(
     action: fromGlobalActions.LoadFlashMessages
-  ): Observable<any> {
+  ): Observable<unknown> {
     const flashMessagesUrl: string = getUrl('flashMessagesUrl');
-
-    return ajax.getJSON<Message[]>(flashMessagesUrl).pipe(
+    return this.apiService.getJSON<Message[]>(flashMessagesUrl).pipe(
       map(messages => {
         const showSnackbarMessage = new ShowSnackbarMessage({
           title: action.message,

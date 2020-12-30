@@ -11,6 +11,7 @@ import { rootEpic } from './epics';
 import { FlashMessagesService } from '../services/flash-messages.service';
 import { UndoActionResolverService } from '../services/undo-action-resolver.service';
 import { ModalService } from '../services/modal.service';
+import { ApiService } from '../services/api.service';
 
 const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
   action: Action
@@ -20,9 +21,10 @@ const allowCustomActionObjectsMiddleWare: Middleware = () => next => (
 
 const epicMiddleware = createEpicMiddleware({
   dependencies: {
-    flashMessagesService: new FlashMessagesService(),
+    flashMessagesService: new FlashMessagesService(new ApiService()),
     undoActionResolverService: new UndoActionResolverService(),
     modalService: new ModalService(),
+    apiService: new ApiService(),
   },
 });
 

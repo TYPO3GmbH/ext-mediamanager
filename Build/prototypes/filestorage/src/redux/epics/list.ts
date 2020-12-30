@@ -12,18 +12,20 @@ import {
   switchMap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { ajax } from 'rxjs/ajax';
 import { Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { RootState } from '../ducks';
 import { getUrl } from '../../services/backend-url.service';
+import { ApiService } from '../../services/api.service';
 
 export const fetchListData = (
-  action$: ActionsObservable<fromList.LoadListData>
+  action$: ActionsObservable<fromList.LoadListData>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromList.LOAD_LIST_DATA).pipe(
     switchMap(action =>
-      ajax.getJSON<ListItem[]>(action.url).pipe(
+      dependencies.apiService.getJSON<ListItem[]>(action.url).pipe(
         mergeMap(data => [
           new fromList.ClearSelection(),
           new fromList.LoadListDataSuccess(data),
@@ -74,7 +76,9 @@ export const searchTermChanged = (
 };
 
 export const searchFiles = (
-  action$: ActionsObservable<fromList.SearchFiles>
+  action$: ActionsObservable<fromList.SearchFiles>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromList.SEARCH_FILES).pipe(
     switchMap(action => {
@@ -82,7 +86,7 @@ export const searchFiles = (
       params.append('search', action.searchTerm);
 
       const url = getUrl('searchFilesUrl') + '&' + params.toString();
-      return ajax.getJSON<ListItem[]>(url).pipe(
+      return dependencies.apiService.getJSON<ListItem[]>(url).pipe(
         mergeMap(data => [
           new fromList.ClearSelection(),
           new fromList.SearchFilesSuccess(data),
