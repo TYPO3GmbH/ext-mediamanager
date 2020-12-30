@@ -15,9 +15,7 @@ export interface CanvasDatagrid extends HTMLElement {
   orderDirection: 'asc' | 'desc';
   style: CustomCanvasCSStyleDeclaration;
   selectedRows: { [key: string]: string }[];
-  sorters: {
-    string: Function;
-  };
+  sorters: { [key: string]: Function };
   selectNone(): void;
   selectRow(rowIndex: number): void;
   beginEditAt(columnIndex: number, rowIndex: number): void;

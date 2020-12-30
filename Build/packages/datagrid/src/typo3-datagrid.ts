@@ -15,7 +15,6 @@ import { CanvasDatagrid } from './lib/CanvasDatagrid';
 import 'canvas-datagrid';
 import { PropertyValues } from 'lit-element/lib/updating-element';
 import * as _ from 'lodash-es';
-import { find, has } from 'lodash-es';
 import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
 import { EndEditEvent } from './lib/event/EndEditEvent';
 import { ContextMenuEvent } from './lib/event/ContextMenuEvent';
@@ -32,6 +31,8 @@ export class Typo3Datagrid extends LitElement {
   @property({ type: Object }) schema = {};
 
   @property({ type: Object }) data = {};
+
+  @property({ type: Object }) sorters: { [key: string]: Function } = {};
 
   @property({ type: Array }) editableColumns: string[] = [];
 
@@ -95,24 +96,26 @@ export class Typo3Datagrid extends LitElement {
           --cdg-selection-overlay-borderColor: transparent;
           --cdg-disabled-cell-opacity: 0.5;
         "
-        @rendercell="${this._onRendercell}"
-        @contextmenu="${this._onContextmenu}"
-        @afterrendercell="${this._onAfterRendercell}"
-        @rendertext="${this._onRenderText}"
-        @renderorderbyarrow="${this._onRenderOrderByArrow}"
-        @selectionchanged="${this._onSelectionChanged}"
-        @beforebeginedit="${this._onBeforeBeginEdit}"
-        @beginmove="${this._onBeginmove}"
-        @endedit="${this._onEndEdit}"
-        @click="${this._onClick}"
-        @dblclick="${this._onDblClick}"
-        @mousedown="${this._onMousedown}"
+        allowcolumnreordering="false"
+        allowcolumnresize="false"
         borderdragbehavior="${borderDragMode}"
-        selectionmode="row"
-        showrowheaders="false"
-        schema="${JSON.stringify(this.schema)}"
         data="${JSON.stringify(this.data)}"
         editable="${this.editableColumns.length > 0}"
+        schema="${JSON.stringify(this.schema)}"
+        selectionmode="row"
+        showrowheaders="false"
+        @afterrendercell="${this._onAfterRendercell}"
+        @beforebeginedit="${this._onBeforeBeginEdit}"
+        @beginmove="${this._onBeginmove}"
+        @click="${this._onClick}"
+        @contextmenu="${this._onContextmenu}"
+        @dblclick="${this._onDblClick}"
+        @endedit="${this._onEndEdit}"
+        @mousedown="${this._onMousedown}"
+        @rendercell="${this._onRendercell}"
+        @renderorderbyarrow="${this._onRenderOrderByArrow}"
+        @rendertext="${this._onRenderText}"
+        @selectionchanged="${this._onSelectionChanged}"
       ></canvas-datagrid>
     `;
   }
@@ -138,50 +141,10 @@ export class Typo3Datagrid extends LitElement {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
-    this.canvasGrid.sorters.string = (
-      columnName: string,
-      direction: string
-    ) => {
-      const asc = direction === 'asc';
-
-      return (a: { [key: string]: string }, b: { [key: string]: string }) => {
-        if (a[columnName] === undefined || a[columnName] === null) {
-          return 1;
-        }
-        if (b[columnName] === undefined || b[columnName] === null) {
-          return 0;
-        }
-        const typeColumn = 'sysType';
-
-        if (a[typeColumn] != b[typeColumn]) {
-          if ('_FILE' === a[typeColumn]) {
-            return 0;
-          } else {
-            return 1;
-          }
-        }
-
-        const columnDef = find(this.schema, ['name', columnName]);
-        if (columnDef && has(columnDef, 'sortField')) {
-          const sortField = columnDef['sortField'];
-          if (asc) {
-            return a[sortField] - b[sortField];
-          }
-          return b[sortField] - a[sortField];
-        }
-
-        if (asc) {
-          if (!a[columnName].localeCompare) {
-            return 1;
-          }
-          return a[columnName].localeCompare(b[columnName]);
-        }
-        if (!b[columnName].localeCompare) {
-          return 1;
-        }
-        return b[columnName].localeCompare(a[columnName]);
-      };
-    };
+    this.canvasGrid.sorters = Object.assign(
+      this.canvasGrid.sorters,
+      this.sorters
+    );
   }
 
   disconnectedCallback() {

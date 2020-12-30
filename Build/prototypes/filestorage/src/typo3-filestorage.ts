@@ -44,6 +44,8 @@ import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
 import { createSVGElement } from './lib/svg-helper';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { DatagridSorter } from './lib/datagrid-sorter';
+import { Schema } from './types/schema';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -90,15 +92,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromGlobalActions.Reload() as Action);
   }
 
-  get listHeader(): {
-    name: string;
-    type?: string;
-    width?: string;
-    title: string;
-    hidden?: boolean;
-    sortable?: boolean;
-    sortField?: string;
-  }[] {
+  get datagridSchema(): Schema {
     const fields = [
       { name: 'identifier', type: 'text', title: ' ', hidden: true },
       { name: 'icon', type: 'html', title: ' ', width: '24' },
@@ -245,16 +239,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     if (fromView.isListMode(this.state)) {
+      const sorters = DatagridSorter.getDatagridSorters(this.datagridSchema);
       return html` <typo3-datagrid
         class="main-content"
         draggable="${!this.itemsDragDropEnabled ||
         fromList.isEmptySelection(this.state)
           ? 'false'
           : 'true'}"
-        .schema="${this.listHeader}"
+        .schema="${this.datagridSchema}"
         .data="${listItems}"
         .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
         .selectedRows="${fromList.getSelectedItems(this.state)}"
+        .sorters="${sorters}"
         @dragstart="${this._onDragStart}"
         @contextmenu="${this._onContextMenuWithoutContext}"
         @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
@@ -403,7 +399,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           ${createSVGElement('view.sorting', 'icon')}
           <span>${translate('view.sorting')}</span>
         </typo3-dropdown-button>
-        ${this.listHeader
+        ${this.datagridSchema
           .filter(header => header.sortable === true)
           .map(listHeader => {
             const sortField = listHeader.sortField ?? listHeader.name;
