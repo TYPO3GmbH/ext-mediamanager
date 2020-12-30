@@ -1,19 +1,22 @@
-<html>
-    <head>
-        <link rel='stylesheet' href="{f:uri.resource(path:'Css/filelist.css')}">
-        <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
-        <script type="text/javascript">
-            var app = {f:format.json(value: appConfig) -> f:format.raw()}
-        </script>
-    </head>
-    <body>
-        <typo3-filestorage
-            treeUrl="{treeUrl}"
-            fileActionUrl="{fileActionUrl}"
-            storages="{f:format.json(value: storages)}"
-            selectedStorageUid="{selectedStorageUid}"
-            itemsDragDropEnabled
-            itemsEditEnabled
-        ></typo3-filestorage>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+<head>
+    <title>{f:translate(key: 'LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:mlang_tabs_tab')}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel='stylesheet' href="{f:uri.resource(path:'Css/filelist.css')}">
+    <script type="module" src="{f:uri.resource(path:'JavaScript/es.js')}"></script>
+    <script type="text/javascript">
+        var app = {f:format.json(value: appConfig) -> f:format.raw()}
+    </script>
+</head>
+<body>
+    <typo3-filestorage
+        treeUrl="{treeUrl}"
+        fileActionUrl="{fileActionUrl}"
+        storages="{f:format.json(value: storages)}"
+        selectedStorageUid="{selectedStorageUid}"
+        itemsDragDropEnabled
+        itemsEditEnabled
+    ></typo3-filestorage>
+</body>
 </html>
