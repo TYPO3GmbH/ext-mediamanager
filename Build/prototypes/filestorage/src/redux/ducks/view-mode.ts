@@ -4,8 +4,8 @@ import { createSelector } from 'reselect';
 import { memoize } from 'lodash-es';
 
 export enum ViewMode {
-  LIST,
-  TILES,
+  LIST = 'list',
+  TILES = 'tiles',
 }
 
 export enum OrderDirection {
@@ -26,7 +26,9 @@ export type ViewModeState = Readonly<{
 }>;
 
 const initialState: ViewModeState = {
-  mode: ViewMode.LIST,
+  mode:
+    (localStorage.getItem('t3-file-list-view-mode') as ViewMode) ??
+    ViewMode.LIST,
   order: {
     field: 'name',
     direction: OrderDirection.ASC,

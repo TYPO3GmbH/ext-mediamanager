@@ -19,6 +19,7 @@ import { RootState } from './redux/ducks';
 
 import * as fromLayout from './redux/ducks/layout';
 import * as fromView from './redux/ducks/view-mode';
+import { ViewMode } from './redux/ducks/view-mode';
 import * as fromList from './redux/ducks/list';
 import * as fromTree from './redux/ducks/tree';
 import * as fromFileActions from './redux/ducks/file-actions';
@@ -704,9 +705,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
-    store.dispatch(
-      new fromView.SetViewMode(event.detail.index as fromView.ViewMode)
-    );
+    const viewMode = Object.values(fromView.ViewMode)[event.detail.index];
+    store.dispatch(new fromView.SetViewMode(viewMode as ViewMode));
   }
 
   _onSelectSortField(field: string): void {
