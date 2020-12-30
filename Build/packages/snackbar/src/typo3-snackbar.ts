@@ -26,6 +26,8 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
  */
 @customElement('typo3-snackbar')
 export class Typo3Snackbar extends LitElement {
+  @property({ type: Number, reflect: true }) messageId!: number;
+
   @property({ type: Boolean, reflect: true }) visible = false;
 
   @property({ type: String, reflect: true }) message = '';
@@ -76,12 +78,12 @@ export class Typo3Snackbar extends LitElement {
 
   hideSnackbar(): void {
     clearTimeout(this.timerAutoHide);
-    this.visible = false;
     this.addEventListener('transitionend', this._afterHide);
+    this.visible = false;
   }
 
   _afterHide(): void {
-    this.dispatchEvent(new CustomEvent('typo3-snackbar-close'));
     this.removeEventListener('transitionend', this._afterHide);
+    this.dispatchEvent(new CustomEvent('typo3-snackbar-close'));
   }
 }

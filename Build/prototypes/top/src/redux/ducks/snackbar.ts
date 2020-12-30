@@ -12,6 +12,7 @@ export const SNACKBAR_ACTION = '[SNACKBAR] ACTION';
 
 export type SnackbarState = Readonly<{
   open: boolean;
+  messageId?: number;
   data?: SnackbarData;
 }>;
 
@@ -28,6 +29,7 @@ export const snackbarReducer = (
       return {
         ...state,
         data: action.data,
+        messageId: Math.floor(Date.now() / 1000),
         open: true,
       };
     case CLOSE_SNACKBAR:
@@ -35,6 +37,7 @@ export const snackbarReducer = (
         ...state,
         open: false,
         data: undefined,
+        messageId: undefined,
       };
     default:
       return state;

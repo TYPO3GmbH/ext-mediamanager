@@ -59,6 +59,7 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>
       <typo3-snackbar
+        messageId="${this.state.snackbar?.messageId}"
         ?visible="${this.state.snackbar.open}"
         placement="right"
         title="${this.state.snackbar.data?.title}"
@@ -131,8 +132,6 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       formData.forEach((value, key) => (obj[key] = value));
     }
     store.dispatch(new fromModal.ModalAction(action, obj));
-
-    this.snackbar.hideSnackbar();
   }
 
   onSnackbarAction(button: SnackbarButton): void {
