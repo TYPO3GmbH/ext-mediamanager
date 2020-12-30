@@ -5,7 +5,9 @@ interface ListItem {
   icon: string;
   name: string;
   modified: string;
+  modifiedRaw: string;
   size: string;
+  sizeRaw: string;
   type: string;
   sysType: '_FILE' | '_FOLDER';
   variants: string;
