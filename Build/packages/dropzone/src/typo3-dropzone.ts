@@ -99,7 +99,6 @@ export class Typo3Dropzone extends LitElement {
   }
 
   public onDrop(event: DragEvent): void {
-    console.log('on Drop...?');
     event.preventDefault();
     this.clearDebouncedDragLeave();
     this.isDragged = false;
