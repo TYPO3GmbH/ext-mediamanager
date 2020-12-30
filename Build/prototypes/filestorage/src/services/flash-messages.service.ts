@@ -18,6 +18,7 @@ import {
 import { isEqual } from 'lodash-es';
 import { ApiService } from './api.service';
 import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
+import { UndoFilesAction } from '../redux/ducks/file-actions';
 
 interface Message {
   message: string;
@@ -66,7 +67,10 @@ export class FlashMessagesService {
           map(event => event.data),
           filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
           filter(data =>
-            isEqual(data.actionData.data.formData, undoAction.formData)
+            isEqual(
+              data.actionData.data!.formData,
+              (undoAction as UndoFilesAction)!.formData
+            )
           ),
           timeout(5000),
           take(1),

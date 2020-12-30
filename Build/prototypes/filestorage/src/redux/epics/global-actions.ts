@@ -25,7 +25,7 @@ export const loadFlashMessages = (
   action$: ActionsObservable<fromActions.LoadFlashMessages>,
   state$: StateObservable<RootState>,
   dependencies: { flashMessagesService: FlashMessagesService }
-): Observable<Action> => {
+): Observable<unknown> => {
   return action$
     .ofType(fromActions.LOAD_FLASH_MESSAGES)
     .pipe(

@@ -7,7 +7,7 @@ interface AppConfig {
 export class AppConfigService {
   getAppConfig(): AppConfig {
     return Object.prototype.hasOwnProperty.call(window, 'app')
-      ? ((window.app as unknown) as AppConfig)
+      ? ((window as unknown) as { app: AppConfig }).app
       : {
           translations: {},
           iconUrls: {},
