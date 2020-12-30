@@ -12,6 +12,14 @@ export class ApiService {
     );
   }
 
+  postFormData(url: string, formData?: FormData): Observable<AjaxResponse> {
+    return ajax.post(url, formData).pipe(
+      tap(ApiService.detectSessionTimeout),
+      // rethrow error
+      catchError(e => throwError(e))
+    );
+  }
+
   private static detectSessionTimeout(response: AjaxResponse): void {
     if (response.xhr.responseURL.match(/login/)) {
       top.location.href = response.xhr.responseURL;

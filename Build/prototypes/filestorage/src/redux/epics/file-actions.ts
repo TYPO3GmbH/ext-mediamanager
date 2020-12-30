@@ -27,11 +27,15 @@ import { UndoActionResolverService } from '../../services/undo-action-resolver.s
 import { ModalData, ModalType } from '../../../../shared/src/types/modal-data';
 import { ModalService } from '../../services/modal.service';
 import { openAsLink } from '../../lib/utils';
+import { ApiService } from '../../services/api.service';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
   state$: StateObservable<RootState>,
-  dependencies: { undoActionResolverService: UndoActionResolverService }
+  dependencies: {
+    undoActionResolverService: UndoActionResolverService;
+    apiService: ApiService;
+  }
 ): Observable<Action> => {
   return action$.ofType(fromActions.RENAME_FILE).pipe(
     withLatestFrom(state$),
@@ -39,23 +43,25 @@ export const renameFile = (
       const formData = new FormData();
       formData.append('data[rename][0][data]', action.identifier);
       formData.append('data[rename][0][target]', action.name);
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(response =>
-          dependencies.undoActionResolverService.getUndoAction(
-            action,
-            response,
-            state
-          )
-        ),
-        map(
-          undoAction =>
-            new fromActions.RenameFileSuccess(
-              translate('message.header.fileRenamed'),
-              undoAction
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(response =>
+            dependencies.undoActionResolverService.getUndoAction(
+              action,
+              response,
+              state
             )
-        ),
-        catchError(() => of(new fromActions.RenameFileFailure()))
-      );
+          ),
+          map(
+            undoAction =>
+              new fromActions.RenameFileSuccess(
+                translate('message.header.fileRenamed'),
+                undoAction
+              )
+          ),
+          catchError(() => of(new fromActions.RenameFileFailure()))
+        );
     })
   );
 };
@@ -92,7 +98,9 @@ export const confirmDeleteFiles = (
 };
 
 export const deleteFiles = (
-  action$: ActionsObservable<fromActions.DeleteFiles>
+  action$: ActionsObservable<fromActions.DeleteFiles>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.DELETE_FILES).pipe(
     switchMap(action => {
@@ -100,15 +108,17 @@ export const deleteFiles = (
       action.identifiers.forEach((identifier, index) => {
         formData.append('data[delete][' + index + '][data]', identifier);
       });
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(
-          () =>
-            new fromActions.DeleteFilesSuccess(
-              translate('message.header.fileDeleted')
-            )
-        ),
-        catchError(() => of(new fromActions.DeleteFilesFailure()))
-      );
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(
+            () =>
+              new fromActions.DeleteFilesSuccess(
+                translate('message.header.fileDeleted')
+              )
+          ),
+          catchError(() => of(new fromActions.DeleteFilesFailure()))
+        );
     })
   );
 };
@@ -137,7 +147,10 @@ export const showFile = (
 export const addFolder = (
   action$: ActionsObservable<fromActions.AddFolder>,
   state$: StateObservable<RootState>,
-  dependencies: { undoActionResolverService: UndoActionResolverService }
+  dependencies: {
+    undoActionResolverService: UndoActionResolverService;
+    apiService: ApiService;
+  }
 ): Observable<Action> => {
   return action$.ofType(fromActions.ADD_FOLDER).pipe(
     withLatestFrom(state$),
@@ -148,23 +161,25 @@ export const addFolder = (
         'data[newfolder][0][target]',
         action.parentNode.identifier
       );
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(response =>
-          dependencies.undoActionResolverService.getUndoAction(
-            action,
-            response,
-            state
-          )
-        ),
-        map(
-          undoAction =>
-            new fromActions.AddFolderSuccess(
-              translate('message.header.folderCreated'),
-              undoAction
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(response =>
+            dependencies.undoActionResolverService.getUndoAction(
+              action,
+              response,
+              state
             )
-        ),
-        catchError(() => of(new fromActions.AddFolderFailure()))
-      );
+          ),
+          map(
+            undoAction =>
+              new fromActions.AddFolderSuccess(
+                translate('message.header.folderCreated'),
+                undoAction
+              )
+          ),
+          catchError(() => of(new fromActions.AddFolderFailure()))
+        );
     })
   );
 };
@@ -172,7 +187,10 @@ export const addFolder = (
 export const uploadFiles = (
   action$: ActionsObservable<fromActions.UploadFiles>,
   state$: StateObservable<RootState>,
-  dependencies: { undoActionResolverService: UndoActionResolverService }
+  dependencies: {
+    undoActionResolverService: UndoActionResolverService;
+    apiService: ApiService;
+  }
 ): Observable<Action> => {
   return action$.ofType(fromActions.UPLOAD_FILES).pipe(
     withLatestFrom(state$),
@@ -189,23 +207,25 @@ export const uploadFiles = (
           action.dataTransfer.files.item(i) as File
         );
       }
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(response =>
-          dependencies.undoActionResolverService.getUndoAction(
-            action,
-            response,
-            state
-          )
-        ),
-        map(
-          undoAction =>
-            new fromActions.UploadFilesSuccess(
-              translate('message.header.filesUploaded'),
-              undoAction
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(response =>
+            dependencies.undoActionResolverService.getUndoAction(
+              action,
+              response,
+              state
             )
-        ),
-        catchError(() => of(new fromActions.UploadFilesFailure()))
-      );
+          ),
+          map(
+            undoAction =>
+              new fromActions.UploadFilesSuccess(
+                translate('message.header.filesUploaded'),
+                undoAction
+              )
+          ),
+          catchError(() => of(new fromActions.UploadFilesFailure()))
+        );
     })
   );
 };
@@ -213,7 +233,10 @@ export const uploadFiles = (
 export const moveFiles = (
   action$: ActionsObservable<fromActions.MoveFiles>,
   state$: StateObservable<RootState>,
-  dependencies: { undoActionResolverService: UndoActionResolverService }
+  dependencies: {
+    undoActionResolverService: UndoActionResolverService;
+    apiService: ApiService;
+  }
 ): Observable<Action> => {
   return action$.ofType(fromActions.MOVE_FILES).pipe(
     withLatestFrom(state$),
@@ -226,23 +249,25 @@ export const moveFiles = (
         );
         formData.append('data[move][' + i + '][data]', action.identifiers[i]);
       }
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(response =>
-          dependencies.undoActionResolverService.getUndoAction(
-            action,
-            response,
-            state
-          )
-        ),
-        map(
-          undoAction =>
-            new fromActions.MoveFilesSuccess(
-              translate('message.header.filesMoved'),
-              undoAction
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(response =>
+            dependencies.undoActionResolverService.getUndoAction(
+              action,
+              response,
+              state
             )
-        ),
-        catchError(() => of(new fromActions.MoveFilesFailure()))
-      );
+          ),
+          map(
+            undoAction =>
+              new fromActions.MoveFilesSuccess(
+                translate('message.header.filesMoved'),
+                undoAction
+              )
+          ),
+          catchError(() => of(new fromActions.MoveFilesFailure()))
+        );
     })
   );
 };
@@ -250,7 +275,10 @@ export const moveFiles = (
 export const copyFiles = (
   action$: ActionsObservable<fromActions.CopyFiles>,
   state$: StateObservable<RootState>,
-  dependencies: { undoActionResolverService: UndoActionResolverService }
+  dependencies: {
+    undoActionResolverService: UndoActionResolverService;
+    apiService: ApiService;
+  }
 ): Observable<Action> => {
   return action$.ofType(fromActions.COPY_FILES).pipe(
     withLatestFrom(state$),
@@ -263,29 +291,33 @@ export const copyFiles = (
         );
         formData.append('data[copy][' + i + '][data]', action.identifiers[i]);
       }
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(response =>
-          dependencies.undoActionResolverService.getUndoAction(
-            action,
-            response,
-            state
-          )
-        ),
-        map(
-          undoAction =>
-            new fromActions.CopyFilesSuccess(
-              translate('message.header.filesCopied'),
-              undoAction
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(response =>
+            dependencies.undoActionResolverService.getUndoAction(
+              action,
+              response,
+              state
             )
-        ),
-        catchError(() => of(new fromActions.CopyFilesFailure()))
-      );
+          ),
+          map(
+            undoAction =>
+              new fromActions.CopyFilesSuccess(
+                translate('message.header.filesCopied'),
+                undoAction
+              )
+          ),
+          catchError(() => of(new fromActions.CopyFilesFailure()))
+        );
     })
   );
 };
 
 export const clipboardSelectionAction = (
-  action$: ActionsObservable<fromActions.ClipboardSelectionActions>
+  action$: ActionsObservable<fromActions.ClipboardSelectionActions>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<void> => {
   return action$
     .ofType(
@@ -312,34 +344,40 @@ export const clipboardSelectionAction = (
           params.append('CB[setCopyMode]', '1');
         }
 
-        return ajax.post(url + '&' + params.toString()).pipe(
-          catchError(() => {
-            console.warn('error during clipboard action');
-            return EMPTY;
-          })
-        );
+        return dependencies.apiService
+          .postFormData(url + '&' + params.toString())
+          .pipe(
+            catchError(() => {
+              console.warn('error during clipboard action');
+              return EMPTY;
+            })
+          );
       }),
       ignoreElements()
     );
 };
 
 export const clipboardPaste = (
-  action$: ActionsObservable<fromActions.ClipboardPaste>
+  action$: ActionsObservable<fromActions.ClipboardPaste>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.CLIPBOARD_PASTE).pipe(
     switchMap(action => {
       const formData = new FormData();
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
       formData.append('CB[pad]', 'normal');
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(
-          () =>
-            new fromActions.ClipboardPasteSuccess(
-              translate('message.header.filesMoved')
-            )
-        ),
-        catchError(() => of(new fromActions.ClipboardPasteFailure()))
-      );
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(
+            () =>
+              new fromActions.ClipboardPasteSuccess(
+                translate('message.header.filesMoved')
+              )
+          ),
+          catchError(() => of(new fromActions.ClipboardPasteFailure()))
+        );
     })
   );
 };
@@ -473,7 +511,9 @@ export const replaceFileConfirm = (
 };
 
 export const replaceFile = (
-  action$: ActionsObservable<fromActions.ReplaceFile>
+  action$: ActionsObservable<fromActions.ReplaceFile>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.REPLACE_FILE).pipe(
     switchMap(action => {
@@ -481,21 +521,25 @@ export const replaceFile = (
       for (const key in action.formData) {
         formData.append(key, action.formData[key]);
       }
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(
-          () =>
-            new fromActions.ReplaceFileSuccess(
-              translate('file_replace.pagetitle')
-            )
-        ),
-        catchError(() => of(new fromActions.ReplaceFileFailure()))
-      );
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(
+            () =>
+              new fromActions.ReplaceFileSuccess(
+                translate('file_replace.pagetitle')
+              )
+          ),
+          catchError(() => of(new fromActions.ReplaceFileFailure()))
+        );
     })
   );
 };
 
 export const undoFileAction = (
-  action$: ActionsObservable<fromActions.UndoFilesAction>
+  action$: ActionsObservable<fromActions.UndoFilesAction>,
+  state$: StateObservable<RootState>,
+  dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.UNDO_FILES_ACTION).pipe(
     switchMap(action => {
@@ -504,15 +548,17 @@ export const undoFileAction = (
         formData.append(key, action.formData[key]);
       }
 
-      return ajax.post(getUrl('fileActionUrl'), formData).pipe(
-        map(
-          () =>
-            new fromActions.UndoFilesActionSuccess(
-              translate('message.header.undo')
-            )
-        ),
-        catchError(() => of(new fromActions.UndoFilesActionFailure()))
-      );
+      return dependencies.apiService
+        .postFormData(getUrl('fileActionUrl'), formData)
+        .pipe(
+          map(
+            () =>
+              new fromActions.UndoFilesActionSuccess(
+                translate('message.header.undo')
+              )
+          ),
+          catchError(() => of(new fromActions.UndoFilesActionFailure()))
+        );
     })
   );
 };
