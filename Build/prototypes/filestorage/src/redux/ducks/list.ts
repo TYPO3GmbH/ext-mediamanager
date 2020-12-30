@@ -142,6 +142,8 @@ export type Actions =
 
 const listSelector = (state: RootState) => state.list;
 
+export const getItems = createSelector(listSelector, list => list.items ?? []);
+
 export const isItemSelected = createSelector(listSelector, list =>
   memoize((itemId: string) => list.selectedItemIds.includes(itemId))
 );
@@ -151,11 +153,12 @@ export const isEmptySelection = createSelector(
   list => list.selectedItemIds.length === 0
 );
 
-export const getSelectedItems = createSelector(listSelector, list =>
-  list.items.filter(item => list.selectedItemIds.includes(item.identifier))
+export const getSelectedItems = createSelector(
+  listSelector,
+  getItems,
+  (list, items) =>
+    items.filter(item => list.selectedItemIds.includes(item.identifier))
 );
-
-export const getItems = createSelector(listSelector, list => list.items);
 
 export const getListItemByIdentifier = createSelector(getItems, items =>
   memoize(
