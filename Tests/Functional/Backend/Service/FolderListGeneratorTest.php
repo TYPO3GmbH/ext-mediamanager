@@ -93,6 +93,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $subFolder->method('getParentFolder')
             ->willReturn($folderObject);
 
+        $subFolder->method('getModificationTime')
+            ->willReturn(1609319601);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -117,8 +120,10 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'identifier' => '1:/test-folder',
             'icon' => 'icon',
             'name' => 'TestFolder',
-            'modified' => '01-01-70',
+            'modified' => '30-12-20',
+            'modifiedRaw' => 1609319601,
             'size' => '0 Files',
+            'sizeRaw' => 0,
             'type' => 'Folder',
             'variants' => '-',
             'references' => '-',
@@ -198,6 +203,12 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $file->method('getParentFolder')
             ->willReturn($folderObject);
 
+        $file->method('getModificationTime')
+            ->willReturn(1589846400);
+
+        $file->method('getSize')
+            ->willReturn(1200);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -225,8 +236,10 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'identifier' => '1:/test-file',
             'icon' => 'icon',
             'name' => 'Test-file',
-            'modified' => '01-01-70',
-            'size' => '0 B',
+            'modified' => '19-05-20',
+            'modifiedRaw' => 1589846400,
+            'size' => '1.17 KB',
+            'sizeRaw' => 1200,
             'type' => 'XLS',
             'variants' => '-',
             'references' => 2,
