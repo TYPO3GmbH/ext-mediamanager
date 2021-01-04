@@ -27,15 +27,21 @@ export class Typo3breadcrumb extends LitElement {
 
   private resizeAction!: number;
 
+  private resizeObserver!: ResizeObserver;
+
   public connectedCallback(): void {
     super.connectedCallback();
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+
+    this.resizeObserver = new ResizeObserver(this.handleResize);
+    this.resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('resize', this.handleResize);
+    this.resizeObserver.disconnect();
   }
 
   render(): TemplateResult {

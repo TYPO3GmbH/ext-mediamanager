@@ -11,16 +11,18 @@
   align-items: center;
   justify-content: space-between;
   background-color: var(--typo3-top-bar-bar-background-color, #eee);
+  gap: var(--typo3-global-default-gap);
 }
 
 ::slotted(*) {
   display: flex;
   align-items: center;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--typo3-global-default-gap);
   color: var(--typo3-top-bar-bar-text-color, #333);
   flex-grow: 1;
+  overflow: hidden;
 }
 
 ::slotted([slot='right']) {
