@@ -14,6 +14,7 @@ const globby = require('globby');
 
 const baseConfig = createBasicConfig({
   inlineDynamicImports: true,
+  nodeResolve: false,
 
   // if you need to support older browsers, such as IE11, set the legacyBuild
   // option to generate an additional build just for this browser
