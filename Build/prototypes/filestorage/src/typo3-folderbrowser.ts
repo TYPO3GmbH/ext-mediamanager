@@ -109,7 +109,7 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
 
   _onItemDblClick(item: ListItem): void {
     if (this._itemIsSelectable(item)) {
-      this._sendForeignInsertCommand([item.uid]);
+      this._sendForeignInsertCommand([item.identifier]);
       MessageHandler.sendPostMessage(
         [top],
         new ShowSnackbarMessage({
@@ -125,8 +125,11 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
   }
 
   _onInsert(): void {
-    const uids = fromList.getSelectedItems(this.state).map(item => item.uid);
-    this._sendForeignInsertCommand(uids);
+    const identifiers = fromList
+      .getSelectedItems(this.state)
+      .map(item => item.identifier);
+
+    this._sendForeignInsertCommand(identifiers);
     this._closeModal();
   }
 
@@ -135,13 +138,13 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
     parent.TYPO3.Modal.currentModal.trigger('modal-dismiss');
   }
 
-  _sendForeignInsertCommand(uids: string[]): void {
-    uids.forEach(uid => {
+  _sendForeignInsertCommand(identifiers: string[]): void {
+    identifiers.forEach(identifier => {
       const action = {
         actionName: 'typo3:foreignRelation:insert',
         objectGroup: this.irreObjectId,
         table: 'sys_folder',
-        uid: uid,
+        uid: identifier,
       };
       MessageHandler.sendPostMessage([IframeHelper.getContentIframe()], action);
     });
