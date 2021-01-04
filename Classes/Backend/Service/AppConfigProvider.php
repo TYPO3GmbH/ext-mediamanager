@@ -119,6 +119,10 @@ class AppConfigProvider implements AppConfigProviderInterface
             'cm.allowedFileExtensions' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.allowedFileExtensions'),
             'file_browser.fileNotAllowed' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.fileNotAllowed'),
             'file_browser.fileAdded' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:file_browser.fileAdded'),
+            'folder_browser.button.insert' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:folder_browser.button.insert'),
+            'folder_browser.title' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:folder_browser.title'),
+            'folder_browser.fileNotAllowed' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:folder_browser.fileNotAllowed'),
+            'folder_browser.folderAdded' => $languageService->sL('LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:folder_browser.folderAdded'),
         ];
     }
 

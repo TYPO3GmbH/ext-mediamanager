@@ -284,6 +284,18 @@
 			<trans-unit id="file_browser.fileAdded" resname="file_browser.fileAdded">
 				<source>File added</source>
 			</trans-unit>
+			<trans-unit id="folder_browser.title" resname="folder_browser.title">
+				<source>Folder Selector</source>
+			</trans-unit>
+			<trans-unit id="folder_browser.button.insert" resname="folder_browser.button.insert">
+				<source>Insert Items</source>
+			</trans-unit>
+			<trans-unit id="folder_browser.fileNotAllowed" resname="folder_browser.fileNotAllowed">
+				<source>Only folders can be selected</source>
+			</trans-unit>
+			<trans-unit id="folder_browser.folderAdded" resname="folder_browser.folderAdded">
+				<source>Folder added</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

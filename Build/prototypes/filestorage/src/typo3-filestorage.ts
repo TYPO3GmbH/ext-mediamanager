@@ -646,7 +646,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     `;
   }
 
-  private get renderSearchField(): TemplateResult {
+  protected get renderSearchField(): TemplateResult {
     return html`
       <typo3-search
         placeholder="${translate('labels.search')}"

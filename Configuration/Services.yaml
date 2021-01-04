@@ -7,7 +7,8 @@ services:
   TYPO3\CMS\FilelistNg\:
     resource: '../Classes/*'
 
-  TYPO3\CMS\FilelistNg\Backend\Browser\FileBrowser:
+  TYPO3\CMS\FilelistNg\Backend\Browser\:
+    resource: '../Classes/Backend/Browser/*'
     public: true
 
   TYPO3\CMS\FilelistNg\Backend\Controller\:
