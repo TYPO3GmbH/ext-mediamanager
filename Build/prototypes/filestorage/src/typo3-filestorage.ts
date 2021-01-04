@@ -46,6 +46,10 @@ import { createSVGElement } from './lib/svg-helper';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { DatagridSorter } from './lib/datagrid-sorter';
 import { Schema } from './types/schema';
+import { ApiService } from './services/api.service';
+import { catchError, map, take, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -66,6 +70,13 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   @query('#file_upload') fileUploadInput!: HTMLInputElement;
 
   public static styles = [themeStyles, styles];
+
+  private apiService: ApiService;
+
+  constructor() {
+    super();
+    this.apiService = new ApiService();
+  }
 
   stateChanged(state: RootState): void {
     this.state = state;
@@ -640,6 +651,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     return fromList.getItems(this.state);
   }
 
+  protected filterContextMenuOptions(
+    options: Typo3ContextMenuOption[]
+  ): Typo3ContextMenuOption[] {
+    return options;
+  }
+
   _onSplitterDragend(): void {
     dispatchEvent(new Event('resize'));
 
@@ -659,30 +676,32 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   _onContextMenu(event: ContextMenuEvent): void {
     event.detail.event.preventDefault();
     event.detail.event.stopImmediatePropagation();
-    fetch(event.detail.node.contextMenuUrl)
-      .then((response: Response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(data => {
-        dispatchEvent(
-          new CustomEvent('typo3-show-context-menu', {
-            detail: {
-              sourceEvent: event.detail.event,
-              options: data,
-              contextItem: event.detail.node,
-            },
-          })
-        );
-      })
-      .catch((error: Error) => {
-        console.log(
-          'todo: handle error on loading context-menu options',
-          error
-        );
-      });
+
+    this.apiService
+      .getJSON<Typo3ContextMenuOption[]>(event.detail.node.contextMenuUrl)
+      .pipe(
+        take(1),
+        map(options => this.filterContextMenuOptions(Object.values(options))),
+        tap(options => {
+          dispatchEvent(
+            new CustomEvent('typo3-show-context-menu', {
+              detail: {
+                sourceEvent: event.detail.event,
+                options: options,
+                contextItem: event.detail.node,
+              },
+            })
+          );
+        }),
+        catchError(error => {
+          console.log(
+            'todo: handle error on loading context-menu options',
+            error
+          );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   _onContextMenuWithoutContext(event: MouseEvent): void {

@@ -22,6 +22,7 @@ import * as fromView from './redux/ducks/view-mode';
 import { Typo3Tooltip } from '../../../packages/tooltip/src/typo3-tooltip';
 import { ShowSnackbarMessage } from '../../shared/src/types/show-snackbar-message';
 import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
+import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
@@ -110,6 +111,16 @@ export class Typo3Filebrowser extends Typo3Filestorage {
     });
 
     return orderBy(extendedListItems, ['disabled'], ['asc']);
+  }
+
+  protected filterContextMenuOptions(
+    options: Typo3ContextMenuOption[]
+  ): Typo3ContextMenuOption[] {
+    const allowedActions = ['addFolder'];
+
+    return options.filter(option =>
+      allowedActions.includes(option.callbackAction)
+    );
   }
 
   _onItemDblClick(item: ListItem): void {
