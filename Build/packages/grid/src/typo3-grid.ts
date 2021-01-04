@@ -9,8 +9,6 @@ import {
 
 import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
-import { Masonry } from '@fristys/masonry';
-import { PropertyValues } from 'lit-element/lib/updating-element';
 import { Typo3Card } from '../../card/src/typo3-card';
 
 /**
@@ -29,8 +27,6 @@ export class Typo3Grid extends LitElement {
   // used for triggering updates
   @property({ type: String }) hash = '';
 
-  private _masonry!: Masonry;
-
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this._onKeyDown);
@@ -42,35 +38,15 @@ export class Typo3Grid extends LitElement {
   }
 
   render(): TemplateResult {
-    return html` <slot name="item" @click="${this._onItemClick}"></slot> `;
-  }
-
-  protected updated(_changedProperties: PropertyValues): void {
-    if (_changedProperties.has('hash')) {
-      this._masonry.init();
-    }
+    return html`
+      <div class="grid">
+        <slot name="item" @click="${this._onItemClick}"></slot>
+      </div>
+    `;
   }
 
   firstUpdated(): void {
     this.setAttribute('tabIndex', '-1');
-    this._masonry = new Masonry(this, {
-      useContainerWidth: true,
-      columns: 8,
-      columnBreakpoints: {
-        1800: 7,
-        1600: 6,
-        1400: 5,
-        1200: 4,
-        940: 3,
-        520: 2,
-        400: 1,
-      },
-      trackItemSizeChanges: true,
-    });
-  }
-
-  reload(): void {
-    this._masonry.init();
   }
 
   get items(): Typo3Card[] {

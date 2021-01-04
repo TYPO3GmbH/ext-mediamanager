@@ -7,17 +7,13 @@ import typescriptPlugin from 'rollup-plugin-typescript';
 import typescript from 'typescript';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import commonjs from 'rollup-plugin-commonjs';
-import { createBasicConfig } from '@open-wc/building-rollup';
+import {createBasicConfig} from '@open-wc/building-rollup';
 import merge from 'deepmerge';
 
 const globby = require('globby');
 
 const baseConfig = createBasicConfig({
   inlineDynamicImports: true,
-
-  nodeResolve: {
-    resolveOnly: [/masonry/],
-  },
 
   // if you need to support older browsers, such as IE11, set the legacyBuild
   // option to generate an additional build just for this browser
@@ -36,11 +32,11 @@ const plugins = [
     inject: false, // By default postcss also injects the head
   }),
   postcssLit(),
-  commonjs(),
   typescriptPlugin({
     importHelpers: true,
     typescript,
   }),
+  commonjs(),
   injectProcessEnv({
     NODE_ENV: 'development',
   }),
