@@ -105,8 +105,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   get datagridSchema(): Schema {
     const fields = [
-      { name: 'identifier', type: 'text', title: ' ', hidden: true },
-      { name: 'icon', type: 'html', title: ' ', width: '24' },
+      {
+        name: 'identifier',
+        type: 'text',
+        title: ' ',
+        hidden: true,
+      },
+      {
+        name: 'icon',
+        type: 'html',
+        title: ' ',
+        width: '24',
+      },
       { name: 'name', title: translate('field.name'), sortable: true },
       {
         name: 'modified',
@@ -134,7 +144,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         title: translate('field.references'),
         width: '100',
       },
-      { name: 'rw', title: translate('field.rw'), width: '50' },
+      {
+        name: 'rw',
+        title: translate('field.rw'),
+        width: '50',
+      },
     ];
 
     if (fromList.isInSearchMode(this.state)) {
