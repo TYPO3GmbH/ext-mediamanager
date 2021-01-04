@@ -41,7 +41,6 @@ import {
   TreeNodeDropEvent,
 } from './types/events';
 import { translate } from './services/translation.service';
-import { getIconUrl } from './services/icon-url.service';
 import { styleMap } from 'lit-html/directives/style-map';
 import { createSVGElement } from './lib/svg-helper';
 import { ifDefined } from 'lit-html/directives/if-defined';
@@ -597,12 +596,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected get renderDragHandler(): TemplateResult {
-    let iconUrl = getIconUrl('moveTo');
+    let iconKey = 'moveTo';
     let message = translate('dnd.move.message');
     let title = translate('dnd.move.title');
 
     if (fromFileActions.isCopyDragMode(this.state)) {
-      iconUrl = getIconUrl('copyTo');
+      iconKey = 'copyTo';
       message = translate('dnd.copy.message');
       title = translate('dnd.copy.title');
     }
@@ -616,7 +615,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-draghandler
         .hidden="${fromFileActions.isDraggingFiles(this.state) !== true}"
       >
-        ${createSVGElement(iconUrl, 'icon')}
+        ${createSVGElement(iconKey, 'icon')}
         <span slot="title">${title}</span>
         <span slot="message">${unsafeHTML(message)}</span>
       </typo3-draghandler>
