@@ -58,10 +58,10 @@ class ResourcesSizeValidator extends AbstractValidator
     {
         switch (true) {
             case $resource instanceof FileInterface:
-                return $resource->getSize();
+                return (int) $resource->getSize();
             case $resource instanceof Folder:
                 $subResources = \array_merge($resource->getSubfolders(), $resource->getFiles());
-                return \array_sum(\array_map([$this, 'getResourceSize'], $subResources));
+                return (int) \array_sum(\array_map([$this, 'getResourceSize'], $subResources));
         }
     }
 }
