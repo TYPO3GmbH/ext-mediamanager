@@ -149,13 +149,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         title: translate('field.rw'),
         width: '50',
       },
-    ];
+    ] as Schema;
 
     if (fromList.isInSearchMode(this.state)) {
       fields.splice(2, 0, {
         name: 'path',
         title: translate('field.path'),
-        width: '150',
       });
     }
 
