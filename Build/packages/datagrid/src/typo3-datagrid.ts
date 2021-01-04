@@ -267,7 +267,7 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
-  _onBeginmove(e: CanvasDataGridEvent): void {
+  _onBeginmove(): void {
     // trigger mouseup to prevent default move handling
     setTimeout(
       () => document.body.dispatchEvent(new MouseEvent('mouseup')),
