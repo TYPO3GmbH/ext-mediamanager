@@ -5,7 +5,7 @@ export interface SnackbarButton {
   label: string;
   color: Color;
   action: string;
-  data?: Record<string, unknown>;
+  data?: unknown;
 }
 
 export interface SnackbarData {
@@ -14,4 +14,5 @@ export interface SnackbarData {
   variant: SnackbarVariants;
   buttons?: SnackbarButton[];
   duration: number;
+  dismissible: boolean;
 }

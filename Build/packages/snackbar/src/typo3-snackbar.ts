@@ -60,6 +60,14 @@ export class Typo3Snackbar extends LitElement {
           <p class="snackbar__message">${unsafeHTML(this.message)}</p>
         </div>
         <slot name="footer"></slot>
+        ${this.dismissible
+          ? html`<button
+              class="snackbar__btn-close"
+              @click="${this.hideSnackbar}"
+            >
+              ×
+            </button>`
+          : ''}
       </typo3-alert>
     `;
   }

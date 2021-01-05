@@ -42,6 +42,7 @@ export class FlashMessagesService {
             .join('<br />'),
           variant: action.variant,
           duration: 5000,
+          dismissible: true,
         });
 
         if (action.undoAction) {
@@ -68,7 +69,7 @@ export class FlashMessagesService {
           filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
           filter(data =>
             isEqual(
-              data.actionData.data!.formData,
+              (data.actionData.data as UndoFilesAction).formData,
               (undoAction as UndoFilesAction)!.formData
             )
           ),

@@ -39,6 +39,23 @@ describe('Typo3Snackbar', () => {
     expect(messageElement.textContent).to.be.eq('Hello World');
   });
 
+  it('will render close button if dismissible', async () => {
+    Object.assign(element, {
+      visible: true,
+      message: 'Hello World',
+      dismissible: true,
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 5));
+
+    await elementUpdated(element);
+
+    const button = element.shadowRoot!.querySelector(
+      '.snackbar__btn-close'
+    ) as HTMLElement;
+    expect(button).to.exist;
+  });
+
   it('shows and hide snackbar after defined duration', async () => {
     Object.assign(element, { visible: true, message: 'Hello', duration: 15 });
 
