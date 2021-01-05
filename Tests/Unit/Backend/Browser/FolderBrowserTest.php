@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Browser;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\FilelistNg\Backend\Browser\FileBrowser;
 use TYPO3\CMS\FilelistNg\Backend\Browser\FolderBrowser;
 use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
