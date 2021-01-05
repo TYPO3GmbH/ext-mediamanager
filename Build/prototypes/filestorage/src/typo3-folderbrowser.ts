@@ -117,6 +117,7 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
           title: '',
           message: translate('folder_browser.folderAdded'),
           variant: SnackbarVariants.success,
+          dismissible: true,
         })
       );
       return;
