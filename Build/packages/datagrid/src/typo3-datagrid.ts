@@ -52,6 +52,8 @@ export class Typo3Datagrid extends LitElement {
 
   private latestSelectedRowIndex?: number;
 
+  private inEditMode = false;
+
   render(): TemplateResult {
     const borderDragMode = this.draggable ? 'move' : 'none';
 
@@ -106,8 +108,9 @@ export class Typo3Datagrid extends LitElement {
         showrowheaders="false"
         @afterrendercell="${this._onAfterRendercell}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
+        @beginedit="${this._onBeginEdit}"
         @beginmove="${this._onBeginmove}"
-        @click="${this._onClick}"
+        @mouseup="${this._onMouseup}"
         @contextmenu="${this._onContextmenu}"
         @dblclick="${this._onDblClick}"
         @endedit="${this._onEndEdit}"
@@ -275,8 +278,11 @@ export class Typo3Datagrid extends LitElement {
     );
   }
 
-  _onClick(e: CanvasDataGridEvent): void {
+  _onMouseup(e: CanvasDataGridEvent): void {
     if (true === e.cell.isHeader) {
+      return;
+    }
+    if (this.inEditMode) {
       return;
     }
 
@@ -293,6 +299,7 @@ export class Typo3Datagrid extends LitElement {
             selectedIndex === this.latestSelectedRowIndex
           ) {
             this._handleSingleClick(e);
+            this.latestSelectedRowIndex = undefined;
           }
         } else {
           const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
@@ -301,6 +308,7 @@ export class Typo3Datagrid extends LitElement {
             detail: e.cell.data,
           });
           this.dispatchEvent(dblClickEvent);
+          this.latestSelectedRowIndex = undefined;
         }
         this.clicks = 0;
       }, 300);
@@ -380,7 +388,15 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
+  _onBeginEdit(): void {
+    this.inEditMode = true;
+    window.addEventListener('click', this._onClickOutsideOfEditArea);
+  }
+
   _onEndEdit(event: EndEditEvent): void {
+    this.inEditMode = false;
+    window.removeEventListener('click', this._onClickOutsideOfEditArea);
+
     if (event.aborted === true) {
       return;
     }
@@ -403,6 +419,7 @@ export class Typo3Datagrid extends LitElement {
     } catch (e) {
       // catch edit cell is undefined error
     }
+    this.inEditMode = false;
   }
 
   _handleDisabledRow(e: RenderCellEvent): void {
@@ -457,4 +474,8 @@ export class Typo3Datagrid extends LitElement {
       /use/.test(cell.value)
     );
   }
+
+  _onClickOutsideOfEditArea = () => {
+    this._endEdit();
+  };
 }
