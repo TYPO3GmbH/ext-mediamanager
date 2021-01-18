@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Type\Bitmask\JsConfirmation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 class FileProvider extends AbstractProvider
 {
@@ -314,7 +315,7 @@ class FileProvider extends AbstractProvider
         }
         if ('show' === $itemName) {
             $attributes += [
-                'data-url' => $this->record->getPublicUrl(true),
+                'data-url' => PathUtility::getAbsoluteWebPath($this->record->getPublicUrl(true)),
             ];
         }
 
