@@ -1,9 +1,9 @@
 Filelist NG
-==============
+===========
 
     
 Development
-------------
+-----------
 
 Install php dependencies using composer:
     
