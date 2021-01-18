@@ -9,7 +9,7 @@
 .. _start:
 
 =============================================================
-Extension Name
+FileList NG
 =============================================================
 
 :Version:
@@ -29,7 +29,7 @@ Extension Name
    `CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`__ (Creative Commons)
    license
 
-{extension.description}
+Next Generation File List
 
 **TYPO3**
 
