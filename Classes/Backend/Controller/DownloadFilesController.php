@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
 use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
 
@@ -66,7 +67,9 @@ class DownloadFilesController
                 if (false === $fileOrFolderObject->checkActionPermission('read')) {
                     return new HtmlResponse('Missing read permissions  for ' . $fileOrFolderObject->getName(), 403);
                 }
-                return new RedirectResponse($fileOrFolderObject->getPublicUrl(true));
+                return new RedirectResponse(
+                    PathUtility::getAbsoluteWebPath($fileOrFolderObject->getPublicUrl())
+                );
             }
         }
 

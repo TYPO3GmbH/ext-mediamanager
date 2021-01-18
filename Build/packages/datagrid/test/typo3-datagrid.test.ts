@@ -174,8 +174,8 @@ describe('Typo3Datagrid', () => {
 
     const listener = oneEvent(element, 'typo3-datagrid-dblclick');
 
-    element._onClick(event as CanvasDataGridEvent);
-    element._onClick(event as CanvasDataGridEvent);
+    element._onMouseup(event as CanvasDataGridEvent);
+    element._onMouseup(event as CanvasDataGridEvent);
 
     const { detail } = await listener;
     expect(detail).to.be.eql({ identifier: 1 });
