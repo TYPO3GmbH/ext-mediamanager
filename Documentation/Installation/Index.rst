@@ -6,8 +6,28 @@
 Installation
 ============
 
-- How is the extension installed?
-- Are there any dependencies that need to be resolved?
+Install from git
+^^^^^^^^^^^^^^^^
 
-References to general TYPO3 documentation are possible,
-for example the :ref:`t3install:start`.
+Alternatively, you can also get the latest development version from GitHub:
+
+
+.. code-block:: bash
+
+    $ git clone git@git.dfau.de:dfau/filelist-ng.git cms_filelist_ng
+
+
+Install with composer
+^^^^^^^^^^^^^^^^^^^^^
+
+Install this TYPO3 Extension ``cms_filelist_ng`` via TYPO3 Extension Manager as usual, or via ``composer`` by
+running:
+
+
+.. code-block:: bash
+
+    composer require dfau/filelist-ng
+
+
+
+Head over to the Extension Manager module and activate the Extension.

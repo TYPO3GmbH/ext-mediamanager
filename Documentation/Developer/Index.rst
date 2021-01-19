@@ -6,15 +6,13 @@
 Developer Corner
 ================
 
-Use this section to provide examples of code or detail any information that would be deemed relevant to a developer.
-
-For example explain how a certain feature was implemented.
-
-
 .. _developer-api:
 
 API
 ===
+
+
+
 
 How to use the API...
 

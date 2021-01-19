@@ -21,7 +21,7 @@ Remove it if it is not relevant.
 
 .. figure:: ../Images/NgFilelistModule.png
    :class: with-shadow
-   :alt: Introduction Package
+   :alt: File List Package
    :width: 500px
 
    Filelist module after installation (caption of the image).
