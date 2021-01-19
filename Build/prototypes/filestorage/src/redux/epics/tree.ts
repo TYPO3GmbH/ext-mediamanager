@@ -1,6 +1,13 @@
 import { ActionsObservable, StateObservable } from 'redux-observable';
 import * as fromTree from '../ducks/tree';
-import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  distinctUntilChanged,
+  ignoreElements,
+  mergeMap,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { Action } from 'redux';
@@ -36,3 +43,15 @@ export const fetchTreeData = (
     )
   );
 };
+
+export const selectTreeNode = (
+  action$: ActionsObservable<fromTree.SelectTreeNode>
+): Observable<void> => {
+  return action$.ofType(fromTree.SELECT_TREE_NODE).pipe(
+    distinctUntilChanged(),
+    tap(action => (window.location.hash = action.identifier)),
+    ignoreElements()
+  );
+};
+
+export const treeActions = [fetchTreeData, selectTreeNode];

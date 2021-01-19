@@ -50,6 +50,7 @@ import { ApiService } from './services/api.service';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
+import { getLastSelectedTreeNodeId } from './redux/ducks/tree';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -91,12 +92,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     super.connectedCallback();
     this.addEventListener('dragend', this._onDragEnd);
     this.addEventListener('dragover', this._onDragOver);
+    window.addEventListener('hashchange', this._onWindowHashChange);
   }
 
   public disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('dragend', this._onDragEnd);
     this.addEventListener('dragover', this._onDragOver);
+    window.addEventListener('hashchange', this._onWindowHashChange);
   }
 
   refresh(): void {
@@ -1022,4 +1025,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ['desc', fromView.getSortDirection(this.state)]
     );
   }
+
+  _onWindowHashChange = (): void => {
+    const hash = window.location.hash.replace('#', '');
+    const node = fromTree.getTreeNodeByIdentifier(this.state)(hash);
+    if (
+      node &&
+      node.identifier !== fromTree.getLastSelectedTreeNodeId(this.state)
+    ) {
+      store.dispatch(new fromTree.SelectTreeNode(node.identifier));
+      store.dispatch(new fromList.LoadListData(node.folderUrl));
+    }
+  };
 }
