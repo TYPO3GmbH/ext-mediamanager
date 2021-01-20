@@ -17,7 +17,7 @@ Go to the Settings - Extension Configuration and open the configuration of `cms_
 +----------------------------+------------------------------------------------------------------------------------------------------------------------------+--------------------------+
 
 
-.. figure:: ../Images/ExtensionConfiguration.png
+.. figure:: ../Images/AdministratorManual/ExtensionConfiguration.png
    :class: with-shadow
    :alt: Extension Package
    :width: 500px
