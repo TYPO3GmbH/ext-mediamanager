@@ -285,6 +285,9 @@ export class Typo3Datagrid extends LitElement {
     if (this.inEditMode) {
       return;
     }
+    if (e.NativeEvent!.button !== 0) {
+      return;
+    }
 
     this.clicks += 1;
     const selectedIndex = e.cell.selected ? e.cell.rowIndex : undefined;
