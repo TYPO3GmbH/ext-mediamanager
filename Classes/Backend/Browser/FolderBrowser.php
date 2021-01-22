@@ -23,9 +23,8 @@ use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
-use TYPO3\CMS\Recordlist\Tree\View\LinkParameterProviderInterface;
 
-class FolderBrowser implements ElementBrowserInterface, LinkParameterProviderInterface
+class FolderBrowser implements ElementBrowserInterface
 {
     /** @var UriBuilder */
     private $uriBuilder;
@@ -38,6 +37,9 @@ class FolderBrowser implements ElementBrowserInterface, LinkParameterProviderInt
 
     /** @var BackendTemplateView */
     private $view;
+
+    /** @var string|null */
+    protected $expandFolder;
 
     public function __construct(
         BackendTemplateView $view,
@@ -55,6 +57,7 @@ class FolderBrowser implements ElementBrowserInterface, LinkParameterProviderInt
     public function render()
     {
         $bparams = GeneralUtility::_GP('bparams');
+        $this->expandFolder = GeneralUtility::_GP('expandFolder');
 
         $this->view->getRenderingContext()->setControllerAction('FolderBrowser');
 
@@ -83,6 +86,7 @@ class FolderBrowser implements ElementBrowserInterface, LinkParameterProviderInt
         $this->view->assign('irreObjectId', $irreObjectId);
         $this->view->assign('treeUrl', $backendUrls['treeUrl']);
         $this->view->assign('storages', $storages);
+        $this->view->assign('expandFolder', $this->expandFolder);
 
         $this->view->assign('selectedStorageUid', (int) $storageUid);
 
@@ -104,23 +108,18 @@ class FolderBrowser implements ElementBrowserInterface, LinkParameterProviderInt
         }, $this->storagesProvider->getFormattedStoragesForUser());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processSessionData($data)
     {
-        // TODO: Implement processSessionData() method.
-    }
-
-    public function getScriptUrl()
-    {
-        // TODO: Implement getScriptUrl() method.
-    }
-
-    public function getUrlParameters(array $values)
-    {
-        // TODO: Implement getUrlParameters() method.
-    }
-
-    public function isCurrentlySelectedItem(array $values)
-    {
-        // TODO: Implement isCurrentlySelectedItem() method.
+        if (null !== $this->expandFolder) {
+            $data['expandFolder'] = $this->expandFolder;
+            $store = true;
+        } else {
+            $this->expandFolder = $data['expandFolder'];
+            $store = false;
+        }
+        return [$data, $store];
     }
 }
