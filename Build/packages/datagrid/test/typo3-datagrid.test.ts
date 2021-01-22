@@ -160,6 +160,9 @@ describe('Typo3Datagrid', () => {
 
   it('will fire a `typo3-datagrid-dblclick` on two consecutive clicks', async () => {
     const event: CanvasDataGridEvent | {} = {
+      NativeEvent: {
+        button: 0,
+      },
       cell: {
         header: {
           name: 'identifier',
