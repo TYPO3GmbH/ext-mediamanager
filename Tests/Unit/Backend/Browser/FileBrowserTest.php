@@ -22,7 +22,6 @@ use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
 use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
-use TYPO3\CMS\Recordlist\Tree\View\LinkParameterProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
@@ -56,6 +55,5 @@ class FileBrowserTest extends UnitTestCase
     public function it_implements_correct_interfaces(): void
     {
         self::assertInstanceOf(ElementBrowserInterface::class, $this->subject);
-        self::assertInstanceOf(LinkParameterProviderInterface::class, $this->subject);
     }
 }

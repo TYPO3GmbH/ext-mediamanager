@@ -23,10 +23,12 @@ import { Typo3Tooltip } from '../../../packages/tooltip/src/typo3-tooltip';
 import { ShowSnackbarMessage } from '../../shared/src/types/show-snackbar-message';
 import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
+import * as fromTree from './redux/ducks/tree';
 
 @customElement('typo3-folderbrowser')
 export class Typo3Folderbrowser extends Typo3Filestorage {
   @property({ type: String }) irreObjectId = '';
+  @property({ type: String }) expandFolder = '';
 
   @query('typo3-tooltip') disabledFileTooltip!: Typo3Tooltip;
 
@@ -48,6 +50,9 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
     super.connectedCallback();
     // trigger resize event (after modal is visible)
     setTimeout(() => dispatchEvent(new Event('resize')), 200);
+    if (this.expandFolder) {
+      store.dispatch(new fromTree.ExpandTreeNode(this.expandFolder));
+    }
   }
 
   protected render(): TemplateResult {
