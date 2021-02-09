@@ -118,7 +118,7 @@ jobs:
                 echo "NPM Version: $(npm --version)"
 
                 cd workspace/Build
-                npm install
+                npm ci
                 npm run build:dev
 
       - task: run-lint

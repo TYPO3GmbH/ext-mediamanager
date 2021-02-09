@@ -11,7 +11,7 @@ Install php dependencies using composer:
     
 Install web components
 
-    (cd Build; npm install)
+    (cd Build; npm ci)
     
 Build web components
     
