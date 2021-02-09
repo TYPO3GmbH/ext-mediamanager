@@ -52,14 +52,14 @@ export default [
   merge(baseConfig, {
     input: './bundle/filestorage/index.ts',
     output: {
-      sourcemap: true,
+      sourcemap: false,
       entryFileNames: 'es.js',
     },
   }),
   merge(baseConfig, {
     input: './bundle/top/index.ts',
     output: {
-      sourcemap: true,
+      sourcemap: false,
       entryFileNames: 'top_es.js',
     },
   }),

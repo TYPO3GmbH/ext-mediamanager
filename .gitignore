@@ -5,8 +5,6 @@ composer.lock
 /.idea
 /Build/node_modules
 /Documentation-GENERATED-temp
-/Resources/Public/JavaScript/
-/Resources/Public/Sprites/
 /public/
 /vendor
 etc/testing-docker/.env
