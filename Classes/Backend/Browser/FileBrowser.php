@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Browser;
+namespace TYPO3\CMS\Mediamanager\Backend\Browser;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Mediamanager\Backend\Service\AppConfigProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Storage\StoragesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
 
 class FileBrowser implements ElementBrowserInterface

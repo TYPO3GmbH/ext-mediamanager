@@ -15,12 +15,12 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Validator;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Validator;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactory;
-use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
-use TYPO3\CMS\FilelistNg\Backend\Validator\ResourcesSizeValidator;
+use TYPO3\CMS\Mediamanager\Backend\Validator\DownloadSizeValidatorFactory;
+use TYPO3\CMS\Mediamanager\Backend\Validator\DownloadSizeValidatorFactoryInterface;
+use TYPO3\CMS\Mediamanager\Backend\Validator\ResourcesSizeValidator;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class DownloadSizeValidatorFactoryTest extends UnitTestCase
@@ -35,7 +35,7 @@ class DownloadSizeValidatorFactoryTest extends UnitTestCase
         $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
 
         $extensionConfigurationMock->method('get')
-            ->with('cms_filelist_ng', 'maxDownloadSizeMB')
+            ->with('mediamanager', 'maxDownloadSizeMB')
             ->willReturn(500);
 
         $this->subject = new DownloadSizeValidatorFactory($extensionConfigurationMock);

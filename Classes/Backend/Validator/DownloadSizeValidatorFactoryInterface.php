@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Validator;
+namespace TYPO3\CMS\Mediamanager\Backend\Validator;
 
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 

@@ -19,11 +19,11 @@ Screenshots
 This chapter should help people understand how the extension works.
 Remove it if it is not relevant.
 
-.. figure:: ../Images/NgFilelistModule.png
+.. figure:: ../Images/MediamanagerModule.png
    :class: with-shadow
-   :alt: File List Package
+   :alt: Mediamanager module
    :width: 500px
 
-   Filelist module after installation (caption of the image).
+   Mediamanager module after installation (caption of the image).
 
 How the Frontend of the Introduction Package looks like after installation (legend of the image).

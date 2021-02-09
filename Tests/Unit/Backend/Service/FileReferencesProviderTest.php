@@ -15,11 +15,11 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Service;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\FileReferencesProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\FileReferencesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class FileReferencesProviderTest extends UnitTestCase

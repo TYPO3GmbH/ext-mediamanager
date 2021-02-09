@@ -27,9 +27,9 @@ use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\MetaDataAspect;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGenerator;
-use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\FileReferencesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\FolderListGenerator;
+use TYPO3\CMS\Mediamanager\Backend\Service\LanguageServiceProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FolderListGeneratorTest extends FunctionalTestCase
@@ -38,7 +38,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
     private $generator;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/cms_filelist_ng',
+        'typo3conf/ext/mediamanager',
     ];
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|IconFactory */
@@ -249,7 +249,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'clipboardIdentifier' => '4fbe4dde37',
             'thumbnailUrl' => null,
             'sysType' => '_FILE',
-            'metaDataUrl' => '/typo3/record/edit?token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit&returnUrl=typo3conf%2Fext%2Fcms_filelist_ng%2FResources%2FPublic%2FHtml%2FCloseModal.html',
+            'metaDataUrl' => '/typo3/record/edit?token=dummyToken&edit%5Bsys_file_metadata%5D%5B42%5D=edit&returnUrl=typo3conf%2Fext%2Fmediamanager%2FResources%2FPublic%2FHtml%2FCloseModal.html',
             'parentIdentifier' => '1:/',
             'path' => '/',
             'uid' => 13,

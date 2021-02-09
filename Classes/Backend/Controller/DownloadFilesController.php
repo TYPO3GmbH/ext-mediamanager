@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Controller;
+namespace TYPO3\CMS\Mediamanager\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,8 +25,8 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\ArchiveGeneratorInterface;
+use TYPO3\CMS\Mediamanager\Backend\Validator\DownloadSizeValidatorFactoryInterface;
 
 class DownloadFilesController
 {

@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Controller;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Controller;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamFile;
@@ -27,9 +27,9 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
-use TYPO3\CMS\FilelistNg\Backend\Controller\DownloadFilesController;
-use TYPO3\CMS\FilelistNg\Backend\Service\ArchiveGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Validator\DownloadSizeValidatorFactoryInterface;
+use TYPO3\CMS\Mediamanager\Backend\Controller\DownloadFilesController;
+use TYPO3\CMS\Mediamanager\Backend\Service\ArchiveGeneratorInterface;
+use TYPO3\CMS\Mediamanager\Backend\Validator\DownloadSizeValidatorFactoryInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class DownloadFilesControllerTest extends UnitTestCase

@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Validator;
+namespace TYPO3\CMS\Mediamanager\Backend\Validator;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -35,7 +35,7 @@ class DownloadSizeValidatorFactory implements DownloadSizeValidatorFactoryInterf
     {
         /** @var AbstractValidator $resourceSizeValidator */
         $resourceSizeValidator = GeneralUtility::makeInstance(ResourcesSizeValidator::class, [
-            'maximum' => (int)$this->extensionConfiguration->get('cms_filelist_ng', 'maxDownloadSizeMB'),
+            'maximum' => (int)$this->extensionConfiguration->get('mediamanager', 'maxDownloadSizeMB'),
         ]);
 
         return $resourceSizeValidator;

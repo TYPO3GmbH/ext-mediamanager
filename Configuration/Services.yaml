@@ -4,16 +4,16 @@ services:
     autoconfigure: true
     public: false
 
-  TYPO3\CMS\FilelistNg\:
+  TYPO3\CMS\Mediamanager\:
     resource: '../Classes/*'
 
-  TYPO3\CMS\FilelistNg\Backend\Browser\:
+  TYPO3\CMS\Mediamanager\Backend\Browser\:
     resource: '../Classes/Backend/Browser/*'
     public: true
 
-  TYPO3\CMS\FilelistNg\Backend\Controller\:
+  TYPO3\CMS\Mediamanager\Backend\Controller\:
     resource: '../Classes/Backend/Controller/*'
     public: true
 
-  TYPO3\CMS\FilelistNg\Backend\Controller\FilelistController:
+  TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController:
     tags: ['backend.controller']

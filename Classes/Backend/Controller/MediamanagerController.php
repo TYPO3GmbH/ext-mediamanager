@@ -15,18 +15,18 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Controller;
+namespace TYPO3\CMS\Mediamanager\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Mediamanager\Backend\Service\AppConfigProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\BackendUserProvider;
+use TYPO3\CMS\Mediamanager\Backend\Storage\StoragesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\View\BackendTemplateView;
 
-class FilelistController
+class MediamanagerController
 {
     /** @var BackendTemplateView */
     private $view;

@@ -18,16 +18,16 @@ defined('TYPO3_MODE') or die();
 (static function () {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
         'file',
-        'CmsFilelistNg',
+        'Mediamanager',
         'bottom',
         null,
         [
-            'name' => 'file_CmsFilelistNg',
-            'routeTarget' => \TYPO3\CMS\FilelistNg\Backend\Controller\FilelistController::class . '::indexAction',
+            'name' => 'file_Mediamanager',
+            'routeTarget' => \TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController::class . '::indexAction',
             'access' => 'user,group',
             'workspaces' => 'online,custom',
-            'icon' => 'EXT:cms_filelist_ng/Resources/Public/Icons/module-filelist-ng.svg',
-            'labels' => 'LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf',
+            'icon' => 'EXT:mediamanager/Resources/Public/Icons/module-filelist-ng.svg',
+            'labels' => 'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf',
             'navigationComponentId' => null,
             'inheritNavigationComponentFromMainModule' => false,
         ]

@@ -8,7 +8,7 @@ Configuration
 
 General File List Configuration
 ```````````````````````````````
-Go to the Settings - Extension Configuration and open the configuration of `cms_filelist_ng`. Here several settings are configurable:
+Go to the Settings - Extension Configuration and open the configuration of `mediamanager`. Here several settings are configurable:
 
 +----------------------------+------------------------------------------------------------------------------------------------------------------------------+--------------------------+
 |**Setting**                 |**Impact**                                                                                                                    |**Default**               |

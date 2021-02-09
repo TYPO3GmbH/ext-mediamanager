@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FilelistNg\Backend\Controller;
+use TYPO3\CMS\Mediamanager\Backend\Controller;
 
 return [
     // Get data for page tree

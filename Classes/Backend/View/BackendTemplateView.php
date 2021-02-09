@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\View;
+namespace TYPO3\CMS\Mediamanager\Backend\View;
 
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class BackendTemplateView extends StandaloneView
 {
-    private const DEFAULT_TEMPLATE_ROOT_PATHS = ['EXT:cms_filelist_ng/Resources/Private/Templates'];
-    private const DEFAULT_EXTENSION_NAME = 'cms_filelist_ng';
+    private const DEFAULT_TEMPLATE_ROOT_PATHS = ['EXT:mediamanager/Resources/Private/Templates'];
+    private const DEFAULT_EXTENSION_NAME = 'mediamanager';
 
     /**
      * {@inheritdoc}

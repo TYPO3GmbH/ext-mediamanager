@@ -32,7 +32,7 @@ setUpDockerComposeDotEnv() {
 
 # Load help text into $HELP
 read -r -d '' HELP <<EOF
-cms_filelist_ng test runner. Execute unit test suite and some other details.
+mediamanager test runner. Execute unit test suite and some other details.
 Also used by travis-ci for test execution.
 Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
 Usage: $0 [options] [file]
@@ -159,14 +159,14 @@ DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
 if [ -n "${1}" ]; then
-    TEST_FILE="Web/typo3conf/ext/cms_filelist_ng/${1}"
+    TEST_FILE="Web/typo3conf/ext/mediamanager/${1}"
 else
     case ${TEST_SUITE} in
         unit)
-            TEST_FILE="Web/typo3conf/ext/cms_filelist_ng/Tests/Unit"
+            TEST_FILE="Web/typo3conf/ext/mediamanager/Tests/Unit"
             ;;
         functional)
-            TEST_FILE="Web/typo3conf/ext/cms_filelist_ng/Tests/Functional"
+            TEST_FILE="Web/typo3conf/ext/mediamanager/Tests/Functional"
             ;;
     esac
 fi

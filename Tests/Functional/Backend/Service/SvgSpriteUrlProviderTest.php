@@ -15,18 +15,18 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Functional\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Tests\Functional\Backend\Service;
 
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\SvgSpriteUrlProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\SvgSpriteUrlProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class SvgSpriteUrlProviderTest extends FunctionalTestCase
 {
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/cms_filelist_ng',
+        'typo3conf/ext/mediamanager',
     ];
 
     /** @var SvgSpriteUrlProvider */

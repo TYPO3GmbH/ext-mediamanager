@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\ContextMenu;
+namespace TYPO3\CMS\Mediamanager\Backend\ContextMenu;
 
 class FilemountsProvider extends FileProvider
 {

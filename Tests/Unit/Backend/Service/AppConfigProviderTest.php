@@ -15,13 +15,13 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Service;
 
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\AppConfigProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\AppConfigProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\AppConfigProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\IconUrlProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\LanguageServiceProvider;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class AppConfigProviderTest extends UnitTestCase

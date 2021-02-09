@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Functional\Backend\ContextMenu;
+namespace TYPO3\CMS\Mediamanager\Tests\Functional\Backend\ContextMenu;
 
 use TYPO3\CMS\Backend\Clipboard\Clipboard;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -24,13 +24,13 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\ContextMenu\FileProvider;
+use TYPO3\CMS\Mediamanager\Backend\ContextMenu\FileProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FileProviderTest extends FunctionalTestCase
 {
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/cms_filelist_ng',
+        'typo3conf/ext/mediamanager',
     ];
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|ResourceFactory */

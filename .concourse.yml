@@ -4,7 +4,7 @@ resources:
     type: git
     icon: git
     source:
-      uri: git@git.dfau.de:dfau/filelist-ng.git
+      uri: git@git.dfau.de:typo3/cms-mediamanager.git
       private_key: ((ssh-key.id_rsa))
 
 jobs:
@@ -66,8 +66,8 @@ jobs:
                 source /docker-lib.sh
                 start_docker
                 cd workspace
-                rm .Build/Web/typo3conf/ext/cms_filelist_ng
-                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
+                rm .Build/Web/typo3conf/ext/mediamanager
+                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/mediamanager
                 ./etc/scripts/runTests.sh -s unit
 
       - task: run-functional-tests
@@ -87,8 +87,8 @@ jobs:
                 source /docker-lib.sh
                 start_docker
                 cd workspace
-                rm .Build/Web/typo3conf/ext/cms_filelist_ng
-                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/cms_filelist_ng
+                rm .Build/Web/typo3conf/ext/mediamanager
+                ln -s "$(pwd)" ./.Build/Web/typo3conf/ext/mediamanager
                 ./etc/scripts/runTests.sh -s functional
 
   - name: test-frontend

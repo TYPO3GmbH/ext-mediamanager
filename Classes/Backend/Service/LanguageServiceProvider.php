@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Backend\Service;
 
 use TYPO3\CMS\Core\Localization\LanguageService;
 
@@ -26,7 +26,7 @@ class LanguageServiceProvider
         $languageService = $GLOBALS['LANG'];
         \assert($languageService instanceof LanguageService);
 
-        $languageService->includeLLFile('EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf');
+        $languageService->includeLLFile('EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_misc.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_common.xlf');
         $languageService->includeLLFile('EXT:core/Resources/Private/Language/locallang_mod_file.xlf');

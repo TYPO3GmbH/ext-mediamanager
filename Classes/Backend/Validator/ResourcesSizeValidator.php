@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Validator;
+namespace TYPO3\CMS\Mediamanager\Backend\Validator;
 
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\Folder;
@@ -43,8 +43,8 @@ class ResourcesSizeValidator extends AbstractValidator
         if ($rawSize > $maxSizeInBytes) {
             $this->addError(
                 $this->translateErrorMessage(
-                    'LLL:EXT:cms_filelist_ng/Resources/Private/Language/locallang_mod_file_list_ng.xlf:validator.maxDownloadSize.exceed',
-                    'cms_filelist_ng',
+                    'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf:validator.maxDownloadSize.exceed',
+                    'mediamanager',
                     [
                         $this->options['maximum'],
                     ]

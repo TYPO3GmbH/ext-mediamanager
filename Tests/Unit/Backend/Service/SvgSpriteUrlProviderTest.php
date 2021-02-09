@@ -15,13 +15,13 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Service;
 
 use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
-use TYPO3\CMS\FilelistNg\Backend\Service\IconUrlProviderInterface;
-use TYPO3\CMS\FilelistNg\Backend\Service\SvgSpriteUrlProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\IconUrlProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\SvgSpriteUrlProvider;
 
 class SvgSpriteUrlProviderTest extends TestCase
 {

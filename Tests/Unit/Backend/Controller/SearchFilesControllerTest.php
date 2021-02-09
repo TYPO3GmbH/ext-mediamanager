@@ -15,16 +15,16 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Controller;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Controller;
 
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Search\Result\FileSearchResultInterface;
-use TYPO3\CMS\FilelistNg\Backend\Controller\SearchFilesController;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Controller\SearchFilesController;
+use TYPO3\CMS\Mediamanager\Backend\Service\FolderListGeneratorInterface;
+use TYPO3\CMS\Mediamanager\Backend\Storage\StoragesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class SearchFilesControllerTest extends UnitTestCase

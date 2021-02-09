@@ -27,10 +27,10 @@ use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\BackendUser;
-use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderTreeGenerator;
-use TYPO3\CMS\FilelistNg\Backend\Service\LanguageServiceProvider;
-use TYPO3\CMS\FilelistNg\Backend\Service\SvgSpriteUrlProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\BackendUserProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\FolderTreeGenerator;
+use TYPO3\CMS\Mediamanager\Backend\Service\LanguageServiceProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\SvgSpriteUrlProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FolderTreeGeneratorTest extends FunctionalTestCase
@@ -39,7 +39,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
     private $generator;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/cms_filelist_ng',
+        'typo3conf/ext/mediamanager',
     ];
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|IconFactory */

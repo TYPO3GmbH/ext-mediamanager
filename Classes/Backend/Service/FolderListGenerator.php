@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Service;
+namespace TYPO3\CMS\Mediamanager\Backend\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -115,7 +115,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
         // todo: potential bottleneck: (either perform request to get metadata url or retrieve all metadataIds via queryProvider)
         $metaDataUrl = null;
         if ($file->isIndexed() && $file->checkActionPermission('editMeta')) {
-            $closeUrl = GeneralUtility::getFileAbsFileName('EXT:cms_filelist_ng/Resources/Public/Html/CloseModal.html');
+            $closeUrl = GeneralUtility::getFileAbsFileName('EXT:mediamanager/Resources/Public/Html/CloseModal.html');
 
             $metaData = $file->getMetaData()->get();
             $urlParameters = [

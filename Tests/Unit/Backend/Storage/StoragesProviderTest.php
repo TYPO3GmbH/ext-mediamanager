@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Tests\Unit\Backend\Storage;
+namespace TYPO3\CMS\Mediamanager\Tests\Unit\Backend\Storage;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
-use TYPO3\CMS\FilelistNg\Backend\Service\BackendUserProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProvider;
-use TYPO3\CMS\FilelistNg\Backend\Storage\StoragesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\BackendUserProvider;
+use TYPO3\CMS\Mediamanager\Backend\Storage\StoragesProvider;
+use TYPO3\CMS\Mediamanager\Backend\Storage\StoragesProviderInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class StoragesProviderTest extends UnitTestCase

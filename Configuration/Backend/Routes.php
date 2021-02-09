@@ -15,13 +15,13 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FilelistNg\Backend\Controller;
+use TYPO3\CMS\Mediamanager\Backend\Controller;
 
 return [
     'filelist_ng_storage' => [
         'path' => '/filelist_ng/storage',
         'access' => 'public',
-        'target' =>  Controller\FilelistController::class . '::storageAction',
+        'target' =>  Controller\MediamanagerController::class . '::storageAction',
     ],
     'filelist_ng_download_files' => [
         'path' => '/filelist_ng/download-files',

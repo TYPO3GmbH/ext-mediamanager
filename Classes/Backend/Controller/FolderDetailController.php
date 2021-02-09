@@ -15,14 +15,14 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Controller;
+namespace TYPO3\CMS\Mediamanager\Backend\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\FilelistNg\Backend\Service\FolderListGeneratorInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\FolderListGeneratorInterface;
 
 class FolderDetailController
 {

@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FilelistNg\Backend\Service\FileReferencesProvider;
+use TYPO3\CMS\Mediamanager\Backend\Service\FileReferencesProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FileReferencesProviderTest extends FunctionalTestCase
@@ -32,7 +32,7 @@ class FileReferencesProviderTest extends FunctionalTestCase
     private $subject;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/cms_filelist_ng',
+        'typo3conf/ext/mediamanager',
     ];
 
     protected function setUp(): void

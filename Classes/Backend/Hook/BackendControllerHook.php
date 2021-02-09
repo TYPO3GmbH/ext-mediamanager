@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace TYPO3\CMS\FilelistNg\Backend\Hook;
+namespace TYPO3\CMS\Mediamanager\Backend\Hook;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -25,7 +25,7 @@ class BackendControllerHook
     public function addJavaScript(): void
     {
         $this->getPageRenderer()->addBodyContent('<typo3-top-container></typo3-top-container>');
-        $this->getPageRenderer()->addJsFile('EXT:cms_filelist_ng/Resources/Public/JavaScript/top_es.js');
+        $this->getPageRenderer()->addJsFile('EXT:mediamanager/Resources/Public/JavaScript/top_es.js');
     }
 
     protected function getPageRenderer(): PageRenderer
