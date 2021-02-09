@@ -46,7 +46,8 @@ jobs:
               - -c
               - |
                 cd workspace
-                ./etc/scripts/checkCodingStandards.sh
+                composer global require friendsofphp/php-cs-fixer
+                ./bin/php-cs-fixer fix --config ./Build/.php_cs --dry-run
 
       - task: run-unit-tests
         privileged: true

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -74,13 +75,13 @@ class FileBrowser implements ElementBrowserInterface
         $storages = $this->getStoragesData();
 
         $backendUrls = [
-            'fileActionUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'),
-            'treeUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
-            'flashMessagesUrl' =>  (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
-            'clipboardUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
-            'downloadFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
-            'editFileStorageUrl' => (string) $this->uriBuilder->buildUriFromRoute('record_edit'),
-            'searchFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
+            'fileActionUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_process'),
+            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
+            'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
+            'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
+            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
+            'editFileStorageUrl' => (string)$this->uriBuilder->buildUriFromRoute('record_edit'),
+            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
         ];
 
         $appConfig = $this->appConfigProvider->getConfig();
@@ -93,7 +94,7 @@ class FileBrowser implements ElementBrowserInterface
         $this->view->assign('storages', $storages);
         $this->view->assign('expandFolder', $this->expandFolder);
 
-        $this->view->assign('selectedStorageUid', (int) $storageUid);
+        $this->view->assign('selectedStorageUid', (int)$storageUid);
 
         return $this->view->render();
     }
@@ -104,7 +105,7 @@ class FileBrowser implements ElementBrowserInterface
     private function getStoragesData(): array
     {
         $serverRequest = ServerRequestFactory::fromGlobals();
-        $uri = (string) $serverRequest->getUri();
+        $uri = (string)$serverRequest->getUri();
 
         return \array_map(static function (array $storage) use ($uri) {
             $storage['storageUrl'] = $uri . '&uid=' . $storage['uid'];

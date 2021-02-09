@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -67,14 +68,14 @@ class FilelistController
         $backendUrls = [];
 
         if ($backendUser->check('tables_modify', 'sys_file_storage')) {
-            $backendUrls['newStorageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('record_edit', [
+            $backendUrls['newStorageUrl'] = (string)$this->uriBuilder->buildUriFromRoute('record_edit', [
                 'edit[sys_file_storage][0]' => 'new',
-                'returnUrl' => (string) $fileListUrl,
+                'returnUrl' => (string)$fileListUrl,
             ]);
         }
 
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('beuser') && $backendUser->check('module', 'beuser')) {
-            $backendUrls['switchUserUrl'] = (string) $this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser');
+            $backendUrls['switchUserUrl'] = (string)$this->uriBuilder->buildUriFromRoute('system_BeuserTxBeuser');
         }
 
         $this->addGlobalVars($backendUrls);
@@ -96,16 +97,16 @@ class FilelistController
         $storages = $this->getStoragesData();
 
         $this->addGlobalVars([
-            'fileActionUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_file_process'),
-            'treeUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
-            'flashMessagesUrl' =>  (string) $this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
-            'clipboardUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
-            'downloadFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
-            'editFileStorageUrl' => (string) $this->uriBuilder->buildUriFromRoute('record_edit'),
-            'searchFilesUrl' => (string) $this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
+            'fileActionUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_process'),
+            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
+            'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
+            'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
+            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
+            'editFileStorageUrl' => (string)$this->uriBuilder->buildUriFromRoute('record_edit'),
+            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
         ]);
         $this->view->assign('storages', $storages);
-        $this->view->assign('selectedStorageUid', (int) $storageUid);
+        $this->view->assign('selectedStorageUid', (int)$storageUid);
 
         return new HtmlResponse($this->view->render());
     }
@@ -116,7 +117,7 @@ class FilelistController
     private function getStoragesData(): array
     {
         return \array_map(function (array $storage) {
-            $storage['storageUrl'] = (string) $this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage['uid']]);
+            $storage['storageUrl'] = (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage['uid']]);
             return $storage;
         }, $this->storagesProvider->getFormattedStoragesForUser());
     }

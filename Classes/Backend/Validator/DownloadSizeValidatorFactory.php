@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -34,7 +35,7 @@ class DownloadSizeValidatorFactory implements DownloadSizeValidatorFactoryInterf
     {
         /** @var AbstractValidator $resourceSizeValidator */
         $resourceSizeValidator = GeneralUtility::makeInstance(ResourcesSizeValidator::class, [
-            'maximum' => (int) $this->extensionConfiguration->get('cms_filelist_ng', 'maxDownloadSizeMB'),
+            'maximum' => (int)$this->extensionConfiguration->get('cms_filelist_ng', 'maxDownloadSizeMB'),
         ]);
 
         return $resourceSizeValidator;

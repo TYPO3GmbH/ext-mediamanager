@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -53,7 +54,7 @@ class SearchFilesController
             return new HtmlResponse('Parameter "search" is missing', 400);
         }
 
-        $storage = $this->storagesProvider->getStorageForUserById((int) $storageId);
+        $storage = $this->storagesProvider->getStorageForUserById((int)$storageId);
 
         if (null === $storage) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);

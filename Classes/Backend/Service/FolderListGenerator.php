@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -86,7 +87,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             $this->formatResource($folder),
             [
                 'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
-                'sizeRaw' => (int) $numFiles,
+                'sizeRaw' => (int)$numFiles,
                 'type' => $this->languageService->getLL('folder'),
             ]
         );
@@ -126,7 +127,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'returnUrl' => PathUtility::getAbsoluteWebPath($closeUrl),
             ];
 
-            $metaDataUrl = (string) $this->uriBuilder->buildUriFromRoute('record_edit', $urlParameters);
+            $metaDataUrl = (string)$this->uriBuilder->buildUriFromRoute('record_edit', $urlParameters);
         }
 
         $parentFolder = $file->getParentFolder();
@@ -136,8 +137,8 @@ class FolderListGenerator implements FolderListGeneratorInterface
             [
                 'uid' => $file->getUid(),
                 'extension' => $file->getExtension(),
-                'size' => GeneralUtility::formatSize((int) $file->getSize(), $this->languageService->getLL('byteSizeUnits')),
-                'sizeRaw' => (int) $file->getSize(),
+                'size' => GeneralUtility::formatSize((int)$file->getSize(), $this->languageService->getLL('byteSizeUnits')),
+                'sizeRaw' => (int)$file->getSize(),
                 'type' => \strtoupper($file->getExtension()),
                 'references' => $this->fileReferencesProvider->getReferencesCount($file),
                 'thumbnailUrl' => $thumbnailUrl,
@@ -177,6 +178,6 @@ class FolderListGenerator implements FolderListGeneratorInterface
 
     protected function buildContextMenuUrl(string $combinedIdentifier): string
     {
-        return (string) $this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
+        return (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
     }
 }

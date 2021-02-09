@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -272,7 +273,7 @@ class FileProvider extends AbstractProvider
             } else {
                 $confirmMessage .= BackendUtility::referenceCount(
                     'sys_file',
-                    (string) $this->record->getUid(),
+                    (string)$this->record->getUid(),
                     ' ' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFile')
                 );
             }

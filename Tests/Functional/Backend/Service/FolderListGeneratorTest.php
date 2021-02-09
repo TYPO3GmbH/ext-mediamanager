@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -74,7 +75,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $storage->method('getFoldersInFolder')
             ->willReturn([$subFolder]);
 
-        $subFolder->expects($this->once())
+        $subFolder->expects(self::once())
             ->method('getRole')
             ->willReturn(FolderInterface::ROLE_DEFAULT);
 
@@ -144,7 +145,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $storage = $this->createMock(ResourceStorage::class);
         $subFolder = $this->createMock(Folder::class);
 
-        $subFolder->expects($this->once())
+        $subFolder->expects(self::once())
             ->method('getRole')
             ->willReturn(FolderInterface::ROLE_PROCESSING);
 

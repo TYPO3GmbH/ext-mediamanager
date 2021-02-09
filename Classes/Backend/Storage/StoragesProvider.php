@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -47,6 +48,9 @@ class StoragesProvider implements StoragesProviderInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormattedStoragesForUser(): array
     {
         return \array_map(function ($storage) {

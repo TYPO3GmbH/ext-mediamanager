@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -23,7 +24,7 @@ use TYPO3\CMS\Core\Resource\ResourceInterface;
 class ArchiveGenerator implements ArchiveGeneratorInterface
 {
     /**
-     * @param ResourceInterface[] $resources
+     * {@inheritdoc}
      */
     public function generateArchive($resources = []): string
     {

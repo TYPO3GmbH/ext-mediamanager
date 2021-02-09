@@ -1,50 +1,48 @@
 {
-  "name": "typo3/cms-filelist-ng",
-  "description": "Next Generation File List",
-  "type": "typo3-cms-extension",
-  "license": "GPL-3.0-or-later",
-  "require": {
-    "php": ">=7.2 <7.5",
-    "typo3/cms-core": "^v11.0.0",
-    "ext-zip": "*",
-    "ext-json": "*"
-  },
-  "require-dev": {
-    "typo3/testing-framework": "dev-master",
-    "roave/security-advisories": "dev-master",
-    "symplify/easy-coding-standard": "^8.3",
-    "slevomat/coding-standard": "^6.4"
-  },
-  "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin"
-  },
-  "authors": [
-    {
-      "name": "Thomas Maroschik",
-      "email": "tmaroschik@dfau.de"
+    "name": "typo3/cms-filelist-ng",
+    "description": "Next Generation File List",
+    "type": "typo3-cms-extension",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "php": ">=7.2 <7.5",
+        "typo3/cms-core": "^v11.0.0",
+        "ext-zip": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "dev-master",
+        "roave/security-advisories": "dev-master"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "authors": [
+        {
+            "name": "Thomas Maroschik",
+            "email": "tmaroschik@dfau.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TYPO3\\CMS\\FilelistNg\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TYPO3\\CMS\\FilelistNg\\Tests\\": "Tests"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web",
+            "extension-key": "cms_filelist_ng"
+        }
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "TYPO3\\CMS\\FilelistNg\\": "Classes"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "TYPO3\\CMS\\FilelistNg\\Tests\\": "Tests"
-    }
-  },
-  "scripts": {
-    "post-autoload-dump": [
-      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-    ]
-  },
-  "extra": {
-    "typo3/cms": {
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web",
-      "extension-key": "cms_filelist_ng"
-    }
-  }
 }

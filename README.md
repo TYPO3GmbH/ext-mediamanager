@@ -1,23 +1,22 @@
 Filelist NG
 ===========
 
-    
 Development
 -----------
 
 Install php dependencies using composer:
-    
+
     composer install
-    
+
 Install web components
 
     (cd Build; npm ci)
-    
+
 Build web components
-    
+
     (cd Build; npm build:prod)
-    
-    
+
+
 [PHPUnit](https://phpunit.de) Unit tests
 -----------------------------------
 
@@ -27,21 +26,20 @@ Build web components
 -----------------------------------
 
     etc/scripts/runTests.sh -s functional
-    
 
 [PHPUnit](https://phpunit.de) Functional tests
 
 
-[Easy-Coding-Standard](https://github.com/Symplify/EasyCodingStandard)
+[PHP Coding Standards Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
 ----------------------------------------------------------------------
 
-Check coding standard violations violations
+Install php-cs-fixer tool via
 
-    etc/scripts/checkCodingStandards.sh 
-    
-Fix coding standard violations automatically
-    
-    etc/scripts/checkCodingStandards.sh --fix
+    composer global require friendsofphp/php-cs-fixer
+
+and then simply run
+
+    ./bin/php-cs-fixer fix --config ./Build/.php_cs
 
 
 Storybook
@@ -50,7 +48,7 @@ Storybook
     (cd Build; npm run storybook)
 
 
-Documentation 
+Documentation
 -------------
 
 Make `dockrun_t3rd available in current terminal
