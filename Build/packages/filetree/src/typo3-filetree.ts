@@ -46,10 +46,10 @@ export class Typo3Filetree extends Typo3SvgTree {
   @property({ type: Boolean }) editable = false;
   @property({ type: Boolean }) dragDropEnabled: boolean = false;
 
-  @query('.node-dd') dragHandler!: HTMLEmbedElement;
-
   @internalProperty() isDragging = false;
   @internalProperty() allowDrop = false;
+
+  @query('.node-dd') dragHandler!: HTMLEmbedElement;
 
   protected clicks = 0;
   protected nodeIsEdit = false;

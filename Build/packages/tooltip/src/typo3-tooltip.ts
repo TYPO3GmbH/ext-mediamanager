@@ -32,9 +32,7 @@ export class Typo3Tooltip extends LitElement {
   public static styles = [themeStyles, styles];
 
   @property({ type: HTMLElement }) anchor!: HTMLElement;
-
   @property({ type: Number }) offset = 14;
-
   @property({ type: String, reflect: true }) position: Position = 'bottom';
 
   @internalProperty() isHidden = true;

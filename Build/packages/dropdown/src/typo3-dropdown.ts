@@ -30,13 +30,12 @@ import { Typo3Menu } from '../../menu/src/typo3-menu';
  */
 @customElement('typo3-dropdown')
 export class Typo3Dropdown extends LitElement {
+  public static styles = [themeStyles, styles];
+
   @property({ type: Boolean, reflect: true }) multi = false;
 
   @query('slot[name="button"]') buttonSlotElement!: HTMLSlotElement | null;
-
   @query('typo3-menu') typo3Menu!: Typo3Menu;
-
-  public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
     return html`

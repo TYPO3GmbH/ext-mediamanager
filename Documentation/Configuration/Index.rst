@@ -6,7 +6,7 @@
 Configuration
 =============
 
-General File List Configuration
+General Mediamanager Configuration
 ```````````````````````````````
 Go to the Settings - Extension Configuration and open the configuration of `mediamanager`. Here several settings are configurable:
 

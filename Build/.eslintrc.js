@@ -17,7 +17,6 @@ module.exports = {
     'import/named': 'off',
     'import/no-unresolved': 'off',
     'import/extensions': 'off',
-    '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-ordering': [
       'error',
@@ -47,7 +46,7 @@ module.exports = {
     '@typescript-eslint/no-require-imports': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/quotes': ['error', 'single'],
+    '@typescript-eslint/quotes': ['error', 'single', { avoidEscape: true }],
     '@typescript-eslint/type-annotation-spacing': 'error',
     curly: 'error',
     'dot-notation': 'error',
@@ -62,7 +61,6 @@ module.exports = {
     'no-unused-labels': 'error',
     'no-unused-vars': 'off',
     'no-var': 'error',
-    quotes: 'off',
     radix: 'error',
     semi: 'off',
     'header/header': [
@@ -71,11 +69,11 @@ module.exports = {
       [
         '',
         ' * This file is part of the TYPO3 CMS project.',
-        ' * ',
+        ' *',
         ' * It is free software; you can redistribute it and/or modify it under',
         ' * the terms of the GNU General Public License, either version 2',
         ' * of the License, or any later version.',
-        ' * ',
+        ' *',
         ' * For the full copyright and license information, please read the',
         ' * LICENSE.txt file that was distributed with this source code.',
         ' *',

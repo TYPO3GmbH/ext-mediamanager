@@ -29,28 +29,21 @@ import themeStyles from '../../../theme/index.pcss';
  */
 @customElement('typo3-card')
 export class Typo3Card extends LitElement {
-  @property({ type: String }) title = '';
-
-  @property({ type: String }) subtitle = '';
-
-  @property({ type: String, reflect: true }) variant: 'standard' | 'preview' =
-    'standard';
-
-  @property({ type: Boolean, reflect: true }) selected = false;
-
-  @property({ type: String, reflect: true }) value?: string;
-
-  @property({ type: Boolean, reflect: true }) titleEditable = false;
-
-  @property({ type: Boolean, reflect: true }) disabled = false;
-
-  @property({ type: Boolean, reflect: true }) notSelectable = false;
-
-  @query('.title') titleElement!: HTMLElement;
-
   public static styles = [themeStyles, styles];
 
+  @property({ type: String }) title = '';
+  @property({ type: String }) subtitle = '';
+  @property({ type: String, reflect: true }) variant: 'standard' | 'preview' =
+    'standard';
+  @property({ type: Boolean, reflect: true }) selected = false;
+  @property({ type: String, reflect: true }) value?: string;
+  @property({ type: Boolean, reflect: true }) titleEditable = false;
+  @property({ type: Boolean, reflect: true }) disabled = false;
+  @property({ type: Boolean, reflect: true }) notSelectable = false;
+
   @internalProperty() inEditMode = false;
+
+  @query('.title') titleElement!: HTMLElement;
 
   render(): TemplateResult {
     return html`

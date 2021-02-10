@@ -27,9 +27,9 @@ import styles from './typo3-file-action-undo-button.pcss';
 
 @customElement('typo3-file-action-undo-button')
 export class Typo3FileActionUndoButton extends connect(store)(LitElement) {
-  @property({ type: Object, reflect: true }) undoAction?: Action;
-
   public static styles = [themeStyles, styles];
+
+  @property({ type: Object, reflect: true }) undoAction?: Action;
 
   render(): TemplateResult {
     if (!this.undoAction) {

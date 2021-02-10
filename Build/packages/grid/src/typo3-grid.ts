@@ -32,11 +32,9 @@ export class Typo3Grid extends LitElement {
   public static styles = [themeStyles, styles];
 
   @query('.grid') grid!: HTMLElement;
-
   @query('slot') slotElement!: HTMLSlotElement;
 
   @property({ type: Boolean, reflect: true }) selectable = false;
-
   // used for triggering updates
   @property({ type: String }) hash = '';
 

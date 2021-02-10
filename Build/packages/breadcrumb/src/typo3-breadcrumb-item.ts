@@ -28,15 +28,12 @@ import themeStyles from '../../../theme/index.pcss';
  */
 @customElement('typo3-breadcrumb-item')
 export class Typo3BreadcrumbItem extends LitElement {
-  @property({ type: Boolean, reflect: true }) active = false;
-
-  @property({ type: String, reflect: true }) title = '';
-
-  @property({ type: String, reflect: true }) link = null;
-
-  @property({ type: Boolean, reflect: true }) shortened = false;
-
   public static styles = [themeStyles, styles];
+
+  @property({ type: Boolean, reflect: true }) active = false;
+  @property({ type: String, reflect: true }) title = '';
+  @property({ type: String, reflect: true }) link = null;
+  @property({ type: Boolean, reflect: true }) shortened = false;
 
   public originalWidth = 0;
 

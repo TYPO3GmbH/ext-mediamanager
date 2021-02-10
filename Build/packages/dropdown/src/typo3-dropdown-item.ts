@@ -20,10 +20,10 @@ import { Typo3ListItemBase } from '../../list/src/typo3-list-item-base';
 
 @customElement('typo3-dropdown-item')
 export class Typo3DropdownItem extends Typo3ListItemBase {
+  public static styles = [...Typo3ListItemBase.styles, styles];
+
   @property({ type: Boolean, reflect: true, attribute: 'display-checkmark' })
   displayCheckmark = true;
-
-  public static styles = [...Typo3ListItemBase.styles, styles];
 
   render(): TemplateResult {
     return html`

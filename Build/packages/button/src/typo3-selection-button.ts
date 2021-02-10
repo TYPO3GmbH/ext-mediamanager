@@ -27,15 +27,13 @@ import { Typo3Button } from './typo3-button';
 
 @customElement('typo3-selection-button')
 export class Typo3SelectionButton extends LitElement {
+  public static styles = [themeStyles, defaultStyles, styles];
+
   @property({ type: Number, reflect: true }) count = 0;
-
   @property({ type: String, reflect: true }) suffix = 'Selected';
-
   @property({ type: String, reflect: true }) color = 'primary';
 
   @query('typo3-button') button?: Typo3Button;
-
-  public static styles = [themeStyles, defaultStyles, styles];
 
   render(): TemplateResult {
     if (0 === this.count) {

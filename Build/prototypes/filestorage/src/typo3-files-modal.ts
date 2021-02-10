@@ -33,17 +33,14 @@ import { translate } from './services/translation.service';
 export class Typo3FilesModal extends LitElement {
   public static styles = [themeStyles, styles];
 
-  @query('typo3-modal') modal!: Typo3Modal;
-
   @property({ type: String }) mode: 'move' | 'copy' = 'move';
-
   @property({ type: Array }) nodes: Typo3Node[] = [];
-
   @property({ type: Array }) expandedNodeIds: string[] = [];
-
   @property({ type: Array }) selectedFiles: ListItem[] = [];
 
   @internalProperty() target: Typo3Node | null = null;
+
+  @query('typo3-modal') modal!: Typo3Modal;
 
   render(): TemplateResult {
     const selectedFiles = this.selectedFiles.map(item =>

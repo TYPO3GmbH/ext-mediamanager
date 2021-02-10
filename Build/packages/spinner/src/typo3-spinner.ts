@@ -47,7 +47,6 @@ export class Typo3Spinner extends LitElement {
   public static styles = [themeStyles, styles];
 
   @property({ type: String, reflect: true }) color: Color = Color.PRIMARY;
-
   @property({ type: String, reflect: true }) screenReaderText = 'Loading';
 
   protected render(): TemplateResult {

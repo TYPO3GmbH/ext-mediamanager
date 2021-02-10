@@ -76,11 +76,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   @query('.content_left') contentLeft!: HTMLElement;
   @query('.content_right') contentRight!: HTMLElement;
-
   @query('typo3-filetree') fileTree!: Typo3Filetree;
   @query('typo3-draghandler') filesDragHandler!: Typo3Draghandler;
   @query('typo3-files-modal') moveFilesModal!: Typo3FilesModal;
-
   @query('#file_upload') fileUploadInput!: HTMLInputElement;
 
   public static styles = [themeStyles, styles];

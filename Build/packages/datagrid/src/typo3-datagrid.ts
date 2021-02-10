@@ -41,21 +41,16 @@ import { Cell } from './lib/Cell';
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
+  public static styles = [themeStyles];
+
   @property({ type: Object }) schema = {};
-
   @property({ type: Object }) data = {};
-
   @property({ type: Object }) sorters: { [key: string]: Function } = {};
-
   @property({ type: Array }) editableColumns: string[] = [];
-
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
-
   @property({ type: String }) rowIdentifier = 'identifier';
 
   @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
-
-  public static styles = [themeStyles];
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
 

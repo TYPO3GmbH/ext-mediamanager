@@ -1,23 +1,12 @@
 {
-  "scripts": {
-    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "format": "npm run format:eslint && npm run format:prettier",
-    "test": "npm run build:dev && karma start --coverage",
-    "test:watch": "concurrently --kill-others --names rollup,karma \"npm run build:dev:watch\" \"karma start --auto-watch=true --single-run=false\"",
-    "test:ci": "karma start --no-watch --no-progress",
-    "storybook": "concurrently --kill-others --names rollup,storybook \"npm run build:dev:watch\"  \"start-storybook --node-resolve --watch --open\"",
-    "storybook:build": "build-storybook",
-    "build:dev": "rollup -c rollup.config.dev.js",
-    "build:dev:watch": "npm run build:dev -- --w",
-    "build:prod": "rimraf dist && rollup -c rollup.config.prod.js",
-    "build:prod:watch": "rollup -c rollup.config.prod.js --w",
-    "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
-    "start": "concurrently --kill-others --names rollup,es-dev-server \"npm run build:dev:watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
-    "deploy-storybook": "storybook-to-ghpages"
+  "name": "typo3-cms-mediamanager",
+  "description": "Webcomponent typo3-mediamanager following open-wc recommendations",
+  "author": "TYPO3 CMS Core Team",
+  "version": "0.0.0",
+  "license": "GPL-2.0+",
+  "engines": {
+    "node": ">=14.13.0 <15.0.0",
+    "yarn": "^1.22.0"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^1.9.4",
@@ -64,6 +53,40 @@
     "tslib": "^1.14.1",
     "typescript": "~3.9.0"
   },
+  "scripts": {
+    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "test": "npm run build:dev && karma start --coverage",
+    "test:watch": "concurrently --kill-others --names rollup,karma \"npm run build:dev:watch\" \"karma start --auto-watch=true --single-run=false\"",
+    "test:ci": "karma start --no-watch --no-progress",
+    "storybook": "concurrently --kill-others --names rollup,storybook \"npm run build:dev:watch\"  \"start-storybook --node-resolve --watch --open\"",
+    "storybook:build": "build-storybook",
+    "build:dev": "rollup -c rollup.config.dev.js",
+    "build:dev:watch": "npm run build:dev -- --w",
+    "build:prod": "rimraf dist && rollup -c rollup.config.prod.js",
+    "build:prod:watch": "rollup -c rollup.config.prod.js --w",
+    "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --open --compatibility none",
+    "start": "concurrently --kill-others --names rollup,es-dev-server \"npm run build:dev:watch\" \"es-dev-server --app-index index.html --node-resolve --open --watch\"",
+    "deploy-storybook": "storybook-to-ghpages"
+  },
+  "dependencies": {
+    "@material/mwc-menu": "^0.18.0",
+    "@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
+    "canvas-datagrid": "^0.25.4",
+    "d3": "^6.5.0",
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0",
+    "lodash-es": "^4.17.20",
+    "pwa-helpers": "^0.9.1",
+    "redux": "^4.0.5",
+    "redux-observable": "^1.2.0",
+    "reselect": "^4.0.0",
+    "rxjs": "^6.6.3"
+  },
   "eslintConfig": {
     "extends": [
       "@open-wc/eslint-config",
@@ -85,24 +108,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "name": "typo3-filelist",
-  "version": "0.0.0",
-  "description": "Webcomponent typo3-filelist following open-wc recommendations",
-  "author": "typo3-filelist",
-  "license": "MIT",
-  "dependencies": {
-    "@material/mwc-menu": "^0.18.0",
-    "@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
-    "canvas-datagrid": "^0.25.4",
-    "d3": "^6.5.0",
-    "lit-element": "^2.0.1",
-    "lit-html": "^1.0.0",
-    "lodash-es": "^4.17.20",
-    "pwa-helpers": "^0.9.1",
-    "redux": "^4.0.5",
-    "redux-observable": "^1.2.0",
-    "reselect": "^4.0.0",
-    "rxjs": "^6.6.3"
   }
 }

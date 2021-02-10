@@ -42,23 +42,15 @@ export class Typo3Snackbar extends LitElement {
   public static styles = [themeStyles, styles];
 
   @property({ type: Number, reflect: true }) messageId!: number;
-
   @property({ type: Boolean, reflect: true }) visible = false;
-
   @property({ type: String, reflect: true }) message = '';
-
   @property({ type: String }) title = '';
-
   @property({ type: String, reflect: true }) buttonText = 'OK';
-
   @property({ type: String, reflect: true }) variant: SnackbarVariants =
     SnackbarVariants.default;
-
   @property({ type: String, reflect: true }) placement: 'left' | 'right' =
     'left';
-
   @property({ type: Boolean, reflect: true }) dismissible = false;
-
   @property({ type: String, reflect: true }) duration?: number;
 
   private timerAutoHide?: number;

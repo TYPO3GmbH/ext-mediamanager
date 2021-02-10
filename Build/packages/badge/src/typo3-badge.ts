@@ -34,11 +34,10 @@ export type Size = 'small' | 'medium';
 
 @customElement('typo3-badge')
 export class Typo3Badge extends LitElement {
-  @property({ type: String, reflect: true }) color: Color = 'default';
-
-  @property({ type: String, reflect: true }) size: Size = 'medium';
-
   public static styles = [themeStyles, styles];
+
+  @property({ type: String, reflect: true }) color: Color = 'default';
+  @property({ type: String, reflect: true }) size: Size = 'medium';
 
   render(): TemplateResult {
     return html` <slot></slot> `;
