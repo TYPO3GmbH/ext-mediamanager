@@ -26,7 +26,7 @@ defined('TYPO3_MODE') or die();
             'routeTarget' => \TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController::class . '::indexAction',
             'access' => 'user,group',
             'workspaces' => 'online,custom',
-            'icon' => 'EXT:mediamanager/Resources/Public/Icons/module-filelist-ng.svg',
+            'icon' => 'EXT:mediamanager/Resources/Public/Icons/module-mediamanager.svg',
             'labels' => 'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf',
             'navigationComponentId' => null,
             'inheritNavigationComponentFromMainModule' => false,

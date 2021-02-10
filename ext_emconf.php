@@ -14,18 +14,19 @@
  */
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Next Generation File List',
-    'description' => '',
-    'category' => 'be',
+    'title' => 'Mediamanager',
+    'description' => 'Manage TYPO3 media files.',
+    'category' => 'module',
     'version' => '0.0.1',
     'state' => 'alpha',
-    'uploadfolder' => 0,
     'clearcacheonload' => 1,
-    'author' => 'Thomas Maroschik',
-    'author_email' => 'tmaroschik@dfau.de',
-    'author_company' => 'DFAU',
+    'author' => 'TYPO3 Core Team',
+    'author_email' => 'typo3cms@typo3.org',
+    'author_company' => '',
     'constraints' => [
-        'depends' => [],
+        'depends' => [
+            'typo3' => '11.1.0',
+        ],
         'conflicts' => [],
         'suggests' => [],
     ]

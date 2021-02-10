@@ -4,7 +4,7 @@ resources:
     type: git
     icon: git
     source:
-      uri: git@git.dfau.de:typo3/cms-mediamanager.git
+      uri: git@git.dfau.de:dfau/filelist-ng.git
       private_key: ((ssh-key.id_rsa))
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
           platform: linux
           image_resource:
             type: registry-image
-            source: { repository: shippingdocker/php-composer, tag: 7.4 }
+            source: { repository: cytopia/php-cs-fixer }
           inputs:
             - name: workspace
           run:
@@ -46,8 +46,7 @@ jobs:
               - -c
               - |
                 cd workspace
-                composer global require friendsofphp/php-cs-fixer
-                ./bin/php-cs-fixer fix --config ./Build/.php_cs --dry-run
+                /usr/bin/php-cs-fixer fix --config ./Build/.php_cs --dry-run
 
       - task: run-unit-tests
         privileged: true
