@@ -6,7 +6,7 @@
 Developer Corner
 ================
 
-With the filelist module there is also an alternative for displaying modal windows and snack bar notifications in the
+With the mediamanager module there is also an alternative for displaying modal windows and snack bar notifications in the
 topframe.
 
 The postmessage api(https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) is used for the communication

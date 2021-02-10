@@ -63,7 +63,7 @@ class MediamanagerController
         $storages = $this->getStoragesData();
         $backendUser = $this->backendUserProvider->getBackendUser();
 
-        $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/CmsFilelistNg');
+        $fileListUrl = $this->uriBuilder->buildUriFromRoutePath('/module/file/Mediamanager');
 
         $backendUrls = [];
 
@@ -98,12 +98,12 @@ class MediamanagerController
 
         $this->addGlobalVars([
             'fileActionUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_process'),
-            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
+            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_tree_fetchData', ['uid' => $storageUid]),
             'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
             'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
-            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
+            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('mediamanager_download_files'),
             'editFileStorageUrl' => (string)$this->uriBuilder->buildUriFromRoute('record_edit'),
-            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
+            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_search_files', ['uid' => $storageUid]),
         ]);
         $this->view->assign('storages', $storages);
         $this->view->assign('selectedStorageUid', (int)$storageUid);
@@ -117,7 +117,7 @@ class MediamanagerController
     private function getStoragesData(): array
     {
         return \array_map(function (array $storage) {
-            $storage['storageUrl'] = (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_storage', ['uid' => $storage['uid']]);
+            $storage['storageUrl'] = (string)$this->uriBuilder->buildUriFromRoute('mediamanager_storage', ['uid' => $storage['uid']]);
             return $storage;
         }, $this->storagesProvider->getFormattedStoragesForUser());
     }

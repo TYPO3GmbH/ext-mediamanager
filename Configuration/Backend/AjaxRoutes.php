@@ -19,16 +19,16 @@ use TYPO3\CMS\Mediamanager\Backend\Controller;
 
 return [
     // Get data for page tree
-    'filelist_ng_tree_fetchData' => [
-        'path' => '/filelist_ng/tree/fetchData',
+    'mediamanager_tree_fetchData' => [
+        'path' => '/mediamanager/tree/fetchData',
         'target' => Controller\FolderTreeController::class . '::fetchDataAction',
     ],
-    'filelist_ng_folder_fetchData' => [
-        'path' => '/filelist_ng/folder/fetchData',
+    'mediamanager_folder_fetchData' => [
+        'path' => '/mediamanager/folder/fetchData',
         'target' => Controller\FolderDetailController::class . '::fetchDataAction',
     ],
-    'filelist_ng_search_files' => [
-        'path' => '/filelist_ng/searchFiles',
+    'mediamanager_search_files' => [
+        'path' => '/mediamanager/searchFiles',
         'target' => Controller\SearchFilesController::class . '::searchFilesAction',
     ],
 ];

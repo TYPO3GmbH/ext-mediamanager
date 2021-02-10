@@ -18,13 +18,13 @@ declare(strict_types=1);
 use TYPO3\CMS\Mediamanager\Backend\Controller;
 
 return [
-    'filelist_ng_storage' => [
-        'path' => '/filelist_ng/storage',
+    'mediamanager_storage' => [
+        'path' => '/mediamanager/storage',
         'access' => 'public',
         'target' =>  Controller\MediamanagerController::class . '::storageAction',
     ],
-    'filelist_ng_download_files' => [
-        'path' => '/filelist_ng/download-files',
+    'mediamanager_download_files' => [
+        'path' => '/mediamanager/download-files',
         'target' => Controller\DownloadFilesController::class . '::downloadAction',
     ],
 ];

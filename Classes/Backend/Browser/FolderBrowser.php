@@ -72,12 +72,12 @@ class FolderBrowser implements ElementBrowserInterface
 
         $backendUrls = [
             'fileActionUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_process'),
-            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_tree_fetchData', ['uid' => $storageUid]),
+            'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_tree_fetchData', ['uid' => $storageUid]),
             'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
             'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
-            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('filelist_ng_download_files'),
+            'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('mediamanager_download_files'),
             'editFileStorageUrl' => (string)$this->uriBuilder->buildUriFromRoute('record_edit'),
-            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_filelist_ng_search_files', ['uid' => $storageUid]),
+            'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_search_files', ['uid' => $storageUid]),
         ];
 
         $appConfig = $this->appConfigProvider->getConfig();
