@@ -26,6 +26,7 @@ export class Reload implements Action {
 
 export class LoadFlashMessages implements Action {
   readonly type = LOAD_FLASH_MESSAGES;
+
   constructor(
     public variant: SnackbarVariants,
     public message?: string,

@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/alert/src/typo3-alert';
 
 <Meta
-  title="Components/typo3-alert"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-alert', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-alert"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-alert', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Alert.ts
 
 <Preview>
     <Story name="Basic Alert" height="220px">
-    {html`
+        {html`
       <typo3-alert>Default</typo3-alert>
       <typo3-alert color="success">Success</typo3-alert>
       <typo3-alert color="info">Info</typo3-alert>
@@ -21,7 +21,7 @@ import '../../../out-tsc/packages/alert/src/typo3-alert';
     `}
     </Story>
     <Story name="Dismissible Alert" height="220px">
-    {html`
+        {html`
       <typo3-alert color="success" dismissible="true">Dismissible</typo3-alert>
     `}
     </Story>
@@ -29,4 +29,4 @@ import '../../../out-tsc/packages/alert/src/typo3-alert';
 
 # API
 
-<Props of="typo3-alert" />
+<Props of="typo3-alert"/>

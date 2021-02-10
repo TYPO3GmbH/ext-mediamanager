@@ -4,16 +4,16 @@ import '../../../out-tsc/packages/modal/src/typo3-modal';
 import '../../../out-tsc/packages/button/src/typo3-button';
 
 <Meta
-  title="Components/typo3-modal"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-modal', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-modal"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-modal', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Modal.ts
 
 <Preview>
     <Story name="Basic modal" height="220px">
-      {html`
+        {html`
       <typo3-button onclick="basicModal.show()">Open BasicModal</typo3-button>
       <typo3-modal id="basicModal" headline="Basic Headline" dismissible>
         <p>
@@ -26,7 +26,7 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     `}
     </Story>
     <Story name="Modal with footer" height="220px">
-    {html`
+        {html`
       <typo3-button onclick="modal.show()">Open Modal</typo3-button>
       <typo3-modal id="modal">
         <h2>
@@ -55,4 +55,4 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 
 # API
 
-<Props of="typo3-modal" />
+<Props of="typo3-modal"/>

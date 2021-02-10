@@ -25,6 +25,7 @@ class BackendUrlService {
       : '';
   }
 }
+
 const service = new BackendUrlService(new AppConfigService());
 
 export const getUrl = (key: string): string => service.get(key);

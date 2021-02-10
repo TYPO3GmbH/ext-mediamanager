@@ -4,16 +4,16 @@ import '../../../out-tsc/packages/snackbar/src/typo3-snackbar';
 import '../../../out-tsc/packages/button/src/typo3-button';
 
 <Meta
-  title="Components/typo3-snackbar"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-snackbar', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-snackbar"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-snackbar', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Snackbar.ts
 
 <Preview>
     <Story name="Snackbar" height="220px">
-    {html`
+        {html`
       <typo3-snackbar id="snackbar" placement="right"></typo3-snackbar>
       <typo3-button color="success" onclick='Object.assign(snackbar, {visible: true, dismissible: true, duration: 2500, message: "test", variant: "success"});'>
         Open Success Snackbar
@@ -57,4 +57,4 @@ const snackbar = document.getElementById('snackbar');
 Object.assign(snackbar, {visible: true, duration: null, title: "Welcome", message: "Hey ho", variant: "success"});
 ```
 
-<Props of="typo3-snackbar" />
+<Props of="typo3-snackbar"/>

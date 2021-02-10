@@ -54,6 +54,7 @@ export const modalReducer = (
 
 export class ShowModal implements Action {
   readonly type = SHOW_MODAL;
+
   constructor(public data: ModalData) {}
 }
 
@@ -65,6 +66,7 @@ export class CloseModal implements Action {
 
 export class ModalAction implements Action {
   readonly type = MODAL_ACTION;
+
   constructor(
     public action: string,
     public data?: { [key: string]: string | Blob }

@@ -4,16 +4,16 @@ import '../../../out-tsc/packages/search/src/typo3-search';
 import '../../../out-tsc/packages/button/src/typo3-button';
 
 <Meta
-  title="Components/typo3-search"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-search', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-search"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-search', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Search.ts
 
 <Preview>
     <Story name="Basic Search" height="220px">
-    {html`
+        {html`
         <typo3-search
             @typo3-search-submit="${(e) => action(`typo3-search-submit`)(e.detail)}"
             @typo3-search-change="${(e) => action(`typo3-search-change`)(e.detail)}"
@@ -31,4 +31,4 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 
 # API
 
-<Props of="typo3-search" />
+<Props of="typo3-search"/>

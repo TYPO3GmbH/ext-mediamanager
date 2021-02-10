@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/badge/src/typo3-badge';
 
 <Meta
-  title="Components/typo3-badge"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-badge', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-badge"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-badge', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Badge.ts
 
 <Preview>
     <Story name="Basic Badge" height="220px">
-    {html`
+        {html`
         <typo3-badge>D</typo3-badge>
         <typo3-badge color="primary">P</typo3-badge>
         <typo3-badge color="success">S</typo3-badge>
@@ -22,7 +22,7 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
     `}
     </Story>
     <Story name="Icon Badge" height="220px">
-    {html`
+        {html`
         <typo3-badge color="primary">
             <svg xmlns="http://www.w3.org/2000/svg">
                 <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-check"></use>
@@ -31,7 +31,7 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
     `}
     </Story>
     <Story name="Badge Sizes" height="220px">
-    {html`
+        {html`
         <typo3-badge color="primary">m</typo3-badge>
         <typo3-badge color="primary" size="small">s</typo3-badge>
     `}
@@ -40,4 +40,4 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
 
 # API
 
-<Props of="typo3-badge" />
+<Props of="typo3-badge"/>

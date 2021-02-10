@@ -251,11 +251,13 @@ export interface SuccessAction extends Action {
 
 export class RenameFile implements Action {
   readonly type = RENAME_FILE;
+
   constructor(public identifier: string, public name: string) {}
 }
 
 export class RenameFileSuccess implements SuccessAction {
   readonly type = RENAME_FILE_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
@@ -265,15 +267,19 @@ export class RenameFileFailure implements Action {
 
 export class ReplaceFileConfirm implements Action {
   readonly type = REPLACE_FILE_CONFIRM;
+
   constructor(public identifier: string) {}
 }
+
 export class ReplaceFile implements Action {
   readonly type = REPLACE_FILE;
+
   constructor(public formData: { [key: string]: string | Blob }) {}
 }
 
 export class ReplaceFileSuccess implements SuccessAction {
   readonly type = REPLACE_FILE_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
@@ -283,6 +289,7 @@ export class ReplaceFileFailure implements Action {
 
 export class DeleteFilesConfirm implements Action {
   readonly type = DELETE_FILES_CONFIRM;
+
   constructor(
     public identifiers: string[],
     public modalData: { headline: string; content: string }
@@ -291,11 +298,13 @@ export class DeleteFilesConfirm implements Action {
 
 export class DeleteFiles implements Action {
   readonly type = DELETE_FILES;
+
   constructor(public identifiers: string[]) {}
 }
 
 export class DeleteFilesSuccess implements SuccessAction {
   readonly type = DELETE_FILES_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
@@ -305,21 +314,25 @@ export class DeleteFilesFailure implements Action {
 
 export class ShowFile implements Action {
   readonly type = SHOW_FILE;
+
   constructor(public fileUrl: string) {}
 }
 
 export class ShowFileInfo implements Action {
   readonly type = SHOW_FILE_INFO;
+
   constructor(public identifier: string, public sysType: '_FILE' | '_FOLDER') {}
 }
 
 export class AddFolder implements Action {
   readonly type = ADD_FOLDER;
+
   constructor(public node: Typo3Node, public parentNode: Typo3Node) {}
 }
 
 export class AddFolderSuccess implements SuccessAction {
   readonly type = ADD_FOLDER_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
@@ -333,6 +346,7 @@ export class DragFilesEnd implements Action {
 
 export class DragFilesChangeMode implements Action {
   readonly type = DRAG_FILES_CHANGE_MODE;
+
   constructor(public mode: 'move' | 'copy') {}
 }
 
@@ -342,11 +356,13 @@ export class DragFilesStart implements Action {
 
 export class UploadFiles implements Action {
   readonly type = UPLOAD_FILES;
+
   constructor(public dataTransfer: DataTransfer, public node: Typo3Node) {}
 }
 
 export class UploadFilesSuccess implements SuccessAction {
   readonly type = UPLOAD_FILES_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
@@ -356,6 +372,7 @@ export class UploadFilesFailure implements Action {
 
 export class MoveFiles implements Action {
   readonly type = MOVE_FILES;
+
   constructor(public identifiers: string[], public target: Typo3Node) {}
 }
 
@@ -365,11 +382,13 @@ export class MoveFilesFailure implements Action {
 
 export class MoveFilesSuccess implements SuccessAction {
   readonly type = MOVE_FILES_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class CopyFiles implements Action {
   readonly type = COPY_FILES;
+
   constructor(public identifiers: string[], public target: Typo3Node) {}
 }
 
@@ -379,33 +398,39 @@ export class CopyFilesFailure implements Action {
 
 export class CopyFilesSuccess implements Action {
   readonly type = COPY_FILES_SUCCESS;
+
   constructor(public message: string, public undoAction?: Action) {}
 }
 
 export class ClipboardCopyFile implements Action {
   readonly type = CLIPBOARD_COPY_FILE;
+
   constructor(public clipboardIdentifier: string, public identifier: string) {}
 }
 
 export class ClipboardCopyReleaseFile implements Action {
   readonly type = CLIPBOARD_COPY_RELEASE_FILE;
   readonly identifier = '0';
+
   constructor(public clipboardIdentifier: string) {}
 }
 
 export class ClipboardCutFile implements Action {
   readonly type = CLIPBOARD_CUT_FILE;
+
   constructor(public clipboardIdentifier: string, public identifier: string) {}
 }
 
 export class ClipboardCutReleaseFile implements Action {
   readonly type = CLIPBOARD_CUT_RELEASE_FILE;
   readonly identifier = '0';
+
   constructor(public clipboardIdentifier: string) {}
 }
 
 export class ClipboardPaste implements Action {
   readonly type = CLIPBOARD_PASTE;
+
   constructor(public targetIdentifier: string) {}
 }
 
@@ -415,11 +440,13 @@ export class ClipboardPasteFailure implements Action {
 
 export class ClipboardPasteSuccess implements SuccessAction {
   readonly type = CLIPBOARD_PASTE_SUCCESS;
+
   constructor(public message: string) {}
 }
 
 export class DownloadFiles implements Action {
   readonly type = DOWNLOAD_FILES;
+
   constructor(public identifiers: string[]) {}
 }
 
@@ -433,21 +460,25 @@ export class DownloadFilesFailure implements Action {
 
 export class EditFileMetadata implements Action {
   readonly type = EDIT_FILE_METADATA;
+
   constructor(public metaDataUrl: string) {}
 }
 
 export class EditFileStorage implements Action {
   readonly type = EDIT_FILE_STORAGE;
+
   constructor(public identifier: string) {}
 }
 
 export class UndoFilesAction implements Action {
   readonly type = UNDO_FILES_ACTION;
+
   constructor(public formData: { [key: string]: string }) {}
 }
 
 export class UndoFilesActionSuccess implements SuccessAction {
   readonly type = UNDO_FILES_ACTION_SUCCESS;
+
   constructor(public message: string) {}
 }
 

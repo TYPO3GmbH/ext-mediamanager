@@ -1,33 +1,33 @@
 :host {
-  display: block;
-  position: absolute;
-  outline: none;
-  z-index: 1002;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: default;
-  top: -1000px;
+    display: block;
+    position: absolute;
+    outline: none;
+    z-index: 1002;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+    top: -1000px;
 }
 
 #tooltip {
-  display: block;
-  outline: none;
-  visibility: visible;
-  font-size: var(--typo3-tooltip-font-size, var(--typo3-global-tooltip-font-size));
-  line-height: var(--typo3-tooltip-line-height, var(--typo3-global-tooltip-line-height));
-  background-color: var(--typo3-tooltip-background, var(--typo3-global-tooltip-bg));
-  color: var(--typo3-tooltip-text-color, var(--typo3-global-tooltip-color));
-  padding: var(--typo3-tooltip-padding, var(--typo3-global-tooltip-padding));
-  border-radius: var(--typo3-tooltip-border-radius, var(--typo3-global-tooltip-border-radius));
-  max-width: var(--typo3-tooltip-max-width, var(--typo3-global-tooltip-max-width));
-  opacity: 1;
-  transition: var(--typo3-tooltip-transition, var(--typo3-global-tooltip-transition));
+    display: block;
+    outline: none;
+    visibility: visible;
+    font-size: var(--typo3-tooltip-font-size, var(--typo3-global-tooltip-font-size));
+    line-height: var(--typo3-tooltip-line-height, var(--typo3-global-tooltip-line-height));
+    background-color: var(--typo3-tooltip-background, var(--typo3-global-tooltip-bg));
+    color: var(--typo3-tooltip-text-color, var(--typo3-global-tooltip-color));
+    padding: var(--typo3-tooltip-padding, var(--typo3-global-tooltip-padding));
+    border-radius: var(--typo3-tooltip-border-radius, var(--typo3-global-tooltip-border-radius));
+    max-width: var(--typo3-tooltip-max-width, var(--typo3-global-tooltip-max-width));
+    opacity: 1;
+    transition: var(--typo3-tooltip-transition, var(--typo3-global-tooltip-transition));
 }
 
 #tooltip[hidden] {
-  visibility: hidden;
-  transition: var(--typo3-tooltip-transition, var(--typo3-global-tooltip-transition));
-  opacity: 0;
+    visibility: hidden;
+    transition: var(--typo3-tooltip-transition, var(--typo3-global-tooltip-transition));
+    opacity: 0;
 }

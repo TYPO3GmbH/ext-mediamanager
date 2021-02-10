@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/menu/src/typo3-context-menu';
 
 <Meta
-  title="Components/typo3-context-menu"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-context-menu', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-context-menu"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-context-menu', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3ContextMenu.ts
 
 <Preview>
     <Story name="Context Menu" height="220px">
-    {html`
+        {html`
       <div style="position:relative">
         <button id="contextTrigger" oncontextmenu='window.dispatchEvent(
             new CustomEvent("typo3-show-context-menu",
@@ -77,4 +77,4 @@ function openContextMenu(event) {
     window.dispatchEvent(contextEvent);
 }
 ```
-<Props of="typo3-context-menu" />
+<Props of="typo3-context-menu"/>

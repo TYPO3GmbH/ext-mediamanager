@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/splitpane/src/typo3-splitpane';
 
 <Meta
-  title="Components/typo3-splitpane"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-splitpane', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-splitpane"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-splitpane', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Splitpane.ts (based on  vaadin-split-layout)
 
 <Preview>
     <Story name="Splitpane" height="220px">
-    {html`
+        {html`
       <div style="height: 200px;">
         <typo3-splitpane style="height: 100%; ">
           <div style="width:25%">Left layout content</div>
@@ -27,4 +27,4 @@ import '../../../out-tsc/packages/splitpane/src/typo3-splitpane';
 
 For properties and events: https://github.com/vaadin/vaadin-split-layout
 
-<Props of="typo3-splitpane" />
+<Props of="typo3-splitpane"/>

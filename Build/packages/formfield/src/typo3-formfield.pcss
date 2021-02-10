@@ -1,28 +1,29 @@
 :host {
-  display: inline-flex;
+    display: inline-flex;
 }
+
 .form-field {
-  width: 100%;
-  display: inline-flex;
-  vertical-align: middle;
-  line-height: var(--typo3-formfield-line-height, 1.25rem);
-  padding: var(--typo3-formfield-padding, .375rem 0);
-  gap: var(--typo3-formfield-label-input-gap, var(--typo3-global-default-gap));
+    width: 100%;
+    display: inline-flex;
+    vertical-align: middle;
+    line-height: var(--typo3-formfield-line-height, 1.25rem);
+    padding: var(--typo3-formfield-padding, .375rem 0);
+    gap: var(--typo3-formfield-label-input-gap, var(--typo3-global-default-gap));
 }
 
 ::slotted(*) {
-  display: block;
-  padding: var(--typo3-formfield-input-padding, .375rem .75rem);
-  color: var(--typo3-formfield-input-color, var(--typo3-global-gray-dark));
-  border: var(--typo3-formfield-input-border-width, var(--typo3-global-default-border-width)) solid var(--typo3-formfield-input-border-color, var(--typo3-global-btn-default-border));
-  border-radius: var(--typo3-formfield-input-border-radius, var(--typo3-global-default-border-radius));
-  outline: none;
+    display: block;
+    padding: var(--typo3-formfield-input-padding, .375rem .75rem);
+    color: var(--typo3-formfield-input-color, var(--typo3-global-gray-dark));
+    border: var(--typo3-formfield-input-border-width, var(--typo3-global-default-border-width)) solid var(--typo3-formfield-input-border-color, var(--typo3-global-btn-default-border));
+    border-radius: var(--typo3-formfield-input-border-radius, var(--typo3-global-default-border-radius));
+    outline: none;
 }
 
 :host([label-align='top']) .form-field {
-  flex-direction: column;
+    flex-direction: column;
 }
 
-:host([label-align='right']) .form-field  {
-  flex-direction: row-reverse;
+:host([label-align='right']) .form-field {
+    flex-direction: row-reverse;
 }

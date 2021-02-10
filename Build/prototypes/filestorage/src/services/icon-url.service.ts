@@ -25,6 +25,7 @@ class IconUrlService {
       : '';
   }
 }
+
 const service = new IconUrlService(new AppConfigService());
 
 export const getIconUrl = (key: string): string => service.get(key);

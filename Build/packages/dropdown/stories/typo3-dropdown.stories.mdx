@@ -6,10 +6,10 @@ import '../../../out-tsc/packages/dropdown/src/typo3-dropdown-item';
 import '../../../out-tsc/packages/menu/src/typo3-menu';
 
 <Meta
-  title="Components/typo3-dropdown"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-dropdown', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-dropdown"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-dropdown', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3DropDown.ts
 
@@ -33,7 +33,7 @@ import '../../../out-tsc/packages/menu/src/typo3-menu';
     `}
     </Story>
     <Story name="Grouped DropDown" height="220px">
-    {html`
+        {html`
       <typo3-dropdown multi activatable>
        <typo3-dropdown-button slot="button" label="Open Grouped Menu">
             <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
@@ -63,4 +63,4 @@ import '../../../out-tsc/packages/menu/src/typo3-menu';
 </Preview>
 
 # API
-<Props of="typo3-dropdown" />
+<Props of="typo3-dropdown"/>

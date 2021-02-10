@@ -1,51 +1,51 @@
 :host {
-  display: flex;
-  overflow: hidden !important;
-  transform: translateZ(0);
-  user-select: none;
+    display: flex;
+    overflow: hidden !important;
+    transform: translateZ(0);
+    user-select: none;
 }
 
 :host([hidden]),
 [hidden] {
-  display: none !important;
+    display: none !important;
 }
 
 :host([orientation='vertical']) {
-  flex-direction: column;
+    flex-direction: column;
 }
 
 :host ::slotted(*) {
-  flex: 1 1 auto;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 [part='splitter'] {
-  flex: none;
-  position: relative;
-  z-index: 1;
-  overflow: visible;
-  min-width: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
-  min-height: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
-  background-color: var(--typo3-splitpane-splitter-background, var(--typo3-global-splitpane-splitter-bg));
+    flex: none;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    min-width: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
+    min-height: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
+    background-color: var(--typo3-splitpane-splitter-background, var(--typo3-global-splitpane-splitter-bg));
 }
 
 :host(:not([orientation='vertical'])) > [part='splitter'] {
-  cursor: ew-resize;
+    cursor: ew-resize;
 }
 
 :host([orientation='vertical']) > [part='splitter'] {
-  cursor: ns-resize;
+    cursor: ns-resize;
 }
 
 [part='handle']::after {
-  content: '';
-  display: block;
-  width: var(--typo3-splitpane-handle-width, var(--typo3-global-splitpane-handle-width));
-  height: var(--typo3-splitpane-handle-height, var(--typo3-global-splitpane-handle-height));
-  background-color: var(--typo3-splitpane-handle-background, transparent);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
+    content: '';
+    display: block;
+    width: var(--typo3-splitpane-handle-width, var(--typo3-global-splitpane-handle-width));
+    height: var(--typo3-splitpane-handle-height, var(--typo3-global-splitpane-handle-height));
+    background-color: var(--typo3-splitpane-handle-background, transparent);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
 }

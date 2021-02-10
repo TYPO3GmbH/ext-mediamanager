@@ -35,8 +35,9 @@ import { Typo3BreadcrumbItem } from './typo3-breadcrumb-item';
 export class Typo3breadcrumb extends LitElement {
   public static styles = [themeStyles, styles];
 
-  items: Typo3BreadcrumbItem[] = [];
   @queryAssignedNodes('item', false, 'typo3-breadcrumb-item')
+  items!: Typo3BreadcrumbItem[];
+
   private resizeAction!: number;
   private resizeObserver!: ResizeObserver;
 

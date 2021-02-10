@@ -88,31 +88,37 @@ export const treeReducer = (
 
 export class LoadTreeData implements Action {
   readonly type = LOAD_TREE_DATA;
+
   constructor(public init = true) {}
 }
 
 export class LoadTreeDataSuccess implements Action {
   readonly type = LOAD_TREE_DATA_SUCCESS;
+
   constructor(public data: Typo3Node[]) {}
 }
 
 export class LoadTreeDataFailure implements Action {
   readonly type = LOAD_TREE_DATA_FAILURE;
+
   constructor(public error: string) {}
 }
 
 export class SelectTreeNode implements Action {
   readonly type = SELECT_TREE_NODE;
+
   constructor(public identifier: string) {}
 }
 
 export class ExpandTreeNode implements Action {
   readonly type = EXPAND_TREE_NODE;
+
   constructor(public identifier: string) {}
 }
 
 export class CollapseTreeNode implements Action {
   readonly type = COLLAPSE_TREE_NODE;
+
   constructor(public identifier: string) {}
 }
 

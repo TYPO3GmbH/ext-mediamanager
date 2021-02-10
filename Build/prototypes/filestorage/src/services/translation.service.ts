@@ -25,6 +25,7 @@ class TranslationService {
       : '';
   }
 }
+
 const service = new TranslationService(new AppConfigService());
 
 export const translate = (key: string): string => service.get(key);

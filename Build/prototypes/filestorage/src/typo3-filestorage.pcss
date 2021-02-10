@@ -1,107 +1,107 @@
 :host {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .topbar-wrapper {
-  background-color: var(--typo3-topbar-wrapper-background-color, var(--typo3-global-gray-lighter));
-  padding-top: 2rem;
-  border-bottom: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
+    background-color: var(--typo3-topbar-wrapper-background-color, var(--typo3-global-gray-lighter));
+    padding-top: 2rem;
+    border-bottom: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
 }
 
 .topbar-wrapper typo3-topbar:last-child {
-  border-top: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
-  background-color: #F4F4F4;
-  height: 3rem;
+    border-top: var(--typo3-global-default-border-width) solid var(--typo3-global-modal-border-color);
+    background-color: #F4F4F4;
+    height: 3rem;
 }
 
 typo3-splitpane {
-  flex: 1;
+    flex: 1;
 }
 
 .content_left, .content_right {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  background-color:white;
-  min-width: 12.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: white;
+    min-width: 12.5rem;
 }
 
 typo3-filetree {
-  overflow: auto;
-  flex: 1;
+    overflow: auto;
+    flex: 1;
 }
 
 .loading {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255,255,255,0.5);
-  z-index: 100;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 100;
 }
 
 .loading typo3-spinner {
-  top: 50%;
-  position: relative;
+    top: 50%;
+    position: relative;
 }
 
 .main-content {
-  background-color: #FFFFFF;
-  flex: 1;
-  overflow: auto;
-  margin: 0.75rem;
+    background-color: #FFFFFF;
+    flex: 1;
+    overflow: auto;
+    margin: 0.75rem;
 }
 
 .main-content-info {
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 }
 
-typo3-datagrid.main-content  {
-  width: 100%;
-  overflow: auto;
-  margin-bottom: 0;
+typo3-datagrid.main-content {
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 0;
 }
 
 #storage_select a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 typo3-breadcrumb {
-  overflow: hidden;
-  margin-right: var(--typo3-global-default-gap);
-  flex: 1;
+    overflow: hidden;
+    margin-right: var(--typo3-global-default-gap);
+    flex: 1;
 }
 
 typo3-breadcrumb-item {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .dropzone-drop-message {
-  width: 90%;
-  height: 90%;
-  display: flex;
-  border: 2px dashed white;
-  z-index: 1002;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    border: 2px dashed white;
+    z-index: 1002;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
 }
 
 .dropzone-drop-message__title {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 typo3-draghandler, typo3-files-modal {
-  position: absolute;
-  top: -1000px;
+    position: absolute;
+    top: -1000px;
 }
 

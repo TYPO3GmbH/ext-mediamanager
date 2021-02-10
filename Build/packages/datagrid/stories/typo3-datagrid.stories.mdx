@@ -11,7 +11,7 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
 
 <Preview withToolbar>
     <Story name="Simple" height="220px">
-    {html`
+        {html`
       <typo3-datagrid
         @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
         @typo3-datagrid-dblclick="${(e) => action(`typo3-datagrid-dblclick`)(e.detail)}"
@@ -72,7 +72,7 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
     `}
     </Story>
     <Story name="Grid with editable column (description)" height="220px">
-    {html`
+        {html`
       <typo3-datagrid
         @typo3-datagrid-value-change="${(e) => action(`typo3-datagrid-value-change`)(e.detail)}"
         @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
@@ -113,4 +113,4 @@ In order to accomplish row-specific handling or formatting specific data fields 
 | `disabled`      | Boolean | Opacity of the row will be set to the css var `--cdg-disabled-cell-opacity` |
 | `notSelectable` | Boolean | Selection of row will be prevented                                          |
 
-<Props of="typo3-datagrid" />
+<Props of="typo3-datagrid"/>

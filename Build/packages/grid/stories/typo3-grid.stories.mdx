@@ -5,14 +5,14 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
 <Meta
     title="Components/typo3-grid"
     decorators={[withKnobs, withWebComponentsKnobs]}
-    parameters={{ component: 'typo3-grid', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    parameters={{component: 'typo3-grid', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 # Grid
 
 <Preview withToolbar>
     <Story name="Basic grid" height="220px">
-    {html`
+        {html`
         <div style="height: 100vh">
         <typo3-grid>
             <typo3-card slot="item" title="Card without icon" subtitle="Dec 6, 2017"></typo3-card>
@@ -69,4 +69,4 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
 
 # API
 
-<Props of="typo3-grid" />
+<Props of="typo3-grid"/>

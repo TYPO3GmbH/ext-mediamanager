@@ -6,14 +6,14 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 <Meta
     title="Components/typo3-button"
     decorators={[withKnobs, withWebComponentsKnobs]}
-    parameters={{ component: 'typo3-selection-button', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    parameters={{component: 'typo3-selection-button', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 # Demo Typo3SelectionButton.ts
 
 <Preview>
     <Story name="Selection Button" height="220px">
-    {html`
+        {html`
       <typo3-selection-button id="btnSelect" count="4"></typo3-selection-button>
       <typo3-button onclick="btnSelect.count +=1;">Increment</typo3-button>
     `}
@@ -22,4 +22,4 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 
 # API
 
-<Props of="typo3-selection-button" />
+<Props of="typo3-selection-button"/>

@@ -75,16 +75,19 @@ export const viewModeReducer = (
 
 export class SetViewMode implements Action {
   readonly type = SET_VIEW_MODE;
+
   constructor(public viewmode: ViewMode) {}
 }
 
 export class SetSortOrderField implements Action {
   readonly type = SET_SORT_ORDER_FIELD;
+
   constructor(public field: string) {}
 }
 
 export class SetSortOrderDirection implements Action {
   readonly type = SET_SORT_ORDER_DIRECTION;
+
   constructor(public direction: string) {}
 }
 

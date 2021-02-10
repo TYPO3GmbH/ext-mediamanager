@@ -1,14 +1,14 @@
 .breadcrumb {
-  display: flex;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 ::slotted(:not(:last-child)):after {
-  display: inline-block;
-  padding-right: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-default-gap));
-  padding-left: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-default-gap));
-  color: var(--typo3-breadcrumb-item-color, var(--typo3-global-breadcrumb-item-color));
-  content: var(--typo3-breadcrumb-separator-content, "/");
+    display: inline-block;
+    padding-right: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-default-gap));
+    padding-left: var(--typo3-breadcrumb-separator-gap, var(--typo3-global-default-gap));
+    color: var(--typo3-breadcrumb-item-color, var(--typo3-global-breadcrumb-item-color));
+    content: var(--typo3-breadcrumb-separator-content, "/");
 }
 

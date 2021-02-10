@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/button/src/typo3-button';
 
 <Meta
-  title="Components/typo3-button"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-button', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-button"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-button', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3Button.ts
 
 <Preview>
     <Story name="Basic Button" height="220px">
-    {html`
+        {html`
       <typo3-button>Default</typo3-button>
       <typo3-button color="primary">Primary</typo3-button>
       <typo3-button color="secondary">Secondary</typo3-button>
@@ -23,7 +23,7 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     `}
     </Story>
     <Story name="Disabled button" height="220px">
-    {html`
+        {html`
       <typo3-button disabled>Default</typo3-button>
       <typo3-button disabled color="primary">Primary</typo3-button>
       <typo3-button disabled color="secondary">Secondary</typo3-button>
@@ -34,7 +34,7 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     `}
     </Story>
     <Story name="Button with icon" height="220px">
-    {html`
+        {html`
       <typo3-button>
         <svg slot="icon" xmlns="http://www.w3.org/2000/svg">
             <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-filter"></use>
@@ -60,7 +60,7 @@ import '../../../out-tsc/packages/button/src/typo3-button';
     `}
     </Story>
     <Story name="Button with action" height="220px">
-    {html`
+        {html`
       <typo3-button onclick="alert('typo3-button clicked')">Click me</typo3-button>
     `}
     </Story>
@@ -68,4 +68,4 @@ import '../../../out-tsc/packages/button/src/typo3-button';
 
 # API
 
-<Props of="typo3-button" />
+<Props of="typo3-button"/>

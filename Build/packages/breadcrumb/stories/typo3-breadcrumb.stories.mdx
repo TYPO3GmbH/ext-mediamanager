@@ -4,16 +4,16 @@ import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb';
 import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb-item';
 
 <Meta
-  title="Components/typo3-breadcrumb"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-breadcrumb', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-breadcrumb"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-breadcrumb', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3breadcrumb.ts
 
 <Preview>
     <Story name="Basic breadcrumb" height="220px">
-    {html`
+        {html`
     <typo3-breadcrumb>
         <typo3-breadcrumb-item slot="item" title="root"></typo3-breadcrumb-item>
         <typo3-breadcrumb-item slot="item" title="Resource"></typo3-breadcrumb-item>
@@ -28,4 +28,4 @@ import '../../../out-tsc/packages/breadcrumb/src/typo3-breadcrumb-item';
 
 # API
 
-<Props of="typo3-breadcrumb" />
+<Props of="typo3-breadcrumb"/>

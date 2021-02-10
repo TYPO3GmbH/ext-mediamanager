@@ -76,6 +76,7 @@ export class Typo3Card extends LitElement {
       event.stopImmediatePropagation();
     }
   }
+
   _onDblclick(event: MouseEvent): void {
     if (this.inEditMode) {
       event.stopImmediatePropagation();

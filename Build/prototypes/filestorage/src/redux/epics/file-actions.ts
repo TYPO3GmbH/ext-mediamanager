@@ -644,6 +644,7 @@ export const fileActionFailure = (
 interface Typo3Modal {
   types: { [propName: string]: string };
   sizes: { [propName: string]: string };
+
   advanced(data: { type: string; size: string; content: string }): void;
 }
 

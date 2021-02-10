@@ -1,53 +1,53 @@
 :host {
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  padding-left: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
-  padding-right: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding-left: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
+    padding-right: var(--typo3-list-item-side-padding, var(--typo3-global-list-item-padding-x));
 
-  padding-top: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
-  padding-bottom: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
+    padding-top: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
+    padding-bottom: var(--typo3-list-item-vertical-padding, var(--typo3-global-list-item-padding-y));
 
-  outline: none;
-  color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
-  font-size: var(--typo3-list-font-size, 0.75rem);
-  letter-spacing: var(--typo3-list-item-letter-spacing, 0.009375em);
-  line-height: var(--typo3-list-item-line-height, 1.5rem);
-  white-space: nowrap;
+    outline: none;
+    color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
+    font-size: var(--typo3-list-font-size, 0.75rem);
+    letter-spacing: var(--typo3-list-item-letter-spacing, 0.009375em);
+    line-height: var(--typo3-list-item-line-height, 1.5rem);
+    white-space: nowrap;
 }
 
 :host(:not([disabled]):focus),
 :host(:not([disabled]):hover) {
-  color: var(--typo3-list-item-color-hover, var(--typo3-global-list-item-color-hover));
-  text-decoration: none;
-  background-color: var(--typo3-list-item-background-color-hover, var(--typo3-global-list-item-bg-hover));
+    color: var(--typo3-list-item-color-hover, var(--typo3-global-list-item-color-hover));
+    text-decoration: none;
+    background-color: var(--typo3-list-item-background-color-hover, var(--typo3-global-list-item-bg-hover));
 }
 
 :host([disabled]) {
-  cursor: default;
-  pointer-events: none;
-  opacity: 0.38;
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.38;
 }
 
 slot[name='icon']::slotted(*) {
-  fill: currentColor;
-  width: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
-  height: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
-  line-height: 1;
-  margin-right: var(--typo3-list-item-icon-gap, var(--typo3-global-list-item-icon-size));
+    fill: currentColor;
+    width: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
+    height: var(--typo3-list-item-icon-size, var(--typo3-global-list-item-icon-size));
+    line-height: 1;
+    margin-right: var(--typo3-list-item-icon-gap, var(--typo3-global-list-item-icon-size));
 }
 
 ::slotted(a) {
-  text-decoration: none;
-  color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
+    text-decoration: none;
+    color: var(--typo3-list-item-color, var(--typo3-global-list-item-color));
 }
 
 .list-item__text {
-  overflow: hidden;
-  flex: 1;
+    overflow: hidden;
+    flex: 1;
 }

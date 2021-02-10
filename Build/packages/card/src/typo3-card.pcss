@@ -1,105 +1,105 @@
 :host {
-  width: var(--typo3-card-width, 12rem);
-  height: var(--typo3-card-height, 13.0625rem);
+    width: var(--typo3-card-width, 12rem);
+    height: var(--typo3-card-height, 13.0625rem);
 }
 
 .card {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  box-sizing: border-box;
-  border: var(--typo3-card-border-size, 0.125rem) solid var(--typo3-card-border-color, #eaeaea);
-  border-radius: var(--typo3-card-border-radius, 0.25rem);
-  position: relative;
-  flex-direction: column;
-  text-decoration: none;
-  background-color: var(--typo3-card-background-color, #fff);
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+    border: var(--typo3-card-border-size, 0.125rem) solid var(--typo3-card-border-color, #eaeaea);
+    border-radius: var(--typo3-card-border-radius, 0.25rem);
+    position: relative;
+    flex-direction: column;
+    text-decoration: none;
+    background-color: var(--typo3-card-background-color, #fff);
+    overflow: hidden;
 }
 
 .card[selected] {
-  border-color: var(--typo3-card-border-color-selected, #c1dbf2);
-  border-width: var(--typo3-card-border-width-selected, 0.25rem);
+    border-color: var(--typo3-card-border-color-selected, #c1dbf2);
+    border-width: var(--typo3-card-border-width-selected, 0.25rem);
 }
 
 .card:hover {
-  border-color: var(--typo3-card-border-color-hover, var(--typo3-global-brand-info));
+    border-color: var(--typo3-card-border-color-hover, var(--typo3-global-brand-info));
 }
 
 .card:focus {
-  outline: none;
+    outline: none;
 }
 
 .body {
-  padding-top: var(--typo3-card-body-padding-top, 1.25rem);
-  padding-bottom: var(--typo3-card-body-padding-bottom, 1.25rem);
-  padding-left: var(--typo3-card-body-padding-left, 1.875rem);
-  padding-right: var(--typo3-card-body-padding-right, 1.875rem);
-  text-align: center;
+    padding-top: var(--typo3-card-body-padding-top, 1.25rem);
+    padding-bottom: var(--typo3-card-body-padding-bottom, 1.25rem);
+    padding-left: var(--typo3-card-body-padding-left, 1.875rem);
+    padding-right: var(--typo3-card-body-padding-right, 1.875rem);
+    text-align: center;
 }
 
 .title {
-  font-size: var(--typo3-card-title-text-size, 0.875rem);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--typo3-card-title-text-color, #505050);
+    font-size: var(--typo3-card-title-text-size, 0.875rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--typo3-card-title-text-color, #505050);
 }
 
 .subtitle {
-  font-size: var(--typo3-card-subtitle-text-size, 0.625rem);
-  color: var(--typo3-card-subtitle-color, #6e6e6e);
+    font-size: var(--typo3-card-subtitle-text-size, 0.625rem);
+    color: var(--typo3-card-subtitle-color, #6e6e6e);
 }
 
 .image {
-  height: var(--typo3-card-image-height, 8.5rem);
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+    height: var(--typo3-card-image-height, 8.5rem);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .image ::slotted([slot='image']) {
-  object-fit: cover;
-  width: auto;
-  height: 80%;
-  pointer-events: none;
+    object-fit: cover;
+    width: auto;
+    height: 80%;
+    pointer-events: none;
 }
 
 :host slot[name='badge'] {
-  position: absolute;
-  bottom: 0;
-  right: 1.25rem;
-  display: inline-block;
-  margin-left: 0.625rem;
+    position: absolute;
+    bottom: 0;
+    right: 1.25rem;
+    display: inline-block;
+    margin-left: 0.625rem;
 }
 
 :host([variant='preview']) .image {
-  height: 12.875rem;
+    height: 12.875rem;
 }
 
 :host([variant='preview']) .image ::slotted([slot='image']) {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 :host([variant='preview']) .body {
-  text-align: left;
-  padding: 0.5rem;
-  margin-top: -3.75rem;
-  z-index: 1;
+    text-align: left;
+    padding: 0.5rem;
+    margin-top: -3.75rem;
+    z-index: 1;
 }
 
 :host([variant='preview']) .title,
 :host([variant='preview']) .subtitle {
-  color: white;
-  text-shadow: 0 0 0.1875em rgba(0, 0, 0, 1);
+    color: white;
+    text-shadow: 0 0 0.1875em rgba(0, 0, 0, 1);
 }
 
 :host slot[name='selected-badge'] {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  display: inline-block;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-block;
 }

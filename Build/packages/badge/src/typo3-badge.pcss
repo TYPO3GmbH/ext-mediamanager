@@ -1,69 +1,69 @@
 :host {
-  padding: var(--typo3-global-badge-padding);
-  font-weight: var(--typo3-badge-font-weight, var(--typo3-global-badge-font-weight));
-  vertical-align: baseline;
-  text-align: center;
-  display: inline-flex;
-  justify-content: center;
-  border-radius: var(--typo3-global-badge-border-radius);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  pointer-events: none;
-  min-width: var(--typo3-badge-size, var(--typo3-global-badge-size));
-  height: var(--typo3-badge-size, var(--typo3-global-badge-size));
-  line-height: var(--typo3-badge-size, var(--typo3-global-badge-size));
-  font-size: var(--typo3-badge-font-size, var(--typo3-global-badge-font-size));
-  color: var(--typo3-badge-text-color, var(--typo3-global-badge-default-color));
-  background-color: var(--typo3-badge-background-color, var(--typo3-global-badge-default-bg));
+    padding: var(--typo3-global-badge-padding);
+    font-weight: var(--typo3-badge-font-weight, var(--typo3-global-badge-font-weight));
+    vertical-align: baseline;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    border-radius: var(--typo3-global-badge-border-radius);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    min-width: var(--typo3-badge-size, var(--typo3-global-badge-size));
+    height: var(--typo3-badge-size, var(--typo3-global-badge-size));
+    line-height: var(--typo3-badge-size, var(--typo3-global-badge-size));
+    font-size: var(--typo3-badge-font-size, var(--typo3-global-badge-font-size));
+    color: var(--typo3-badge-text-color, var(--typo3-global-badge-default-color));
+    background-color: var(--typo3-badge-background-color, var(--typo3-global-badge-default-bg));
 }
 
 :host([color='default']) {
-  color: var(--typo3-badge-default-color, var(--typo3-global-badge-default-color));
-  background-color: var(--typo3-badge-default-background-color, var(--typo3-global-badge-default-bg));
+    color: var(--typo3-badge-default-color, var(--typo3-global-badge-default-color));
+    background-color: var(--typo3-badge-default-background-color, var(--typo3-global-badge-default-bg));
 }
 
 :host([color='primary']) {
-  color: var(--typo3-badge-primary-color, var(--typo3-global-badge-primary-color));
-  background-color: var(--typo3-badge-primary-background-color, var(--typo3-global-badge-primary-bg));
+    color: var(--typo3-badge-primary-color, var(--typo3-global-badge-primary-color));
+    background-color: var(--typo3-badge-primary-background-color, var(--typo3-global-badge-primary-bg));
 }
 
 :host([color='success']) {
-  color: var(--typo3-badge-success-color, var(--typo3-global-badge-success-color));
-  background-color: var(--typo3-badge-success-background-color, var(--typo3-global-badge-success-bg));
+    color: var(--typo3-badge-success-color, var(--typo3-global-badge-success-color));
+    background-color: var(--typo3-badge-success-background-color, var(--typo3-global-badge-success-bg));
 }
 
 :host([color='info']) {
-  color: var(--typo3-badge-info-color, var(--typo3-global-badge-info-color));
-  background-color: var(--typo3-badge-info-background-color, var(--typo3-global-badge-info-bg));
+    color: var(--typo3-badge-info-color, var(--typo3-global-badge-info-color));
+    background-color: var(--typo3-badge-info-background-color, var(--typo3-global-badge-info-bg));
 }
 
 :host([color='warning']) {
-  color: var(--typo3-badge-warning-color, var(--typo3-global-badge-warning-color));
-  background-color: var(--typo3-badge-warning-background-color, var(--typo3-global-badge-warning-bg));
+    color: var(--typo3-badge-warning-color, var(--typo3-global-badge-warning-color));
+    background-color: var(--typo3-badge-warning-background-color, var(--typo3-global-badge-warning-bg));
 }
 
 :host([color='danger']) {
-  color: var(--typo3-badge-danger-color, var(--typo3-global-badge-danger-color));
-  background-color: var(--typo3-badge-danger-background-color, var(--typo3-global-badge-danger-bg));
+    color: var(--typo3-badge-danger-color, var(--typo3-global-badge-danger-color));
+    background-color: var(--typo3-badge-danger-background-color, var(--typo3-global-badge-danger-bg));
 }
 
 :host([size='small']) {
-  padding: var(--typo3-badge-padding-small, 0.0625rem);
-  min-width: var(--typo3-badge-size-small, 1rem);
-  height: var(--typo3-badge-size-small, 1rem);
-  line-height: var(--typo3-badge-size-small, 1rem);
-  font-size: var(--typo3-badge-font-size-small, 0.5rem);
+    padding: var(--typo3-badge-padding-small, 0.0625rem);
+    min-width: var(--typo3-badge-size-small, 1rem);
+    height: var(--typo3-badge-size-small, 1rem);
+    line-height: var(--typo3-badge-size-small, 1rem);
+    font-size: var(--typo3-badge-font-size-small, 0.5rem);
 }
 
 ::slotted(svg) {
-  fill: currentColor;
-  margin: auto;
-  width: var(--typo3-badge-size, var(--typo3-global-badge-size));
-  height: var(--typo3-badge-size, var(--typo3-global-badge-size));
+    fill: currentColor;
+    margin: auto;
+    width: var(--typo3-badge-size, var(--typo3-global-badge-size));
+    height: var(--typo3-badge-size, var(--typo3-global-badge-size));
 }
 
 :host([size='small']) ::slotted(svg) {
-  width: var(--typo3-badge-size-small, 1rem);
-  height: var(--typo3-badge-size-small, 1rem);
+    width: var(--typo3-badge-size-small, 1rem);
+    height: var(--typo3-badge-size-small, 1rem);
 }

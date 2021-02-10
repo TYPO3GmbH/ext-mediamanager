@@ -3,16 +3,16 @@ import {html} from 'lit-html';
 import '../../../out-tsc/packages/list/src/typo3-list';
 
 <Meta
-  title="Components/typo3-list"
-  decorators={[withKnobs, withWebComponentsKnobs]}
-  parameters={{ component: 'typo3-list', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
-  />
+    title="Components/typo3-list"
+    decorators={[withKnobs, withWebComponentsKnobs]}
+    parameters={{component: 'typo3-list', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
+/>
 
 # Demo Typo3List.ts
 
 <Preview>
     <Story name="Basic List" height="220px">
-    {html`
+        {html`
       <div style="max-width: 500px">
           <typo3-list>
               <typo3-list-item>item without icon</typo3-list-item>
@@ -33,4 +33,4 @@ import '../../../out-tsc/packages/list/src/typo3-list';
 
 # API
 
-<Props of="typo3-list" />
+<Props of="typo3-list"/>

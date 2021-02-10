@@ -44,6 +44,7 @@ export const layoutReducer = (
 
 export class SetSidebarWidth implements Action {
   readonly type = SET_SIDEBAR_WIDTH;
+
   constructor(public sidebarWidth: number) {}
 }
 

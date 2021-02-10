@@ -1,1377 +1,1377 @@
 {
-  "version": 2,
-  "tags": [
-    {
-      "name": "typo3-badge",
-      "description": "This is a container for a button element",
-      "properties": [
-        {
-          "name": "color",
-          "type": "String",
-          "attribute": "color",
-          "description": "default|primary|info|warning|danger"
-        },
-        {
-          "name": "size",
-          "type": "String",
-          "attribute": "size",
-          "description": "small|medium"
-        }
-      ],
-      "slots": [
-        {
-          "description": "The content of the badge (text or HTML)"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-badge-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-badge-text-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-badge-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-badge-font-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-badge-font-size-small",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-badge-size-small",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-badge-padding-small",
-          "type": "Length"
-        }
-      ]
-    },
-    {
-      "name": "typo3-button",
-      "description": "This is a container for a button element",
-      "properties": [
-        {
-          "name": "label",
-          "type": "String",
-          "attribute": "label",
-          "description": "Shown as aria-label"
-        },
-        {
-          "name": "color",
-          "type": "String",
-          "attribute": "color",
-          "description": "default|primary|info|warning|danger"
-        },
-        {
-          "name": "disabled",
-          "type": "Boolean",
-          "attribute": "disabled",
-          "description": "Makes the element not mutable, focusable and does not submit any event",
-          "default": false
-        },
-        {
-          "name": "onlyIcon",
-          "type": "Boolean",
-          "attribute": "only-icon",
-          "description": "Renders button without border and background",
-          "default": false
-        },
-        {
-          "name": "iconRight",
-          "type": "Boolean",
-          "attribute": "icon-right",
-          "description": "Shifts icon to the right of the text",
-          "default": false
-        }
-      ],
-      "slots": [
-        {
-          "description": "The content of the button (text or HTML)"
-        },
-        {
-          "name": "icon",
-          "description": "Icon of the button"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-btn-background-color",
-          "description": "Button background color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-text-color",
-          "description": "Button text color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-border-color",
-          "description": "Button border color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-background-color-hover",
-          "description": "Button background color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-text-color-hover",
-          "description": "Button text color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-border-color-hover",
-          "description": "Button border color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-font-size",
-          "description": "Button font size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-line-height",
-          "description": "Button line height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-border-radius",
-          "description": "Button border radius",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-border-width",
-          "description": "Button border width",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-icon-size",
-          "description": "Button icon size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-text-icon-gap",
-          "description": "Gap between icon and text",
-          "type": "Length"
-        }
-      ]
-    },
-    {
-      "name": "typo3-dropdown-button",
-      "description": "This is a container for a split button element",
-      "properties": [
-        {
-          "name": "label",
-          "type": "String",
-          "attribute": "label",
-          "description": "Shown as aria-label"
-        },
-        {
-          "name": "disabled",
-          "type": "Boolean",
-          "attribute": "disabled",
-          "description": "Makes the element not mutable, focusable and does not submit any event",
-          "default": false
-        },
-        {
-          "name": "iconRight",
-          "type": "Boolean",
-          "attribute": "icon-right",
-          "description": "Shifts icon to the right of the text",
-          "default": false
-        },
-        {
-          "name": "left",
-          "type": "Boolean",
-          "attribute": "left",
-          "description": "Shifts trigger to the left of default button",
-          "default": false
-        }
-      ],
-      "slots": [
-        {
-          "description": "The content of the button (text or HTML)"
-        },
-        {
-          "name": "icon",
-          "description": "Icon of the button"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-btn-background-color",
-          "description": "Button background color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-text-color",
-          "description": "Button text color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-border-color",
-          "description": "Button border color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-background-color-hover",
-          "description": "Button background color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-text-color-hover",
-          "description": "Button text color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-border-color-hover",
-          "description": "Button border color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-btn-font-size",
-          "description": "Button font size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-line-height",
-          "description": "Button line height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-border-radius",
-          "description": "Button border radius",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-border-width",
-          "description": "Button border width",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-btn-icon-size",
-          "description": "Button icon size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-dropdown-button-background-color-hover",
-          "description": "Button background color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-dropdown-button-trigger-background-color",
-          "description": "Button background color on hover for trigger element",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-dropdown-button-text-color-hover",
-          "description": "Text color on hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-dropdown-button-trigger-icon-size",
-          "description": "Iconsize for split button trigger",
-          "type": "Length"
-        }
-      ]
-    },
-    {
-      "name": "typo3-dropzone",
-      "description": "An area on the screen dropping files",
-      "properties": [
-        {
-          "name": "isDragged",
-          "type": "Boolean",
-          "default": "false"
-        },
-        {
-          "name": "dropAllowed",
-          "type": "Boolean",
-          "default": "false",
-          "attribute": "drop-allowed"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-dropzone-dragleave"
-        },
-        {
-          "name": "typo3-dropzone-dragover"
-        },
-        {
-          "name": "typo3-dropzone-drop"
-        },
-        {
-          "name": "typo3-dropzone-should-accept"
-        }
-      ],
-      "slots": [
-        {
-          "description": "The content of the dropzone"
-        },
-        {
-          "name": "allowed-drop-message",
-          "description": "Content displayed, when file drop is allowed"
-        },
-        {
-          "name": "denied-drop-message",
-          "description": "Content displayed, when file drop is denied"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-dropzone-background-color-selected-hover",
-          "description": "Dropzone background color on hover",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-card",
-      "description": "Content card including title, subtitle, image",
-      "properties": [
-        {
-          "name": "title",
-          "type": "String",
-          "attribute": "title"
-        },
-        {
-          "name": "subtitle",
-          "type": "String",
-          "attribute": "subtitle"
-        },
-        {
-          "name": "selected",
-          "attribute": "selected",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "value",
-          "attribute": "value",
-          "type": "string | undefined"
-        },
-        {
-          "name": "titleEditable",
-          "attribute": "titleEditable",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-card-title-rename",
-          "description": "Event fired on title rename"
-        }
-      ],
-      "slots": [
-        {
-          "name": "image",
-          "description": "Icon or Preview Image"
-        },
-        {
-          "name": "badge",
-          "description": "e.g. Num of files"
-        },
-        {
-          "name": "selected-badge",
-          "description": "Indicator for selection"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-card-width",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-border-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-border-radius",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-card-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-card-border-color-hover",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-card-body-padding-top",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-body-padding-bottom",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-body-padding-left",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-body-padding-right",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-title-text-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-title-text-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-card-subtitle-text-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-subtitle-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-card-image-height",
-          "type": "Length"
-        }
-      ]
-    },
-    {
-      "name": "typo3-grid",
-      "description": "Grid (e.g. for displaying card)",
-      "properties": [
-        {
-          "name": "selectable",
-          "attribute": "selectable",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-grid-selection-changed",
-          "description": "Dispatched when selection has changed"
-        }
-      ],
-      "slots": [
-        {
-          "name": "item",
-          "description": "Grid items"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-card-grid-colmin",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-card-grid-gap",
-          "type": "Length"
-        }
-      ]
-    },
-    {
-      "name": "typo3-topbar",
-      "description": "Top Bar for list navigation",
-      "properties": [],
-      "events": [],
-      "slots": [
-        {
-          "name": "left"
-        },
-        {
-          "name": "middle"
-        },
-        {
-          "name": "right"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-top-bar-bar-padding-top",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-top-bar-bar-padding-bottom",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-top-bar-bar-padding-left",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-top-bar-bar-padding-right",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-top-bar-bar-min-height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-top-bar-bar-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-top-bar-bar-text-color",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-datagrid",
-      "description": "Canvas datagrid wrapper",
-      "properties": [
-        {
-          "name": "data",
-          "attribute": "data",
-          "description": "JSON-String of grid data. See https://canvas-datagrid.js.org/#canvasDatagrid.data",
-          "type": "String"
-        },
-        {
-          "name": "schema",
-          "attribute": "schema",
-          "description": "JSON-String of canvasDatagrid.header objects. See https://canvas-datagrid.js.org/#canvasDatagrid.schema",
-          "type": "String"
-        },
-        {
-          "name": "editableColumns",
-          "type": "string[]",
-          "default": "[]"
-        },
-        {
-          "name": "selectedRows",
-          "type": "{ [key: string]: string; }[]",
-          "default": "[]"
-        },
-        {
-          "name": "rowIdentifier",
-          "type": "string",
-          "default": "\"identifier\""
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-datagrid-selection-change",
-          "description": "Dispatched on change of selection"
-        },
-        {
-          "name": "typo3-datagrid-value-change",
-          "description": "Dispatched on change of a cell value"
-        },
-        {
-          "name": "typo3-datagrid-contextmenu",
-          "description": "Dispatched on row contextmenu"
-        },
-        {
-          "name": "typo3-datagrid-dblclick",
-          "description": "Dispatched on row dblclick"
-        }
-      ]
-    },
-    {
-      "name": "typo3-splitpane",
-      "description": "Splitpane wrapper",
-      "cssProperties": [
-        {
-          "name": "--typo3-splitpane-splitter-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-splitpane-splitter-background",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-splitpane-handle-width",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-splitpane-handle-height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-splitpane-handle-background",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-tooltip",
-      "description": "Tooltip",
-      "properties": [
-        {
-          "name": "anchor",
-          "type": "HtmlElement",
-          "attribute": "anchor",
-          "description": "Anchor element for tooltip"
-        },
-        {
-          "name": "offset",
-          "type": "Number",
-          "attribute": "offset",
-          "description": "Spacing between anchor and tooltip"
-        },
-        {
-          "name": "position",
-          "type": "String",
-          "attribute": "position",
-          "description": "Tooltip position (relative to anchor): top|right|bottom|left"
-        }
-      ],
-      "slots": [
-        {
-          "description": "Tooltip content"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-tooltip-font-size",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-tooltip-line-height",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-tooltip-background",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-tooltip-padding",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-tooltip-border-radius",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-tooltip-max-width",
-          "type": "Length"
-        },
-        {
-          "name": "--typo3-tooltip-transition"
-        }
-      ]
-    },
-    {
-      "name": "typo3-alert",
-      "properties": [
-        {
-          "name": "color",
-          "attribute": "color",
-          "type": "String",
-          "default": "\"default\""
-        },
-        {
-          "name": "dismissible",
-          "attribute": "dismissible",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-alert-close",
-          "description": "Dispatched when dismissible alert is closed"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Default content placed in message div of this element"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-alert-padding-y"
-        },
-        {
-          "name": "--typo3-alert-padding-x"
-        },
-        {
-          "name": "--typo3-alert-success-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-success-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-success-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-info-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-info-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-info-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-warning-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-warning-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-warning-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-danger-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-danger-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-danger-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-close-btn-font-size"
-        },
-        {
-          "name": "--typo3-alert-close-btn-font-weight"
-        },
-        {
-          "name": "--typo3-alert-close-btn-line-height"
-        },
-        {
-          "name": "--typo3-alert-close-btn-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-alert-close-btn-color-hover",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-modal",
-      "attributes": [
-        {
-          "name": "open",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "headline",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "dismissible",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "properties": [
-        {
-          "name": "open",
-          "attribute": "open",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "headline",
-          "attribute": "headline",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "dismissible",
-          "attribute": "dismissible",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-modal-open",
-          "description": "Dispatched when modal is opened"
-        },
-        {
-          "name": "typo3-modal-close",
-          "description": "Dispatched when modal is closed"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Default modal content"
-        },
-        {
-          "name": "footer",
-          "description": "Modal footer"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-modal-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-modal-width"
-        },
-        {
-          "name": "--typo3-modal-border-width"
-        },
-        {
-          "name": "--typo3-modal-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-modal-border-radius"
-        },
-        {
-          "name": "--typo3-modal-font-size"
-        },
-        {
-          "name": "--typo3-modal-header-padding"
-        },
-        {
-          "name": "--typo3-modal-content-padding"
-        },
-        {
-          "name": "--typo3-modal-footer-padding"
-        },
-        {
-          "name": "--typo3-modal-overlay-opacity"
-        },
-        {
-          "name": "--typo3-modal-close-btn-font-size"
-        },
-        {
-          "name": "--typo3-modal-close-btn-font-weight"
-        },
-        {
-          "name": "--typo3-modal-close-btn-line-height"
-        },
-        {
-          "name": "--typo3-modal-close-btn-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-modal-close-btn-opacity"
-        },
-        {
-          "name": "--typo3-modal-close-btn-color-hover",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-context-menu",
-      "events": [
-        {
-          "name": "typo3-context-menu-open",
-          "description": "Dispatched when context menu is opened"
-        },
-        {
-          "name": "typo3-context-menu-close",
-          "description": "Dispatched when context menu is closed"
-        },
-        {
-          "name": "typo3-context-menu-item-click",
-          "description": "Dispatched when a context menu option is clicked"
-        }
-      ]
-    },
-    {
-      "name": "typo3-dropdown",
-      "slots": [
-        {
-          "name": "",
-          "description": "Default menu content"
-        },
-        {
-          "name": "button",
-          "description": "Trigger for opening menu"
-        }
-      ]
-    },
-    {
-      "name": "typo3-selection-button",
-      "properties": [
-        {
-          "name": "count",
-          "type": "number",
-          "default": "0"
-        },
-        {
-          "name": "suffix",
-          "type": "string",
-          "default": "\"Selected\""
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "default": "\"primary\""
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-selection-clear"
-        }
-      ]
-    },
-    {
-      "name": "typo3-breadcrumb-item",
-      "properties": [
-        {
-          "name": "active",
-          "attribute": "active",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "title",
-          "attribute": "title",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "link",
-          "attribute": "link",
-          "type": "null"
-        },
-        {
-          "name": "shortened",
-          "attribute": "shortened",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-breadcrumb-item-color-active",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-breadcrumb-item-color",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-breadcrumb",
-      "properties": [],
-      "slots": [
-        {
-          "name": "item",
-          "description": "Breadcrumb items"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-breadcrumb-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-breadcrumb-border-radius"
-        },
-        {
-          "name": "--typo3-breadcrumb-separator-content"
-        },
-        {
-          "name": "--typo3-breadcrumb-separator-gap"
-        }
-      ]
-    },
-    {
-      "name": "typo3-snackbar",
-      "properties": [
-        {
-          "name": "visible",
-          "attribute": "visible",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "message",
-          "attribute": "message",
-          "type": "string"
-        },
-        {
-          "name": "buttonText",
-          "attribute": "buttonText",
-          "type": "string"
-        },
-        {
-          "name": "variant",
-          "attribute": "variant",
-          "type": "string",
-          "default": "\"default\""
-        },
-        {
-          "name": "placement",
-          "attribute": "placement",
-          "type": "string",
-          "default": "\"left\""
-        },
-        {
-          "name": "dismissible",
-          "attribute": "dismissible",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-snackbar-display"
-        },
-        {
-          "name": "--typo3-snackbar-width"
-        },
-        {
-          "name": "--typo3-snackbar-max-width"
-        },
-        {
-          "name": "--typo3-snackbar-position"
-        },
-        {
-          "name": "--typo3-snackbar-bottom"
-        },
-        {
-          "name": "--typo3-snackbar-left"
-        },
-        {
-          "name": "--typo3-snackbar-padding"
-        },
-        {
-          "name": "--typo3-snackbar-z-index"
-        },
-        {
-          "name": "--typo3-snackbar-transform"
-        },
-        {
-          "name": "--typo3-snackbar-opacity"
-        },
-        {
-          "name": "--typo3-snackbar-transition"
-        },
-        {
-          "name": "--typo3-snackbar-right"
-        },
-        {
-          "name": "--typo3-snackbar-visible-transform"
-        },
-        {
-          "name": "--typo3-snackbar-visible-opacity"
-        },
-        {
-          "name": "--typo3-snackbar-message-margin"
-        },
-        {
-          "name": "--typo3-snackbar-message-padding"
-        }
-      ]
-    },
-    {
-      "name": "typo3-spinner",
-      "properties": [
-        {
-          "name": "styles",
-          "type": "array",
-          "default": "[\"themeStyles\",\"styles\"]"
-        },
-        {
-          "name": "color",
-          "attribute": "color",
-          "type": "String",
-          "default": "\"primary\""
-        },
-        {
-          "name": "screenReaderText",
-          "attribute": "screenReaderText",
-          "type": "string",
-          "default": "\"Loading\""
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-spinner-size"
-        },
-        {
-          "name": "--typo3-spinner-border-width"
-        },
-        {
-          "name": "--typo3-spinner-animation-duration"
-        },
-        {
-          "name": "--typo3-spinner-default-color"
-        },
-        {
-          "name": "--typo3-spinner-primary-color"
-        },
-        {
-          "name": "--typo3-spinner-success-color"
-        },
-        {
-          "name": "--typo3-spinner-info-color"
-        },
-        {
-          "name": "--typo3-spinner-warning-color"
-        },
-        {
-          "name": "--typo3-spinner-danger-color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-filetree",
-      "properties": [
-        {
-          "name": "nodes",
-          "attribute": "nodes",
-          "type": "Array",
-          "default": "[]"
-        },
-        {
-          "name": "expandedNodeIds",
-          "attribute": "expandedNodeIds",
-          "type": "Array",
-          "default": "[]"
-        },
-        {
-          "name": "selectedNodeIds",
-          "attribute": "selectedNodeIds",
-          "type": "Array",
-          "default": "[]"
-        },
-        {
-          "name": "editable",
-          "attribute": "editable",
-          "type": "Boolean",
-          "default": "false"
-        },
-        {
-          "name": "inDropMode",
-          "attribute": "inDropMode",
-          "type": "Boolean",
-          "default": "false"
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-node-select",
-          "description": "Event fired on node selection"
-        },
-        {
-          "name": "typo3-node-expand",
-          "description": "Event fired on node expand"
-        },
-        {
-          "name": "typo3-node-collapse",
-          "description": "Event fired on node expand"
-        },
-        {
-          "name": "typo3-node-contextmenu",
-          "description": "Event fired on contextmenu for node"
-        },
-        {
-          "name": "typo3-node-rename",
-          "description": "Event fired on node rename"
-        }
-      ]
-    },
-    {
-      "name": "typo3-overlay",
-      "properties": [
-        {
-          "name": "fixed",
-          "attribute": "fixed",
-          "type": "boolean",
-          "default": "false"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-modal-overlay-opacity"
-        },
-        {
-          "name": "--typo3-modal-overlay-color",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-draghandler",
-      "slots": [
-        {
-          "name": "icon",
-          "description": "Icon that appears on the left"
-        },
-        {
-          "name": "title",
-          "description": "Title for drag handler"
-        },
-        {
-          "name": "message",
-          "description": "Message for drag handler"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-draghandler-background-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-draghandler-color",
-          "type": "Color"
-        }
-      ]
-    },
-    {
-      "name": "typo3-search",
-      "properties": [
-        {
-          "name": "disabled",
-          "attribute": "disabled",
-          "type": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "label",
-          "attribute": "label",
-          "type": "string",
-          "default": "\"Search\""
-        },
-        {
-          "name": "placeholder",
-          "attribute": "placeholder",
-          "type": "string",
-          "default": "\"Search\""
-        },
-        {
-          "name": "value",
-          "attribute": "value",
-          "type": "string",
-          "default": "\"\""
-        }
-      ],
-      "events": [
-        {
-          "name": "typo3-search-change",
-          "description": "Dispatched on input change"
-        },
-        {
-          "name": "typo3-search-submit",
-          "description": "Dispatched on submit"
-        }
-      ],
-      "slots": [
-        {
-          "name": "search-icon",
-          "description": "Search icon"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-search-height"
-        },
-        {
-          "name": "--typo3-search-width"
-        },
-        {
-          "name": "--typo3-search-input-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-search-line-height"
-        },
-        {
-          "name": "--typo3-search-input-border-radius"
-        },
-        {
-          "name": "--typo3-search-input-border-width"
-        },
-        {
-          "name": "--typo3-search-input-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-search-icon-size"
-        },
-        {
-          "name": "--typo3-search-icon-margin-left"
-        },
-        {
-          "name": "--typo3-search-reset-button-width"
-        }
-      ]
-    },
-    {
-      "name": "typo3-formfield",
-      "properties": [
-        {
-          "name": "label",
-          "attribute": "label",
-          "type": "string",
-          "default": "\"\""
-        },
-        {
-          "name": "labelAlign",
-          "attribute": "label-align",
-          "type": "string",
-          "default": "\"top\""
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Form element"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--typo3-formfield-line-height"
-        },
-        {
-          "name": "--typo3-formfield-padding"
-        },
-        {
-          "name": "--typo3-formfield-label-input-gap"
-        },
-        {
-          "name": "--typo3-formfield-input-padding"
-        },
-        {
-          "name": "--typo3-formfield-input-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-formfield-input-border-width"
-        },
-        {
-          "name": "--typo3-formfield-input-border-color",
-          "type": "Color"
-        },
-        {
-          "name": "--typo3-formfield-input-border-radius"
-        }
-      ]
-    }
-  ]
+	"version": 2,
+	"tags": [
+		{
+			"name": "typo3-badge",
+			"description": "This is a container for a button element",
+			"properties": [
+				{
+					"name": "color",
+					"type": "String",
+					"attribute": "color",
+					"description": "default|primary|info|warning|danger"
+				},
+				{
+					"name": "size",
+					"type": "String",
+					"attribute": "size",
+					"description": "small|medium"
+				}
+			],
+			"slots": [
+				{
+					"description": "The content of the badge (text or HTML)"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-badge-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-badge-text-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-badge-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-badge-font-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-badge-font-size-small",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-badge-size-small",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-badge-padding-small",
+					"type": "Length"
+				}
+			]
+		},
+		{
+			"name": "typo3-button",
+			"description": "This is a container for a button element",
+			"properties": [
+				{
+					"name": "label",
+					"type": "String",
+					"attribute": "label",
+					"description": "Shown as aria-label"
+				},
+				{
+					"name": "color",
+					"type": "String",
+					"attribute": "color",
+					"description": "default|primary|info|warning|danger"
+				},
+				{
+					"name": "disabled",
+					"type": "Boolean",
+					"attribute": "disabled",
+					"description": "Makes the element not mutable, focusable and does not submit any event",
+					"default": false
+				},
+				{
+					"name": "onlyIcon",
+					"type": "Boolean",
+					"attribute": "only-icon",
+					"description": "Renders button without border and background",
+					"default": false
+				},
+				{
+					"name": "iconRight",
+					"type": "Boolean",
+					"attribute": "icon-right",
+					"description": "Shifts icon to the right of the text",
+					"default": false
+				}
+			],
+			"slots": [
+				{
+					"description": "The content of the button (text or HTML)"
+				},
+				{
+					"name": "icon",
+					"description": "Icon of the button"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-btn-background-color",
+					"description": "Button background color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-text-color",
+					"description": "Button text color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-border-color",
+					"description": "Button border color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-background-color-hover",
+					"description": "Button background color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-text-color-hover",
+					"description": "Button text color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-border-color-hover",
+					"description": "Button border color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-font-size",
+					"description": "Button font size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-line-height",
+					"description": "Button line height",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-border-radius",
+					"description": "Button border radius",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-border-width",
+					"description": "Button border width",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-icon-size",
+					"description": "Button icon size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-text-icon-gap",
+					"description": "Gap between icon and text",
+					"type": "Length"
+				}
+			]
+		},
+		{
+			"name": "typo3-dropdown-button",
+			"description": "This is a container for a split button element",
+			"properties": [
+				{
+					"name": "label",
+					"type": "String",
+					"attribute": "label",
+					"description": "Shown as aria-label"
+				},
+				{
+					"name": "disabled",
+					"type": "Boolean",
+					"attribute": "disabled",
+					"description": "Makes the element not mutable, focusable and does not submit any event",
+					"default": false
+				},
+				{
+					"name": "iconRight",
+					"type": "Boolean",
+					"attribute": "icon-right",
+					"description": "Shifts icon to the right of the text",
+					"default": false
+				},
+				{
+					"name": "left",
+					"type": "Boolean",
+					"attribute": "left",
+					"description": "Shifts trigger to the left of default button",
+					"default": false
+				}
+			],
+			"slots": [
+				{
+					"description": "The content of the button (text or HTML)"
+				},
+				{
+					"name": "icon",
+					"description": "Icon of the button"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-btn-background-color",
+					"description": "Button background color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-text-color",
+					"description": "Button text color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-border-color",
+					"description": "Button border color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-background-color-hover",
+					"description": "Button background color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-text-color-hover",
+					"description": "Button text color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-border-color-hover",
+					"description": "Button border color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-btn-font-size",
+					"description": "Button font size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-line-height",
+					"description": "Button line height",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-border-radius",
+					"description": "Button border radius",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-border-width",
+					"description": "Button border width",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-btn-icon-size",
+					"description": "Button icon size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-dropdown-button-background-color-hover",
+					"description": "Button background color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-dropdown-button-trigger-background-color",
+					"description": "Button background color on hover for trigger element",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-dropdown-button-text-color-hover",
+					"description": "Text color on hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-dropdown-button-trigger-icon-size",
+					"description": "Iconsize for split button trigger",
+					"type": "Length"
+				}
+			]
+		},
+		{
+			"name": "typo3-dropzone",
+			"description": "An area on the screen dropping files",
+			"properties": [
+				{
+					"name": "isDragged",
+					"type": "Boolean",
+					"default": "false"
+				},
+				{
+					"name": "dropAllowed",
+					"type": "Boolean",
+					"default": "false",
+					"attribute": "drop-allowed"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-dropzone-dragleave"
+				},
+				{
+					"name": "typo3-dropzone-dragover"
+				},
+				{
+					"name": "typo3-dropzone-drop"
+				},
+				{
+					"name": "typo3-dropzone-should-accept"
+				}
+			],
+			"slots": [
+				{
+					"description": "The content of the dropzone"
+				},
+				{
+					"name": "allowed-drop-message",
+					"description": "Content displayed, when file drop is allowed"
+				},
+				{
+					"name": "denied-drop-message",
+					"description": "Content displayed, when file drop is denied"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-dropzone-background-color-selected-hover",
+					"description": "Dropzone background color on hover",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-card",
+			"description": "Content card including title, subtitle, image",
+			"properties": [
+				{
+					"name": "title",
+					"type": "String",
+					"attribute": "title"
+				},
+				{
+					"name": "subtitle",
+					"type": "String",
+					"attribute": "subtitle"
+				},
+				{
+					"name": "selected",
+					"attribute": "selected",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "value",
+					"attribute": "value",
+					"type": "string | undefined"
+				},
+				{
+					"name": "titleEditable",
+					"attribute": "titleEditable",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-card-title-rename",
+					"description": "Event fired on title rename"
+				}
+			],
+			"slots": [
+				{
+					"name": "image",
+					"description": "Icon or Preview Image"
+				},
+				{
+					"name": "badge",
+					"description": "e.g. Num of files"
+				},
+				{
+					"name": "selected-badge",
+					"description": "Indicator for selection"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-card-width",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-border-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-border-radius",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-card-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-card-border-color-hover",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-card-body-padding-top",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-body-padding-bottom",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-body-padding-left",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-body-padding-right",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-title-text-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-title-text-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-card-subtitle-text-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-subtitle-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-card-image-height",
+					"type": "Length"
+				}
+			]
+		},
+		{
+			"name": "typo3-grid",
+			"description": "Grid (e.g. for displaying card)",
+			"properties": [
+				{
+					"name": "selectable",
+					"attribute": "selectable",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-grid-selection-changed",
+					"description": "Dispatched when selection has changed"
+				}
+			],
+			"slots": [
+				{
+					"name": "item",
+					"description": "Grid items"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-card-grid-colmin",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-card-grid-gap",
+					"type": "Length"
+				}
+			]
+		},
+		{
+			"name": "typo3-topbar",
+			"description": "Top Bar for list navigation",
+			"properties": [],
+			"events": [],
+			"slots": [
+				{
+					"name": "left"
+				},
+				{
+					"name": "middle"
+				},
+				{
+					"name": "right"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-top-bar-bar-padding-top",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-top-bar-bar-padding-bottom",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-top-bar-bar-padding-left",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-top-bar-bar-padding-right",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-top-bar-bar-min-height",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-top-bar-bar-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-top-bar-bar-text-color",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-datagrid",
+			"description": "Canvas datagrid wrapper",
+			"properties": [
+				{
+					"name": "data",
+					"attribute": "data",
+					"description": "JSON-String of grid data. See https://canvas-datagrid.js.org/#canvasDatagrid.data",
+					"type": "String"
+				},
+				{
+					"name": "schema",
+					"attribute": "schema",
+					"description": "JSON-String of canvasDatagrid.header objects. See https://canvas-datagrid.js.org/#canvasDatagrid.schema",
+					"type": "String"
+				},
+				{
+					"name": "editableColumns",
+					"type": "string[]",
+					"default": "[]"
+				},
+				{
+					"name": "selectedRows",
+					"type": "{ [key: string]: string; }[]",
+					"default": "[]"
+				},
+				{
+					"name": "rowIdentifier",
+					"type": "string",
+					"default": "\"identifier\""
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-datagrid-selection-change",
+					"description": "Dispatched on change of selection"
+				},
+				{
+					"name": "typo3-datagrid-value-change",
+					"description": "Dispatched on change of a cell value"
+				},
+				{
+					"name": "typo3-datagrid-contextmenu",
+					"description": "Dispatched on row contextmenu"
+				},
+				{
+					"name": "typo3-datagrid-dblclick",
+					"description": "Dispatched on row dblclick"
+				}
+			]
+		},
+		{
+			"name": "typo3-splitpane",
+			"description": "Splitpane wrapper",
+			"cssProperties": [
+				{
+					"name": "--typo3-splitpane-splitter-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-splitpane-splitter-background",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-splitpane-handle-width",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-splitpane-handle-height",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-splitpane-handle-background",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-tooltip",
+			"description": "Tooltip",
+			"properties": [
+				{
+					"name": "anchor",
+					"type": "HtmlElement",
+					"attribute": "anchor",
+					"description": "Anchor element for tooltip"
+				},
+				{
+					"name": "offset",
+					"type": "Number",
+					"attribute": "offset",
+					"description": "Spacing between anchor and tooltip"
+				},
+				{
+					"name": "position",
+					"type": "String",
+					"attribute": "position",
+					"description": "Tooltip position (relative to anchor): top|right|bottom|left"
+				}
+			],
+			"slots": [
+				{
+					"description": "Tooltip content"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-tooltip-font-size",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-tooltip-line-height",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-tooltip-background",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-tooltip-padding",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-tooltip-border-radius",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-tooltip-max-width",
+					"type": "Length"
+				},
+				{
+					"name": "--typo3-tooltip-transition"
+				}
+			]
+		},
+		{
+			"name": "typo3-alert",
+			"properties": [
+				{
+					"name": "color",
+					"attribute": "color",
+					"type": "String",
+					"default": "\"default\""
+				},
+				{
+					"name": "dismissible",
+					"attribute": "dismissible",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-alert-close",
+					"description": "Dispatched when dismissible alert is closed"
+				}
+			],
+			"slots": [
+				{
+					"name": "",
+					"description": "Default content placed in message div of this element"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-alert-padding-y"
+				},
+				{
+					"name": "--typo3-alert-padding-x"
+				},
+				{
+					"name": "--typo3-alert-success-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-success-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-success-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-info-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-info-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-info-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-warning-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-warning-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-warning-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-danger-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-danger-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-danger-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-close-btn-font-size"
+				},
+				{
+					"name": "--typo3-alert-close-btn-font-weight"
+				},
+				{
+					"name": "--typo3-alert-close-btn-line-height"
+				},
+				{
+					"name": "--typo3-alert-close-btn-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-alert-close-btn-color-hover",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-modal",
+			"attributes": [
+				{
+					"name": "open",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "headline",
+					"type": "string",
+					"default": "\"\""
+				},
+				{
+					"name": "dismissible",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"properties": [
+				{
+					"name": "open",
+					"attribute": "open",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "headline",
+					"attribute": "headline",
+					"type": "string",
+					"default": "\"\""
+				},
+				{
+					"name": "dismissible",
+					"attribute": "dismissible",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-modal-open",
+					"description": "Dispatched when modal is opened"
+				},
+				{
+					"name": "typo3-modal-close",
+					"description": "Dispatched when modal is closed"
+				}
+			],
+			"slots": [
+				{
+					"name": "",
+					"description": "Default modal content"
+				},
+				{
+					"name": "footer",
+					"description": "Modal footer"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-modal-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-modal-width"
+				},
+				{
+					"name": "--typo3-modal-border-width"
+				},
+				{
+					"name": "--typo3-modal-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-modal-border-radius"
+				},
+				{
+					"name": "--typo3-modal-font-size"
+				},
+				{
+					"name": "--typo3-modal-header-padding"
+				},
+				{
+					"name": "--typo3-modal-content-padding"
+				},
+				{
+					"name": "--typo3-modal-footer-padding"
+				},
+				{
+					"name": "--typo3-modal-overlay-opacity"
+				},
+				{
+					"name": "--typo3-modal-close-btn-font-size"
+				},
+				{
+					"name": "--typo3-modal-close-btn-font-weight"
+				},
+				{
+					"name": "--typo3-modal-close-btn-line-height"
+				},
+				{
+					"name": "--typo3-modal-close-btn-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-modal-close-btn-opacity"
+				},
+				{
+					"name": "--typo3-modal-close-btn-color-hover",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-context-menu",
+			"events": [
+				{
+					"name": "typo3-context-menu-open",
+					"description": "Dispatched when context menu is opened"
+				},
+				{
+					"name": "typo3-context-menu-close",
+					"description": "Dispatched when context menu is closed"
+				},
+				{
+					"name": "typo3-context-menu-item-click",
+					"description": "Dispatched when a context menu option is clicked"
+				}
+			]
+		},
+		{
+			"name": "typo3-dropdown",
+			"slots": [
+				{
+					"name": "",
+					"description": "Default menu content"
+				},
+				{
+					"name": "button",
+					"description": "Trigger for opening menu"
+				}
+			]
+		},
+		{
+			"name": "typo3-selection-button",
+			"properties": [
+				{
+					"name": "count",
+					"type": "number",
+					"default": "0"
+				},
+				{
+					"name": "suffix",
+					"type": "string",
+					"default": "\"Selected\""
+				},
+				{
+					"name": "color",
+					"type": "string",
+					"default": "\"primary\""
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-selection-clear"
+				}
+			]
+		},
+		{
+			"name": "typo3-breadcrumb-item",
+			"properties": [
+				{
+					"name": "active",
+					"attribute": "active",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "title",
+					"attribute": "title",
+					"type": "string",
+					"default": "\"\""
+				},
+				{
+					"name": "link",
+					"attribute": "link",
+					"type": "null"
+				},
+				{
+					"name": "shortened",
+					"attribute": "shortened",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-breadcrumb-item-color-active",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-breadcrumb-item-color",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-breadcrumb",
+			"properties": [],
+			"slots": [
+				{
+					"name": "item",
+					"description": "Breadcrumb items"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-breadcrumb-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-breadcrumb-border-radius"
+				},
+				{
+					"name": "--typo3-breadcrumb-separator-content"
+				},
+				{
+					"name": "--typo3-breadcrumb-separator-gap"
+				}
+			]
+		},
+		{
+			"name": "typo3-snackbar",
+			"properties": [
+				{
+					"name": "visible",
+					"attribute": "visible",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "message",
+					"attribute": "message",
+					"type": "string"
+				},
+				{
+					"name": "buttonText",
+					"attribute": "buttonText",
+					"type": "string"
+				},
+				{
+					"name": "variant",
+					"attribute": "variant",
+					"type": "string",
+					"default": "\"default\""
+				},
+				{
+					"name": "placement",
+					"attribute": "placement",
+					"type": "string",
+					"default": "\"left\""
+				},
+				{
+					"name": "dismissible",
+					"attribute": "dismissible",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-snackbar-display"
+				},
+				{
+					"name": "--typo3-snackbar-width"
+				},
+				{
+					"name": "--typo3-snackbar-max-width"
+				},
+				{
+					"name": "--typo3-snackbar-position"
+				},
+				{
+					"name": "--typo3-snackbar-bottom"
+				},
+				{
+					"name": "--typo3-snackbar-left"
+				},
+				{
+					"name": "--typo3-snackbar-padding"
+				},
+				{
+					"name": "--typo3-snackbar-z-index"
+				},
+				{
+					"name": "--typo3-snackbar-transform"
+				},
+				{
+					"name": "--typo3-snackbar-opacity"
+				},
+				{
+					"name": "--typo3-snackbar-transition"
+				},
+				{
+					"name": "--typo3-snackbar-right"
+				},
+				{
+					"name": "--typo3-snackbar-visible-transform"
+				},
+				{
+					"name": "--typo3-snackbar-visible-opacity"
+				},
+				{
+					"name": "--typo3-snackbar-message-margin"
+				},
+				{
+					"name": "--typo3-snackbar-message-padding"
+				}
+			]
+		},
+		{
+			"name": "typo3-spinner",
+			"properties": [
+				{
+					"name": "styles",
+					"type": "array",
+					"default": "[\"themeStyles\",\"styles\"]"
+				},
+				{
+					"name": "color",
+					"attribute": "color",
+					"type": "String",
+					"default": "\"primary\""
+				},
+				{
+					"name": "screenReaderText",
+					"attribute": "screenReaderText",
+					"type": "string",
+					"default": "\"Loading\""
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-spinner-size"
+				},
+				{
+					"name": "--typo3-spinner-border-width"
+				},
+				{
+					"name": "--typo3-spinner-animation-duration"
+				},
+				{
+					"name": "--typo3-spinner-default-color"
+				},
+				{
+					"name": "--typo3-spinner-primary-color"
+				},
+				{
+					"name": "--typo3-spinner-success-color"
+				},
+				{
+					"name": "--typo3-spinner-info-color"
+				},
+				{
+					"name": "--typo3-spinner-warning-color"
+				},
+				{
+					"name": "--typo3-spinner-danger-color"
+				}
+			]
+		},
+		{
+			"name": "typo3-filetree",
+			"properties": [
+				{
+					"name": "nodes",
+					"attribute": "nodes",
+					"type": "Array",
+					"default": "[]"
+				},
+				{
+					"name": "expandedNodeIds",
+					"attribute": "expandedNodeIds",
+					"type": "Array",
+					"default": "[]"
+				},
+				{
+					"name": "selectedNodeIds",
+					"attribute": "selectedNodeIds",
+					"type": "Array",
+					"default": "[]"
+				},
+				{
+					"name": "editable",
+					"attribute": "editable",
+					"type": "Boolean",
+					"default": "false"
+				},
+				{
+					"name": "inDropMode",
+					"attribute": "inDropMode",
+					"type": "Boolean",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-node-select",
+					"description": "Event fired on node selection"
+				},
+				{
+					"name": "typo3-node-expand",
+					"description": "Event fired on node expand"
+				},
+				{
+					"name": "typo3-node-collapse",
+					"description": "Event fired on node expand"
+				},
+				{
+					"name": "typo3-node-contextmenu",
+					"description": "Event fired on contextmenu for node"
+				},
+				{
+					"name": "typo3-node-rename",
+					"description": "Event fired on node rename"
+				}
+			]
+		},
+		{
+			"name": "typo3-overlay",
+			"properties": [
+				{
+					"name": "fixed",
+					"attribute": "fixed",
+					"type": "boolean",
+					"default": "false"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-modal-overlay-opacity"
+				},
+				{
+					"name": "--typo3-modal-overlay-color",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-draghandler",
+			"slots": [
+				{
+					"name": "icon",
+					"description": "Icon that appears on the left"
+				},
+				{
+					"name": "title",
+					"description": "Title for drag handler"
+				},
+				{
+					"name": "message",
+					"description": "Message for drag handler"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-draghandler-background-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-draghandler-color",
+					"type": "Color"
+				}
+			]
+		},
+		{
+			"name": "typo3-search",
+			"properties": [
+				{
+					"name": "disabled",
+					"attribute": "disabled",
+					"type": "boolean",
+					"default": "false"
+				},
+				{
+					"name": "label",
+					"attribute": "label",
+					"type": "string",
+					"default": "\"Search\""
+				},
+				{
+					"name": "placeholder",
+					"attribute": "placeholder",
+					"type": "string",
+					"default": "\"Search\""
+				},
+				{
+					"name": "value",
+					"attribute": "value",
+					"type": "string",
+					"default": "\"\""
+				}
+			],
+			"events": [
+				{
+					"name": "typo3-search-change",
+					"description": "Dispatched on input change"
+				},
+				{
+					"name": "typo3-search-submit",
+					"description": "Dispatched on submit"
+				}
+			],
+			"slots": [
+				{
+					"name": "search-icon",
+					"description": "Search icon"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-search-height"
+				},
+				{
+					"name": "--typo3-search-width"
+				},
+				{
+					"name": "--typo3-search-input-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-search-line-height"
+				},
+				{
+					"name": "--typo3-search-input-border-radius"
+				},
+				{
+					"name": "--typo3-search-input-border-width"
+				},
+				{
+					"name": "--typo3-search-input-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-search-icon-size"
+				},
+				{
+					"name": "--typo3-search-icon-margin-left"
+				},
+				{
+					"name": "--typo3-search-reset-button-width"
+				}
+			]
+		},
+		{
+			"name": "typo3-formfield",
+			"properties": [
+				{
+					"name": "label",
+					"attribute": "label",
+					"type": "string",
+					"default": "\"\""
+				},
+				{
+					"name": "labelAlign",
+					"attribute": "label-align",
+					"type": "string",
+					"default": "\"top\""
+				}
+			],
+			"slots": [
+				{
+					"name": "",
+					"description": "Form element"
+				}
+			],
+			"cssProperties": [
+				{
+					"name": "--typo3-formfield-line-height"
+				},
+				{
+					"name": "--typo3-formfield-padding"
+				},
+				{
+					"name": "--typo3-formfield-label-input-gap"
+				},
+				{
+					"name": "--typo3-formfield-input-padding"
+				},
+				{
+					"name": "--typo3-formfield-input-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-formfield-input-border-width"
+				},
+				{
+					"name": "--typo3-formfield-input-border-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-formfield-input-border-radius"
+				}
+			]
+		}
+	]
 }

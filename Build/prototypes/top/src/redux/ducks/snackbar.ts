@@ -59,6 +59,7 @@ export const snackbarReducer = (
 
 export class ShowSnackbar implements Action {
   readonly type = SHOW_SNACKBAR;
+
   constructor(public data: SnackbarData) {}
 }
 
@@ -70,6 +71,7 @@ export class CloseSnackbar implements Action {
 
 export class SnackbarAction implements Action {
   readonly type = SNACKBAR_ACTION;
+
   constructor(public action: string, public data?: SnackbarButton) {}
 }
 

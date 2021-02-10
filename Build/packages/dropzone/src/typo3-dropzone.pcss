@@ -1,28 +1,28 @@
 :host {
-  display: block;
-  text-align: center;
-  position: relative;
+    display: block;
+    text-align: center;
+    position: relative;
 }
 
 :host(:focus) {
-  outline: 0;
+    outline: 0;
 }
 
 .message {
-  display: flex;
-  position: absolute;
-  overflow: auto;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+    display: flex;
+    position: absolute;
+    overflow: auto;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
 }
 
 typo3-overlay {
-  --typo3-modal-overlay-color: var(--typo3-global-brand-danger);
+    --typo3-modal-overlay-color: var(--typo3-global-brand-danger);
 }
 
 :host([drop-allowed]) typo3-overlay {
-  --typo3-modal-overlay-color: var(--typo3-global-brand-primary);
+    --typo3-modal-overlay-color: var(--typo3-global-brand-primary);
 }

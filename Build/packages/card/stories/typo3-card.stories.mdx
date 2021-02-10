@@ -6,14 +6,14 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
 <Meta
     title="Components/typo3-card"
     decorators={[withKnobs, withWebComponentsKnobs]}
-    parameters={{ component: 'typo3-card', options: { selectedPanel: 'storybookjs/knobs/panel' } }}
+    parameters={{component: 'typo3-card', options: {selectedPanel: 'storybookjs/knobs/panel'}}}
 />
 
 # Card
 
 <Preview withToolbar>
     <Story name="Basic card" height="220px">
-    {html`
+        {html`
         <div style="display: flex; flex-flow: row wrap;gap: 0.5rem;">
             <typo3-card title="Card without icon" subtitle="Dec 6, 2017"></typo3-card>
             <typo3-card title="Microsoft Excel" subtitle="Dec 6, 2017">
@@ -31,14 +31,14 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
     `}
     </Story>
     <Story name="Preview Card">
-    {html`
+        {html`
         <typo3-card style="width:500px;display:block" title="demo_image_001.jpg" subtitle="Dec 6, 2017" variant="preview">
             <img slot="image" loading="lazy" src="https://picsum.photos/500/190" alt="Demo Image" />
         </typo3-card>
     `}
     </Story>
     <Story name="Editable Card">
-    {html`
+        {html`
            <typo3-card style="width:200px;display:block" title="Editable Title" titleEditable subtitle="Dec 6, 2017" @typo3-card-title-rename=${(e) => action(`typo3-card-title-rename`)(e.detail)}></typo3-card>
     `}
     </Story>
@@ -46,4 +46,4 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
 
 # API
 
-<Props of="typo3-card" />
+<Props of="typo3-card"/>
