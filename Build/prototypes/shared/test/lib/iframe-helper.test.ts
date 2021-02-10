@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import { expect } from '@open-wc/testing';
 import { IframeHelper } from '../../src/lib/iframe-helper';
 
@@ -8,7 +21,8 @@ describe('IframeHelper', () => {
 
   it('can return content iframe', () => {
     const child = document.createElement('div');
-    child.innerHTML = `<iframe id="typo3-contentIframe" src='about:blank'></iframe>`;
+    child.innerHTML =
+      '<iframe id="typo3-contentIframe" src=\'about:blank\'></iframe>';
     top.document.body.appendChild(child);
     expect(IframeHelper.getContentIframe()).not.to.be.null;
   });

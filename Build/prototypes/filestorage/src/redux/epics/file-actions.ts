@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import { ActionsObservable, StateObservable } from 'redux-observable';
 
 import * as fromActions from '../ducks/file-actions';
@@ -443,7 +456,7 @@ export const editFileStorage = (
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
       const url: string = getUrl('editFileStorageUrl');
-      const storageId = parseInt(action.identifier);
+      const storageId = parseInt(action.identifier, 10);
       const params = new URLSearchParams();
       params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
       params.append('returnUrl', window.document.location.href);

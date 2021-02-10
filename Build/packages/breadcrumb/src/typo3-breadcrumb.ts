@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -20,13 +33,11 @@ import { Typo3BreadcrumbItem } from './typo3-breadcrumb-item';
  */
 @customElement('typo3-breadcrumb')
 export class Typo3breadcrumb extends LitElement {
-  @queryAssignedNodes('item', false, 'typo3-breadcrumb-item')
-  items!: Typo3BreadcrumbItem[];
-
   public static styles = [themeStyles, styles];
 
+  items: Typo3BreadcrumbItem[] = [];
+  @queryAssignedNodes('item', false, 'typo3-breadcrumb-item')
   private resizeAction!: number;
-
   private resizeObserver!: ResizeObserver;
 
   public connectedCallback(): void {

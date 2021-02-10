@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -16,6 +29,8 @@ export type Position = 'top' | 'right' | 'bottom' | 'left';
 
 @customElement('typo3-tooltip')
 export class Typo3Tooltip extends LitElement {
+  public static styles = [themeStyles, styles];
+
   @property({ type: HTMLElement }) anchor!: HTMLElement;
 
   @property({ type: Number }) offset = 14;
@@ -26,24 +41,12 @@ export class Typo3Tooltip extends LitElement {
 
   @query('#tooltip') protected tooltipHtmlElement!: HTMLSlotElement | null;
 
-  public static styles = [themeStyles, styles];
-
   render(): TemplateResult {
     return html`
       <div id="tooltip" ?hidden="${this.isHidden}">
         <slot></slot>
       </div>
     `;
-  }
-
-  protected updated(_changedProperties: PropertyValues) {
-    super.updated(_changedProperties);
-    const anchorElement = this.anchor;
-    anchorElement?.addEventListener('mouseenter', () => this.show());
-    anchorElement?.addEventListener('focus', () => this.show());
-    anchorElement?.addEventListener('mouseleave', () => this.hide());
-    anchorElement?.addEventListener('blur', () => this.hide());
-    anchorElement?.addEventListener('tap', () => this.hide());
   }
 
   disconnectedCallback(): void {
@@ -64,6 +67,16 @@ export class Typo3Tooltip extends LitElement {
 
   hide(): void {
     this.isHidden = true;
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    const anchorElement = this.anchor;
+    anchorElement?.addEventListener('mouseenter', () => this.show());
+    anchorElement?.addEventListener('focus', () => this.show());
+    anchorElement?.addEventListener('mouseleave', () => this.hide());
+    anchorElement?.addEventListener('blur', () => this.hide());
+    anchorElement?.addEventListener('tap', () => this.hide());
   }
 
   protected updatePosition(): void {
@@ -90,10 +103,6 @@ export class Typo3Tooltip extends LitElement {
         tooltipLeft = targetLeft + horizontalCenterOffset;
         tooltipTop = targetTop - thisRect.height - offset;
         break;
-      case 'bottom':
-        tooltipLeft = targetLeft + horizontalCenterOffset;
-        tooltipTop = targetTop + targetRect.height + offset;
-        break;
       case 'left':
         tooltipLeft = targetLeft - thisRect.width - offset;
         tooltipTop = targetTop + verticalCenterOffset;
@@ -101,6 +110,11 @@ export class Typo3Tooltip extends LitElement {
       case 'right':
         tooltipLeft = targetLeft + targetRect.width + offset;
         tooltipTop = targetTop + verticalCenterOffset;
+        break;
+      case 'bottom':
+      default:
+        tooltipLeft = targetLeft + horizontalCenterOffset;
+        tooltipTop = targetTop + targetRect.height + offset;
         break;
     }
 

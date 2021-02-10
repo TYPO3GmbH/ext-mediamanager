@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -140,14 +153,6 @@ export class Typo3Datagrid extends LitElement {
         expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
       }
     }
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    super.firstUpdated(_changedProperties);
-    this.canvasGrid.sorters = Object.assign(
-      this.canvasGrid.sorters,
-      this.sorters
-    );
   }
 
   disconnectedCallback() {
@@ -481,4 +486,12 @@ export class Typo3Datagrid extends LitElement {
   _onClickOutsideOfEditArea = () => {
     this._endEdit();
   };
+
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.canvasGrid.sorters = Object.assign(
+      this.canvasGrid.sorters,
+      this.sorters
+    );
+  }
 }

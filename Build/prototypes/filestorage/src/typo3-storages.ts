@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -17,10 +30,18 @@ import { createSVGElement } from './lib/svg-helper';
 
 @customElement('typo3-storages')
 export class Typo3Storages extends LitElement {
+  public static styles = [themeStyles, defaultStyles, styles];
+
   @property({ type: Array }) storages: Storage[] = [];
   @property({ type: String }) userName!: string;
 
-  public static styles = [themeStyles, defaultStyles, styles];
+  _onRefresh(): void {
+    window.location.reload();
+  }
+
+  _onRelocate(url: string): void {
+    window.location.href = url;
+  }
 
   protected render(): TemplateResult {
     const newStorageUrl = getUrl('newStorageUrl');
@@ -91,13 +112,5 @@ export class Typo3Storages extends LitElement {
         ${unsafeHTML(rawIcon)}
       </typo3-card></a
     >`;
-  }
-
-  _onRefresh(): void {
-    window.location.reload();
-  }
-
-  _onRelocate(url: string): void {
-    window.location.href = url;
   }
 }

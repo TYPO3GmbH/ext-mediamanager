@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import { expect, fixture, html, oneEvent } from '@open-wc/testing';
 import '../src/typo3-filetree.js';
 import { Typo3Filetree } from '../src/typo3-filetree';
@@ -53,8 +66,8 @@ describe('Typo3Filetree', () => {
     element._onContextmenu(mouseEvent, node);
 
     const { detail } = await listener;
-    expect(detail['node']).to.be.eql(node);
-    expect(detail['event']).to.be.eql(mouseEvent);
+    expect(detail.node).to.be.eql(node);
+    expect(detail.event).to.be.eql(mouseEvent);
   });
 
   it('it fires `typo3-node-rename` on node rename', async () => {
@@ -64,7 +77,7 @@ describe('Typo3Filetree', () => {
     element._sendEditNodeLabelCommand(node, 'New Name');
 
     const { detail } = await listener;
-    expect(detail['node']).to.be.eql(node);
-    expect(detail['name']).to.be.eql('New Name');
+    expect(detail.node).to.be.eql(node);
+    expect(detail.name).to.be.eql('New Name');
   });
 });

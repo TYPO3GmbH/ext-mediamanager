@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -30,8 +43,7 @@ import styles from './typo3-search.pcss';
  */
 @customElement('typo3-search')
 export class Typo3Search extends LitElement {
-  @query('#input')
-  private inputElement!: HTMLInputElement;
+  public static styles = [themeStyles, styles];
 
   @query('#form')
   public form?: HTMLFormElement;
@@ -48,9 +60,10 @@ export class Typo3Search extends LitElement {
   @property({ type: String })
   public value = '';
 
-  public static styles = [themeStyles, styles];
+  @query('#input')
+  private inputElement!: HTMLInputElement;
 
-  protected render(): TemplateResult {
+  render(): TemplateResult {
     return html`
       <form
         id="form"
@@ -61,6 +74,31 @@ export class Typo3Search extends LitElement {
         ${this.renderInput} ${this.renderResetButton}
       </form>
     `;
+  }
+
+  async reset(): Promise<void> {
+    if (!this.form) {
+      return;
+    }
+    this.value = '';
+    this.form.reset();
+    this.inputElement.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+      })
+    );
+    // The native `change` event on an `input` element is not composed,
+    // so this synthetic replication of a `change` event must not be
+    // either as the `Textfield` baseclass should only need to handle
+    // the native variant of this interaction.
+    this.inputElement.dispatchEvent(
+      new InputEvent('change', {
+        bubbles: true,
+      })
+    );
+
+    await this.updateComplete;
   }
 
   private get renderInput(): TemplateResult {
@@ -126,30 +164,5 @@ export class Typo3Search extends LitElement {
       return;
     }
     this.reset();
-  }
-
-  public async reset(): Promise<void> {
-    if (!this.form) {
-      return;
-    }
-    this.value = '';
-    this.form.reset();
-    this.inputElement.dispatchEvent(
-      new InputEvent('input', {
-        bubbles: true,
-        composed: true,
-      })
-    );
-    // The native `change` event on an `input` element is not composed,
-    // so this synthetic replication of a `change` event must not be
-    // either as the `Textfield` baseclass should only need to handle
-    // the native variant of this interaction.
-    this.inputElement.dispatchEvent(
-      new InputEvent('change', {
-        bubbles: true,
-      })
-    );
-
-    await this.updateComplete;
   }
 }

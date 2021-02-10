@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -28,13 +41,12 @@ import { ifDefined } from 'lit-html/directives/if-defined';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
+  public static styles = [themeStyles, styles];
+
   @internalProperty() state!: RootState;
 
   @query('typo3-modal') modal!: Typo3Modal;
-
   @query('typo3-snackbar') snackbar!: Typo3Snackbar;
-
-  public static styles = [themeStyles, styles];
 
   stateChanged(state: RootState): void {
     this.state = state;
@@ -48,6 +60,41 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
   disconnectedCallback() {
     window.removeEventListener('message', this._handlePostMessage);
     super.disconnectedCallback();
+  }
+
+  _handlePostMessage = (
+    event: MessageEvent<ShowModalMessage | ShowSnackbarMessage>
+  ) => {
+    switch (event.data.type) {
+      case SHOW_MODAL_MESSAGE_TYPE:
+        store.dispatch(new fromModal.ShowModal(event.data.data));
+        break;
+      case SHOW_SNACKBAR_MESSAGE_TYPE:
+        store.dispatch(new fromSnackbar.ShowSnackbar(event.data.data));
+        break;
+    }
+  };
+
+  _onModalClose(): void {
+    store.dispatch(new fromModal.CloseModal());
+  }
+
+  _onModalAction(action: string): void {
+    const obj: { [key: string]: string | Blob } = {};
+    if (fromModal.getModalData(this.state)?.isForm) {
+      const formElement = this.modal.querySelector('form') as HTMLFormElement;
+      const formData = new FormData(formElement);
+      formData.forEach((value, key) => (obj[key] = value));
+    }
+    store.dispatch(new fromModal.ModalAction(action, obj));
+  }
+
+  onSnackbarAction(button: SnackbarButton): void {
+    store.dispatch(new fromSnackbar.SnackbarAction(button.action, button));
+  }
+
+  _onSnackbarClose(): void {
+    store.dispatch(new fromSnackbar.CloseSnackbar());
   }
 
   protected render(): TemplateResult {
@@ -107,40 +154,5 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         >${buttonData.label}</typo3-button
       >`;
     });
-  }
-
-  _handlePostMessage = (
-    event: MessageEvent<ShowModalMessage | ShowSnackbarMessage>
-  ) => {
-    switch (event.data.type) {
-      case SHOW_MODAL_MESSAGE_TYPE:
-        store.dispatch(new fromModal.ShowModal(event.data.data));
-        break;
-      case SHOW_SNACKBAR_MESSAGE_TYPE:
-        store.dispatch(new fromSnackbar.ShowSnackbar(event.data.data));
-        break;
-    }
-  };
-
-  _onModalClose(): void {
-    store.dispatch(new fromModal.CloseModal());
-  }
-
-  _onModalAction(action: string): void {
-    const obj: { [key: string]: string | Blob } = {};
-    if (fromModal.getModalData(this.state)?.isForm) {
-      const formElement = this.modal.querySelector('form') as HTMLFormElement;
-      const formData = new FormData(formElement);
-      formData.forEach((value, key) => (obj[key] = value));
-    }
-    store.dispatch(new fromModal.ModalAction(action, obj));
-  }
-
-  onSnackbarAction(button: SnackbarButton): void {
-    store.dispatch(new fromSnackbar.SnackbarAction(button.action, button));
-  }
-
-  _onSnackbarClose(): void {
-    store.dispatch(new fromSnackbar.CloseSnackbar());
   }
 }

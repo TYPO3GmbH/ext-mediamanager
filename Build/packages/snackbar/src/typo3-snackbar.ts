@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import { customElement, html, LitElement, property } from 'lit-element';
 
 import styles from './typo3-snackbar.pcss';
@@ -26,6 +39,8 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html';
  */
 @customElement('typo3-snackbar')
 export class Typo3Snackbar extends LitElement {
+  public static styles = [themeStyles, styles];
+
   @property({ type: Number, reflect: true }) messageId!: number;
 
   @property({ type: Boolean, reflect: true }) visible = false;
@@ -47,8 +62,6 @@ export class Typo3Snackbar extends LitElement {
   @property({ type: String, reflect: true }) duration?: number;
 
   private timerAutoHide?: number;
-
-  public static styles = [themeStyles, styles];
 
   render() {
     return html`
@@ -72,6 +85,17 @@ export class Typo3Snackbar extends LitElement {
     `;
   }
 
+  hideSnackbar(): void {
+    clearTimeout(this.timerAutoHide);
+    this.addEventListener('transitionend', this._afterHide);
+    this.visible = false;
+  }
+
+  _afterHide(): void {
+    this.removeEventListener('transitionend', this._afterHide);
+    this.dispatchEvent(new CustomEvent('typo3-snackbar-close'));
+  }
+
   protected updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
     clearTimeout(this.timerAutoHide);
@@ -82,16 +106,5 @@ export class Typo3Snackbar extends LitElement {
         }, this.duration);
       }
     }
-  }
-
-  hideSnackbar(): void {
-    clearTimeout(this.timerAutoHide);
-    this.addEventListener('transitionend', this._afterHide);
-    this.visible = false;
-  }
-
-  _afterHide(): void {
-    this.removeEventListener('transitionend', this._afterHide);
-    this.dispatchEvent(new CustomEvent('typo3-snackbar-close'));
   }
 }

@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import '../src/typo3-dropzone.js';
 
 import { elementUpdated, expect, fixture, html } from '@open-wc/testing';
@@ -24,7 +37,9 @@ describe('Typo3Dropzone', () => {
 
   it('loads', async () => {
     expect(element).to.not.equal(undefined);
-    if (!element.shadowRoot) throw new Error('No shadowRoot');
+    if (!element.shadowRoot) {
+      throw new Error('No shadowRoot');
+    }
     const slot = element.shadowRoot.querySelector('slot') as HTMLSlotElement;
     expect(slot).to.not.equal(undefined);
     return true;

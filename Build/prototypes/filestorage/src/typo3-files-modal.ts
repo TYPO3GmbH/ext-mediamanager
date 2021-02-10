@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -18,6 +31,8 @@ import { translate } from './services/translation.service';
 
 @customElement('typo3-files-modal')
 export class Typo3FilesModal extends LitElement {
+  public static styles = [themeStyles, styles];
+
   @query('typo3-modal') modal!: Typo3Modal;
 
   @property({ type: String }) mode: 'move' | 'copy' = 'move';
@@ -29,8 +44,6 @@ export class Typo3FilesModal extends LitElement {
   @property({ type: Array }) selectedFiles: ListItem[] = [];
 
   @internalProperty() target: Typo3Node | null = null;
-
-  public static styles = [themeStyles, styles];
 
   render(): TemplateResult {
     const selectedFiles = this.selectedFiles.map(item =>
@@ -84,39 +97,6 @@ export class Typo3FilesModal extends LitElement {
     </typo3-modal>`;
   }
 
-  protected formatFileItem(item: ListItem): TemplateResult {
-    const rawIcon = addSlotToRawHtml(item.icon, 'icon');
-    let imageSlot = html`${unsafeHTML(rawIcon)}`;
-    if (item.thumbnailUrl) {
-      imageSlot = html`<img
-        slot="icon"
-        loading="lazy"
-        src="${item.thumbnailUrl}"
-        alt="${item.name}"
-      />`;
-    }
-
-    const content = html`
-      <div class="item-body">
-        <div class="file-data">
-          <div class="file-title">${item.name}</div>
-          <div class="file-subtitle">${item.modified}</div>
-        </div>
-        <button
-          class="btn-remove"
-          style=${styleMap({
-            visibility: this.selectedFiles.length > 1 ? 'visible' : 'hidden',
-          })}
-          @click="${() => this._onRemoveItem(item)}"
-        >
-          ×
-        </button>
-      </div>
-    `;
-
-    return html`<typo3-list-item>${imageSlot} ${content}</typo3-list-item>`;
-  }
-
   show(): void {
     this.target = null;
     this.modal.show();
@@ -149,5 +129,38 @@ export class Typo3FilesModal extends LitElement {
     this.selectedFiles = this.selectedFiles.filter(
       listItem => listItem != item
     );
+  }
+
+  protected formatFileItem(item: ListItem): TemplateResult {
+    const rawIcon = addSlotToRawHtml(item.icon, 'icon');
+    let imageSlot = html`${unsafeHTML(rawIcon)}`;
+    if (item.thumbnailUrl) {
+      imageSlot = html`<img
+        slot="icon"
+        loading="lazy"
+        src="${item.thumbnailUrl}"
+        alt="${item.name}"
+      />`;
+    }
+
+    const content = html`
+      <div class="item-body">
+        <div class="file-data">
+          <div class="file-title">${item.name}</div>
+          <div class="file-subtitle">${item.modified}</div>
+        </div>
+        <button
+          class="btn-remove"
+          style=${styleMap({
+            visibility: this.selectedFiles.length > 1 ? 'visible' : 'hidden',
+          })}
+          @click="${() => this._onRemoveItem(item)}"
+        >
+          ×
+        </button>
+      </div>
+    `;
+
+    return html`<typo3-list-item>${imageSlot} ${content}</typo3-list-item>`;
   }
 }

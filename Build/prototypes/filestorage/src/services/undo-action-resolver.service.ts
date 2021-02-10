@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import * as fromFileActions from '../redux/ducks/file-actions';
 import { AjaxResponse } from 'rxjs/ajax';
 import { isString } from 'lodash-es';
@@ -100,7 +113,7 @@ export class UndoActionResolverService {
 
       const newIdentifierWithoutStorage = isString(moveItemResponse)
         ? moveItemResponse
-        : moveItemResponse['identifier'];
+        : moveItemResponse.identifier;
 
       const newIdentifier =
         extractStorageFromIdentifier(identifier) + newIdentifierWithoutStorage;
@@ -129,7 +142,7 @@ export class UndoActionResolverService {
 
         const newIdentifierWithoutStorage = isString(copyItemResponse)
           ? copyItemResponse
-          : copyItemResponse['identifier'];
+          : copyItemResponse.identifier;
 
         const newIdentifier =
           extractStorageFromIdentifier(identifier) +
@@ -142,7 +155,7 @@ export class UndoActionResolverService {
     return new fromFileActions.UndoFilesAction(data);
   }
 
-  getUndoAddFolderAction(
+  private getUndoAddFolderAction(
     action: fromFileActions.AddFolder,
     newFolderResponse: NewFolderResponse
   ): fromFileActions.UndoFilesAction {
@@ -161,7 +174,7 @@ export class UndoActionResolverService {
     return new fromFileActions.UndoFilesAction(data);
   }
 
-  getUndoUploadFilesAction(
+  private getUndoUploadFilesAction(
     action: fromFileActions.UploadFiles,
     uploadFilesResponse: UploadFilesResponse
   ): fromFileActions.UndoFilesAction {

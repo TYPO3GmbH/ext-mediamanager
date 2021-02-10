@@ -1,3 +1,16 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 import {
   customElement,
   html,
@@ -27,25 +40,14 @@ import * as fromTree from './redux/ducks/tree';
 
 @customElement('typo3-filebrowser')
 export class Typo3Filebrowser extends Typo3Filestorage {
+  public static styles = [themeStyles, fileStorageStyles, styles];
+
   @property({ type: String }) irreObjectId = '';
   @property({ type: Array }) allowedFileExtensions: string[] = [];
   @property({ type: String }) expandFolder = '';
 
   @query('typo3-tooltip') disabledFileTooltip!: Typo3Tooltip;
-
   @queryAll('typo3-card[disabled]') disabledCards!: Typo3Card[];
-
-  public static styles = [themeStyles, fileStorageStyles, styles];
-
-  protected updated(_changedProperties: PropertyValues) {
-    super.updated(_changedProperties);
-
-    this.disabledCards.forEach(card =>
-      card.addEventListener('mouseover', () => {
-        this.disabledFileTooltip.anchor = card;
-      })
-    );
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -54,78 +56,6 @@ export class Typo3Filebrowser extends Typo3Filestorage {
     if (this.expandFolder) {
       store.dispatch(new fromTree.ExpandTreeNode(this.expandFolder));
     }
-  }
-
-  protected render(): TemplateResult {
-    return html`${super.render()} ${this.renderFooter}
-    ${this.renderDisabledTooltip}`;
-  }
-
-  protected get renderFooter(): TemplateResult {
-    return html`
-      <div class="topbar-wrapper footer">
-        <typo3-topbar>
-          <div slot="left" class="allowed-extensions">
-            ${this.renderAllowedFileExtensions}
-          </div>
-          <div slot="right">
-            <typo3-button @click="${this._closeModal}"
-              >${translate('button.cancel')}
-            </typo3-button>
-            <typo3-button
-              color="primary"
-              .disabled="${fromList.isEmptySelection(this.state)}"
-              @click="${this._onInsert}"
-              >${translate('file_browser.button.insert')}
-            </typo3-button>
-          </div>
-        </typo3-topbar>
-      </div>
-    `;
-  }
-
-  protected get renderAllowedFileExtensions(): TemplateResult {
-    if (this.allowedFileExtensions.length === 0) {
-      return html``;
-    }
-
-    const allowedFileExtensionsHtml = this.allowedFileExtensions.map(
-      fileExtension =>
-        html`<typo3-badge color="success" size="small"
-          >${fileExtension}</typo3-badge
-        >`
-    );
-
-    return html`<div>${translate('cm.allowedFileExtensions')}</div>
-      ${allowedFileExtensionsHtml}`;
-  }
-
-  protected get renderDisabledTooltip(): TemplateResult {
-    return html` <typo3-tooltip
-      >${translate('file_browser.fileNotAllowed')}</typo3-tooltip
-    >`;
-  }
-
-  protected get listItems(): ListItem[] {
-    const extendedListItems = super.listItems.map(listItem => {
-      return {
-        ...listItem,
-        disabled: this._itemIsDisabled(listItem),
-        notSelectable: !this._itemIsSelectable(listItem),
-      };
-    });
-
-    return orderBy(extendedListItems, ['disabled'], ['asc']);
-  }
-
-  protected filterContextMenuOptions(
-    options: Typo3ContextMenuOption[]
-  ): Typo3ContextMenuOption[] {
-    const allowedActions = ['addFolder'];
-
-    return options.filter(option =>
-      allowedActions.includes(option.callbackAction)
-    );
   }
 
   _onItemDblClick(item: ListItem): void {
@@ -214,6 +144,88 @@ export class Typo3Filebrowser extends Typo3Filestorage {
         fromView.getSortField(this.state),
       ],
       ['asc', 'desc', fromView.getSortDirection(this.state)]
+    );
+  }
+
+  protected updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    this.disabledCards.forEach(card =>
+      card.addEventListener('mouseover', () => {
+        this.disabledFileTooltip.anchor = card;
+      })
+    );
+  }
+
+  protected render(): TemplateResult {
+    return html`${super.render()} ${this.renderFooter}
+    ${this.renderDisabledTooltip}`;
+  }
+
+  protected get renderFooter(): TemplateResult {
+    return html`
+      <div class="topbar-wrapper footer">
+        <typo3-topbar>
+          <div slot="left" class="allowed-extensions">
+            ${this.renderAllowedFileExtensions}
+          </div>
+          <div slot="right">
+            <typo3-button @click="${this._closeModal}"
+              >${translate('button.cancel')}
+            </typo3-button>
+            <typo3-button
+              color="primary"
+              .disabled="${fromList.isEmptySelection(this.state)}"
+              @click="${this._onInsert}"
+              >${translate('file_browser.button.insert')}
+            </typo3-button>
+          </div>
+        </typo3-topbar>
+      </div>
+    `;
+  }
+
+  protected get renderAllowedFileExtensions(): TemplateResult {
+    if (this.allowedFileExtensions.length === 0) {
+      return html``;
+    }
+
+    const allowedFileExtensionsHtml = this.allowedFileExtensions.map(
+      fileExtension =>
+        html`<typo3-badge color="success" size="small"
+          >${fileExtension}</typo3-badge
+        >`
+    );
+
+    return html`<div>${translate('cm.allowedFileExtensions')}</div>
+      ${allowedFileExtensionsHtml}`;
+  }
+
+  protected get renderDisabledTooltip(): TemplateResult {
+    return html` <typo3-tooltip
+      >${translate('file_browser.fileNotAllowed')}
+    </typo3-tooltip>`;
+  }
+
+  protected get listItems(): ListItem[] {
+    const extendedListItems = super.listItems.map(listItem => {
+      return {
+        ...listItem,
+        disabled: this._itemIsDisabled(listItem),
+        notSelectable: !this._itemIsSelectable(listItem),
+      };
+    });
+
+    return orderBy(extendedListItems, ['disabled'], ['asc']);
+  }
+
+  protected filterContextMenuOptions(
+    options: Typo3ContextMenuOption[]
+  ): Typo3ContextMenuOption[] {
+    const allowedActions = ['addFolder'];
+
+    return options.filter(option =>
+      allowedActions.includes(option.callbackAction)
     );
   }
 }
