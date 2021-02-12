@@ -9,7 +9,7 @@
 .. _start:
 
 =============================================================
-FileList NG
+Mediamanager
 =============================================================
 
 :Version:
@@ -18,11 +18,6 @@ FileList NG
 :Language:
    en
 
-:Authors:
-   Thomas Maroschik
-
-:Email:
-   tmaroschik@dfau.de
 
 :License:
    This extension documentation is published under the
