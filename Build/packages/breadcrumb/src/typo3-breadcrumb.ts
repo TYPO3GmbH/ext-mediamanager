@@ -32,7 +32,7 @@ import { Typo3BreadcrumbItem } from './typo3-breadcrumb-item';
  * @cssprop --typo3-breadcrumb-separator-gap
  */
 @customElement('typo3-breadcrumb')
-export class Typo3breadcrumb extends LitElement {
+export class Typo3Breadcrumb extends LitElement {
   public static styles = [themeStyles, styles];
 
   @queryAssignedNodes('item', false, 'typo3-breadcrumb-item')
