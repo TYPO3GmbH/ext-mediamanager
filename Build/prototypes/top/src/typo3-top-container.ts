@@ -35,9 +35,15 @@ import {
   SHOW_SNACKBAR_MESSAGE_TYPE,
   ShowSnackbarMessage,
 } from '../../shared/src/types/show-snackbar-message';
-import { SnackbarButton } from '../../shared/src/types/snackbar-data';
+import {
+  SnackbarButton,
+  SnackbarData,
+} from '../../shared/src/types/snackbar-data';
 import { Typo3Snackbar } from '../../../packages/snackbar/src/typo3-snackbar';
 import { ifDefined } from 'lit-html/directives/if-defined';
+import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
+import { forEach } from 'lodash-es';
+import { ImmediateAction } from '../../shared/src/types/typo3-notification-action';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -89,14 +95,6 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
     store.dispatch(new fromModal.ModalAction(action, obj));
   }
 
-  onSnackbarAction(button: SnackbarButton): void {
-    store.dispatch(new fromSnackbar.SnackbarAction(button.action, button));
-  }
-
-  _onSnackbarClose(): void {
-    store.dispatch(new fromSnackbar.CloseSnackbar());
-  }
-
   protected render(): TemplateResult {
     return html`
       <typo3-modal
@@ -106,19 +104,6 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
       >
         ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>
-      <typo3-snackbar
-        placement="right"
-        ?visible="${this.state.snackbar.open}"
-        ?dismissible="${ifDefined(this.state.snackbar.data?.dismissible)}"
-        messageId="${this.state.snackbar?.messageId}"
-        title="${this.state.snackbar.data?.title}"
-        message="${this.state.snackbar.data?.message}"
-        variant="${this.state.snackbar.data?.variant}"
-        duration="${this.state.snackbar.data?.duration}"
-        @typo3-snackbar-close="${this._onSnackbarClose}"
-      >
-        ${this.renderSnackbarButtons}
-      </typo3-snackbar>
     `;
   }
 
@@ -140,17 +125,6 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         slot="footer"
         color="${buttonData.color}"
         @click="${() => this._onModalAction(buttonData.action)}"
-        >${buttonData.label}</typo3-button
-      >`;
-    });
-  }
-
-  private get renderSnackbarButtons(): TemplateResult[] {
-    return fromSnackbar.getActionButtons(this.state).map(buttonData => {
-      return html` <typo3-button
-        slot="footer"
-        color="${buttonData.color}"
-        @click="${() => this.onSnackbarAction(buttonData)}"
         >${buttonData.label}</typo3-button
       >`;
     });

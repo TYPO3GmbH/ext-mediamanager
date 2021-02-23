@@ -12,7 +12,7 @@
  */
 
 import { Color } from '../../../../packages/button/src/typo3-base-button';
-import { SnackbarVariants } from '../../../../packages/snackbar/src/lib/snackbar-variants';
+import { SeverityEnum } from './Severity';
 
 export interface SnackbarButton {
   label: string;
@@ -24,7 +24,7 @@ export interface SnackbarButton {
 export interface SnackbarData {
   message?: string;
   title?: string;
-  variant: SnackbarVariants;
+  severity: SeverityEnum;
   buttons?: SnackbarButton[];
   duration: number;
   dismissible: boolean;
