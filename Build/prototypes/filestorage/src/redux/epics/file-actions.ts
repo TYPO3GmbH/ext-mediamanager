@@ -35,12 +35,12 @@ import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
 import { RootState } from '../ducks';
-import { SnackbarVariants } from '../../../../../packages/snackbar/src/lib/snackbar-variants';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
 import { ModalData, ModalType } from '../../../../shared/src/types/modal-data';
 import { ModalService } from '../../services/modal.service';
 import { openAsLink } from '../../lib/utils';
 import { ApiService } from '../../services/api.service';
+import { SeverityEnum } from '../../../../shared/src/types/Severity';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -595,7 +595,7 @@ export const fileActionSuccess = (
       mergeMap(action => [
         new fromGlobal.Reload(),
         new fromGlobal.LoadFlashMessages(
-          SnackbarVariants.success,
+          SeverityEnum.ok,
           action.message,
           action.undoAction
         ),
@@ -621,7 +621,7 @@ export const fileActionFailure = (
       mergeMap(action => {
         const actions: Action[] = [
           new fromGlobal.LoadFlashMessages(
-            SnackbarVariants.danger,
+            SeverityEnum.error,
             translate('message.header.genericError')
           ),
         ];

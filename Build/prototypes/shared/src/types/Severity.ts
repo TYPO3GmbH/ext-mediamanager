@@ -11,8 +11,10 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { combineEpics } from 'redux-observable';
-import { closeModal } from './modal';
-import { snackbarActions } from './snackbar';
-
-export const rootEpic = combineEpics(closeModal, ...snackbarActions);
+export enum SeverityEnum {
+  notice = -2,
+  info = -1,
+  ok = 0,
+  warning = 1,
+  error = 2,
+}

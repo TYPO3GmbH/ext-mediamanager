@@ -52,9 +52,9 @@ export class FlashMessagesService {
           title: action.message,
           message: messages
             .map(errorMessage => errorMessage.message)
-            .join('<br />'),
-          variant: action.variant,
-          duration: 5000,
+            .join('\n'),
+          severity: action.severity,
+          duration: 5,
           dismissible: true,
         });
 

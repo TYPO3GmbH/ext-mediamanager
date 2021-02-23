@@ -13,16 +13,16 @@
 
 import { expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-breadcrumb.js';
-import { Typo3breadcrumb } from '../src/typo3-breadcrumb';
+import { Typo3Breadcrumb } from '../src/typo3-breadcrumb';
 
 describe('Typo3breadcrumb', () => {
-  let element: Typo3breadcrumb;
+  let element: Typo3Breadcrumb;
   beforeEach(async () => {
     element = await fixture(html` <typo3-breadcrumb></typo3-breadcrumb> `);
   });
 
   it('can create component', () => {
     expect(element).to.not.be.null;
-    expect(element).to.be.instanceOf(Typo3breadcrumb);
+    expect(element).to.be.instanceOf(Typo3Breadcrumb);
   });
 });
