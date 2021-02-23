@@ -85,10 +85,12 @@ typo3-breadcrumb-item {
 }
 
 .dropzone-drop-message {
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
+    margin: auto;
+    box-sizing: border-box;
+    border: 0.125rem dotted white;
     display: flex;
-    border: 2px dashed white;
     z-index: 1002;
     align-items: center;
     justify-content: center;
@@ -97,7 +99,8 @@ typo3-breadcrumb-item {
 }
 
 .dropzone-drop-message__title {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: var(--typo3-global-default-gap);
 }
 
 typo3-draghandler, typo3-files-modal {
