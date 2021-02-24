@@ -341,12 +341,9 @@ export const clipboardSelectionAction = (
     )
     .pipe(
       switchMap(action => {
-        const url: string = getUrl('clipboardUrl');
-        const params = new URLSearchParams();
-        params.append(
-          'CB[el][_FILE|' + action.clipboardIdentifier + ']',
-          action.identifier
-        );
+        const params: Record<string, string> = {};
+        params[`CB[el][_FILE|${action.clipboardIdentifier}]`] =
+          action.identifier;
         if (
           -1 !==
           [
@@ -354,11 +351,11 @@ export const clipboardSelectionAction = (
             fromActions.CLIPBOARD_COPY_RELEASE_FILE,
           ].indexOf(action.type)
         ) {
-          params.append('CB[setCopyMode]', '1');
+          params['CB[setCopyMode]'] = '1';
         }
 
         return dependencies.apiService
-          .postFormData(url + '&' + params.toString())
+          .postFormData(getUrl('clipboardUrl', params))
           .pipe(
             catchError(() => {
               console.warn('error during clipboard action');
@@ -455,13 +452,11 @@ export const editFileStorage = (
 ): Observable<Action> => {
   return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
-      const url: string = getUrl('editFileStorageUrl');
       const storageId = parseInt(action.identifier, 10);
-      const params = new URLSearchParams();
-      params.append('edit[sys_file_storage][' + storageId + ']', 'edit');
-      params.append('returnUrl', window.document.location.href);
-
-      window.location.href = url + '&' + params.toString();
+      const params: Record<string, string> = {};
+      params[`edit[sys_file_storage][${storageId}]`] = 'edit';
+      params.returnUrl = window.document.location.href;
+      window.location.href = getUrl('editFileStorageUrl', params);
     }),
     ignoreElements()
   );

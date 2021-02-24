@@ -42,7 +42,7 @@ const plugins = [
   }),
   commonjs(),
   injectProcessEnv({
-    NODE_ENV: 'production',
+    NODE_ENV: 'development',
   }),
 ];
 
@@ -52,7 +52,7 @@ export default [
   merge(baseConfig, {
     input: './bundle/filestorage/index.ts',
     output: {
-      sourcemap: false,
+      sourcemap: true,
       entryFileNames: 'es.js',
     },
   }),

@@ -28,4 +28,16 @@ class BackendUrlService {
 
 const service = new BackendUrlService(new AppConfigService());
 
-export const getUrl = (key: string): string => service.get(key);
+export const getUrl = (
+  key: string,
+  params?: Record<string, string>
+): string => {
+  const url = service.get(key);
+
+  if (params === undefined) {
+    return url;
+  }
+  const urlSearchParams = new URLSearchParams(params);
+
+  return url + (url.match(/[?]/g) ? '&' : '?') + urlSearchParams.toString();
+};

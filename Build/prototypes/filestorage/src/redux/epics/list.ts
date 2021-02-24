@@ -95,10 +95,9 @@ export const searchFiles = (
 ): Observable<Action> => {
   return action$.ofType(fromList.SEARCH_FILES).pipe(
     switchMap(action => {
-      const params = new URLSearchParams();
-      params.append('search', action.searchTerm);
-
-      const url = getUrl('searchFilesUrl') + '&' + params.toString();
+      const url = getUrl('searchFilesUrl', {
+        search: action.searchTerm,
+      });
       return dependencies.apiService.getJSON<ListItem[]>(url).pipe(
         mergeMap(data => [
           new fromList.ClearSelection(),
