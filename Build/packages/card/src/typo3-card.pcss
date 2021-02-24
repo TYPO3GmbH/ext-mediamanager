@@ -52,30 +52,39 @@
 }
 
 .image {
-    height: var(--typo3-card-image-height, 8.5rem);
+    padding-top: 1.25rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
+    flex: 1;
 }
 
 .image ::slotted([slot='image']) {
-    object-fit: cover;
-    width: auto;
+    pointer-events: none;
+}
+
+:host([variant='file']) .image ::slotted([slot='image']) {
     height: 80%;
+}
+
+:host([variant='folder']) .image ::slotted([slot='image']) {
     pointer-events: none;
 }
 
 :host slot[name='badge'] {
     position: absolute;
-    bottom: 0;
-    right: 1.25rem;
     display: inline-block;
     margin-left: 0.625rem;
+    font-size: 0.625rem;
+    right: calc(100% /2 - 4rem );
+    top: calc(100% - 1.5rem);
 }
 
 :host([variant='preview']) .image {
+    padding-top: 0;
     height: 12.875rem;
 }
 

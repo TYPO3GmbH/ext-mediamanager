@@ -16,16 +16,16 @@ import '../../../out-tsc/packages/badge/src/typo3-badge';
         {html`
         <div style="display: flex; flex-flow: row wrap;gap: 0.5rem;">
             <typo3-card title="Card without icon" subtitle="Dec 6, 2017"></typo3-card>
-            <typo3-card title="Microsoft Excel" subtitle="Dec 6, 2017">
+            <typo3-card title="Microsoft Excel" subtitle="Dec 6, 2017" variant="file">
                 <svg slot="image" xmlns="http://www.w3.org/2000/svg">
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel"></use>
                 </svg>
             </typo3-card>
-            <typo3-card title="Directory width Badge" subtitle="Dec 6, 2017">
+            <typo3-card title="Directory width Badge" subtitle="Dec 6, 2017" variant="folder">
                 <svg slot="image" xmlns="http://www.w3.org/2000/svg">
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/apps.svg#apps-filetree-folder-default"></use>
                 </svg>
-                <typo3-badge slot="badge">12</typo3-badge>
+                <span slot="badge">12</span>
             </typo3-card>
         </div>
     `}
