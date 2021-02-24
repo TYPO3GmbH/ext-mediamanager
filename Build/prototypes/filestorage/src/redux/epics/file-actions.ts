@@ -30,7 +30,7 @@ import {
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
@@ -41,6 +41,7 @@ import { ModalService } from '../../services/modal.service';
 import { openAsLink } from '../../lib/utils';
 import { ApiService } from '../../services/api.service';
 import { SeverityEnum } from '../../../../shared/src/types/Severity';
+import * as _ from 'lodash-es';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -206,37 +207,74 @@ export const uploadFiles = (
   }
 ): Observable<Action> => {
   return action$.ofType(fromActions.UPLOAD_FILES).pipe(
-    withLatestFrom(state$),
-    switchMap(([action, state]) => {
-      const formData = new FormData();
+    switchMap(action => {
+      const files: File[] = [];
+      const targetIdentifier = action.node.identifier;
+
       for (let i = 0; i < action.dataTransfer.files.length; i++) {
+        files.push(action.dataTransfer.files.item(i) as File);
+      }
+
+      const fileExistsChecks = files.map(file => {
+        const url = getUrl('fileExistsUrl', {
+          fileName: file.name,
+          fileTarget: targetIdentifier,
+        });
+
+        return dependencies.apiService.getJSON<{ name?: string }[]>(url);
+      });
+
+      return forkJoin(fileExistsChecks).pipe(
+        map(results => {
+          const uploadableFiles: File[] = [];
+          const conflictFiles: File[] = [];
+
+          files.forEach(file => {
+            const fileExists = _.some(results, { name: file.name });
+            if (fileExists) {
+              conflictFiles.push(file);
+            } else {
+              uploadableFiles.push(file);
+            }
+          });
+
+          return {
+            uploadableFiles: uploadableFiles,
+            conflictFiles: conflictFiles,
+            targetIdentifier: targetIdentifier,
+          };
+        })
+      );
+    }),
+    switchMap(data => {
+      const formData = new FormData();
+      data.uploadableFiles.forEach((file, i) => {
         formData.append(
           'data[upload][' + i + '][target]',
-          action.node.identifier
+          data.targetIdentifier
         );
         formData.append('data[upload][' + i + '][data]', i.toString());
-        formData.append(
-          'upload_' + i,
-          action.dataTransfer.files.item(i) as File
-        );
-      }
+        formData.append('upload_' + i, file);
+      });
+
       return dependencies.apiService
         .postFormData(getUrl('fileActionUrl'), formData)
         .pipe(
-          map(response =>
-            dependencies.undoActionResolverService.getUndoAction(
-              action,
-              response,
-              state
-            )
-          ),
-          map(
-            undoAction =>
+          mergeMap(() => {
+            const actions: Action[] = [
               new fromActions.UploadFilesSuccess(
-                translate('message.header.filesUploaded'),
-                undoAction
-              )
-          ),
+                translate('message.header.filesUploaded')
+              ),
+            ];
+
+            if (data.conflictFiles.length > 0) {
+              actions.push(
+                new fromActions.UploadFilesConflicts(data.conflictFiles)
+              );
+            }
+
+            return actions;
+          }),
           catchError(() => of(new fromActions.UploadFilesFailure()))
         );
     })

@@ -69,6 +69,7 @@ export const SHOW_FILE = '[FILE] SHOW FILE';
 export const UPLOAD_FILES = '[FILE] UPLOAD FILES';
 export const UPLOAD_FILES_SUCCESS = '[FILE] UPLOAD FILES SUCCESS';
 export const UPLOAD_FILES_FAILURE = '[FILE] UPLOAD FILES FAILURE';
+export const UPLOAD_FILES_CONFLICTS = '[FILE] UPLOAD FILES CONFLICTS';
 
 export const UNDO_FILES_ACTION = '[FILE] UNDO FILES ACTION';
 export const UNDO_FILES_ACTION_SUCCESS = '[FILE] UNDO FILES ACTION SUCCESS';
@@ -370,6 +371,11 @@ export class UploadFilesFailure implements Action {
   readonly type = UPLOAD_FILES_FAILURE;
 }
 
+export class UploadFilesConflicts implements Action {
+  readonly type = UPLOAD_FILES_CONFLICTS;
+  constructor(public files: File[]) {}
+}
+
 export class MoveFiles implements Action {
   readonly type = MOVE_FILES;
 
@@ -523,6 +529,7 @@ export type Actions =
   | UploadFiles
   | UploadFilesFailure
   | UploadFilesSuccess
+  | UploadFilesConflicts
   | UndoFilesAction
   | UndoFilesActionSuccess
   | UndoFilesActionFailure;
