@@ -16,16 +16,16 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
         <div style="height: 100vh">
         <typo3-grid>
             <typo3-card slot="item" title="Card without icon" subtitle="Dec 6, 2017"></typo3-card>
-            <typo3-card slot="item" title="Microsoft Excel" subtitle="Dec 6, 2017">
+            <typo3-card slot="item" title="Microsoft Excel" subtitle="Dec 6, 2017" variant="file">
                 <svg slot="image" xmlns="http://www.w3.org/2000/svg">
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel"></use>
                 </svg>
             </typo3-card>
-            <typo3-card slot="item" title="Directory width Badge" subtitle="Dec 6, 2017">
+            <typo3-card slot="item" title="Directory width Badge" subtitle="Dec 6, 2017" variant="folder">
                 <svg slot="image" xmlns="http://www.w3.org/2000/svg">
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/apps.svg#apps-filetree-folder-default"></use>
                 </svg>
-                <typo3-badge slot="badge">12</typo3-badge>
+                <span slot="badge">12</span>
             </typo3-card>
         </typo3-grid>
         </div>
@@ -41,7 +41,7 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
                     </svg>
                 </typo3-badge>
             </typo3-card>
-            <typo3-card slot="item" title="Microsoft Excel" subtitle="Dec 6, 2017">
+            <typo3-card slot="item" title="Microsoft Excel" subtitle="Dec 6, 2017" variant="file">
                 <typo3-badge slot="selected-badge" color="primary" size="small">
                     <svg xmlns="http://www.w3.org/2000/svg">
                         <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-check"></use>
@@ -51,7 +51,7 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel"></use>
                 </svg>
             </typo3-card>
-            <typo3-card slot="item" title="Directory width Badge" subtitle="Dec 6, 2017">
+            <typo3-card slot="item" title="Directory width Badge" subtitle="Dec 6, 2017" variant="folder">
                 <typo3-badge slot="selected-badge" color="primary" size="small">
                     <svg xmlns="http://www.w3.org/2000/svg">
                         <use xlink:href="node_modules/@typo3/icons/dist/sprites/actions.svg#actions-check"></use>
@@ -60,7 +60,7 @@ import '../../../out-tsc/packages/grid/src/typo3-grid';
                 <svg slot="image" xmlns="http://www.w3.org/2000/svg">
                     <use xlink:href="node_modules/@typo3/icons/dist/sprites/apps.svg#apps-filetree-folder-default"></use>
                 </svg>
-                <typo3-badge slot="badge">12</typo3-badge>
+                <span slot="badge">12</span>
             </typo3-card>
         </typo3-grid>
     `}

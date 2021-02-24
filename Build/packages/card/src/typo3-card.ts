@@ -33,8 +33,10 @@ export class Typo3Card extends LitElement {
 
   @property({ type: String }) title = '';
   @property({ type: String }) subtitle = '';
-  @property({ type: String, reflect: true }) variant: 'standard' | 'preview' =
-    'standard';
+  @property({ type: String, reflect: true }) variant:
+    | 'file'
+    | 'folder'
+    | 'preview' = 'file';
   @property({ type: Boolean, reflect: true }) selected = false;
   @property({ type: String, reflect: true }) value?: string;
   @property({ type: Boolean, reflect: true }) titleEditable = false;

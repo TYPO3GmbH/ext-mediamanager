@@ -694,10 +694,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     let badge = html``;
+    let variant = 'file';
 
     if (listData.sysType === '_FOLDER') {
       const sizeNumeric = parseInt(listData.size.replace(/^\D+/g, ''), 10);
-      badge = html`<typo3-badge slot="badge">${sizeNumeric}</typo3-badge>`;
+      badge = html`<span slot="badge">${sizeNumeric}</span>`;
+      variant = 'folder';
     }
 
     const contextMenuCallback = (e: MouseEvent) => {
@@ -718,7 +720,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       value="${listData.identifier}"
       title="${listData.name}"
       subtitle="${listData.modified}"
-      variant="${listData.thumbnailUrl ? 'preview' : 'standard'}"
+      variant="${listData.thumbnailUrl ? 'preview' : variant}"
       ?titleEditable="${this.itemsEditEnabled && isSelected}"
       draggable="${!this.itemsDragDropEnabled ||
       fromList.isEmptySelection(this.state)
