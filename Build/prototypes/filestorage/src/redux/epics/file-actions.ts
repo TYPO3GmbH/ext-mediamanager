@@ -550,6 +550,8 @@ export const replaceFileConfirm = (
           headline: translate('file_replace.pagetitle'),
           type: ModalType.HTML,
           isForm: true,
+          dismissible: true,
+          variant: ModalVariant.warning,
           content: formContent,
           modalButtons: [
             {
@@ -559,7 +561,7 @@ export const replaceFileConfirm = (
             },
             {
               label: translate('file_replace.submit'),
-              color: 'primary',
+              color: 'warning',
               action: 'typo3-replace-confirm',
             },
           ],
