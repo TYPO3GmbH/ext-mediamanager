@@ -43,7 +43,7 @@ describe('Typo3Modal', () => {
   });
 
   it('displays no close button on default', () => {
-    const closeButton = element.shadowRoot!.querySelector('#btn-close')!;
+    const closeButton = element.shadowRoot!.querySelector('.btn-close')!;
     expect(closeButton).to.be.null;
   });
 
@@ -52,7 +52,7 @@ describe('Typo3Modal', () => {
       html` <typo3-modal dismissible="true">Modal</typo3-modal> `
     );
     const closeButton = dismissibleModal.shadowRoot!.querySelector(
-      '#btn-close'
+      '.btn-close'
     );
     expect(closeButton).not.to.be.null;
   });
@@ -62,7 +62,7 @@ describe('Typo3Modal', () => {
       html` <typo3-modal open dismissible="true">Modal</typo3-modal> `
     )) as Typo3Modal;
     const closeButton = dismissibleModal.shadowRoot!.querySelector(
-      '#btn-close'
+      '.btn-close'
     ) as HTMLButtonElement;
     closeButton.click();
 
@@ -88,7 +88,7 @@ describe('Typo3Modal', () => {
     const listener = oneEvent(dismissibleModal, 'typo3-modal-close');
 
     const closeButton = dismissibleModal.shadowRoot!.querySelector(
-      '#btn-close'
+      '.btn-close'
     ) as HTMLButtonElement;
     closeButton.click();
 
