@@ -42,12 +42,6 @@ import { ModalVariant } from './lib/modal-variant';
  * @cssprop --typo3-modal-footer-padding
  * @cssprop --typo3-modal-overlay-opacity
  *
- * @cssprop --typo3-modal-close-btn-font-size
- * @cssprop --typo3-modal-close-btn-font-weight
- * @cssprop --typo3-modal-close-btn-line-height
- * @cssprop --typo3-modal-close-btn-color
- * @cssprop --typo3-modal-close-btn-opacity
- * @cssprop --typo3-modal-close-btn-color-hover
  */
 @customElement('typo3-modal')
 export class Typo3Modal extends LitElement {
