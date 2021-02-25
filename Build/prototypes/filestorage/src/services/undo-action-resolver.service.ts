@@ -62,8 +62,6 @@ export class UndoActionResolverService {
         return this.getUndoCopyAction(action, ajaxResponse.response);
       case fromFileActions.ADD_FOLDER:
         return this.getUndoAddFolderAction(action, ajaxResponse.response);
-      case fromFileActions.UPLOAD_FILES:
-        return this.getUndoUploadFilesAction(action, ajaxResponse.response);
     }
   }
 
@@ -168,20 +166,6 @@ export class UndoActionResolverService {
           extractStorageFromIdentifier(parentIdentifier) + newFolderIdentifier;
 
         data['data[delete][' + index + '][data]'] = newIdentifier;
-      }
-    );
-
-    return new fromFileActions.UndoFilesAction(data);
-  }
-
-  private getUndoUploadFilesAction(
-    action: fromFileActions.UploadFiles,
-    uploadFilesResponse: UploadFilesResponse
-  ): fromFileActions.UndoFilesAction {
-    const data: { [key: string]: string } = {};
-    uploadFilesResponse.upload.forEach(
-      (fileResponseItem: FileResponseItem, index: number) => {
-        data['data[delete][' + index + '][data]'] = fileResponseItem.id;
       }
     );
 

@@ -15,6 +15,7 @@ import { Action } from 'redux';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { createSelector } from 'reselect';
 import { RootState } from './index';
+import { ConflictFileDto } from '../../../../shared/src/types/conflict-file-dto';
 
 export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
@@ -373,7 +374,7 @@ export class UploadFilesFailure implements Action {
 
 export class UploadFilesConflicts implements Action {
   readonly type = UPLOAD_FILES_CONFLICTS;
-  constructor(public files: File[], public targetIdentifier: string) {}
+  constructor(public files: ConflictFileDto[], public node: Typo3Node) {}
 }
 
 export class MoveFiles implements Action {

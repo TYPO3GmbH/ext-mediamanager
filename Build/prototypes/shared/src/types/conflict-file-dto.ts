@@ -11,10 +11,27 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import '../../prototypes/top';
-import '../../packages/alert/src/typo3-alert';
-import '../../packages/button/src/typo3-button';
-import '../../packages/formfield/src/typo3-formfield';
-import '../../packages/modal/src/typo3-modal';
-import '../../packages/overlay/src/typo3-overlay';
-import '../../prototypes/top/src/typo3-files-override-modal-content';
+export interface Typo3File {
+  name: string;
+  id: number;
+  uid: number;
+  icon: string;
+  extension: string;
+  permissions: { read: boolean; write: boolean };
+  size: number;
+  date: string;
+
+  mtime: Date;
+  thumbUrl: string;
+  type: string;
+}
+
+export interface ConflictFileDto {
+  original: Typo3File;
+  data: {
+    name: string;
+    lastModified: number;
+    size: number;
+  };
+  file?: File;
+}

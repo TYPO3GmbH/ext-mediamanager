@@ -17,6 +17,7 @@ import * as fromActions from '../ducks/file-actions';
 import {
   DownloadFilesFailure,
   DownloadFilesSuccess,
+  UploadFiles,
 } from '../ducks/file-actions';
 import {
   catchError,
@@ -43,6 +44,10 @@ import { ApiService } from '../../services/api.service';
 import { SeverityEnum } from '../../../../shared/src/types/Severity';
 import * as _ from 'lodash-es';
 import { ModalVariant } from '../../../../../packages/modal/src/lib/modal-variant';
+import {
+  ConflictFileDto,
+  Typo3File,
+} from '../../../../shared/src/types/conflict-file-dto';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -224,18 +229,27 @@ export const uploadFiles = (
           fileTarget: targetIdentifier,
         });
 
-        return dependencies.apiService.getJSON<{ name?: string }[]>(url);
+        return dependencies.apiService.getJSON<Typo3File>(url);
       });
 
       return forkJoin(fileExistsChecks).pipe(
         map(results => {
           const uploadableFiles: File[] = [];
-          const conflictFiles: File[] = [];
+          const conflictFiles: ConflictFileDto[] = [];
 
           files.forEach(file => {
-            const fileExists = _.some(results, { name: file.name });
-            if (fileExists) {
-              conflictFiles.push(file);
+            const existingFile = _.find(results, { name: file.name });
+            if (existingFile) {
+              const conflictFileDto: ConflictFileDto = {
+                original: existingFile,
+                file: file,
+                data: {
+                  name: file.name,
+                  lastModified: file.lastModified,
+                  size: file.size,
+                },
+              };
+              conflictFiles.push(conflictFileDto);
             } else {
               uploadableFiles.push(file);
             }
@@ -244,7 +258,7 @@ export const uploadFiles = (
           return {
             uploadableFiles: uploadableFiles,
             conflictFiles: conflictFiles,
-            targetIdentifier: targetIdentifier,
+            target: action.node,
           };
         })
       );
@@ -254,7 +268,7 @@ export const uploadFiles = (
       data.uploadableFiles.forEach((file, i) => {
         formData.append(
           'data[upload][' + i + '][target]',
-          data.targetIdentifier
+          data.target.identifier
         );
         formData.append('data[upload][' + i + '][data]', i.toString());
         formData.append('upload_' + i, file);
@@ -274,7 +288,7 @@ export const uploadFiles = (
               actions.push(
                 new fromActions.UploadFilesConflicts(
                   data.conflictFiles,
-                  data.targetIdentifier
+                  data.target
                 )
               );
             }
@@ -288,11 +302,60 @@ export const uploadFiles = (
 };
 
 export const uploadFilesConflict = (
-  action$: ActionsObservable<fromActions.UploadFilesConflicts>
+  action$: ActionsObservable<fromActions.UploadFilesConflicts>,
+  state$: StateObservable<RootState>,
+  dependencies: { modalService: ModalService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.UPLOAD_FILES_CONFLICTS).pipe(
     switchMap(action => {
-      const files: File[] = [];
+      const modalData: ModalData = {
+        type: ModalType.HTML,
+        isForm: true,
+        headline: 'Some files exist already',
+        content: `<typo3-files-override-modal-content files='${JSON.stringify(
+          action.files
+        )}'></typo3-files-override-modal-content>`,
+        dismissible: true,
+        variant: ModalVariant.warning,
+        modalButtons: [
+          {
+            label: translate('button.cancel'),
+            color: 'default',
+            action: 'typo3-files-conflict-cancel',
+          },
+          {
+            label: 'Continue with selected action',
+            color: 'warning',
+            action: 'typo3-files-conflict-confirm',
+          },
+        ],
+      };
+
+      return dependencies.modalService.openModal(modalData).pipe(
+        tap(data => console.log(data)),
+        filter(data => 'typo3-files-conflict-confirm' === data.actionName),
+        mergeMap(data => {
+          const formData = data.actionData as Record<string, string>;
+          const overrideAction = formData['data[all]'];
+
+          const uploadActions: UploadFiles[] = action.files
+            .map(conflictFile => {
+              const overrideFileAction =
+                formData[`data[file][${conflictFile.file?.name}]`] ||
+                overrideAction;
+              if (overrideFileAction === 'cancel') {
+                return null;
+              }
+              return new UploadFiles(
+                [conflictFile.file],
+                action.node,
+                overrideFileAction
+              );
+            })
+            .filter(action => null !== action);
+          return uploadActions;
+        })
+      );
     })
   );
 };
