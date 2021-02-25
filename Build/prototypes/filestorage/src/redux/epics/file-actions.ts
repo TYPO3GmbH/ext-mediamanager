@@ -269,7 +269,10 @@ export const uploadFiles = (
 
             if (data.conflictFiles.length > 0) {
               actions.push(
-                new fromActions.UploadFilesConflicts(data.conflictFiles)
+                new fromActions.UploadFilesConflicts(
+                  data.conflictFiles,
+                  data.targetIdentifier
+                )
               );
             }
 
@@ -277,6 +280,16 @@ export const uploadFiles = (
           }),
           catchError(() => of(new fromActions.UploadFilesFailure()))
         );
+    })
+  );
+};
+
+export const uploadFilesConflict = (
+  action$: ActionsObservable<fromActions.UploadFilesConflicts>
+): Observable<Action> => {
+  return action$.ofType(fromActions.UPLOAD_FILES_CONFLICTS).pipe(
+    switchMap(action => {
+      const files: File[] = [];
     })
   );
 };
@@ -717,5 +730,6 @@ export const fileActions = [
   showFileInfo,
   undoFileAction,
   uploadFiles,
+  uploadFilesConflict,
   showFile,
 ];

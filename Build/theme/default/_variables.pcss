@@ -12,11 +12,53 @@
     --typo3-global-gray-lighter: #eee;
 
     --typo3-global-brand-primary: #0078e6;
+    --typo3-global-brand-primary-text-color: #fff;
+    --typo3-global-brand-primary-hover: #005db3;
+    --typo3-global-brand-primary-border-color: #006bcc;
+    --typo3-global-brand-primary-border-color-active: #004b8f;
+    --typo3-global-brand-primary-border-color-hover: #004b8f;
+
     --typo3-global-brand-secondary: #6c757d;
-    --typo3-global-brand-success: #79a548;
-    --typo3-global-brand-info: #6daae0;
+    --typo3-global-brand-secondary-text-color: #fff;
+    --typo3-global-brand-secondary-hover: #545b62;
+    --typo3-global-brand-secondary-border-color: var(--typo3-global-brand-secondary);
+    --typo3-global-brand-secondary-border-color-active: #50565c;
+    --typo3-global-brand-secondary-border-color-hover: #50565c;
+
     --typo3-global-brand-warning: #e8a33d;
+    --typo3-global-brand-warning-text-color: #fff;
+    --typo3-global-brand-warning-hover: #d88b1a;
+    --typo3-global-brand-warning-border-color: #e59826;
+    --typo3-global-brand-warning-border-color-active: #b87716;
+    --typo3-global-brand-warning-border-color-hover: #b87716;
+
+    --typo3-global-brand-success: #79a548;
+    --typo3-global-brand-success-text-color: #fff;
+    --typo3-global-brand-success-hover: #5f8139;
+    --typo3-global-brand-success-border-color-hover: #4d682d;
+    --typo3-global-brand-success-border-color-active: #8bb759;
+    --typo3-global-brand-success-border-color: #6c9340;
+
     --typo3-global-brand-danger: #c83c3c;
+    --typo3-global-brand-danger-text-color: #fff;
+    --typo3-global-brand-danger-hover: #a32e2e;
+    --typo3-global-brand-danger-border-color: #b73434;
+    --typo3-global-brand-danger-border-color-active: #872626;
+    --typo3-global-brand-danger-border-color-hover: #872626;
+
+    --typo3-global-brand-info: #6daae0;
+    --typo3-global-brand-info-text-color: #fff;
+    --typo3-global-brand-info-hover: #4391d7;
+    --typo3-global-brand-info-border-color: #589edc;
+    --typo3-global-brand-info-border-color-active: #2b80cc;
+    --typo3-global-brand-info-border-color-hover: #2b80cc;
+
+    --typo3-global-brand-default-text-color: var(--typo3-global-gray-dark);
+    --typo3-global-brand-default: var(--typo3-global-gray-lighter);
+    --typo3-global-brand-default-hover: #d4d4d4;
+    --typo3-global-brand-default-border-color: #bbb;
+    --typo3-global-brand-default-border-color-hover: #9c9c9c;
+    --typo3-global-brand-default-border-color-active: #9c9c9c;
 
     /* Defaults */
     --typo3-global-default-border-radius: 0.125rem;
@@ -25,57 +67,7 @@
     --typo3-global-default-gap: 0.25rem;
 
     /* Buttons */
-    --typo3-global-btn-default-color: var(--typo3-global-gray-dark);
-    --typo3-global-btn-default-bg: var(--typo3-global-gray-lighter);
-    --typo3-global-btn-default-border: #bbb;
-    --typo3-global-btn-default-bg-hover: #d4d4d4;
-    --typo3-global-btn-default-border-hover: #9c9c9c;
-    --typo3-global-btn-default-border-active: #9c9c9c;
-
-    --typo3-global-btn-primary-color: #fff;
-    --typo3-global-btn-primary-bg: var(--typo3-global-brand-primary);
-    --typo3-global-btn-primary-border: #006bcc;
-    --typo3-global-btn-primary-bg-hover: #005db3;
-    --typo3-global-btn-primary-border-hover: #004b8f;
-    --typo3-global-btn-primary-border-active: #004b8f;
-
-    --typo3-global-btn-success-color: #fff;
-    --typo3-global-btn-success-bg: var(--typo3-global-brand-success);
-    --typo3-global-btn-success-border: #6c9340;
-    --typo3-global-btn-success-bg-hover: #5f8139;
-    --typo3-global-btn-sucess-border-hover: #4d682d;
-    --typo3-global-btn-success-border-active: #8bb759;
-
-
-    --typo3-global-btn-info-color: #fff;
-    --typo3-global-btn-info-bg: var(--typo3-global-brand-info);
-    --typo3-global-btn-info-border: #589edc;
-    --typo3-global-btn-info-bg-hover: #4391d7;
-    --typo3-global-btn-info-border-hover: #2b80cc;
-    --typo3-global-btn-info-border-active: #2b80cc;
-
-    --typo3-global-btn-warning-color: #fff;
-    --typo3-global-btn-warning-bg: var(--typo3-global-brand-warning);
-    --typo3-global-btn-warning-border: #e59826;
-    --typo3-global-btn-warning-bg-hover: #d88b1a;
-    --typo3-global-btn-warning-border-hover: #b87716;
-    --typo3-global-btn-warning-border-active: #b87716;
-
-    --typo3-global-btn-danger-color: #fff;
-    --typo3-global-btn-danger-bg: var(--typo3-global-brand-danger);
-    --typo3-global-btn-danger-border: #b73434;
-    --typo3-global-btn-danger-bg-hover: #a32e2e;
-    --typo3-global-btn-danger-border-hover: #872626;
-    --typo3-global-btn-danger-border-active: #872626;
-
-    --typo3-global-btn-secondary-color: #fff;
-    --typo3-global-btn-secondary-bg: var(--typo3-global-brand-secondary);
-    --typo3-global-btn-secondary-border: var(--typo3-global-brand-secondary);
-    --typo3-global-btn-secondary-bg-hover: #545b62;
-    --typo3-global-btn-secondary-border-hover: #50565c;
-    --typo3-global-btn-secondary-border-active: #50565c;
-
-    --typo3-global-btn-border-radius: var(--typo3-global-default-border-radius);
+    --typo3-global-btn-border-radius: var(--typo3-global-default-border-color-radius);
     --typo3-global-btn-font-size: var(--typo3-global-font-size-default);
     --typo3-global-btn-line-height: 1.4;
     --typo3-global-btn-padding: 0.375rem;
@@ -96,23 +88,23 @@
     --typo3-global-badge-size: 1.375rem;
     --typo3-global-badge-font-size: var(--typo3-global-font-size-default);
 
-    --typo3-global-badge-default-color: var(--typo3-global-btn-default-color);
-    --typo3-global-badge-default-bg: var(--typo3-global-btn-default-bg);
+    --typo3-global-badge-default-color: var(--typo3-global-brand-default-text-color);
+    --typo3-global-badge-default-bg: var(--typo3-global-brand-default);
 
-    --typo3-global-badge-primary-color: var(--typo3-global-btn-primary-color);
-    --typo3-global-badge-primary-bg: var(--typo3-global-btn-primary-bg);
+    --typo3-global-badge-primary-color: var(--typo3-global-brand-primary-text-color);
+    --typo3-global-badge-primary-bg: var(--typo3-global-brand-primary);
 
-    --typo3-global-badge-success-color: var(--typo3-global-btn-success-color);
-    --typo3-global-badge-success-bg: var(--typo3-global-btn-success-bg);
+    --typo3-global-badge-success-color: var(--typo3-global-brand-success-text-color);
+    --typo3-global-badge-success-bg: var(--typo3-global-brand-success);
 
-    --typo3-global-badge-info-color: var(--typo3-global-btn-info-color);
-    --typo3-global-badge-info-bg: var(--typo3-global-btn-info-bg);
+    --typo3-global-badge-info-color: var(--typo3-global-brand-info-text-color);
+    --typo3-global-badge-info-bg: var(--typo3-global-brand-info);
 
-    --typo3-global-badge-warning-color: var(--typo3-global-btn-warning-color);
-    --typo3-global-badge-warning-bg: var(--typo3-global-btn-warning-bg);
+    --typo3-global-badge-warning-color: var(--typo3-global-brand-warning-text-color);
+    --typo3-global-badge-warning-bg: var(--typo3-global-brand-warning);
 
-    --typo3-global-badge-danger-color: var(--typo3-global-btn-danger-color);
-    --typo3-global-badge-danger-bg: var(--typo3-global-btn-danger-bg);
+    --typo3-global-badge-danger-color: var(--typo3-global-brand-danger-text-color);
+    --typo3-global-badge-danger-bg: var(--typo3-global-brand-danger);
 
 
     /* SplitPane */
@@ -161,8 +153,7 @@
     --typo3-global-modal-border-width: var(--typo3-global-default-border-width);
     --typo3-global-modal-border-radius: var(--typo3-global-default-border-radius);
 
-    --typo3-global-modal-close-btn-font-size: 1rem;
-    --typo3-global-modal-close-btn-font-weight: var(--typo3-global-font-weight-medium);
+    --typo3-global-modal-close-btn-font-size: 0.625rem;
     --typo3-global-modal-close-btn-line-height: 1.2rem;
     --typo3-global-modal-close-btn-color: #000;
     --typo3-global-modal-close-btn-opacity: 0.5;

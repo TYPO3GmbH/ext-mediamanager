@@ -22,6 +22,7 @@ import {
 
 import styles from './typo3-modal.pcss';
 import themeStyles from '../../../theme/index.pcss';
+import { ModalVariant } from './lib/modal-variant';
 
 /**
  * @fires typo3-modal-open - Dispatched when modal is opened
@@ -50,6 +51,12 @@ import themeStyles from '../../../theme/index.pcss';
  */
 @customElement('typo3-modal')
 export class Typo3Modal extends LitElement {
+  /**
+   * @type String
+   */
+  @property({ type: String, reflect: true }) variant: ModalVariant =
+    ModalVariant.info;
+
   /**
    * @type Boolean
    */
@@ -91,12 +98,24 @@ export class Typo3Modal extends LitElement {
     return html`
       <div class="header">
         ${this.headline
-          ? html` <h5 slot="headline">${this.headline}</h5> `
+          ? html`
+              <h4 class="modal-title" slot="headline">${this.headline}</h4>
+            `
           : html``}
         ${this.dismissible
           ? html`
-              <button id="btn-close" aria-label="Close" @click=${this.close}>
-                ✖️
+              <button
+                class="btn-close"
+                aria-label="Close"
+                @click="${this.close}"
+              >
+                <span class="icon-actions-close" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                    <path
+                      d="M11.9 5.5L9.4 8l2.5 2.5c.2.2.2.5 0 .7l-.7.7c-.2.2-.5.2-.7 0L8 9.4l-2.5 2.5c-.2.2-.5.2-.7 0l-.7-.7c-.2-.2-.2-.5 0-.7L6.6 8 4.1 5.5c-.2-.2-.2-.5 0-.7l.7-.7c.2-.2.5-.2.7 0L8 6.6l2.5-2.5c.2-.2.5-.2.7 0l.7.7c.2.2.2.5 0 .7z"
+                    ></path>
+                  </svg>
+                </span>
               </button>
             `
           : html``}

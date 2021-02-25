@@ -373,7 +373,7 @@ export class UploadFilesFailure implements Action {
 
 export class UploadFilesConflicts implements Action {
   readonly type = UPLOAD_FILES_CONFLICTS;
-  constructor(public files: File[]) {}
+  constructor(public files: File[], public targetIdentifier: string) {}
 }
 
 export class MoveFiles implements Action {

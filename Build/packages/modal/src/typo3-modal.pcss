@@ -23,7 +23,7 @@
 }
 
 .modal {
-    width: var(--typo3-modal-width, auto);
+    width: var(--typo3-modal-width, 37.5rem);
     max-height: calc(100vh - 2.5rem);
     max-width: calc(100vw - 2.5rem);
     position: relative;
@@ -39,43 +39,67 @@
     z-index: 5002;
 }
 
-#btn-close {
-    all: unset;
-    padding: var(--typo3-modal-header-padding, var(--typo3-global-modal-padding));
-    margin: -1rem -1rem -1rem auto;
-    float: right;
-    border-radius: 0;
-    font-size: var(--typo3-modal-close-btn-font-size, var(--typo3-global-modal-close-btn-font-size));
-    font-weight: var(--typo3-modal-close-btn-font-weight, var(--typo3-global-modal-close-btn-font-weight));
-    line-height: var(--typo3-modal-close-btn-line-height, var(--typo3-global-modal-close-btn-line-height));
-    color: var(--typo3-modal-close-btn-color, var(--typo3-global-modal-close-btn-color));
-    opacity: var(--typo3-modal-close-btn-color, .5);
-    text-shadow: 0 1px 0 #fff;
-    background-color: transparent;
+.btn-close {
+    background: none;
     border: none;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    text-shadow: rgba(0, 0, 0, .5) 0 0 .1875rem;
+    opacity: .5;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     cursor: pointer;
+}
 
-    :hover {
-        text-decoration: none;
-        opacity: var(--typo3-modal-close-btn-color-hover, .75);
-    }
+.btn-close:hover {
+    box-shadow: none;
+    outline: 0;
+    background: 0 0;
+    opacity: 1;
+}
+
+.btn-close .icon-actions-close {
+    height: 1rem;
+    width: 1rem;
+    line-height: 1rem;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: -22%;
+}
+
+.btn-close .icon-actions-close svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: translate3d(0,0,0);
+    fill: currentColor;
+}
+
+.btn-close:hover {
+    text-decoration: none;
+    opacity: var(--typo3-modal-close-btn-color-hover, .75);
 }
 
 .header {
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
+    flex-shrink: 0;
+    align-items: center;
     padding: var(--typo3-modal-header-padding, var(--typo3-global-modal-padding));
     background-color: var(--typo3-global-gray-lighter);
-    border-bottom: var(--typo3-global-modal-border-width) solid var(--typo3-global-gray-light);
+    border-bottom: var(--typo3-global-modal-border-width) solid var(--typo3-global-gray-lighter);
+    color: var(--typo3-modal-header-color, #fff);
 }
 
-.header h5 {
-    margin-top: 0;
-    margin-bottom: 0;
+.modal-title {
+    font-size: .9375rem;
+    margin: 0;
     line-height: 1.5;
     font-weight: 500;
-    font-size: 0.85rem;
 }
 
 .content {
@@ -87,9 +111,33 @@
 .footer {
     display: flex;
     align-items: center;
-    padding: var(--typo3-modal-footer-padding, var(--typo3-global-modal-padding));
     flex-wrap: wrap;
     gap: var(--typo3-global-default-gap);
     flex-grow: 1;
     justify-content: flex-end;
+    border-top: 1px solid #d7d7d7;
+    border-bottom-right-radius: calc(.125rem - 1px);
+    border-bottom-left-radius: calc(.125rem - 1px);
+}
+
+.header, .footer {
+    padding: var(--typo3-modal-header-padding, var(--typo3-global-modal-padding));
+}
+
+:host([variant='warning']) .header {
+    background-color: var(--typo3-modal-header-warning-background-color, var(--typo3-global-brand-warning));
+    border-bottom-color: var(--typo3-modal-header-warning-border-color, var(--typo3-global-brand-warning-border-color));
+    color: var(--typo3-modal-header-warning-text-color, var(--typo3-global-brand-warning-text-color));
+}
+
+:host([variant='danger']) .header {
+    background-color: var(--typo3-modal-header-danger-background-color, var(--typo3-global-brand-danger));
+    border-bottom-color: var(--typo3-modal-header-danger-border-color, var(--typo3-global-brand-danger-border-color));
+    color: var(--typo3-modal-header-danger-text-color, var(--typo3-global-brand-danger-text-color));
+}
+
+:host([variant='info']) .header {
+    background-color: var(--typo3-modal-header-info-background-color, var(--typo3-global-brand-info));
+    border-bottom-color: var(--typo3-modal-header-info-border-color, var(--typo3-global-brand-info-border-color));
+    color: var(--typo3-modal-header-info-text-color, var(--typo3-global-brand-info-text-color));
 }
