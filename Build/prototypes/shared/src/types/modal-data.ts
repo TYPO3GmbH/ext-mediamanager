@@ -12,6 +12,7 @@
  */
 
 import { Color } from '../../../../packages/button/src/typo3-base-button';
+import { ModalVariant } from '../../../../packages/modal/src/lib/modal-variant';
 
 export interface ModalButton {
   label: string;
@@ -25,9 +26,11 @@ export enum ModalType {
 }
 
 export interface ModalData {
+  variant?: ModalVariant;
   isForm?: boolean;
   type: ModalType;
   headline: string;
   content: string;
   modalButtons?: ModalButton[];
+  dismissible?: boolean;
 }

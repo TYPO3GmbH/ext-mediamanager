@@ -101,6 +101,8 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
         ?open="${this.state.modal.open}"
         @typo3-modal-close="${this._onModalClose}"
         headline="${this.state.modal.data?.headline}"
+        variant="${this.state.modal.data?.variant}"
+        ?dismissible="${this.state.modal.data?.dismissible}"
       >
         ${this.renderModalContent} ${this.renderModalButtons}
       </typo3-modal>

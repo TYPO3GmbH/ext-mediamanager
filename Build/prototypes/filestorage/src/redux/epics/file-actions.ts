@@ -42,6 +42,7 @@ import { openAsLink } from '../../lib/utils';
 import { ApiService } from '../../services/api.service';
 import { SeverityEnum } from '../../../../shared/src/types/Severity';
 import * as _ from 'lodash-es';
+import { ModalVariant } from '../../../../../packages/modal/src/lib/modal-variant';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -90,6 +91,8 @@ export const confirmDeleteFiles = (
       const modalData = {
         ...action.modalData,
         type: ModalType.CONFIRM,
+        variant: ModalVariant.warning,
+        dismissible: true,
         modalButtons: [
           {
             label: translate('button.cancel'),
@@ -98,7 +101,7 @@ export const confirmDeleteFiles = (
           },
           {
             label: translate('button.delete'),
-            color: 'danger',
+            color: 'warning',
             action: 'typo3-confirm-delete',
           },
         ],
