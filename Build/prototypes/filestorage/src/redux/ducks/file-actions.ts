@@ -223,6 +223,11 @@ export const fileActionsReducer = (
         ...state,
         isUploadingFiles: true,
       };
+    case UPLOAD_FILES_CONFLICTS:
+      return {
+        ...state,
+        isUploadingFiles: false,
+      };
     case UPLOAD_FILES_SUCCESS:
     case UPLOAD_FILES_FAILURE:
       return {

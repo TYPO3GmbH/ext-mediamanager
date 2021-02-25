@@ -17,7 +17,6 @@ import * as fromActions from '../ducks/file-actions';
 import {
   DownloadFilesFailure,
   DownloadFilesSuccess,
-  UploadFiles,
 } from '../ducks/file-actions';
 import {
   catchError,
@@ -31,7 +30,7 @@ import {
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
 import * as fromGlobal from '../ducks/global-actions';
-import { EMPTY, forkJoin, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
@@ -42,12 +41,11 @@ import { ModalService } from '../../services/modal.service';
 import { openAsLink } from '../../lib/utils';
 import { ApiService } from '../../services/api.service';
 import { SeverityEnum } from '../../../../shared/src/types/Severity';
-import * as _ from 'lodash-es';
 import { ModalVariant } from '../../../../../packages/modal/src/lib/modal-variant';
 import {
-  ConflictFileDto,
-  Typo3File,
-} from '../../../../shared/src/types/conflict-file-dto';
+  uploadFiles,
+  uploadFilesConflict,
+} from './file-actions/upload-file-actions';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -202,160 +200,6 @@ export const addFolder = (
           ),
           catchError(() => of(new fromActions.AddFolderFailure()))
         );
-    })
-  );
-};
-
-export const uploadFiles = (
-  action$: ActionsObservable<fromActions.UploadFiles>,
-  state$: StateObservable<RootState>,
-  dependencies: {
-    undoActionResolverService: UndoActionResolverService;
-    apiService: ApiService;
-  }
-): Observable<Action> => {
-  return action$.ofType(fromActions.UPLOAD_FILES).pipe(
-    switchMap(action => {
-      const files: File[] = [];
-      const targetIdentifier = action.node.identifier;
-
-      for (let i = 0; i < action.dataTransfer.files.length; i++) {
-        files.push(action.dataTransfer.files.item(i) as File);
-      }
-
-      const fileExistsChecks = files.map(file => {
-        const url = getUrl('fileExistsUrl', {
-          fileName: file.name,
-          fileTarget: targetIdentifier,
-        });
-
-        return dependencies.apiService.getJSON<Typo3File>(url);
-      });
-
-      return forkJoin(fileExistsChecks).pipe(
-        map(results => {
-          const uploadableFiles: File[] = [];
-          const conflictFiles: ConflictFileDto[] = [];
-
-          files.forEach(file => {
-            const existingFile = _.find(results, { name: file.name });
-            if (existingFile) {
-              const conflictFileDto: ConflictFileDto = {
-                original: existingFile,
-                file: file,
-                data: {
-                  name: file.name,
-                  lastModified: file.lastModified,
-                  size: file.size,
-                },
-              };
-              conflictFiles.push(conflictFileDto);
-            } else {
-              uploadableFiles.push(file);
-            }
-          });
-
-          return {
-            uploadableFiles: uploadableFiles,
-            conflictFiles: conflictFiles,
-            target: action.node,
-          };
-        })
-      );
-    }),
-    switchMap(data => {
-      const formData = new FormData();
-      data.uploadableFiles.forEach((file, i) => {
-        formData.append(
-          'data[upload][' + i + '][target]',
-          data.target.identifier
-        );
-        formData.append('data[upload][' + i + '][data]', i.toString());
-        formData.append('upload_' + i, file);
-      });
-
-      return dependencies.apiService
-        .postFormData(getUrl('fileActionUrl'), formData)
-        .pipe(
-          mergeMap(() => {
-            const actions: Action[] = [
-              new fromActions.UploadFilesSuccess(
-                translate('message.header.filesUploaded')
-              ),
-            ];
-
-            if (data.conflictFiles.length > 0) {
-              actions.push(
-                new fromActions.UploadFilesConflicts(
-                  data.conflictFiles,
-                  data.target
-                )
-              );
-            }
-
-            return actions;
-          }),
-          catchError(() => of(new fromActions.UploadFilesFailure()))
-        );
-    })
-  );
-};
-
-export const uploadFilesConflict = (
-  action$: ActionsObservable<fromActions.UploadFilesConflicts>,
-  state$: StateObservable<RootState>,
-  dependencies: { modalService: ModalService }
-): Observable<Action> => {
-  return action$.ofType(fromActions.UPLOAD_FILES_CONFLICTS).pipe(
-    switchMap(action => {
-      const modalData: ModalData = {
-        type: ModalType.HTML,
-        isForm: true,
-        headline: 'Some files exist already',
-        content: `<typo3-files-override-modal-content files='${JSON.stringify(
-          action.files
-        )}'></typo3-files-override-modal-content>`,
-        dismissible: true,
-        variant: ModalVariant.warning,
-        modalButtons: [
-          {
-            label: translate('button.cancel'),
-            color: 'default',
-            action: 'typo3-files-conflict-cancel',
-          },
-          {
-            label: 'Continue with selected action',
-            color: 'warning',
-            action: 'typo3-files-conflict-confirm',
-          },
-        ],
-      };
-
-      return dependencies.modalService.openModal(modalData).pipe(
-        tap(data => console.log(data)),
-        filter(data => 'typo3-files-conflict-confirm' === data.actionName),
-        mergeMap(data => {
-          const formData = data.actionData as Record<string, string>;
-          const overrideAction = formData['data[all]'];
-
-          const uploadActions: UploadFiles[] = action.files
-            .map(conflictFile => {
-              const overrideFileAction =
-                formData[`data[file][${conflictFile.file?.name}]`] ||
-                overrideAction;
-              if (overrideFileAction === 'cancel') {
-                return null;
-              }
-              return new UploadFiles(
-                [conflictFile.file],
-                action.node,
-                overrideFileAction
-              );
-            })
-            .filter(action => null !== action);
-          return uploadActions;
-        })
-      );
     })
   );
 };
