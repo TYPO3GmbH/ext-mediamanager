@@ -35,15 +35,7 @@ import {
   SHOW_SNACKBAR_MESSAGE_TYPE,
   ShowSnackbarMessage,
 } from '../../shared/src/types/show-snackbar-message';
-import {
-  SnackbarButton,
-  SnackbarData,
-} from '../../shared/src/types/snackbar-data';
 import { Typo3Snackbar } from '../../../packages/snackbar/src/typo3-snackbar';
-import { ifDefined } from 'lit-html/directives/if-defined';
-import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
-import { forEach } from 'lodash-es';
-import { ImmediateAction } from '../../shared/src/types/typo3-notification-action';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
