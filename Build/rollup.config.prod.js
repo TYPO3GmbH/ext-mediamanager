@@ -23,7 +23,7 @@ const baseConfig = createBasicConfig({
   // legacyBuild: true,
 
   // development mode creates a non-minified build for debugging or development
-  developmentMode: false,
+  developmentMode: true,
 
   // set to true to inject the service worker registration into your index.html
   injectServiceWorker: false,

@@ -24,7 +24,7 @@ class BackendControllerHook
 {
     public function addJavaScript(): void
     {
-        $this->getPageRenderer()->addBodyContent('<typo3-top-container></typo3-top-container>');
+        $this->getPageRenderer()->addBodyContent('<typo3-top-container style="height:0"></typo3-top-container>');
         $this->getPageRenderer()->addJsFile('EXT:mediamanager/Resources/Public/JavaScript/top_es.js');
     }
 

@@ -35,7 +35,6 @@ import {
   SHOW_SNACKBAR_MESSAGE_TYPE,
   ShowSnackbarMessage,
 } from '../../shared/src/types/show-snackbar-message';
-import { Typo3Snackbar } from '../../../packages/snackbar/src/typo3-snackbar';
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
@@ -44,7 +43,10 @@ export class Typo3TopContainer extends connect(store)(LitElement) {
   @internalProperty() state!: RootState;
 
   @query('typo3-modal') modal!: Typo3Modal;
-  @query('typo3-snackbar') snackbar!: Typo3Snackbar;
+
+  createRenderRoot(): Element | ShadowRoot {
+    return this;
+  }
 
   stateChanged(state: RootState): void {
     this.state = state;
