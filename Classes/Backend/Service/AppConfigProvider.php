@@ -124,6 +124,8 @@ class AppConfigProvider implements AppConfigProviderInterface
             'folder_browser.title' => $languageService->sL('LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf:folder_browser.title'),
             'folder_browser.fileNotAllowed' => $languageService->sL('LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf:folder_browser.fileNotAllowed'),
             'folder_browser.folderAdded' => $languageService->sL('LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf:folder_browser.folderAdded'),
+            'file_upload.existingfiles.title' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:file_upload.existingfiles.title'),
+            'file_upload.button.continue' => $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:file_upload.button.continue'),
         ];
     }
 

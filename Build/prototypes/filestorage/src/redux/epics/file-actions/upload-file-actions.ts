@@ -163,7 +163,7 @@ export const uploadFilesConflict = (
       const modalData: ModalData = {
         type: ModalType.HTML,
         isForm: true,
-        headline: 'Some files exist already',
+        headline: translate('file_upload.existingfiles.title'),
         content: `<typo3-files-override-modal-content files='${JSON.stringify(
           action.files
         )}'></typo3-files-override-modal-content>`,
@@ -176,7 +176,7 @@ export const uploadFilesConflict = (
             action: 'typo3-files-conflict-cancel',
           },
           {
-            label: 'Continue with selected action',
+            label: translate('file_upload.button.continue'),
             color: 'warning',
             action: 'typo3-files-conflict-confirm',
           },
