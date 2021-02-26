@@ -23,7 +23,7 @@ const baseConfig = createBasicConfig({
   // legacyBuild: true,
 
   // development mode creates a non-minified build for debugging or development
-  developmentMode: true,
+  developmentMode: false,
 
   // set to true to inject the service worker registration into your index.html
   injectServiceWorker: false,
@@ -42,7 +42,7 @@ const plugins = [
   }),
   commonjs(),
   injectProcessEnv({
-    NODE_ENV: 'development',
+    NODE_ENV: 'production',
   }),
 ];
 
@@ -52,7 +52,7 @@ export default [
   merge(baseConfig, {
     input: './bundle/filestorage/index.ts',
     output: {
-      sourcemap: true,
+      sourcemap: false,
       entryFileNames: 'es.js',
     },
   }),
