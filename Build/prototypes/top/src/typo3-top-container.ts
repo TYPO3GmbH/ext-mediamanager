@@ -19,8 +19,6 @@ import {
   query,
   TemplateResult,
 } from 'lit-element';
-import themeStyles from '../../../theme/index.pcss';
-import styles from './typo3-top-container.pcss';
 import { connect } from 'pwa-helpers';
 import { store } from './redux/store';
 import * as fromModal from './redux/ducks/modal';
@@ -38,8 +36,6 @@ import {
 
 @customElement('typo3-top-container')
 export class Typo3TopContainer extends connect(store)(LitElement) {
-  public static styles = [themeStyles, styles];
-
   @internalProperty() state!: RootState;
 
   @query('typo3-modal') modal!: Typo3Modal;
