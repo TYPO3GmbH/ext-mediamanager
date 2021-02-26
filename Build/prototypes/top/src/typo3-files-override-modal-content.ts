@@ -20,6 +20,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { ConflictFileDto } from '../../shared/src/types/conflict-file-dto';
+import { FileSizeHelper } from '../../shared/src/lib/file-size-helper';
 
 @customElement('typo3-files-override-modal-content')
 export class Typo3FilesOverrideModalContent extends LitElement {
@@ -57,7 +58,7 @@ export class Typo3FilesOverrideModalContent extends LitElement {
             <select
               class="form-control t3js-actions-all"
               name="data[all]"
-              @change="${this.onBulkChange}"
+              @change="${this.onBulkActionChange}"
             >
               <option value="">
                 ${this.trans('file_upload.actions.all.empty')}
@@ -83,8 +84,16 @@ export class Typo3FilesOverrideModalContent extends LitElement {
       file => html`
         <tr>
           <td><img src="${file.original.thumbUrl}" style="height: 40px;" /></td>
-          <td>${file.original.name} (82.0 KB)<br />1970-01-19 17:24</td>
-          <td>${file.data.name} (42.1 KB)<br />2020-12-18 18:44</td>
+          <td>
+            ${file.original.name}
+            (${FileSizeHelper.formatFileSize(file.original.size)})<br />1970-01-19
+            17:24
+          </td>
+          <td>
+            ${file.data.name}
+            (${FileSizeHelper.formatFileSize(file.data.size)})<br />2020-12-18
+            18:44
+          </td>
           <td>
             <typo3-formfield>
               <select
@@ -109,7 +118,7 @@ export class Typo3FilesOverrideModalContent extends LitElement {
     );
   }
 
-  protected onBulkChange(event: Event): void {
+  protected onBulkActionChange(event: Event): void {
     const inputElement = event.target as HTMLSelectElement;
     const bulkActionValue = inputElement.value;
     if (bulkActionValue === '') {
