@@ -37,6 +37,12 @@
     outline: 0;
     font-size: var(--typo3-modal-font-size, var(--typo3-global-modal-font-size));
     z-index: 5002;
+    transition: transform .3s ease-out;
+    transform: translate(0,-3.125rem);
+}
+
+.wrapper.open .modal{
+    transform: none;
 }
 
 .btn-close {
