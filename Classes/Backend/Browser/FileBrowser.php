@@ -76,6 +76,7 @@ class FileBrowser implements ElementBrowserInterface
 
         $backendUrls = [
             'fileActionUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_process'),
+            'fileExistsUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_exists'),
             'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_tree_fetchData', ['uid' => $storageUid]),
             'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
             'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),

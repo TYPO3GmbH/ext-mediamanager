@@ -21,6 +21,7 @@ import {
 } from 'lit-element';
 import { ConflictFileDto } from '../../shared/src/types/conflict-file-dto';
 import { FileSizeHelper } from '../../shared/src/lib/file-size-helper';
+import { DateHelper } from '../../shared/src/lib/date-helper';
 
 @customElement('typo3-files-override-modal-content')
 export class Typo3FilesOverrideModalContent extends LitElement {
@@ -51,30 +52,29 @@ export class Typo3FilesOverrideModalContent extends LitElement {
             </tbody>
           </table>
         </div>
-        <span class="form-inline">
-          <typo3-formfield
-            label="${this.trans('file_upload.actions.all.label')}"
+        <typo3-formfield
+          style="width: 100%"
+          label="${this.trans('file_upload.actions.all.label')}"
+        >
+          <select
+            class="form-control t3js-actions-all"
+            name="data[all]"
+            @change="${this.onBulkActionChange}"
           >
-            <select
-              class="form-control t3js-actions-all"
-              name="data[all]"
-              @change="${this.onBulkActionChange}"
-            >
-              <option value="">
-                ${this.trans('file_upload.actions.all.empty')}
-              </option>
-              <option value="cancel">
-                ${this.trans('file_upload.actions.all.skip')}
-              </option>
-              <option value="rename">
-                ${this.trans('file_upload.actions.all.rename')}
-              </option>
-              <option value="replace">
-                ${this.trans('file_upload.actions.all.override')}
-              </option>
-            </select>
-          </typo3-formfield>
-        </span>
+            <option value="">
+              ${this.trans('file_upload.actions.all.empty')}
+            </option>
+            <option value="cancel">
+              ${this.trans('file_upload.actions.all.skip')}
+            </option>
+            <option value="rename">
+              ${this.trans('file_upload.actions.all.rename')}
+            </option>
+            <option value="replace">
+              ${this.trans('file_upload.actions.all.override')}
+            </option>
+          </select>
+        </typo3-formfield>
       </form>
     `;
   }
@@ -86,13 +86,13 @@ export class Typo3FilesOverrideModalContent extends LitElement {
           <td><img src="${file.original.thumbUrl}" style="height: 40px;" /></td>
           <td>
             ${file.original.name}
-            (${FileSizeHelper.formatFileSize(file.original.size)})<br />1970-01-19
-            17:24
+            (${FileSizeHelper.formatFileSize(file.original.size)})<br />
+            ${DateHelper.formatDate(file.original.mtime * 1000)}
           </td>
           <td>
             ${file.data.name}
-            (${FileSizeHelper.formatFileSize(file.data.size)})<br />2020-12-18
-            18:44
+            (${FileSizeHelper.formatFileSize(file.data.size)})<br />
+            ${DateHelper.formatDate(file.data.lastModified)}
           </td>
           <td>
             <typo3-formfield>

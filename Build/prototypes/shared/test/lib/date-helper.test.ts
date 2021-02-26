@@ -11,27 +11,11 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-export interface Typo3File {
-  name: string;
-  id: number;
-  uid: number;
-  icon: string;
-  extension: string;
-  permissions: { read: boolean; write: boolean };
-  size: number;
-  date: string;
+import { expect } from '@open-wc/testing';
+import { DateHelper } from '../../src/lib/date-helper';
 
-  mtime: number;
-  thumbUrl: string;
-  type: string;
-}
-
-export interface ConflictFileDto {
-  original: Typo3File;
-  data: {
-    name: string;
-    lastModified: number;
-    size: number;
-  };
-  file?: File;
-}
+describe('DateHelper', () => {
+  it('can format milliseconds to a "YYYY-MM-DD HH:mm" formatted string', () => {
+    expect(DateHelper.formatDate(1614348935000)).to.be.eq('2021-02-26 15:15');
+  });
+});
