@@ -39,12 +39,13 @@ import {
   Typo3File,
 } from '../../../../../shared/src/types/conflict-file-dto';
 import * as _ from 'lodash-es';
+import { OverrideFileAction } from '../../../../../shared/src/types/override-file-action';
 
 function handleFilesUpload(
   files: File[],
   targetIdentifier: string,
   apiService: ApiService,
-  overrideMode?: string
+  overrideMode?: OverrideFileAction
 ): Observable<Action> {
   const formData = new FormData();
   files.forEach((file, i) => {
@@ -195,7 +196,7 @@ export const uploadFilesConflict = (
               formData[`data[file][${conflictFile.file?.name}]`] ||
               overrideAction;
 
-            if (overrideFileAction === 'cancel') {
+            if (overrideFileAction === OverrideFileAction.SKIP) {
               return null;
             }
             uploadActions.push(
@@ -203,7 +204,7 @@ export const uploadFilesConflict = (
                 [conflictFile.file as File],
                 action.node.identifier,
                 dependencies.apiService,
-                overrideFileAction
+                overrideFileAction as OverrideFileAction
               )
             );
           });
