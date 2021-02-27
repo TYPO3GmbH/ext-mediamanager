@@ -25,6 +25,8 @@ export type Color =
 export abstract class Typo3BaseButton extends LitElement {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  @property({ type: Boolean, reflect: true }) active = false;
+
   @property({ type: String }) label = '';
 
   @property({ type: Boolean, reflect: true, attribute: 'icon-right' })

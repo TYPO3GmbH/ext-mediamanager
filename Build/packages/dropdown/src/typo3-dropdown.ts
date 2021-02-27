@@ -45,6 +45,8 @@ export class Typo3Dropdown extends LitElement {
         fixed="true"
         ?multi="${this.multi}"
         ?forceGroupSelection="${this.multi}"
+        @typo3-menu-open="${this.onMenuOpen}"
+        @typo3-menu-close="${this.onMenuClose}"
       >
         <slot></slot>
       </typo3-menu>
@@ -52,9 +54,24 @@ export class Typo3Dropdown extends LitElement {
   }
 
   showDropdownMenu(): void {
-    if (this.buttonSlotElement) {
-      this.typo3Menu.anchor = this.buttonSlotElement.assignedNodes()[0] as HTMLElement;
+    if (this.buttonElement) {
+      this.typo3Menu.anchor = this.buttonElement;
     }
     this.typo3Menu.show();
+  }
+
+  onMenuOpen(): void {
+    this.buttonElement?.setAttribute('active', '');
+  }
+
+  onMenuClose(): void {
+    this.buttonElement?.removeAttribute('active');
+  }
+
+  get buttonElement(): HTMLElement | null {
+    if (this.buttonSlotElement) {
+      return this.buttonSlotElement.assignedNodes()[0] as HTMLElement;
+    }
+    return null;
   }
 }

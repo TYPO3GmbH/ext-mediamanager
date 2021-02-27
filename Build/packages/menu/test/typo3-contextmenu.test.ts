@@ -19,7 +19,6 @@ import {
   oneEvent,
 } from '@open-wc/testing';
 import '../src/typo3-context-menu.js';
-import '../src/typo3-menu';
 import { Typo3ContextMenu } from '../src/typo3-context-menu';
 
 describe('Typo3ContextMenu', () => {

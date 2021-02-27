@@ -14,6 +14,10 @@
 import { MenuBase } from '@material/mwc-menu/mwc-menu-base';
 import { customElement } from 'lit-element';
 
+/**
+ * @fires typo3-menu-open - Dispatched when menu is opened
+ * @fires typo3-menu-close - Dispatched when menu is closed
+ */
 @customElement('typo3-menu')
 export class Typo3Menu extends MenuBase {
   disconnectedCallback() {
@@ -32,10 +36,12 @@ export class Typo3Menu extends MenuBase {
   protected onOpened() {
     super.onOpened();
     window.addEventListener('click', this.onBodyClick, { passive: true });
+    this.dispatchEvent(new Event('typo3-menu-open'));
   }
 
   protected onClosed() {
     super.onClosed();
     window.removeEventListener('click', this.onBodyClick);
+    this.dispatchEvent(new Event('typo3-menu-close'));
   }
 }
