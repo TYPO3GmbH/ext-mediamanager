@@ -15,13 +15,14 @@
     text-decoration: none;
     background-color: var(--typo3-card-background-color, #fff);
     overflow: hidden;
+    outline: none;
 }
 
 .card[selected] {
     border-color: var(--typo3-card-border-color-selected, #c1dbf2);
     border-width: var(--typo3-card-border-width-selected, 0.25rem);
 }
-
+:host(:focus) .card,
 .card:hover {
     border-color: var(--typo3-card-border-color-hover, var(--typo3-global-brand-info));
 }

@@ -21,6 +21,7 @@ import {
 import '../src/typo3-grid.js';
 import { Typo3Grid } from '../src/typo3-grid';
 import { Typo3Card } from '../../card/src/typo3-card';
+import exp from 'constants';
 
 describe('Typo3Grid', () => {
   let element: Typo3Grid;
@@ -150,5 +151,34 @@ describe('Typo3Grid', () => {
 
     const { detail } = await listener;
     expect(detail).to.be.eql([cardItemOne, cardItemTwo]);
+  });
+
+  it('will focus next element on arrow right`', async () => {
+    cardItemOne.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(document.activeElement).to.be.eq(cardItemTwo);
+  });
+
+  it('will focus previous element on arrow left`', async () => {
+    cardItemTwo.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(document.activeElement).to.be.eq(cardItemOne);
+  });
+
+  it('selects exclusively on keydown "Enter" on a item (no prev selection)', async () => {
+    cardItemOne.focus();
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(cardItemOne.hasAttribute('selected')).to.be.true;
   });
 });

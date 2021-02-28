@@ -47,6 +47,11 @@ export class Typo3Card extends LitElement {
 
   @query('.title') titleElement!: HTMLElement;
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.tabIndex = 0;
+  }
+
   render(): TemplateResult {
     return html`
       <div class="card" ?selected="${this.selected}">

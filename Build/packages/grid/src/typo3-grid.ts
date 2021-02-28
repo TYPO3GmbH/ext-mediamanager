@@ -23,6 +23,7 @@ import {
 import styles from './typo3-grid.pcss';
 import themeStyles from '../../../theme/index.pcss';
 import { Typo3Card } from '../../card/src/typo3-card';
+import { deepActiveElementPath } from '@material/mwc-base/utils';
 
 /**
  * @fires typo3-grid-selection-changed - Dispatched when selection has changed
@@ -54,10 +55,6 @@ export class Typo3Grid extends LitElement {
         <slot name="item" @click="${this._onItemClick}"></slot>
       </div>
     `;
-  }
-
-  firstUpdated(): void {
-    this.setAttribute('tabIndex', '-1');
   }
 
   get items(): Typo3Card[] {
@@ -114,6 +111,12 @@ export class Typo3Grid extends LitElement {
         );
         event.preventDefault();
         break;
+      case 'Enter':
+        if (this.focusedElementIndex !== -1) {
+          this.items[this.focusedElementIndex].click();
+          event.preventDefault();
+        }
+        break;
       case 'a':
         if (event.metaKey || event.ctrlKey) {
           this.items.forEach(item => item.setAttribute('selected', 'selected'));
@@ -126,8 +129,38 @@ export class Typo3Grid extends LitElement {
           event.preventDefault();
         }
         break;
+      case 'ArrowRight':
+        this.focusElement(1);
+        break;
+      case 'ArrowLeft':
+        this.focusElement(-1);
+        break;
       default:
       // do nothing
     }
   };
+
+  get focusedElementIndex(): number {
+    const activeElementPath = deepActiveElementPath();
+    if (!activeElementPath.length) {
+      return -1;
+    }
+
+    for (let i = activeElementPath.length - 1; i >= 0; i--) {
+      const activeItem = activeElementPath[i];
+
+      if (activeItem.tagName === 'TYPO3-CARD') {
+        return this.items.indexOf(activeItem as Typo3Card);
+      }
+    }
+
+    return -1;
+  }
+
+  focusElement(delta: number): void {
+    const element = this.items[this.focusedElementIndex + delta];
+    if (element) {
+      element.focus();
+    }
+  }
 }
