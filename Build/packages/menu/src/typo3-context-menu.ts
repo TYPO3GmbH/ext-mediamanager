@@ -25,6 +25,7 @@ import { html } from 'lit-html';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-context-menu.pcss';
+import { ActionDetail } from '@material/mwc-list/mwc-list-foundation';
 
 interface OpenContextMenuDetail {
   options: { [key: string]: Typo3ContextMenuOption };
@@ -64,7 +65,12 @@ export class Typo3ContextMenu extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <typo3-menu @closed=${this.onClose}> ${this.menuContent}</typo3-menu>
+      <typo3-menu
+        @closed=${this.onClose}
+        @selected="${(event: CustomEvent<ActionDetail>) =>
+          this.dispatchContextMenuItemClick(event)}"
+        >${this.menuContent}</typo3-menu
+      >
     `;
   }
 
@@ -80,10 +86,7 @@ export class Typo3ContextMenu extends LitElement {
             return html` <li divider></li> `;
           case 'item':
             return html`
-              <typo3-menu-item
-                graphic="icon"
-                @click="${() => this.dispatchContextMenuItemClick(option)}"
-              >
+              <typo3-menu-item graphic="icon">
                 <span slot="icon">${unsafeHTML(option.icon)}</span>
                 ${option.label}
               </typo3-menu-item>
@@ -101,7 +104,17 @@ export class Typo3ContextMenu extends LitElement {
     this.currentContextMenuDetail = null;
   }
 
-  dispatchContextMenuItemClick(option: Typo3ContextMenuOption): void {
+  dispatchContextMenuItemClick(event: CustomEvent<ActionDetail>): void {
+    const options = Object.values(
+      this.currentContextMenuDetail?.options ?? {}
+    ).filter(option => option.type !== 'divider');
+
+    const option = options[event.detail.index];
+
+    if (option === undefined) {
+      return;
+    }
+
     const actionEvent = new CustomEvent('typo3-context-menu-item-click', {
       detail: {
         option: option,
