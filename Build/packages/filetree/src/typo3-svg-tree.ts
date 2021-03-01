@@ -136,8 +136,10 @@ export class Typo3SvgTree extends LitElement {
       })
       .on('mouseout', () => {
         this.isOverSvg = false;
-      });
-    // todo add handleKeyboardInteraction
+      })
+      .on('keydown', (event: KeyboardEvent) =>
+        this.handleKeyboardInteraction(event)
+      );
 
     this.container = this.svg
       .append('g')
@@ -1041,14 +1043,14 @@ export class Typo3SvgTree extends LitElement {
   _switchFocusNode(node: Typo3Node): void {
     const nodeElement = this.querySelector(
       'identifier-' + this._getNodeStateIdentifier(node)
-    ) as HTMLElement;
+    ) as SVGElement;
     this._switchFocus(nodeElement);
   }
 
   /**
    * Make the DOM element given as parameter focusable and focus it
    */
-  _switchFocus(element: HTMLElement): void {
+  _switchFocus(element: SVGElement): void {
     if (element !== null) {
       const visibleElements = element.parentNode!.querySelectorAll(
         '[tabindex]'
@@ -1086,5 +1088,119 @@ export class Typo3SvgTree extends LitElement {
 
   _getHoveredNode(): Typo3Node | null {
     return this.processedNodes.find(node => node.isOver) ?? null;
+  }
+
+  /**
+   * Add keydown handling to allow keyboard navigation inside the tree
+   */
+  private handleKeyboardInteraction(event: KeyboardEvent) {
+    const evtTarget = event.target as SVGElement;
+    const currentNode = d3.select(evtTarget).datum() as Typo3Node;
+    const keys = [
+      'Enter',
+      'Space',
+      'End',
+      'Enter',
+      'Home',
+      'ArrowLeft',
+      'ArrowUp',
+      'ArrowRight',
+      'ArrowDown',
+    ];
+
+    if (keys.indexOf(event.key) === -1) {
+      return;
+    }
+    event.preventDefault();
+    const parentDomNode = evtTarget.parentNode as SVGElement;
+    switch (event.key) {
+      case 'End':
+        const lastElementChild = parentDomNode.lastElementChild as SVGElement;
+        // scroll to end, select last node
+        this.scrollTop =
+          lastElementChild.getBoundingClientRect().height +
+          this.settings.nodeHeight -
+          this.viewportHeight;
+        parentDomNode.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        this._update();
+        this._switchFocus(lastElementChild);
+        break;
+      case 'Home':
+        // scroll to top, select first node
+        this.scrollTop = this.nodes[0].y;
+        this.wrapper.scrollTo({ top: this.scrollTop, behavior: 'smooth' });
+        this._update();
+        this._switchFocus(parentDomNode.firstElementChild as SVGElement);
+        break;
+      case 'ArrowLeft':
+        if (this._isNodeExpanded(currentNode)) {
+          // collapse node if collapsible
+          if (currentNode.canToggle) {
+            this._hideChildren(currentNode);
+            this._prepareDataForVisibleNodes();
+            this._update();
+          }
+        } else if (currentNode.parents.length > 0) {
+          // go to parent node
+          let parentNode = this.nodes[currentNode.parents[0]];
+          this._scrollNodeIntoVisibleArea(parentNode, 'up');
+          this._switchFocusNode(parentNode);
+        }
+        break;
+      case 'ArrowUp':
+        // select previous visible node on any level
+        this._scrollNodeIntoVisibleArea(currentNode, 'up');
+        this._switchFocus(evtTarget.previousSibling as SVGElement);
+        break;
+      case 'ArrowRight':
+        if (this._isNodeExpanded(currentNode)) {
+          // the current node is expanded, goto first child (next element on the list)
+          this._scrollNodeIntoVisibleArea(currentNode, 'down');
+          this._switchFocus(evtTarget.nextSibling as SVGElement);
+        } else {
+          if (currentNode.hasChildren) {
+            // expand currentNode
+            this._showChildren(currentNode);
+            this._prepareDataForVisibleNodes();
+            this._update();
+            this._switchFocus(evtTarget as SVGElement);
+          }
+          //do nothing if node has no children
+        }
+        break;
+      case 'ArrowDown':
+        // select next visible node on any level
+        // check if node is at end of viewport and scroll down if so
+        this._scrollNodeIntoVisibleArea(currentNode, 'down');
+        this._switchFocus(evtTarget.nextSibling as SVGElement);
+        break;
+      case 'Enter':
+      case 'Space':
+        this._selectNode(currentNode);
+        break;
+      default:
+    }
+  }
+
+  private _scrollNodeIntoVisibleArea(
+    node: Typo3Node,
+    direction: string = 'up'
+  ): void {
+    if (
+      direction === 'up' &&
+      this.scrollTop > node.y - this.settings.nodeHeight
+    ) {
+      this.scrollTop = node.y - this.settings.nodeHeight;
+    } else if (
+      direction === 'down' &&
+      this.scrollTop + this.viewportHeight <=
+        node.y + 3 * this.settings.nodeHeight
+    ) {
+      this.scrollTop = this.scrollTop + this.settings.nodeHeight;
+    } else {
+      return;
+    }
+    this.wrapper.scrollTo({ top: this.scrollTop, behavior: 'smooth' });
+    this._update();
   }
 }
