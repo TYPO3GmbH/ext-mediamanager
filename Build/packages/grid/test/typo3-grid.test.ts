@@ -27,16 +27,19 @@ describe('Typo3Grid', () => {
   let element: Typo3Grid;
   let cardItemOne: Typo3Card;
   let cardItemTwo: Typo3Card;
+  let cardItemThree: Typo3Card;
 
   beforeEach(async () => {
     element = await fixture(html`
       <typo3-grid selectable>
         <typo3-card selectable slot="item" id="card-1"></typo3-card>
         <typo3-card selectable slot="item" id="card-2"></typo3-card>
+        <typo3-card selectable slot="item" id="card-3"></typo3-card>
       </typo3-grid>
     `);
     cardItemOne = element.querySelector('#card-1') as Typo3Card;
     cardItemTwo = element.querySelector('#card-2') as Typo3Card;
+    cardItemThree = element.querySelector('#card-3') as Typo3Card;
   });
 
   it('can create component', () => {
@@ -148,9 +151,10 @@ describe('Typo3Grid', () => {
 
     expect(cardItemOne.hasAttribute('selected')).to.be.true;
     expect(cardItemTwo.hasAttribute('selected')).to.be.true;
+    expect(cardItemThree.hasAttribute('selected')).to.be.true;
 
     const { detail } = await listener;
-    expect(detail).to.be.eql([cardItemOne, cardItemTwo]);
+    expect(detail).to.be.eql([cardItemOne, cardItemTwo, cardItemThree]);
   });
 
   it('will focus next element on arrow right`', async () => {
@@ -171,6 +175,26 @@ describe('Typo3Grid', () => {
     await elementUpdated(element);
 
     expect(document.activeElement).to.be.eq(cardItemOne);
+  });
+
+  it('will focus first element on home`', async () => {
+    cardItemThree.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', { key: 'Home' });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(document.activeElement).to.be.eq(cardItemOne);
+  });
+
+  it('will focus last element on end`', async () => {
+    cardItemOne.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', { key: 'End' });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(document.activeElement).to.be.eq(cardItemThree);
   });
 
   it('selects exclusively on keydown "Enter" on a item (no prev selection)', async () => {

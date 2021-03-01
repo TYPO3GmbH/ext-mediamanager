@@ -130,10 +130,27 @@ export class Typo3Grid extends LitElement {
         }
         break;
       case 'ArrowRight':
-        this.focusElement(1);
+        this.focusElement(this.focusedElementIndex + 1);
+        event.preventDefault();
         break;
       case 'ArrowLeft':
-        this.focusElement(-1);
+        this.focusElement(this.focusedElementIndex - 1);
+        break;
+      case 'ArrowDown':
+        this.focusElement(this.focusedElementIndex + this.numOfColumns);
+        event.preventDefault();
+        break;
+      case 'ArrowUp':
+        this.focusElement(this.focusedElementIndex - this.numOfColumns);
+        event.preventDefault();
+        break;
+      case 'Home':
+        this.focusElement(0);
+        event.preventDefault();
+        break;
+      case 'End':
+        this.focusElement(this.items.length - 1);
+        event.preventDefault();
         break;
       default:
       // do nothing
@@ -157,10 +174,24 @@ export class Typo3Grid extends LitElement {
     return -1;
   }
 
-  focusElement(delta: number): void {
-    const element = this.items[this.focusedElementIndex + delta];
+  focusElement(index: number): void {
+    const element = this.items[index];
     if (element) {
       element.focus();
     }
+  }
+
+  get numOfColumns(): number {
+    const gridWidth = this.grid.offsetWidth;
+    const minWidth = parseFloat(
+      getComputedStyle(this.grid, null).getPropertyValue(
+        'grid-template-columns'
+      )
+    );
+
+    const gap = parseFloat(
+      getComputedStyle(this.grid, null).getPropertyValue('column-gap')
+    );
+    return Math.round((gridWidth + gap) / (minWidth + gap));
   }
 }

@@ -15,7 +15,7 @@ import { expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-breadcrumb.js';
 import { Typo3Breadcrumb } from '../src/typo3-breadcrumb';
 
-describe('Typo3breadcrumb', () => {
+describe('Typo3Breadcrumb', () => {
   let element: Typo3Breadcrumb;
   beforeEach(async () => {
     element = await fixture(html` <typo3-breadcrumb></typo3-breadcrumb> `);
