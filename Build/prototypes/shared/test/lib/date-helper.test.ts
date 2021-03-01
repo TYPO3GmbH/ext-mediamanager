@@ -16,6 +16,10 @@ import { DateHelper } from '../../src/lib/date-helper';
 
 describe('DateHelper', () => {
   it('can format milliseconds to a "YYYY-MM-DD HH:mm" formatted string', () => {
-    expect(DateHelper.formatDate(1614348935000)).to.be.eq('2021-02-26 15:15');
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset();
+    const milliseconds = 1614348935000 + 60000 * timezoneOffset;
+
+    expect(DateHelper.formatDate(milliseconds)).to.be.eq('2021-02-26 14:15');
   });
 });
