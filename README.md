@@ -39,7 +39,7 @@ Install php-cs-fixer tool via
 
 and then simply run
 
-    ./bin/php-cs-fixer fix --config ./Build/.php_cs
+    php-cs-fixer fix --config ./Build/.php_cs
 
 
 Storybook
