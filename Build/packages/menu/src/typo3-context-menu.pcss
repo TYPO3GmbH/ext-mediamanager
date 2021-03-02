@@ -6,13 +6,3 @@
 typo3-menu {
     --mdc-list-vertical-padding: 0;
 }
-
-typo3-menu-item:focus {
-    outline: var(--typo3-global-default-border-width) auto Highlight;
-    outline: var(--typo3-global-default-border-width) auto -webkit-focus-ring-color;
-    outline-offset: -0.0625rem;
-}
-
-[tabindex="-1"]:focus:not(:focus-visible) {
-    outline: 0!important;
-}
