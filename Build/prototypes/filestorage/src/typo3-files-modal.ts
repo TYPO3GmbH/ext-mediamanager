@@ -83,7 +83,7 @@ export class Typo3FilesModal extends LitElement {
           @typo3-node-select="${this._onSelectedNode}"
         ></typo3-filetree>
       </typo3-splitpane>
-      <div class="footer" slot="footer">
+      <div slot="footer">
         <typo3-button
           color="primary"
           @click="${this._onSubmit}"

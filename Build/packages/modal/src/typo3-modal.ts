@@ -16,7 +16,9 @@ import {
   html,
   LitElement,
   property,
+  PropertyValues,
   query,
+  queryAssignedNodes,
   TemplateResult,
 } from 'lit-element';
 
@@ -49,7 +51,7 @@ export class Typo3Modal extends LitElement {
    * @type String
    */
   @property({ type: String, reflect: true }) variant: ModalVariant =
-    ModalVariant.info;
+    ModalVariant.default;
 
   /**
    * @type Boolean
@@ -68,15 +70,61 @@ export class Typo3Modal extends LitElement {
 
   @query('#modal') modal!: HTMLElement;
 
+  @queryAssignedNodes('footer', false, 'typo3-button')
+  footerButtons!: HTMLElement[];
+
   public static styles = [themeStyles, styles];
 
-  render(): TemplateResult {
+  show(): void {
+    this.open = true;
+  }
+
+  close(): void {
+    this.open = false;
+  }
+
+  _onKeyDown(event: KeyboardEvent): void {
+    if (this.dismissible && 'Escape' === event.key) {
+      this.close();
+    }
+  }
+
+  protected update(changedProperties: PropertyValues) {
+    if (changedProperties.has('open')) {
+      if (true === this.open) {
+        const closeEvent = new CustomEvent('typo3-modal-open');
+        this.dispatchEvent(closeEvent);
+        setTimeout(() => {
+          let focusElement = this.modal;
+          if (this.footerButtons.length > 0) {
+            focusElement = this.footerButtons[0];
+          }
+          focusElement.focus();
+        }, 10);
+        window.addEventListener('keydown', event => this._onKeyDown(event));
+      } else {
+        window.removeEventListener('keydown', event => this._onKeyDown(event));
+        const closeEvent = new CustomEvent('typo3-modal-close');
+        this.dispatchEvent(closeEvent);
+      }
+    }
+
+    super.update(changedProperties);
+  }
+
+  protected render(): TemplateResult {
     return html` <div
       class="wrapper ${this.open ? 'open' : ''}"
       aria-hidden="${!this.open}"
     >
       <typo3-overlay fixed @click="${this.close}"></typo3-overlay>
-      <div id="modal" class="modal" tabindex="-1">
+      <div
+        id="modal"
+        class="modal"
+        tabindex="-1"
+        aria-modal="true"
+        role="dialog"
+      >
         ${this.headerContent}
         <div id="content" class="content">${this.messageContent}</div>
         <div id="footer" class="footer">${this.footerContent}</div>
@@ -117,32 +165,11 @@ export class Typo3Modal extends LitElement {
     `;
   }
 
-  get messageContent(): TemplateResult {
+  private get messageContent(): TemplateResult {
     return html`<slot></slot>`;
   }
 
-  get footerContent(): TemplateResult {
+  private get footerContent(): TemplateResult {
     return html`<slot name="footer"></slot>`;
-  }
-
-  show(): void {
-    const closeEvent = new CustomEvent('typo3-modal-open');
-    this.dispatchEvent(closeEvent);
-    this.open = true;
-    setTimeout(() => this.modal.focus(), 2);
-    window.addEventListener('keydown', event => this._onKeyDown(event));
-  }
-
-  close(): void {
-    window.removeEventListener('keydown', event => this._onKeyDown(event));
-    this.open = false;
-    const closeEvent = new CustomEvent('typo3-modal-close');
-    this.dispatchEvent(closeEvent);
-  }
-
-  _onKeyDown(event: KeyboardEvent): void {
-    if (this.dismissible && 'Escape' === event.key) {
-      this.close();
-    }
   }
 }

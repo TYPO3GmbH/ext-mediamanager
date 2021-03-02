@@ -148,3 +148,13 @@
     border-bottom-color: var(--typo3-modal-header-info-border-color, var(--typo3-global-brand-info-border-color));
     color: var(--typo3-modal-header-info-text-color, var(--typo3-global-brand-info-text-color));
 }
+
+:host([variant='default']) .header {
+    background-color: var(--typo3-modal-header-default-background-color, var(--typo3-global-brand-default));
+    border-bottom-color: var(--typo3-modal-header-default-border-color, var( --typo3-global-brand-default-border-color));
+    color: var(--typo3-modal-header-default-text-color, var(--typo3-global-brand-default-text-color));
+}
+
+::slotted(*) {
+    --typo3-btn-padding: var(--typo3-global-btn-padding) 1rem;
+}
