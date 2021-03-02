@@ -16,6 +16,7 @@ import {
   html,
   LitElement,
   property,
+  PropertyValues,
   query,
   TemplateResult,
 } from 'lit-element';
@@ -39,6 +40,14 @@ export class Typo3Grid extends LitElement {
   // used for triggering updates
   @property({ type: String }) hash = '';
 
+  updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+
+    if (_changedProperties.has('hash') && this.items.length > 0) {
+      this.items[0].tabindex = 0;
+    }
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this._onKeyDown);
@@ -52,7 +61,11 @@ export class Typo3Grid extends LitElement {
   render(): TemplateResult {
     return html`
       <div class="grid">
-        <slot name="item" @click="${this._onItemClick}"></slot>
+        <slot
+          name="item"
+          @click="${this._onItemClick}"
+          @focusin=${this._onFocusIn}
+        ></slot>
       </div>
     `;
   }
@@ -67,15 +80,28 @@ export class Typo3Grid extends LitElement {
     return this.items.filter(element => element.hasAttribute('selected'));
   }
 
+  _onFocusIn = (event: Event) => {
+    this.items.forEach(item => {
+      item.tabindex = item === event.target ? 0 : -1;
+    });
+  };
+
   _onItemClick = (event: MouseEvent) => {
     event.stopPropagation();
     const element = event.target as Typo3Card;
+
     if (false === this.selectable || false === this.items.includes(element)) {
       return;
     }
 
     let selectedItems = this.selectedItems;
-    const multiSelection = !!(event.metaKey || event.ctrlKey);
+
+    const isTogglButtonClick = event
+      .composedPath()
+      .some(element => (element as HTMLElement).tagName === 'BUTTON');
+
+    const multiSelection =
+      !!(event.metaKey || event.ctrlKey) || isTogglButtonClick;
     if (!element.hasAttribute('selected')) {
       element.setAttribute('selected', 'selected');
       if (multiSelection) {

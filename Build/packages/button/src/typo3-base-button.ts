@@ -11,7 +11,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { html, LitElement, property, TemplateResult } from 'lit-element';
+import { html, LitElement, property, query, TemplateResult } from 'lit-element';
 
 export type Color =
   | 'default'
@@ -36,6 +36,8 @@ export abstract class Typo3BaseButton extends LitElement {
   onlyicon = false;
 
   @property({ type: String, reflect: true }) color: Color = 'default';
+
+  @query('button') buttonElement!: HTMLButtonElement;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -62,6 +64,10 @@ export abstract class Typo3BaseButton extends LitElement {
         ${this.buttonContent}
       </button>
     `;
+  }
+
+  focus(options?: FocusOptions): void {
+    this.buttonElement.focus(options);
   }
 
   protected get buttonContent(): TemplateResult[] {

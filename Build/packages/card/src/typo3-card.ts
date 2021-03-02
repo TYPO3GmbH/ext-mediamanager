@@ -42,6 +42,7 @@ export class Typo3Card extends LitElement {
   @property({ type: Boolean, reflect: true }) titleEditable = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) notSelectable = false;
+  @property({ type: Number, reflect: true }) tabindex = -1;
 
   @internalProperty() inEditMode = false;
 
@@ -49,32 +50,51 @@ export class Typo3Card extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.tabIndex = 0;
   }
 
   render(): TemplateResult {
     return html`
-      <div class="card" ?selected="${this.selected}">
-        <div class="image">
-          <slot name="image"></slot>
-          <slot name="badge"></slot>
-        </div>
-        <div class="body">
-          <div
-            class="title"
-            ?contentEditable="${this.titleEditable}"
-            @click="${this._onClick}"
-            @dblclick="${this._onDblclick}"
-            @blur="${() => this._onBlur()}"
-            @keydown="${this._onKeyDown}"
-          >
-            ${this.title}
-          </div>
-          <div class="subtitle">${this.subtitle}</div>
-        </div>
-        ${this.selected ? html`<slot name="selected-badge"></slot> ` : html``}
+      <div class="image">
+        <slot name="image"></slot>
+        <slot name="badge"></slot>
       </div>
+      <div class="body">
+        <div
+          class="title"
+          ?contentEditable="${this.titleEditable}"
+          @click="${this._onClick}"
+          @dblclick="${this._onDblclick}"
+          @blur="${() => this._onBlur()}"
+          @keydown="${this._onKeyDown}"
+        >
+          ${this.title}
+        </div>
+        <div class="subtitle">${this.subtitle}</div>
+      </div>
+      ${this.renderCheckbox}
     `;
+  }
+
+  get renderCheckbox(): TemplateResult {
+    if (false === this.hasCheckboxSlot) {
+      return html``;
+    }
+
+    if (true === this.notSelectable) {
+      return html``;
+    }
+
+    return html`
+      <button aria-label="Select" class="checkbox-button" tabindex="-1">
+        <span class="icon-actions-checkbox" aria-hidden="true">
+          <slot name="checkbox"></slot>
+        </span>
+      </button>
+    `;
+  }
+
+  private get hasCheckboxSlot(): boolean {
+    return !!this.querySelector('[slot="checkbox"]');
   }
 
   _onClick(event: MouseEvent): void {

@@ -152,6 +152,8 @@ class AppConfigProvider implements AppConfigProviderInterface
             'reset' => 'actions-close',
             'toggleTree' => 'apps-pagetree-category-expand-all',
             'checkmark' => 'actions-check',
+            'actions-check-circle' => 'actions-check-circle',
+            'actions-check-circle-alt' => 'actions-check-circle-alt',
         ];
 
         return \array_map(function (string $identifier) {

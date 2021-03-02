@@ -26,11 +26,15 @@
     color: var(--typo3-list-item-color-hover, var(--typo3-global-list-item-color-hover));
     text-decoration: none;
     background-color: var(--typo3-list-item-background-color-hover, var(--typo3-global-list-item-bg-hover));
+}
+
+:host(:not([disabled]):focus) {
     outline: var(--typo3-global-default-border-width) auto Highlight;
     outline: var(--typo3-global-default-border-width) auto -webkit-focus-ring-color;
     outline-offset: -0.0625rem;
 }
-:host([tabindex="-1"]):focus:not(:focus-visible) {
+
+:host([tabindex="-1"]:focus:not(:focus-visible)) {
     outline: 0!important;
 }
 

@@ -382,8 +382,8 @@
 					"description": "e.g. Num of files"
 				},
 				{
-					"name": "selected-badge",
-					"description": "Indicator for selection"
+					"name": "checkbox",
+					"description": "content for checkbox button"
 				}
 			],
 			"cssProperties": [

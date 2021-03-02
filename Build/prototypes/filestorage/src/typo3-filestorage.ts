@@ -63,7 +63,6 @@ import { ApiService } from './services/api.service';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
-import { getLastSelectedTreeNodeId } from './redux/ducks/tree';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -722,18 +721,21 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : variant}"
       ?titleEditable="${this.itemsEditEnabled && isSelected}"
-      draggable="${!this.itemsDragDropEnabled ||
-      fromList.isEmptySelection(this.state)
-        ? 'false'
-        : 'true'}"
+      draggable="${
+        !this.itemsDragDropEnabled || fromList.isEmptySelection(this.state)
+          ? 'false'
+          : 'true'
+      }"
       @dragstart="${this._onDragStart}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
         this._onRename(listData.identifier, e.detail)}"
     >
-      <typo3-badge slot="selected-badge" color="primary" size="small">
-        ${createSVGElement('checkmark')}
+      ${createSVGElement(
+        isSelected ? 'actions-check-circle-alt' : 'actions-check-circle',
+        'checkbox'
+      )}
       </typo3-badge>
       ${imageSlot} ${badge}
     </typo3-card>`;
