@@ -57,7 +57,7 @@ export class Typo3FilesOverrideModalContent extends LitElement {
           label="${this.trans('file_upload.actions.all.label')}"
         >
           <select
-            class="form-control t3js-actions-all"
+            class="form-select t3js-actions-all"
             name="data[all]"
             @change="${this.onBulkActionChange}"
           >
@@ -83,7 +83,13 @@ export class Typo3FilesOverrideModalContent extends LitElement {
     return this.files.map(
       file => html`
         <tr>
-          <td><img src="${file.original.thumbUrl}" style="height: 40px;" /></td>
+          <td>
+            <img
+              src="${file.original.thumbUrl}"
+              alt="${file.original.name}"
+              style="height: 40px;"
+            />
+          </td>
           <td>
             ${file.original.name}
             (${FileSizeHelper.formatFileSize(file.original.size)})<br />
@@ -97,7 +103,7 @@ export class Typo3FilesOverrideModalContent extends LitElement {
           <td>
             <typo3-formfield>
               <select
-                class="form-control t3js-actions"
+                class="form-select t3js-actions"
                 ?disabled="${this.isBulkAction}"
                 name="data[file][${file.data.name}]"
               >
