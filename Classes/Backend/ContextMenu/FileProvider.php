@@ -18,21 +18,26 @@ declare(strict_types=1);
 namespace TYPO3\CMS\Mediamanager\Backend\ContextMenu;
 
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Type\Bitmask\JsConfirmation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelper;
+use TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelperInterface;
 
 class FileProvider extends AbstractProvider
 {
-    /** @var File|Folder */
-    protected $record;
+    /** @var File|Folder[] */
+    protected $records = [];
 
     /** @var ResourceFactory */
     private $resourceFactory;
+
+    /** @var ResourcesDeleteHelperInterface */
+    private $resourcesDeleteHelper;
 
     /** @var string[][] */
     protected $itemsConfiguration = [
@@ -104,7 +109,16 @@ class FileProvider extends AbstractProvider
         parent::initialize();
 
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-        $this->record = $this->resourceFactory->retrieveFileOrFolderObject($this->identifier);
+        $this->resourcesDeleteHelper = GeneralUtility::makeInstance(ResourcesDeleteHelper::class);
+
+        // @fix me do not concat files with ','
+        $identifiers = explode(',', $this->identifier);
+        $this->records = array_map(
+            function ($identifier) {
+                return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
+            },
+            $identifiers
+        );
     }
 
     protected function canRender(string $itemName, string $type): bool
@@ -156,32 +170,37 @@ class FileProvider extends AbstractProvider
 
     protected function canBeDeleted(): bool
     {
-        return $this->record->checkActionPermission('delete');
+        foreach ($this->records as $record) {
+            if (false === $record->checkActionPermission('delete')) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected function canShowInfo(): bool
     {
-        return $this->isFile();
+        return $this->isSingleRecordMode() && $this->isFile($this->getSingleRecord());
     }
 
     protected function canReplace(): bool
     {
-        return $this->isFile() && $this->record->checkActionPermission('replace');
+        return $this->isSingleRecordMode() && $this->isFile($this->getSingleRecord()) && $this->getSingleRecord()->checkActionPermission('replace');
     }
 
     protected function canCreateNew(): bool
     {
-        return $this->isFolder() && $this->record->checkActionPermission('write') && 'tree' === $this->context;
+        return $this->isSingleRecordMode() && $this->isFolder($this->getSingleRecord()) && $this->getSingleRecord()->checkActionPermission('write') && 'tree' === $this->context;
     }
 
     protected function canBeCopied(): bool
     {
-        return $this->record->checkActionPermission('read') && $this->record->checkActionPermission('copy') && !$this->isRecordInClipboard('copy');
+        return $this->getSingleRecord()->checkActionPermission('read') && $this->getSingleRecord()->checkActionPermission('copy') && !$this->isRecordInClipboard('copy');
     }
 
     protected function canBeCut(): bool
     {
-        return $this->record->checkActionPermission('move') && !$this->isRecordInClipboard('cut');
+        return $this->getSingleRecord()->checkActionPermission('move') && !$this->isRecordInClipboard('cut');
     }
 
     protected function canBePastedInto(): bool
@@ -191,14 +210,18 @@ class FileProvider extends AbstractProvider
             return false;
         }
 
-        $selItem = \reset($elArr);
-        $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
-
-        if (false === $this->isFolder()) {
+        if (false === $this->isSingleRecordMode()) {
             return false;
         }
 
-        if (false === $this->record->checkActionPermission('write')) {
+        $selItem = \reset($elArr);
+        $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
+
+        if (false === $this->isFolder($this->getSingleRecord())) {
+            return false;
+        }
+
+        if (false === $this->getSingleRecord()->checkActionPermission('write')) {
             return false;
         }
 
@@ -206,7 +229,7 @@ class FileProvider extends AbstractProvider
             return $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard);
         }
 
-        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->record, $fileOrFolderInClipBoard);
+        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->getSingleRecord(), $fileOrFolderInClipBoard);
     }
 
     /**
@@ -215,7 +238,7 @@ class FileProvider extends AbstractProvider
      */
     protected function foldersAreInTheSameRoot(Folder $folderInClipBoard): bool
     {
-        $recordRootFolderId = $this->record->getStorage()->getRootLevelFolder()->getCombinedIdentifier();
+        $recordRootFolderId = $this->getSingleRecord()->getStorage()->getRootLevelFolder()->getCombinedIdentifier();
         $clipboardRootFolderId = $folderInClipBoard->getStorage()->getRootLevelFolder()->getCombinedIdentifier();
 
         return $recordRootFolderId === $clipboardRootFolderId;
@@ -223,13 +246,13 @@ class FileProvider extends AbstractProvider
 
     protected function isRecordInClipboard(string $mode = ''): bool
     {
-        if ('' !== $mode && !$this->record->checkActionPermission($mode)) {
+        if ('' !== $mode && !$this->getSingleRecord()->checkActionPermission($mode)) {
             return false;
         }
         $isSelected = '';
         // Pseudo table name for use in the clipboard.
         $table = '_FILE';
-        $uid = GeneralUtility::shortMD5($this->record->getCombinedIdentifier());
+        $uid = GeneralUtility::shortMD5($this->getSingleRecord()->getCombinedIdentifier());
         if ('normal' === $this->clipboard->current) {
             $isSelected = $this->clipboard->isSelected($table, $uid);
         }
@@ -238,17 +261,17 @@ class FileProvider extends AbstractProvider
 
     protected function isStorageRoot(): bool
     {
-        return $this->record->getIdentifier() === $this->record->getStorage()->getRootLevelFolder()->getIdentifier();
+        return $this->getSingleRecord()->getIdentifier() === $this->getSingleRecord()->getStorage()->getRootLevelFolder()->getIdentifier();
     }
 
-    protected function isFile(): bool
+    protected function isFile(ResourceInterface $resource): bool
     {
-        return $this->record instanceof File;
+        return $resource instanceof File;
     }
 
-    protected function isFolder(): bool
+    protected function isFolder(ResourceInterface $resource): bool
     {
-        return $this->record instanceof Folder;
+        return $resource instanceof Folder;
     }
 
     protected function getAdditionalAttributes(string $itemName): array
@@ -257,28 +280,11 @@ class FileProvider extends AbstractProvider
             'data-callback-module' => 'TYPO3/CMS/Filelist/ContextMenuActions',
         ];
         if ('delete' === $itemName && $this->backendUser->jsConfirmation(JsConfirmation::DELETE)) {
-            $recordTitle = GeneralUtility::fixed_lgd_cs($this->record->getName(), $this->backendUser->uc['titleLen']);
-
             $title = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:delete');
-            $confirmMessage = \sprintf(
-                $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.delete'),
-                $recordTitle
-            );
-            if ($this->isFolder()) {
-                $confirmMessage .= BackendUtility::referenceCount(
-                    '_FILE',
-                    $this->record->getIdentifier(),
-                    ' ' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFolder')
-                );
-            } else {
-                $confirmMessage .= BackendUtility::referenceCount(
-                    'sys_file',
-                    (string)$this->record->getUid(),
-                    ' ' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFile')
-                );
-            }
+            $confirmMessage = $this->resourcesDeleteHelper->getConfirmMessage($this->records);
             $closeText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel');
             $deleteText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete');
+
             $attributes += [
                 'data-title' => \htmlspecialchars($title),
                 'data-message' => \htmlspecialchars($confirmMessage),
@@ -302,7 +308,7 @@ class FileProvider extends AbstractProvider
                 $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.'
                     . ('copy' === $this->clipboard->currentMode() ? 'copy' : 'move') . '_into'),
                 $fileOrFolderInClipBoard->getName(),
-                $this->record->getName()
+                $this->getSingleRecord()->getName()
             );
             $closeText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel');
             $okLabel = 'copy' === $this->clipboard->currentMode() ? 'copy' : 'pasteinto';
@@ -316,7 +322,7 @@ class FileProvider extends AbstractProvider
         }
         if ('show' === $itemName) {
             $attributes += [
-                'data-url' => PathUtility::getAbsoluteWebPath($this->record->getPublicUrl(true)),
+                'data-url' => PathUtility::getAbsoluteWebPath($this->getSingleRecord()->getPublicUrl(true)),
             ];
         }
 
@@ -331,6 +337,19 @@ class FileProvider extends AbstractProvider
 
     protected function getIdentifier(): string
     {
-        return $this->record->getCombinedIdentifier();
+        return $this->getSingleRecord()->getCombinedIdentifier();
+    }
+
+    /**
+     * @return File|Folder
+     */
+    private function getSingleRecord(): ResourceInterface
+    {
+        return $this->records[0];
+    }
+
+    private function isSingleRecordMode(): bool
+    {
+        return count($this->records) === 1;
     }
 }

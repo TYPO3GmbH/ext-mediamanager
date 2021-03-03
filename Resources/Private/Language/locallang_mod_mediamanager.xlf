@@ -113,6 +113,9 @@
 			<trans-unit id="dnd.copy.message" resname="dnd.copy.message">
 				<source><![CDATA[Release &lt;CTRL&gt; to move <br /> Press &lt;ESC&gt; to cancel]]></source>
 			</trans-unit>
+			<trans-unit id="mess.multi_delete" resname="mess.multi_delete">
+				<source>Are you sure you want to delete following records?</source>
+			</trans-unit>
 			<trans-unit id="dnd.copy.title" resname="dnd.copy.title">
 				<source>Copy %1s Files</source>
 			</trans-unit>

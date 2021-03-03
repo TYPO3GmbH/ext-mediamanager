@@ -20,15 +20,15 @@ use TYPO3\CMS\Mediamanager\Backend\Controller;
 return [
     // Get data for page tree
     'mediamanager_tree_fetchData' => [
-        'path' => '/mediamanager/tree/fetchData',
+        'path' => '/mediamanager/tree/fetch-data',
         'target' => Controller\FolderTreeController::class . '::fetchDataAction',
     ],
     'mediamanager_folder_fetchData' => [
-        'path' => '/mediamanager/folder/fetchData',
+        'path' => '/mediamanager/folder/fetch-data',
         'target' => Controller\FolderDetailController::class . '::fetchDataAction',
     ],
     'mediamanager_search_files' => [
-        'path' => '/mediamanager/searchFiles',
+        'path' => '/mediamanager/search-files',
         'target' => Controller\SearchFilesController::class . '::searchFilesAction',
     ],
 ];
