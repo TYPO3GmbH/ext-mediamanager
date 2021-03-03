@@ -58,11 +58,11 @@ import { styleMap } from 'lit-html/directives/style-map';
 import { createSVGElement } from './lib/svg-helper';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { DatagridSorter } from './lib/datagrid-sorter';
-import { Schema } from './types/schema';
 import { ApiService } from './services/api.service';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
+import { CellHeader } from '../../../packages/datagrid/src/lib/cell-header';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -111,8 +111,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromGlobalActions.Reload() as Action);
   }
 
-  get datagridSchema(): Schema {
-    const fields = [
+  get datagridSchema(): CellHeader[] {
+    const fields: CellHeader[] = [
       {
         name: 'identifier',
         type: 'text',
@@ -125,11 +125,16 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         title: ' ',
         width: '24',
       },
-      { name: 'name', title: translate('field.name'), sortable: true },
+      {
+        name: 'name',
+        title: translate('field.name'),
+        sortable: true,
+        minWidth: '150',
+      },
       {
         name: 'modified',
         title: translate('field.modified'),
-        width: '150',
+        width: '100',
         sortable: true,
         sortField: 'modifiedRaw',
       },
@@ -140,7 +145,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         sortable: true,
         sortField: 'sizeRaw',
       },
-      { name: 'type', title: translate('field.type'), width: '150' },
+      {
+        name: 'type',
+        title: translate('field.type'),
+        width: '100',
+      },
       {
         name: 'variants',
         title: translate('field.variants'),
@@ -157,7 +166,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         title: translate('field.rw'),
         width: '50',
       },
-    ] as Schema;
+    ];
 
     if (fromList.isInSearchMode(this.state)) {
       fields.splice(2, 0, {

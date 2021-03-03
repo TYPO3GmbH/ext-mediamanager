@@ -14,6 +14,7 @@
 import {
   customElement,
   html,
+  internalProperty,
   LitElement,
   property,
   query,
@@ -32,6 +33,11 @@ import { CanvasDataGridEvent } from './lib/event/CanvasDataGridEvent';
 import { EndEditEvent } from './lib/event/EndEditEvent';
 import { ContextMenuEvent } from './lib/event/ContextMenuEvent';
 import { Cell } from './lib/Cell';
+import { CellHeader } from './lib/cell-header';
+import styles from './typo3-datagrid.pcss';
+import { styleMap } from 'lit-html/directives/style-map';
+import { fromEvent, Subscription } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
@@ -41,29 +47,65 @@ import { Cell } from './lib/Cell';
  */
 @customElement('typo3-datagrid')
 export class Typo3Datagrid extends LitElement {
-  public static styles = [themeStyles];
+  public static styles = [themeStyles, styles];
 
-  @property({ type: Object }) schema = {};
-  @property({ type: Object }) data = {};
+  @property({ type: Array }) schema: CellHeader[] = [];
+  @property({ type: Array }) data: Record<string, unknown>[] = [];
   @property({ type: Object }) sorters: { [key: string]: Function } = {};
   @property({ type: Array }) editableColumns: string[] = [];
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
   @property({ type: String }) rowIdentifier = 'identifier';
 
+  @internalProperty()
+  transformedColumns: CellHeader[] = [];
+
   @query('canvas-datagrid') canvasGrid!: CanvasDatagrid;
+  @query('.flex-columns') flexColumnsHelper!: HTMLElement;
 
   protected imageBuffer: { [key: string]: HTMLImageElement } = {};
-
   protected additionalStyles: { disabledCellOpacity?: number } = {};
-
   protected clicks = 0;
-
   private latestSelectedRowIndex?: number;
-
   private inEditMode = false;
+  private resizeSubscription!: Subscription;
 
   render(): TemplateResult {
+    return html` ${this.renderFlexColumns} ${this.renderGrid} `;
+  }
+
+  get renderFlexColumns(): TemplateResult {
+    return html`<div class="flex-columns">
+      ${this.schema
+        .filter(header => header.hidden !== true)
+        .map(header => {
+          let styles = {};
+          if (header.width && header.width !== 'auto') {
+            styles = {
+              ...styles,
+              flex: `0 0 ${header.width}px`,
+            };
+          }
+          if (header.minWidth) {
+            styles = {
+              ...styles,
+              minWidth: `${header.minWidth}px`,
+            };
+          }
+
+          return html`<div
+            id="${header.name}"
+            style=${styleMap(styles)}
+          ></div>`;
+        })}
+    </div>`;
+  }
+
+  get renderGrid(): TemplateResult {
     const borderDragMode = this.draggable ? 'move' : 'none';
+    const columns =
+      this.transformedColumns.length > 0
+        ? this.transformedColumns
+        : this.schema;
 
     return html`
       <canvas-datagrid
@@ -109,9 +151,9 @@ export class Typo3Datagrid extends LitElement {
         allowcolumnreordering="false"
         allowcolumnresize="false"
         borderdragbehavior="${borderDragMode}"
-        data="${JSON.stringify(this.data)}"
+        .data="${this.data}"
+        .schema="${columns}"
         editable="${this.editableColumns.length > 0}"
-        schema="${JSON.stringify(this.schema)}"
         selectionmode="row"
         showrowheaders="false"
         @afterrendercell="${this._onAfterRendercell}"
@@ -129,6 +171,21 @@ export class Typo3Datagrid extends LitElement {
         @selectionchanged="${this._onSelectionChanged}"
       ></canvas-datagrid>
     `;
+  }
+
+  getColumnsWithCaluclatedWidths(): CellHeader[] {
+    if (!this.flexColumnsHelper) {
+      return [];
+    }
+
+    return this.schema.map(column => {
+      const flexDiv = this.flexColumnsHelper.querySelector(`#${column.name}`);
+      const calculatedWidth = flexDiv ? flexDiv.clientWidth : 0;
+      return {
+        ...column,
+        width: calculatedWidth + '',
+      };
+    });
   }
 
   updated(_changedProperties: PropertyValues): void {
@@ -152,7 +209,21 @@ export class Typo3Datagrid extends LitElement {
 
   disconnectedCallback() {
     this._endEdit();
+    this.resizeSubscription.unsubscribe();
     super.disconnectedCallback();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.resizeSubscription = fromEvent(window, 'resize')
+      .pipe(
+        delay(200),
+        tap(
+          () =>
+            (this.transformedColumns = this.getColumnsWithCaluclatedWidths())
+        )
+      )
+      .subscribe();
   }
 
   _onRenderText(e: RenderCellEvent): void {
@@ -484,6 +555,7 @@ export class Typo3Datagrid extends LitElement {
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
+    this.transformedColumns = this.getColumnsWithCaluclatedWidths();
     this.canvasGrid.sorters = Object.assign(
       this.canvasGrid.sorters,
       this.sorters
