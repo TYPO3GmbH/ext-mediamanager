@@ -64,6 +64,7 @@ import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
 import { CellHeader } from '../../../packages/datagrid/src/lib/cell-header';
 import { getUrl } from './services/backend-url.service';
+import * as _ from 'lodash-es';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -206,7 +207,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     let contextItems = [event.detail.node];
     if (context === 'list' && selectedItems.length > 0) {
-      contextItems = selectedItems;
+      // use selection if element is part of selection
+      if (_.some(selectedItems, event.detail.node)) {
+        contextItems = selectedItems;
+      }
     }
 
     const url = getUrl('ajax_contextmenu', {
