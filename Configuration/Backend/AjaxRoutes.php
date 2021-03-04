@@ -31,4 +31,12 @@ return [
         'path' => '/mediamanager/search-files',
         'target' => Controller\SearchFilesController::class . '::searchFilesAction',
     ],
+    'mediamanager_contextmenu_clipboard' => [
+        'path' => '/mediamanager/context-menu/clipboard',
+        'target' => Controller\ContextMenuController::class . '::clipboardAction',
+    ],
+    'mediamanager_delete_resources_confirm_modal_data' => [
+        'path' => '/mediamanager/delete-resources/confirm-modal-data',
+        'target' => Controller\DeleteResourcesModalController::class . '::confirmModalDataAction',
+    ],
 ];
