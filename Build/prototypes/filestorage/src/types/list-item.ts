@@ -33,4 +33,5 @@ interface ListItem {
   parentIdentifier: string;
   notSelectable?: boolean;
   disabled?: boolean;
+  contextMenuType: string;
 }

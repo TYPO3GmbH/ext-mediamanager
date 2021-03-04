@@ -50,4 +50,5 @@ export interface Typo3Node {
   lastChild?: boolean;
   class?: string;
   clipboardIdentifier: string;
+  contextMenuType: string;
 }

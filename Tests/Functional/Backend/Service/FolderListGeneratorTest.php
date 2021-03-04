@@ -150,6 +150,8 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'sysType' => '_FOLDER',
             'cardFolderIcon' => '<svg></svg>',
             'parentIdentifier' => '1:/',
+            'contextMenuType' => 'sys_file',
+
         ]], $result);
     }
 
@@ -270,6 +272,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'path' => '/',
             'uid' => 13,
             'extension' => 'xls',
+            'contextMenuType' => 'sys_file',
         ]], $result);
     }
 }

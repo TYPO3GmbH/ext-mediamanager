@@ -155,6 +155,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'overlayIcon' => null,
                 'parentIdentifier' => null,
                 'sysType' => '_FOLDER',
+                'contextMenuType' => 'sys_file_storage',
             ],
             [
                 'stateIdentifier' => '_230043429',
@@ -172,6 +173,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'overlayIcon' => null,
                 'parentIdentifier' => '1:/test-folder',
                 'sysType' => '_FOLDER',
+                'contextMenuType' => 'sys_file',
             ],
         ], $result);
     }
