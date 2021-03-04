@@ -11,9 +11,6 @@ services:
     resource: '../Classes/Backend/Browser/*'
     public: true
 
-  TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelper:
-    public: true
-
   TYPO3\CMS\Mediamanager\Backend\Controller\:
     resource: '../Classes/Backend/Controller/*'
     public: true

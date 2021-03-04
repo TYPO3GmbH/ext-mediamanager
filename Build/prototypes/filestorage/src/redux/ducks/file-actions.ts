@@ -297,10 +297,7 @@ export class ReplaceFileFailure implements Action {
 export class DeleteFilesConfirm implements Action {
   readonly type = DELETE_FILES_CONFIRM;
 
-  constructor(
-    public identifiers: string[],
-    public modalData: { headline: string; content: string }
-  ) {}
+  constructor(public identifiers: string[]) {}
 }
 
 export class DeleteFiles implements Action {

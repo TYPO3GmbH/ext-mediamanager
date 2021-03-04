@@ -164,7 +164,7 @@ export const uploadFilesConflict = (
       const modalData: ModalData = {
         type: ModalType.HTML,
         isForm: true,
-        headline: translate('file_upload.existingfiles.title'),
+        title: translate('file_upload.existingfiles.title'),
         content: `<typo3-files-override-modal-content files='${JSON.stringify(
           action.files
         )}'></typo3-files-override-modal-content>`,

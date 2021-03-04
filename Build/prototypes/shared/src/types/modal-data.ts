@@ -29,7 +29,7 @@ export interface ModalData {
   variant?: ModalVariant;
   isForm?: boolean;
   type: ModalType;
-  headline: string;
+  title: string;
   content: string;
   modalButtons?: ModalButton[];
   dismissible?: boolean;

@@ -87,23 +87,44 @@ export const renameFile = (
 export const confirmDeleteFiles = (
   action$: ActionsObservable<fromActions.DeleteFilesConfirm>,
   state$: StateObservable<RootState>,
-  dependencies: { modalService: ModalService }
+  dependencies: { apiService: ApiService; modalService: ModalService }
 ): Observable<Action> => {
   return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
     switchMap(action => {
+      const parameters: { [key: string]: string } = {};
+      action.identifiers.forEach((identifier, i) => {
+        parameters[`identifiers[${i}]`] = identifier;
+      });
+
+      const url = getUrl(
+        'mediamanager_delete_resources_confirm_modal_data',
+        parameters
+      );
+
+      return dependencies.apiService
+        .getJSON<{
+          closeText: string;
+          deleteText: string;
+          message: string;
+          title: string;
+        }>(url)
+        .pipe(map(modalData => [action, modalData]));
+    }),
+    switchMap(([action, data]) => {
       const modalData = {
-        ...action.modalData,
+        title: data.title,
+        content: data.message,
         type: ModalType.CONFIRM,
         variant: ModalVariant.warning,
         dismissible: true,
         modalButtons: [
           {
-            label: translate('button.cancel'),
+            label: data.closeText,
             color: 'default',
             action: 'typo3-delete-cancel',
           },
           {
-            label: translate('button.delete'),
+            label: data.deleteText,
             color: 'warning',
             action: 'typo3-confirm-delete',
           },
@@ -454,7 +475,7 @@ export const replaceFileConfirm = (
 
       return dependencies.modalService
         .openModal({
-          headline: translate('file_replace.pagetitle'),
+          title: translate('file_replace.pagetitle'),
           type: ModalType.HTML,
           isForm: true,
           dismissible: true,

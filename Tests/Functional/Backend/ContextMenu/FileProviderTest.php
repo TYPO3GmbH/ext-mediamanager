@@ -25,7 +25,6 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Mediamanager\Backend\ContextMenu\FileProvider;
-use TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelper;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FileProviderTest extends FunctionalTestCase
@@ -50,11 +49,8 @@ class FileProviderTest extends FunctionalTestCase
 
         $this->resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $this->clipboardMock = $this->createMock(Clipboard::class);
-        $resourcesDeleteHelper = $this->createMock(ResourcesDeleteHelper::class);
-        $resourcesDeleteHelper->method('getConfirmMessage')->willReturn('');
 
         GeneralUtility::setSingletonInstance(ResourceFactory::class, $this->resourceFactoryMock);
-        GeneralUtility::setSingletonInstance(ResourcesDeleteHelper::class, $resourcesDeleteHelper);
         GeneralUtility::addInstance(Clipboard::class, $this->clipboardMock);
     }
 

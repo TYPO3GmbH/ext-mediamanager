@@ -36,9 +36,6 @@ class FileProvider extends AbstractProvider
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    /** @var ResourcesDeleteHelperInterface */
-    private $resourcesDeleteHelper;
-
     /** @var string[][] */
     protected $itemsConfiguration = [
         'new' => [
@@ -109,9 +106,8 @@ class FileProvider extends AbstractProvider
         parent::initialize();
 
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-        $this->resourcesDeleteHelper = GeneralUtility::makeInstance(ResourcesDeleteHelper::class);
 
-        // @fix me do not concat files with ','
+        // @todo: fix me do not concat files with ','
         $identifiers = explode(',', $this->identifier);
         $this->records = array_map(
             function ($identifier) {
@@ -276,50 +272,8 @@ class FileProvider extends AbstractProvider
 
     protected function getAdditionalAttributes(string $itemName): array
     {
-        $attributes = [
-            'data-callback-module' => 'TYPO3/CMS/Filelist/ContextMenuActions',
-        ];
-        if ('delete' === $itemName && $this->backendUser->jsConfirmation(JsConfirmation::DELETE)) {
-            $title = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:delete');
-            $confirmMessage = $this->resourcesDeleteHelper->getConfirmMessage($this->records);
-            $closeText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel');
-            $deleteText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.delete');
+        $attributes = [];
 
-            $attributes += [
-                'data-title' => \htmlspecialchars($title),
-                'data-message' => \htmlspecialchars($confirmMessage),
-                'data-button-close-text' => \htmlspecialchars($closeText),
-                'data-button-ok-text' => \htmlspecialchars($deleteText),
-            ];
-        }
-        if ('pasteInto' === $itemName && $this->backendUser->jsConfirmation(JsConfirmation::COPY_MOVE_PASTE)) {
-            $elArr = $this->clipboard->elFromTable('_FILE');
-            $selItem = \reset($elArr);
-
-            $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
-
-            if (null === $fileOrFolderInClipBoard) {
-                return $attributes;
-            }
-
-            $title = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:clip_paste');
-
-            $confirmMessage = \sprintf(
-                $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.'
-                    . ('copy' === $this->clipboard->currentMode() ? 'copy' : 'move') . '_into'),
-                $fileOrFolderInClipBoard->getName(),
-                $this->getSingleRecord()->getName()
-            );
-            $closeText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_web_list.xlf:button.cancel');
-            $okLabel = 'copy' === $this->clipboard->currentMode() ? 'copy' : 'pasteinto';
-            $okText = $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.' . $okLabel);
-            $attributes += [
-                'data-title' => \htmlspecialchars($title),
-                'data-message' => \htmlspecialchars($confirmMessage),
-                'data-button-close-text' => \htmlspecialchars($closeText),
-                'data-button-ok-text' => \htmlspecialchars($okText),
-            ];
-        }
         if ('show' === $itemName) {
             $attributes += [
                 'data-url' => PathUtility::getAbsoluteWebPath($this->getSingleRecord()->getPublicUrl(true)),

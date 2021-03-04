@@ -75,10 +75,12 @@ class FolderBrowser implements ElementBrowserInterface
             'fileExistsUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_file_exists'),
             'treeUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_tree_fetchData', ['uid' => $storageUid]),
             'flashMessagesUrl' =>  (string)$this->uriBuilder->buildUriFromRoute('ajax_flashmessages_render'),
-            'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu_clipboard'),
+            'clipboardUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_contextmenu_clipboard'),
             'downloadFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('mediamanager_download_files'),
             'editFileStorageUrl' => (string)$this->uriBuilder->buildUriFromRoute('record_edit'),
             'searchFilesUrl' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_search_files', ['uid' => $storageUid]),
+            'ajax_contextmenu' => (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu'),
+            'ajax_mediamanager_delete_resources_confirm_modal_data' => (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_delete_resources_confirm_modal_data'),
         ];
 
         $appConfig = $this->appConfigProvider->getConfig();

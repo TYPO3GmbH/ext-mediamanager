@@ -63,6 +63,7 @@ import { catchError, map, take, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
 import { CellHeader } from '../../../packages/datagrid/src/lib/cell-header';
+import { getUrl } from './services/backend-url.service';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -194,12 +195,27 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new fromList.LoadListData(node.folderUrl));
   }
 
-  _onContextMenu(event: ContextMenuEvent): void {
+  _onContextMenu(
+    event: ContextMenuEvent,
+    context: 'list' | 'tree' = 'list'
+  ): void {
     event.detail.event.preventDefault();
     event.detail.event.stopImmediatePropagation();
 
+    const selectedItems = fromList.getSelectedItems(this.state);
+
+    let contextItems = [event.detail.node];
+    if (context === 'list' && selectedItems.length > 0) {
+      contextItems = selectedItems;
+    }
+
+    const url = getUrl('ajax_contextmenu', {
+      table: 'sys_file',
+      uid: contextItems.map(item => item.identifier).join(','),
+    });
+
     this.apiService
-      .getJSON<Typo3ContextMenuOption[]>(event.detail.node.contextMenuUrl)
+      .getJSON<Typo3ContextMenuOption[]>(url)
       .pipe(
         take(1),
         map(options => this.filterContextMenuOptions(Object.values(options))),
@@ -283,24 +299,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onDeleteClicked(): void {
-    let message = translate('deleteConfirmMessage');
-
-    const selectedFileNames = fromList
+    const identifiers = fromList
       .getSelectedItems(this.state)
-      .map(item => item.name)
-      .join("', '");
-
-    message = message.replace(/%\w*/gm, selectedFileNames);
-
-    const action = new fromFileActions.DeleteFilesConfirm(
-      fromList.getSelectedItems(this.state).map(data => data.identifier),
-      {
-        headline: translate('deleteConfirmHeadline'),
-        content: message,
-      }
-    ) as Action;
-
-    store.dispatch(action);
+      .map(data => data.identifier);
+    store.dispatch(new fromFileActions.DeleteFilesConfirm(identifiers));
   }
 
   _onRename(identifier: string, name: string): void {
@@ -375,10 +377,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'deleteFile':
-        storeAction = new fromFileActions.DeleteFilesConfirm([identifier], {
-          headline: additionalAttributes!['data-title'],
-          content: additionalAttributes!['data-message'],
-        });
+        storeAction = new fromFileActions.DeleteFilesConfirm([identifier]);
         break;
 
       case 'addFolder':
@@ -999,7 +998,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @typo3-node-drop="${this._onTreeNodeDrop}"
         @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>
           this._onSelectedNode(e.detail)}"
-        @typo3-node-contextmenu="${this._onContextMenu}"
+        @typo3-node-contextmenu="${e => this._onContextMenu(e, 'tree')}"
         @typo3-node-expand="${this._onNodeExpand}"
         @typo3-node-collapse="${this._onNodeCollapse}"
         @typo3-node-move="${this._onTreeNodeMove}"
