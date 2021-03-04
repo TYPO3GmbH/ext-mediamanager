@@ -22,10 +22,7 @@ export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
 export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 
 export const CLIPBOARD_COPY_FILE = '[FILE][CLIPBOARD] COPY FILE';
-export const CLIPBOARD_COPY_RELEASE_FILE =
-  '[FILE][CLIPBOARD] COPY RELEASE FILE';
 export const CLIPBOARD_CUT_FILE = '[FILE][CLIPBOARD] CUT FILE';
-export const CLIPBOARD_CUT_RELEASE_FILE = '[FILE][CLIPBOARD] CUT RELEASE FILE';
 
 export const CLIPBOARD_PASTE = '[FILE][CLIPBOARD] PASTE';
 export const CLIPBOARD_PASTE_SUCCESS = '[FILE][CLIPBOARD] PASTE SUCCESS';
@@ -411,30 +408,16 @@ export class CopyFilesSuccess implements Action {
   constructor(public message: string, public undoAction?: Action) {}
 }
 
-export class ClipboardCopyFile implements Action {
+export abstract class ClipboardAction {
+  constructor(public contextItems: (Typo3Node | ListItem)[]) {}
+}
+
+export class ClipboardCopyFile extends ClipboardAction implements Action {
   readonly type = CLIPBOARD_COPY_FILE;
-
-  constructor(public clipboardIdentifier: string, public identifier: string) {}
 }
 
-export class ClipboardCopyReleaseFile implements Action {
-  readonly type = CLIPBOARD_COPY_RELEASE_FILE;
-  readonly identifier = '0';
-
-  constructor(public clipboardIdentifier: string) {}
-}
-
-export class ClipboardCutFile implements Action {
+export class ClipboardCutFile extends ClipboardAction implements Action {
   readonly type = CLIPBOARD_CUT_FILE;
-
-  constructor(public clipboardIdentifier: string, public identifier: string) {}
-}
-
-export class ClipboardCutReleaseFile implements Action {
-  readonly type = CLIPBOARD_CUT_RELEASE_FILE;
-  readonly identifier = '0';
-
-  constructor(public clipboardIdentifier: string) {}
 }
 
 export class ClipboardPaste implements Action {
@@ -537,11 +520,7 @@ export type Actions =
   | UndoFilesActionSuccess
   | UndoFilesActionFailure;
 
-export type ClipboardSelectionActions =
-  | ClipboardCopyFile
-  | ClipboardCopyReleaseFile
-  | ClipboardCutFile
-  | ClipboardCutReleaseFile;
+export type ClipboardSelectionActions = ClipboardCopyFile | ClipboardCutFile;
 
 export const isExecutingFileAction = createSelector(
   (state: FileActionsState) => state,

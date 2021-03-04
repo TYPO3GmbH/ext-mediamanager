@@ -127,7 +127,6 @@ export class Typo3ContextMenu extends LitElement {
   _handleShowContextMenu = (
     event: CustomEvent<OpenContextMenuDetail>
   ): void => {
-    console.log(event);
     this.currentContextMenuDetail = event.detail;
     const openEvent = new CustomEvent('typo3-context-menu-open');
     this.dispatchEvent(openEvent);

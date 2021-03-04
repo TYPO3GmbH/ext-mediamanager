@@ -46,6 +46,7 @@ import {
   uploadFiles,
   uploadFilesConflict,
 } from './file-actions/upload-file-actions';
+import { CLIPBOARD_PAD } from '../../lib/mediamanager-clipboard-name';
 
 export const renameFile = (
   action$: ActionsObservable<fromActions.RenameFile>,
@@ -315,24 +316,17 @@ export const clipboardSelectionAction = (
   dependencies: { apiService: ApiService }
 ): Observable<void> => {
   return action$
-    .ofType(
-      fromActions.CLIPBOARD_COPY_FILE,
-      fromActions.CLIPBOARD_CUT_FILE,
-      fromActions.CLIPBOARD_COPY_RELEASE_FILE,
-      fromActions.CLIPBOARD_CUT_RELEASE_FILE
-    )
+    .ofType(fromActions.CLIPBOARD_COPY_FILE, fromActions.CLIPBOARD_CUT_FILE)
     .pipe(
       switchMap(action => {
         const params: Record<string, string> = {};
-        params[`CB[el][_FILE|${action.clipboardIdentifier}]`] =
-          action.identifier;
-        if (
-          -1 !==
-          [
-            fromActions.CLIPBOARD_COPY_FILE,
-            fromActions.CLIPBOARD_COPY_RELEASE_FILE,
-          ].indexOf(action.type)
-        ) {
+
+        action.contextItems.forEach(contextItem => {
+          params[`CB[el][_FILE|${contextItem.clipboardIdentifier}]`] =
+            contextItem.identifier;
+        });
+
+        if (-1 !== [fromActions.CLIPBOARD_COPY_FILE].indexOf(action.type)) {
           params['CB[setCopyMode]'] = '1';
         }
 
@@ -358,7 +352,7 @@ export const clipboardPaste = (
     switchMap(action => {
       const formData = new FormData();
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
-      formData.append('CB[pad]', 'normal');
+      formData.append('CB[pad]', CLIPBOARD_PAD);
       return dependencies.apiService
         .postFormData(getUrl('fileActionUrl'), formData)
         .pipe(

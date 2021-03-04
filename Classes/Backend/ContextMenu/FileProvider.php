@@ -61,20 +61,10 @@ class FileProvider extends AbstractProvider
             'iconIdentifier' => 'actions-edit-copy',
             'callbackAction' => 'copyFile',
         ],
-        'copyRelease' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.copy',
-            'iconIdentifier' => 'actions-edit-copy-release',
-            'callbackAction' => 'copyReleaseFile',
-        ],
         'cut' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.cut',
             'iconIdentifier' => 'actions-edit-cut',
             'callbackAction' => 'cutFile',
-        ],
-        'cutRelease' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.cutrelease',
-            'iconIdentifier' => 'actions-edit-cut-release',
-            'callbackAction' => 'cutReleaseFile',
         ],
         'pasteInto' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:cm.pasteinto',
@@ -148,14 +138,8 @@ class FileProvider extends AbstractProvider
             case 'copy':
                 $canRender = $this->canBeCopied();
                 break;
-            case 'copyRelease':
-                $canRender = $this->isRecordInClipboard('copy');
-                break;
             case 'cut':
                 $canRender = $this->canBeCut();
-                break;
-            case 'cutRelease':
-                $canRender = $this->isRecordInClipboard('cut');
                 break;
             case 'delete':
                 $canRender = $this->canBeDeleted();
@@ -191,12 +175,12 @@ class FileProvider extends AbstractProvider
 
     protected function canBeCopied(): bool
     {
-        return $this->getSingleRecord()->checkActionPermission('read') && $this->getSingleRecord()->checkActionPermission('copy') && !$this->isRecordInClipboard('copy');
+        return $this->getSingleRecord()->checkActionPermission('read') && $this->getSingleRecord()->checkActionPermission('copy');
     }
 
     protected function canBeCut(): bool
     {
-        return $this->getSingleRecord()->checkActionPermission('move') && !$this->isRecordInClipboard('cut');
+        return $this->getSingleRecord()->checkActionPermission('move');
     }
 
     protected function canBePastedInto(): bool
