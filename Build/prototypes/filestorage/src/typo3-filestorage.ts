@@ -735,7 +735,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         this._onRename(listData.identifier, e.detail)}"
     >
       ${createSVGElement(
-        isSelected ? 'actions-check-circle-alt' : 'actions-check-circle',
+        isSelected ? 'actions-check-circle-alt' : 'actions-circle',
         'checkbox'
       )}
       </typo3-badge>
