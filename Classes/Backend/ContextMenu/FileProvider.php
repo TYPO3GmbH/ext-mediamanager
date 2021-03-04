@@ -22,11 +22,9 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
-use TYPO3\CMS\Core\Type\Bitmask\JsConfirmation;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelper;
-use TYPO3\CMS\Mediamanager\Backend\Service\ResourcesDeleteHelperInterface;
+use TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard;
 
 class FileProvider extends AbstractProvider
 {
@@ -97,9 +95,8 @@ class FileProvider extends AbstractProvider
 
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
 
-        // @todo: fix me do not concat files with ','
-        $identifiers = explode(',', $this->identifier);
-        $this->records = array_map(
+        $identifiers = \json_decode($this->identifier, true);
+        $this->records = \array_map(
             function ($identifier) {
                 return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
             },
@@ -185,17 +182,9 @@ class FileProvider extends AbstractProvider
 
     protected function canBePastedInto(): bool
     {
-        $elArr = $this->clipboard->elFromTable('_FILE');
-        if (empty($elArr)) {
-            return false;
-        }
-
         if (false === $this->isSingleRecordMode()) {
             return false;
         }
-
-        $selItem = \reset($elArr);
-        $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($selItem);
 
         if (false === $this->isFolder($this->getSingleRecord())) {
             return false;
@@ -205,11 +194,24 @@ class FileProvider extends AbstractProvider
             return false;
         }
 
-        if ($fileOrFolderInClipBoard instanceof Folder) {
-            return $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard);
+        $clipboardElements = $this->clipboard->elFromTable('_FILE', MediamanagerAwareClipboard::MEDIAMANAGER_CLIPBOARD_PAD);
+        if (empty($clipboardElements)) {
+            return false;
         }
 
-        return false === $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->getSingleRecord(), $fileOrFolderInClipBoard);
+        foreach ($clipboardElements as $clipboardElement) {
+            $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($clipboardElement);
+
+            if (($fileOrFolderInClipBoard instanceof Folder) && false === $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard)) {
+                return false;
+            }
+
+            if (false !== $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->getSingleRecord(), $fileOrFolderInClipBoard)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -288,6 +290,6 @@ class FileProvider extends AbstractProvider
 
     private function isSingleRecordMode(): bool
     {
-        return count($this->records) === 1;
+        return \count($this->records) === 1;
     }
 }

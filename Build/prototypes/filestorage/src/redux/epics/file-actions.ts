@@ -326,9 +326,8 @@ export const clipboardSelectionAction = (
             contextItem.identifier;
         });
 
-        if (-1 !== [fromActions.CLIPBOARD_COPY_FILE].indexOf(action.type)) {
-          params['CB[setCopyMode]'] = '1';
-        }
+        params['CB[setCopyMode]'] =
+          action.type === fromActions.CLIPBOARD_COPY_FILE ? '1' : '0';
 
         return dependencies.apiService
           .postFormData(getUrl('clipboardUrl', params))
