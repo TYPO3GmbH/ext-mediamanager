@@ -25,4 +25,8 @@ defined('TYPO3_MODE') or die();
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ElementBrowsers']['file'] = \TYPO3\CMS\Mediamanager\Backend\Browser\FileBrowser::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ElementBrowsers']['folder'] = \TYPO3\CMS\Mediamanager\Backend\Browser\FolderBrowser::class;
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Clipboard\Clipboard::class] = [
+        'className' => \TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard::class,
+    ];
 })();

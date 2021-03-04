@@ -23,17 +23,16 @@ use TYPO3\CMS\Backend\Clipboard\Clipboard;
 use TYPO3\CMS\Backend\Controller\ContextMenuController as BaseContextMenuController;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard;
 
 class ContextMenuController extends BaseContextMenuController
 {
-    private const DEFAULT_CLIPBOARD_PAD = 'mediamanager';
-
     public function clipboardAction(ServerRequestInterface $request): ResponseInterface
     {
         /** @var Clipboard $clipboard */
         $clipboard = GeneralUtility::makeInstance(Clipboard::class);
         $clipboard->initializeClipboard();
-        $clipboard->current = self::DEFAULT_CLIPBOARD_PAD;
+        $clipboard->current = MediamanagerAwareClipboard::MEDIAMANAGER_CLIPBOARD_PAD;
 
         $clipboard->setCmd($request->getQueryParams()['CB']);
         $clipboard->cleanCurrent();
