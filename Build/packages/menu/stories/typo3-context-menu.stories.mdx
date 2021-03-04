@@ -23,7 +23,7 @@ import '../../../out-tsc/packages/menu/src/typo3-context-menu';
                         "history": {"callbackAction": "createDirectory", "icon": "", "label": "New Folder", "type": "item"}
                     },
                     sourceEvent: event,
-                    contextItem: {id: 1234}
+                    context: {id: 1234}
                 }}
             )); return false;'>
           Open the context menu with a right click
@@ -51,7 +51,7 @@ The `typo3-show-context-menu` event needs :
 |---------------|------------|--------------------------------------------------------------------------------------|
 | `options`     | Object     | An "associative" array with objects implementing `Typo3ContextMenuOption` interface  |
 | `sourceEvent` | MouseEvent | The source event (with pageX and pageY values)                                   |
-| `contextItem` | Object     | Corresponding data to click event                                                    |
+| `context`     | Object     | Corresponding data to click event                                                    |
 
 
 ## Example of `typo3-show-context-menu` custom event
@@ -71,7 +71,7 @@ function openContextMenu(event) {
                 "delete": {"callbackAction": "createFile", "icon": "", "label": "New File", "type": "item"},
                 "divider1": {"type": "divider"}
             },
-            contextItem: {id: 123}
+            context: {id: 123}
         }
     });
     window.dispatchEvent(contextEvent);

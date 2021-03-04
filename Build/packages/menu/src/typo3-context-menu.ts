@@ -30,7 +30,7 @@ import { ActionDetail } from '@material/mwc-list/mwc-list-foundation';
 interface OpenContextMenuDetail {
   options: { [key: string]: Typo3ContextMenuOption };
   sourceEvent: MouseEvent;
-  contextItem: {};
+  context: {};
 }
 
 /**
@@ -118,7 +118,7 @@ export class Typo3ContextMenu extends LitElement {
     const actionEvent = new CustomEvent('typo3-context-menu-item-click', {
       detail: {
         option: option,
-        contextItem: this.currentContextMenuDetail?.contextItem,
+        context: this.currentContextMenuDetail?.context,
       },
     });
     this.dispatchEvent(actionEvent);
@@ -127,6 +127,7 @@ export class Typo3ContextMenu extends LitElement {
   _handleShowContextMenu = (
     event: CustomEvent<OpenContextMenuDetail>
   ): void => {
+    console.log(event);
     this.currentContextMenuDetail = event.detail;
     const openEvent = new CustomEvent('typo3-context-menu-open');
     this.dispatchEvent(openEvent);

@@ -225,7 +225,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
               detail: {
                 sourceEvent: event.detail.event,
                 options: options,
-                contextItem: event.detail.node,
+                context: contextItems,
               },
             })
           );
@@ -356,9 +356,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   _onContextMenuItemClick(event: ContextMenuItemClickEvent): void {
-    const contextItem = event.detail.contextItem;
+    const contextItems = event.detail.context;
+    const contextItem: Typo3Node | ListItem = event.detail.context[0];
     const callbackAction = event.detail.option.callbackAction;
-    const identifier = contextItem.identifier;
+    const identifiers = contextItems.map(node => node.identifier);
 
     let storeAction: Action | null = null;
 
@@ -367,7 +368,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     switch (callbackAction) {
       case 'openInfoPopUp':
         storeAction = new fromFileActions.ShowFileInfo(
-          identifier,
+          contextItem.identifier,
           contextItem.sysType
         );
         break;
@@ -377,16 +378,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'deleteFile':
-        storeAction = new fromFileActions.DeleteFilesConfirm([identifier]);
+        storeAction = new fromFileActions.DeleteFilesConfirm(identifiers);
         break;
-
       case 'addFolder':
-        this.fileTree.addNode(identifier);
+        this.fileTree.addNode(contextItem.identifier);
         break;
       case 'copyFile':
         storeAction = new fromFileActions.ClipboardCopyFile(
           contextItem.clipboardIdentifier,
-          identifier
+          identifiers
         );
         break;
       case 'copyReleaseFile':
@@ -397,7 +397,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       case 'cutFile':
         storeAction = new fromFileActions.ClipboardCutFile(
           contextItem.clipboardIdentifier,
-          identifier
+          identifiers
         );
         break;
       case 'cutReleaseFile':
@@ -406,13 +406,19 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         );
         break;
       case 'pasteFileInto':
-        storeAction = new fromFileActions.ClipboardPaste(identifier);
+        storeAction = new fromFileActions.ClipboardPaste(
+          contextItem.identifier
+        );
         break;
       case 'editFileStorage':
-        storeAction = new fromFileActions.EditFileStorage(identifier);
+        storeAction = new fromFileActions.EditFileStorage(
+          contextItem.identifier
+        );
         break;
       case 'replaceFile':
-        storeAction = new fromFileActions.ReplaceFileConfirm(identifier);
+        storeAction = new fromFileActions.ReplaceFileConfirm(
+          contextItem.identifier
+        );
         break;
       default:
         console.info('Todo: Implement cb action', event.detail.option);

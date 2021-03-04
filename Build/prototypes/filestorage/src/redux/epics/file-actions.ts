@@ -471,7 +471,9 @@ export const replaceFileConfirm = (
           <input type="hidden" name="data[replace][1][uid]" value="${
             action.identifier
           }">
-        </form>`;
+        </form>`
+        .split('\n')
+        .join('');
 
       return dependencies.modalService
         .openModal({
