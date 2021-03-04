@@ -27,8 +27,7 @@ interface ListItem {
   references: string;
   rw: string;
   thumbnailUrl?: string;
-  thumbnailWidth?: string;
-  contextMenuUrl: string;
+  cardFolderIcon?: string;
   clipboardIdentifier: string;
   metaDataUrl?: string;
   parentIdentifier: string;

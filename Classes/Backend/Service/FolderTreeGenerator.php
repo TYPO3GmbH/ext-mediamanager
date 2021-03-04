@@ -169,7 +169,6 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             'nameSourceField' => 'title',
             'hasChildren' => \count($folder->getSubfolders()) > 0,
             'folderUrl' => $this->buildFolderUrl($combinedIdentifier),
-            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier, $isStorage ? 'sys_file_storage' : 'sys_file'),
             'allowEdit' => $folder->checkActionPermission('rename'),
             'clipboardIdentifier' => $clipboardIdentifier,
             'parentIdentifier' => $parentFolder instanceof Folder && !$isStorage ? $parentFolder->getCombinedIdentifier() : null,
@@ -202,10 +201,5 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
     protected function buildFolderUrl(string $combinedIdentifier): string
     {
         return (string)$this->uriBuilder->buildUriFromRoute('ajax_mediamanager_folder_fetchData', ['identifier' => $combinedIdentifier]);
-    }
-
-    protected function buildContextMenuUrl(string $combinedIdentifier, string $type = 'sys_file'): string
-    {
-        return (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => $type, 'uid' => $combinedIdentifier, 'context' => 'tree']);
     }
 }

@@ -49,6 +49,5 @@ export interface Typo3Node {
   firstChild?: boolean;
   lastChild?: boolean;
   class?: string;
-  contextMenuUrl: string;
   clipboardIdentifier: string;
 }

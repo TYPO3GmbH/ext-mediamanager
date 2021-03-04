@@ -683,7 +683,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   }
 
   protected renderCardContent(listData: ListItem): TemplateResult {
-    const rawIcon = addSlotToRawHtml(listData.icon, 'image');
+    const rawIcon = addSlotToRawHtml(
+      listData.cardFolderIcon || listData.icon,
+      'image'
+    );
     let imageSlot = html`${unsafeHTML(rawIcon)}`;
     if (listData.thumbnailUrl) {
       imageSlot = html`<img

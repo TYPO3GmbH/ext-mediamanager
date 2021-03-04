@@ -28,7 +28,9 @@ use TYPO3\CMS\Core\Resource\MetaDataAspect;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Mediamanager\Backend\Service\FileReferencesProviderInterface;
+use TYPO3\CMS\Mediamanager\Backend\Service\FileThumbnailUrlProviderInterface;
 use TYPO3\CMS\Mediamanager\Backend\Service\FolderListGenerator;
+use TYPO3\CMS\Mediamanager\Backend\Service\FolderThumbnailProviderInterface;
 use TYPO3\CMS\Mediamanager\Backend\Service\LanguageServiceProvider;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -44,6 +46,12 @@ class FolderListGeneratorTest extends FunctionalTestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|IconFactory */
     private $iconFactoryMock;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FileThumbnailUrlProviderInterface */
+    private $fileThumbnailUrlProvider;
+
+    /** @var \PHPUnit\Framework\MockObject\MockObject|FolderThumbnailProviderInterface */
+    private $folderThumbnailProvider;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -55,11 +63,17 @@ class FolderListGeneratorTest extends FunctionalTestCase
             ->willReturn(2);
 
         $GLOBALS['LANG'] = LanguageService::create('default');
+
+        $this->fileThumbnailUrlProvider = $this->createMock(FileThumbnailUrlProviderInterface::class);
+        $this->folderThumbnailProvider = $this->createMock(FolderThumbnailProviderInterface::class);
+
         $this->generator = new FolderListGenerator(
             new LanguageServiceProvider(),
             $this->iconFactoryMock,
             GeneralUtility::makeInstance(UriBuilder::class),
-            $fileReferencesProviderMock
+            $fileReferencesProviderMock,
+            $this->fileThumbnailUrlProvider,
+            $this->folderThumbnailProvider
         );
     }
 
@@ -115,6 +129,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $folderObject->method('getCombinedIdentifier')
             ->willReturn('1:/');
 
+        $this->folderThumbnailProvider->method('getFolderThumbnailIcon')
+            ->willReturn('<svg></svg>');
+
         $result = $this->generator->getFolderItems($folderObject);
 
         self::assertEquals([[
@@ -129,9 +146,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'variants' => '-',
             'references' => '-',
             'rw' => 'R',
-            'contextMenuUrl' => '/typo3/ajax/context-menu?token=dummyToken&table=sys_file&uid=1%3A%2Ftest-folder',
             'clipboardIdentifier' => '95ed07cec0',
             'sysType' => '_FOLDER',
+            'cardFolderIcon' => '<svg></svg>',
             'parentIdentifier' => '1:/',
         ]], $result);
     }
@@ -245,7 +262,6 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'variants' => '-',
             'references' => 2,
             'rw' => 'RW',
-            'contextMenuUrl' => '/typo3/ajax/context-menu?token=dummyToken&table=sys_file&uid=1%3A%2Ftest-file',
             'clipboardIdentifier' => '4fbe4dde37',
             'thumbnailUrl' => null,
             'sysType' => '_FILE',

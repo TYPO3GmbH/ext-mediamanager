@@ -27,7 +27,6 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
-use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -46,16 +45,26 @@ class FolderListGenerator implements FolderListGeneratorInterface
     /** @var FileReferencesProviderInterface */
     private $fileReferencesProvider;
 
+    /** @var FileThumbnailUrlProviderInterface */
+    private $fileThumbnailUrlProvider;
+
+    /** @var FolderThumbnailProviderInterface */
+    private $folderThumbnailProvider;
+
     public function __construct(
         LanguageServiceProvider $languageServiceProvider,
         IconFactory $iconFactory,
         UriBuilder $uriBuilder,
-        FileReferencesProviderInterface $fileReferencesProvider
+        FileReferencesProviderInterface $fileReferencesProvider,
+        FileThumbnailUrlProviderInterface $fileThumbnailUrlProvider,
+        FolderThumbnailProviderInterface $folderThumbnailUrlProvider
     ) {
         $this->languageService = $languageServiceProvider->getLanguageService();
         $this->iconFactory = $iconFactory;
         $this->uriBuilder = $uriBuilder;
         $this->fileReferencesProvider = $fileReferencesProvider;
+        $this->fileThumbnailUrlProvider = $fileThumbnailUrlProvider;
+        $this->folderThumbnailProvider = $folderThumbnailUrlProvider;
     }
 
     public function getFolderItems(Folder $folderObject): array
@@ -77,8 +86,10 @@ class FolderListGenerator implements FolderListGeneratorInterface
      */
     protected function formatFolder(Folder $folder): array
     {
+        $folderIcon = null;
         try {
             $numFiles = $folder->getFileCount();
+            $folderIcon = $this->folderThumbnailProvider->getFolderThumbnailIcon($folder);
         } catch (InsufficientFolderAccessPermissionsException $e) {
             $numFiles = 0;
         }
@@ -89,6 +100,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
                 'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
                 'sizeRaw' => (int)$numFiles,
                 'type' => $this->languageService->getLL('folder'),
+                'cardFolderIcon' => $folderIcon
             ]
         );
     }
@@ -98,19 +110,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
      */
     public function formatFile(File $file): array
     {
-        $thumbnailUrl = null;
-        $thumbnailWidth = '490m';
-        $thumbnailHeight = '300m';
-
-        if ($file->isImage() || $file->isMediaFile()) {
-            $processedFile = $file->process(
-                ProcessedFile::CONTEXT_IMAGEPREVIEW,
-                ['height' => $thumbnailHeight, 'width' => $thumbnailWidth]
-            );
-            if ($processedFile) {
-                $thumbnailUrl = PathUtility::getAbsoluteWebPath($processedFile->getPublicUrl());
-            }
-        }
+        $thumbnailUrl = $this->fileThumbnailUrlProvider->getThumbnailUrl($file);
 
         // todo: potential bottleneck: (either perform request to get metadata url or retrieve all metadataIds via queryProvider)
         $metaDataUrl = null;
@@ -169,15 +169,9 @@ class FolderListGenerator implements FolderListGeneratorInterface
             'variants' => '-',
             'references' => '-',
             'rw' => $this->languageService->getLL('read') . ($isWritable ? $this->languageService->getLL('write') : ''),
-            'contextMenuUrl' => $this->buildContextMenuUrl($combinedIdentifier),
             'clipboardIdentifier' => $clipboardIdentifier,
             'sysType' => $resource instanceof FileInterface ? '_FILE' : '_FOLDER',
             'parentIdentifier' => $parentFolder instanceof Folder ? $parentFolder->getCombinedIdentifier() : null,
         ];
-    }
-
-    protected function buildContextMenuUrl(string $combinedIdentifier): string
-    {
-        return (string)$this->uriBuilder->buildUriFromRoute('ajax_contextmenu', ['table' => 'sys_file', 'uid' => $combinedIdentifier]);
     }
 }
