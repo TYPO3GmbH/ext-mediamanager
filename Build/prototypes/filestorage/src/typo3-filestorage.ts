@@ -216,6 +216,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const url = getUrl('ajax_contextmenu', {
       table: 'sys_file',
       uid: JSON.stringify(contextItems.map(item => item.identifier)),
+      context: context,
     });
 
     this.apiService
