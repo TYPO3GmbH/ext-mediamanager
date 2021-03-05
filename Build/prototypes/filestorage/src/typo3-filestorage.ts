@@ -120,12 +120,20 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         type: 'text',
         title: ' ',
         hidden: true,
+        sortable: false,
+      },
+      {
+        name: 'selected',
+        type: 'html',
+        title: ' ',
+        width: '24',
       },
       {
         name: 'icon',
         type: 'html',
         title: ' ',
         width: '24',
+        sortable: false,
       },
       {
         name: 'name',
@@ -656,27 +664,46 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
 
     if (fromView.isListMode(this.state)) {
+      const rows = listItems.map(listItem => {
+        const isSelected = fromList.isItemSelected(this.state)(
+          listItem.identifier
+        );
+        const icon = isSelected ? 'actions-check-circle-alt' : 'actions-circle';
+        const color = isSelected ? '#0078e6' : '#777';
+
+        return {
+          ...listItem,
+          selected: `<svg class="icon-color" role="img" fill="${color}"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#${icon}"/></svg>`,
+        };
+      });
+      console.log(rows);
+
       const sorters = DatagridSorter.getDatagridSorters(this.datagridSchema);
-      return html` <typo3-datagrid
-        class="main-content"
-        draggable="${!this.itemsDragDropEnabled ||
-        fromList.isEmptySelection(this.state)
-          ? 'false'
-          : 'true'}"
-        .schema="${this.datagridSchema}"
-        .data="${listItems}"
-        .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
-        .selectedRows="${fromList.getSelectedItems(this.state)}"
-        .sorters="${sorters}"
-        @dragstart="${this._onDragStart}"
-        @contextmenu="${this._onContextMenuWithoutContext}"
-        @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
-        @typo3-datagrid-contextmenu="${this._onContextMenu}"
-        @typo3-datagrid-dblclick="${(e: CustomEvent) =>
-          this._onItemDblClick(e.detail)}"
-        @typo3-datagrid-value-change="${(e: CustomEvent) =>
-          this._onRename(e.detail.data.identifier, e.detail.data.name)}"
-      ></typo3-datagrid>`;
+      return html`
+        <typo3-datagrid
+          class="main-content"
+          draggable="${!this.itemsDragDropEnabled ||
+          fromList.isEmptySelection(this.state)
+            ? 'false'
+            : 'true'}"
+          .schema="${this.datagridSchema}"
+          .data="${rows}"
+          .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
+          .selectedRows="${fromList.getSelectedItems(this.state)}"
+          .sorters="${sorters}"
+          @dragstart="${this._onDragStart}"
+          @contextmenu="${this._onContextMenuWithoutContext}"
+          @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
+          @typo3-datagrid-contextmenu="${this._onContextMenu}"
+          @typo3-datagrid-dblclick="${(e: CustomEvent) =>
+            this._onItemDblClick(e.detail)}"
+          @typo3-datagrid-value-change="${(e: CustomEvent) =>
+            this._onRename(e.detail.data.identifier, e.detail.data.name)}"
+        ></typo3-datagrid>
+        <defs>
+          <circle id="myCircle" cx="0" cy="0" r="5" />
+        </defs>
+      `;
     }
 
     const orderedData = this._orderItemsForCardgridView(listItems);

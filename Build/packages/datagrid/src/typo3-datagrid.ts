@@ -68,6 +68,7 @@ export class Typo3Datagrid extends LitElement {
   private latestSelectedRowIndex?: number;
   private inEditMode = false;
   private resizeSubscription!: Subscription;
+  private fillColorBuffer: { [key: string]: string } = {};
 
   render(): TemplateResult {
     return html` ${this.renderFlexColumns} ${this.renderGrid} `;
@@ -254,6 +255,13 @@ export class Typo3Datagrid extends LitElement {
 
         this.imageBuffer[e.cell.value] = img;
 
+        const fillColor = (domElement.querySelector(
+          'svg'
+        ) as SVGElement).getAttribute('fill');
+        if (fillColor) {
+          this.fillColorBuffer[id] = fillColor;
+        }
+
         fetch(src)
           .then(r => r.text())
           .then(markup =>
@@ -263,6 +271,9 @@ export class Typo3Datagrid extends LitElement {
             const node = doc.getElementById(id) as HTMLElement;
             node.setAttribute('width', '16px');
             node.setAttribute('height', '16px');
+            if (this.fillColorBuffer[id]) {
+              node.setAttribute('fill', this.fillColorBuffer[id]);
+            }
             const xml = new XMLSerializer().serializeToString(node);
             const svgURL = xml
               .replace('symbol', 'svg')
@@ -287,6 +298,8 @@ export class Typo3Datagrid extends LitElement {
       if (image && image.width !== 0) {
         const targetWidth = image.width;
         const targetHeight = image.height;
+
+        e.ctx.fillStyle = 'blue';
 
         const x = e.cell.x + (e.cell.width - targetWidth) / 2;
         const y = e.cell.y + (e.cell.height - targetHeight) / 2;
@@ -338,6 +351,18 @@ export class Typo3Datagrid extends LitElement {
 
   _onMousedown(e: CanvasDataGridEvent): void {
     if (this._isNotSelectableRow(e.cell)) {
+      e.preventDefault();
+      return;
+    }
+    console.log(e);
+
+    if (e.cell.isHeader) {
+      e.preventDefault();
+      return;
+    }
+
+    if (e.cell.header.name === 'selected') {
+      this.canvasGrid.selectRow(e.cell.rowIndex, true);
       e.preventDefault();
       return;
     }
