@@ -154,6 +154,8 @@ class AppConfigProvider implements AppConfigProviderInterface
             'checkmark' => 'actions-check',
             'actions-circle' => 'actions-circle',
             'actions-check-circle-alt' => 'actions-check-circle-alt',
+            'actions-chevron-left' => 'actions-chevron-left',
+            'actions-chevron-right' => 'actions-chevron-right',
         ];
 
         return \array_map(function (string $identifier) {

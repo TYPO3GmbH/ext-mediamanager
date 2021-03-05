@@ -515,6 +515,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onToggleFileTree(): void {
     store.dispatch(new fromLayout.ToggleSidebar());
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 2);
   }
 
   _orderItemsForCardgridView(listItems: ListItem[]): ListItem[] {
