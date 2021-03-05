@@ -40,20 +40,18 @@ class FolderThumbnailProvider implements FolderThumbnailProviderInterface
         $id = uniqid('', true);
 
         return <<<HTML
-           <svg class="icon-color" role="img">
+            <svg class="icon-color" role="img">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                     <path fill="#E8A33D" fill-rule="evenodd" d="M64 16H32l-6-6H0v44h64V16z"/>
                     <path fill="url(#{$id})" d="M2 12h60v40H2z"></path>
                     <path fill="#FFC857" fill-rule="evenodd" d="M0 48h26l6-6h32v12H0v-6z"/>
                 </svg>
                 <defs>
-
-                <pattern  id="$id" width="1" height="1">
-                    <image width="60" height="40" preserveAspectRatio="xMidYMid slice" href="{$thumbnailUrl}" />
-                </pattern>
-            </defs>
-           </svg>
-
+                    <pattern  id="$id" width="1" height="1">
+                        <image width="60" height="40" preserveAspectRatio="xMidYMid slice" href="{$thumbnailUrl}" />
+                    </pattern>
+                </defs>
+            </svg>
 HTML;
     }
 
