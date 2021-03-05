@@ -19,11 +19,10 @@ import {
   MoveFiles,
   RenameFile,
   UndoFilesAction,
-  UploadFiles,
-} from '../../src/redux/ducks/file-actions';
+} from '../../src/redux/ducks/actions/file';
 import { AjaxResponse } from 'rxjs/ajax';
-import { RootState } from '../../src/redux/ducks';
 import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { RootState } from '../../src/redux/ducks/reducers';
 
 describe('UndoActionResolverService', () => {
   let service: UndoActionResolverService;

@@ -13,11 +13,6 @@
 
 import { ActionsObservable, StateObservable } from 'redux-observable';
 
-import * as fromActions from '../ducks/file-actions';
-import {
-  DownloadFilesFailure,
-  DownloadFilesSuccess,
-} from '../ducks/file-actions';
 import {
   catchError,
   filter,
@@ -29,12 +24,11 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 import { ajax, AjaxError } from 'rxjs/ajax';
-import * as fromGlobal from '../ducks/global-actions';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { translate } from '../../services/translation.service';
-import { RootState } from '../ducks';
+import { RootState } from '../ducks/reducers';
 import { UndoActionResolverService } from '../../services/undo-action-resolver.service';
 import { ModalData, ModalType } from '../../../../shared/src/types/modal-data';
 import { ModalService } from '../../services/modal.service';
@@ -42,21 +36,22 @@ import { openAsLink } from '../../lib/utils';
 import { ApiService } from '../../services/api.service';
 import { SeverityEnum } from '../../../../shared/src/types/Severity';
 import { ModalVariant } from '../../../../../packages/modal/src/lib/modal-variant';
+import { CLIPBOARD_PAD } from '../../lib/mediamanager-clipboard-name';
+import { FileActions, GlobalActions } from '../ducks/actions';
 import {
   uploadFiles,
   uploadFilesConflict,
 } from './file-actions/upload-file-actions';
-import { CLIPBOARD_PAD } from '../../lib/mediamanager-clipboard-name';
 
 export const renameFile = (
-  action$: ActionsObservable<fromActions.RenameFile>,
+  action$: ActionsObservable<FileActions.RenameFile>,
   state$: StateObservable<RootState>,
   dependencies: {
     undoActionResolverService: UndoActionResolverService;
     apiService: ApiService;
   }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.RENAME_FILE).pipe(
+  return action$.ofType(FileActions.RENAME_FILE).pipe(
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const formData = new FormData();
@@ -74,23 +69,23 @@ export const renameFile = (
           ),
           map(
             undoAction =>
-              new fromActions.RenameFileSuccess(
+              new FileActions.RenameFileSuccess(
                 translate('message.header.fileRenamed'),
                 undoAction
               )
           ),
-          catchError(() => of(new fromActions.RenameFileFailure()))
+          catchError(() => of(new FileActions.RenameFileFailure()))
         );
     })
   );
 };
 
 export const confirmDeleteFiles = (
-  action$: ActionsObservable<fromActions.DeleteFilesConfirm>,
+  action$: ActionsObservable<FileActions.DeleteFilesConfirm>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService; modalService: ModalService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.DELETE_FILES_CONFIRM).pipe(
+  return action$.ofType(FileActions.DELETE_FILES_CONFIRM).pipe(
     switchMap(action => {
       const parameters: { [key: string]: string } = {};
       action.identifiers.forEach((identifier, i) => {
@@ -133,18 +128,18 @@ export const confirmDeleteFiles = (
       } as ModalData;
       return dependencies.modalService.openModal(modalData).pipe(
         filter(data => 'typo3-confirm-delete' === data.actionName),
-        map(() => new fromActions.DeleteFiles(action.identifiers))
+        map(() => new FileActions.DeleteFiles(action.identifiers))
       );
     })
   );
 };
 
 export const deleteFiles = (
-  action$: ActionsObservable<fromActions.DeleteFiles>,
+  action$: ActionsObservable<FileActions.DeleteFiles>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.DELETE_FILES).pipe(
+  return action$.ofType(FileActions.DELETE_FILES).pipe(
     switchMap(action => {
       const formData = new FormData();
       action.identifiers.forEach((identifier, index) => {
@@ -155,20 +150,20 @@ export const deleteFiles = (
         .pipe(
           map(
             () =>
-              new fromActions.DeleteFilesSuccess(
+              new FileActions.DeleteFilesSuccess(
                 translate('message.header.fileDeleted')
               )
           ),
-          catchError(() => of(new fromActions.DeleteFilesFailure()))
+          catchError(() => of(new FileActions.DeleteFilesFailure()))
         );
     })
   );
 };
 
 export const showFileInfo = (
-  action$: ActionsObservable<fromActions.ShowFileInfo>
+  action$: ActionsObservable<FileActions.ShowFileInfo>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.SHOW_FILE_INFO).pipe(
+  return action$.ofType(FileActions.SHOW_FILE_INFO).pipe(
     tap(action => {
       // @ts-ignore
       window.top.TYPO3.InfoWindow.showItem(action.sysType, action.identifier);
@@ -178,23 +173,23 @@ export const showFileInfo = (
 };
 
 export const showFile = (
-  action$: ActionsObservable<fromActions.ShowFile>
+  action$: ActionsObservable<FileActions.ShowFile>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.SHOW_FILE).pipe(
+  return action$.ofType(FileActions.SHOW_FILE).pipe(
     tap(action => openAsLink(action.fileUrl)),
     ignoreElements()
   );
 };
 
 export const addFolder = (
-  action$: ActionsObservable<fromActions.AddFolder>,
+  action$: ActionsObservable<FileActions.AddFolder>,
   state$: StateObservable<RootState>,
   dependencies: {
     undoActionResolverService: UndoActionResolverService;
     apiService: ApiService;
   }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.ADD_FOLDER).pipe(
+  return action$.ofType(FileActions.ADD_FOLDER).pipe(
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const formData = new FormData();
@@ -215,26 +210,26 @@ export const addFolder = (
           ),
           map(
             undoAction =>
-              new fromActions.AddFolderSuccess(
+              new FileActions.AddFolderSuccess(
                 translate('message.header.folderCreated'),
                 undoAction
               )
           ),
-          catchError(() => of(new fromActions.AddFolderFailure()))
+          catchError(() => of(new FileActions.AddFolderFailure()))
         );
     })
   );
 };
 
 export const moveFiles = (
-  action$: ActionsObservable<fromActions.MoveFiles>,
+  action$: ActionsObservable<FileActions.MoveFiles>,
   state$: StateObservable<RootState>,
   dependencies: {
     undoActionResolverService: UndoActionResolverService;
     apiService: ApiService;
   }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.MOVE_FILES).pipe(
+  return action$.ofType(FileActions.MOVE_FILES).pipe(
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const formData = new FormData();
@@ -257,26 +252,26 @@ export const moveFiles = (
           ),
           map(
             undoAction =>
-              new fromActions.MoveFilesSuccess(
+              new FileActions.MoveFilesSuccess(
                 translate('message.header.filesMoved'),
                 undoAction
               )
           ),
-          catchError(() => of(new fromActions.MoveFilesFailure()))
+          catchError(() => of(new FileActions.MoveFilesFailure()))
         );
     })
   );
 };
 
 export const copyFiles = (
-  action$: ActionsObservable<fromActions.CopyFiles>,
+  action$: ActionsObservable<FileActions.CopyFiles>,
   state$: StateObservable<RootState>,
   dependencies: {
     undoActionResolverService: UndoActionResolverService;
     apiService: ApiService;
   }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.COPY_FILES).pipe(
+  return action$.ofType(FileActions.COPY_FILES).pipe(
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const formData = new FormData();
@@ -299,24 +294,24 @@ export const copyFiles = (
           ),
           map(
             undoAction =>
-              new fromActions.CopyFilesSuccess(
+              new FileActions.CopyFilesSuccess(
                 translate('message.header.filesCopied'),
                 undoAction
               )
           ),
-          catchError(() => of(new fromActions.CopyFilesFailure()))
+          catchError(() => of(new FileActions.CopyFilesFailure()))
         );
     })
   );
 };
 
 export const clipboardSelectionAction = (
-  action$: ActionsObservable<fromActions.ClipboardSelectionActions>,
+  action$: ActionsObservable<FileActions.ClipboardSelectionActions>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<void> => {
   return action$
-    .ofType(fromActions.CLIPBOARD_COPY_FILE, fromActions.CLIPBOARD_CUT_FILE)
+    .ofType(FileActions.CLIPBOARD_COPY_FILE, FileActions.CLIPBOARD_CUT_FILE)
     .pipe(
       switchMap(action => {
         const params: Record<string, string> = {};
@@ -327,7 +322,7 @@ export const clipboardSelectionAction = (
         });
 
         params['CB[setCopyMode]'] =
-          action.type === fromActions.CLIPBOARD_COPY_FILE ? '1' : '0';
+          action.type === FileActions.CLIPBOARD_COPY_FILE ? '1' : '0';
 
         return dependencies.apiService
           .postFormData(getUrl('clipboardUrl', params))
@@ -343,11 +338,11 @@ export const clipboardSelectionAction = (
 };
 
 export const clipboardPaste = (
-  action$: ActionsObservable<fromActions.ClipboardPaste>,
+  action$: ActionsObservable<FileActions.ClipboardPaste>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.CLIPBOARD_PASTE).pipe(
+  return action$.ofType(FileActions.CLIPBOARD_PASTE).pipe(
     switchMap(action => {
       const formData = new FormData();
       formData.append('CB[paste]', 'FILE|' + action.targetIdentifier);
@@ -357,20 +352,20 @@ export const clipboardPaste = (
         .pipe(
           map(
             () =>
-              new fromActions.ClipboardPasteSuccess(
+              new FileActions.ClipboardPasteSuccess(
                 translate('message.header.filesMoved')
               )
           ),
-          catchError(() => of(new fromActions.ClipboardPasteFailure()))
+          catchError(() => of(new FileActions.ClipboardPasteFailure()))
         );
     })
   );
 };
 
 export const downloadFiles = (
-  action$: ActionsObservable<fromActions.DownloadFiles>
+  action$: ActionsObservable<FileActions.DownloadFiles>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.DOWNLOAD_FILES).pipe(
+  return action$.ofType(FileActions.DOWNLOAD_FILES).pipe(
     switchMap(action => {
       const formData = new FormData();
       action.identifiers.forEach((identifier, i) => {
@@ -401,7 +396,7 @@ export const downloadFiles = (
             }, 100); // cleanup
           }
         }),
-        map(() => new DownloadFilesSuccess()),
+        map(() => new FileActions.DownloadFilesSuccess()),
         catchError((error: AjaxError) => {
           const message = String.fromCharCode.apply(
             null,
@@ -415,7 +410,7 @@ export const downloadFiles = (
               },
             })
           );
-          return of(new DownloadFilesFailure());
+          return of(new FileActions.DownloadFilesFailure());
         })
       );
     })
@@ -423,9 +418,9 @@ export const downloadFiles = (
 };
 
 export const editFileStorage = (
-  action$: ActionsObservable<fromActions.EditFileStorage>
+  action$: ActionsObservable<FileActions.EditFileStorage>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.EDIT_FILE_STORAGE).pipe(
+  return action$.ofType(FileActions.EDIT_FILE_STORAGE).pipe(
     tap(action => {
       const storageId = parseInt(action.identifier, 10);
       const params: Record<string, string> = {};
@@ -438,11 +433,11 @@ export const editFileStorage = (
 };
 
 export const replaceFileConfirm = (
-  action$: ActionsObservable<fromActions.ReplaceFileConfirm>,
+  action$: ActionsObservable<FileActions.ReplaceFileConfirm>,
   state$: StateObservable<RootState>,
   dependencies: { modalService: ModalService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.REPLACE_FILE_CONFIRM).pipe(
+  return action$.ofType(FileActions.REPLACE_FILE_CONFIRM).pipe(
     switchMap(action => {
       const formContent = `
         <form enctype="multipart/form-data">
@@ -491,18 +486,18 @@ export const replaceFileConfirm = (
         })
         .pipe(
           filter(data => 'typo3-replace-confirm' === data.actionName),
-          map(data => new fromActions.ReplaceFile(data.actionData ?? {}))
+          map(data => new FileActions.ReplaceFile(data.actionData ?? {}))
         );
     })
   );
 };
 
 export const replaceFile = (
-  action$: ActionsObservable<fromActions.ReplaceFile>,
+  action$: ActionsObservable<FileActions.ReplaceFile>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.REPLACE_FILE).pipe(
+  return action$.ofType(FileActions.REPLACE_FILE).pipe(
     switchMap(action => {
       const formData = new FormData();
       for (const key in action.formData) {
@@ -513,22 +508,22 @@ export const replaceFile = (
         .pipe(
           map(
             () =>
-              new fromActions.ReplaceFileSuccess(
+              new FileActions.ReplaceFileSuccess(
                 translate('file_replace.pagetitle')
               )
           ),
-          catchError(() => of(new fromActions.ReplaceFileFailure()))
+          catchError(() => of(new FileActions.ReplaceFileFailure()))
         );
     })
   );
 };
 
 export const undoFileAction = (
-  action$: ActionsObservable<fromActions.UndoFilesAction>,
+  action$: ActionsObservable<FileActions.UndoFilesAction>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.UNDO_FILES_ACTION).pipe(
+  return action$.ofType(FileActions.UNDO_FILES_ACTION).pipe(
     switchMap(action => {
       const formData = new FormData();
       for (const key in action.formData) {
@@ -540,35 +535,35 @@ export const undoFileAction = (
         .pipe(
           map(
             () =>
-              new fromActions.UndoFilesActionSuccess(
+              new FileActions.UndoFilesActionSuccess(
                 translate('message.header.undo')
               )
           ),
-          catchError(() => of(new fromActions.UndoFilesActionFailure()))
+          catchError(() => of(new FileActions.UndoFilesActionFailure()))
         );
     })
   );
 };
 
 export const fileActionSuccess = (
-  action$: ActionsObservable<fromActions.SuccessAction>
+  action$: ActionsObservable<FileActions.SuccessAction>
 ): Observable<Action> => {
   return action$
     .ofType(
-      fromActions.ADD_FOLDER_SUCCESS,
-      fromActions.DELETE_FILES_SUCCESS,
-      fromActions.RENAME_FILE_SUCCESS,
-      fromActions.UPLOAD_FILES_SUCCESS,
-      fromActions.MOVE_FILES_SUCCESS,
-      fromActions.COPY_FILES_SUCCESS,
-      fromActions.CLIPBOARD_PASTE_SUCCESS,
-      fromActions.REPLACE_FILE_SUCCESS,
-      fromActions.UNDO_FILES_ACTION_SUCCESS
+      FileActions.ADD_FOLDER_SUCCESS,
+      FileActions.DELETE_FILES_SUCCESS,
+      FileActions.RENAME_FILE_SUCCESS,
+      FileActions.UPLOAD_FILES_SUCCESS,
+      FileActions.MOVE_FILES_SUCCESS,
+      FileActions.COPY_FILES_SUCCESS,
+      FileActions.CLIPBOARD_PASTE_SUCCESS,
+      FileActions.REPLACE_FILE_SUCCESS,
+      FileActions.UNDO_FILES_ACTION_SUCCESS
     )
     .pipe(
       mergeMap(action => [
-        new fromGlobal.Reload(),
-        new fromGlobal.LoadFlashMessages(
+        new GlobalActions.Reload(),
+        new GlobalActions.LoadFlashMessages(
           SeverityEnum.ok,
           action.message,
           action.undoAction
@@ -578,37 +573,37 @@ export const fileActionSuccess = (
 };
 
 export const fileActionFailure = (
-  action$: ActionsObservable<fromActions.Actions>
+  action$: ActionsObservable<FileActions.Actions>
 ): Observable<Action> => {
   return action$
     .ofType(
-      fromActions.DELETE_FILES_FAILURE,
-      fromActions.RENAME_FILE_FAILURE,
-      fromActions.UPLOAD_FILES_FAILURE,
-      fromActions.MOVE_FILES_FAILURE,
-      fromActions.COPY_FILES_FAILURE,
-      fromActions.CLIPBOARD_PASTE_FAILURE,
-      fromActions.REPLACE_FILE_FAILURE,
-      fromActions.UNDO_FILES_ACTION_FAILURE
+      FileActions.DELETE_FILES_FAILURE,
+      FileActions.RENAME_FILE_FAILURE,
+      FileActions.UPLOAD_FILES_FAILURE,
+      FileActions.MOVE_FILES_FAILURE,
+      FileActions.COPY_FILES_FAILURE,
+      FileActions.CLIPBOARD_PASTE_FAILURE,
+      FileActions.REPLACE_FILE_FAILURE,
+      FileActions.UNDO_FILES_ACTION_FAILURE
     )
     .pipe(
       mergeMap(action => {
         const actions: Action[] = [
-          new fromGlobal.LoadFlashMessages(
+          new GlobalActions.LoadFlashMessages(
             SeverityEnum.error,
             translate('message.header.genericError')
           ),
         ];
         if (
           [
-            fromActions.RENAME_FILE_FAILURE,
-            fromActions.ADD_FOLDER_FAILURE,
-            fromActions.MOVE_FILES_FAILURE,
-            fromActions.COPY_FILES_FAILURE,
-            fromActions.UPLOAD_FILES_FAILURE,
+            FileActions.RENAME_FILE_FAILURE,
+            FileActions.ADD_FOLDER_FAILURE,
+            FileActions.MOVE_FILES_FAILURE,
+            FileActions.COPY_FILES_FAILURE,
+            FileActions.UPLOAD_FILES_FAILURE,
           ].indexOf(action.type) != -1
         ) {
-          actions.push(new fromGlobal.Reload());
+          actions.push(new GlobalActions.Reload());
         }
         return actions;
       })
@@ -623,9 +618,9 @@ interface Typo3Modal {
 }
 
 export const editFileMetadata = (
-  action$: ActionsObservable<fromActions.EditFileMetadata>
+  action$: ActionsObservable<FileActions.EditFileMetadata>
 ): Observable<Action> => {
-  return action$.ofType(fromActions.EDIT_FILE_METADATA).pipe(
+  return action$.ofType(FileActions.EDIT_FILE_METADATA).pipe(
     tap(action => {
       // @ts-ignore
       const topModal: Typo3Modal = window.top.TYPO3.Modal;

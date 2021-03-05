@@ -12,12 +12,12 @@
  */
 
 import { expect } from '@open-wc/testing';
-import * as fromList from '../../../src/redux/ducks/list';
-import { ListState } from '../../../src/redux/ducks/list';
+import * as fromList from '../../../src/redux/ducks/actions/list';
+import { listReducer, ListState } from '../../../src/redux/ducks/reducers/list';
 
 describe('List reducer', () => {
   it('can return the initial state', () => {
-    const state = fromList.listReducer(undefined, {} as fromList.Actions);
+    const state = listReducer(undefined, {} as fromList.Actions);
     const expectedState = {
       items: [],
       selectedItemIds: [],
@@ -35,7 +35,7 @@ describe('List reducer', () => {
       searchTerm: 'foo',
       items: [{ identifier: 'id-1' }],
     } as ListState;
-    const state = fromList.listReducer(mockedState, action);
+    const state = listReducer(mockedState, action);
 
     expect(state.loading).to.be.true;
     expect(state.searchTerm).to.be.null;
@@ -45,7 +45,7 @@ describe('List reducer', () => {
   it('can handle `LoadListDataSuccess`', () => {
     const listItems = [{ identifier: 'id_12' }] as ListItem[];
     const action = new fromList.LoadListDataSuccess(listItems);
-    const state = fromList.listReducer(undefined, action);
+    const state = listReducer(undefined, action);
 
     expect(state.items).to.be.eqls(listItems);
     expect(state.loading).to.be.false;
@@ -56,14 +56,14 @@ describe('List reducer', () => {
     const prevState = {
       selectedItemIds: ['id1'],
     } as ListState;
-    const state = fromList.listReducer(prevState, action);
+    const state = listReducer(prevState, action);
 
     expect(state.selectedItemIds).to.be.eqls([]);
   });
 
   it('can handle `LoadListDataFailure`', () => {
     const action = new fromList.LoadListDataFailure('error');
-    const state = fromList.listReducer(undefined, action);
+    const state = listReducer(undefined, action);
 
     expect(state.error).to.be.eqls('error');
     expect(state.loading).to.be.false;
@@ -71,7 +71,7 @@ describe('List reducer', () => {
 
   it('can handle `SearchFiles`', () => {
     const action = new fromList.SearchFiles('foo');
-    const state = fromList.listReducer(undefined, action);
+    const state = listReducer(undefined, action);
 
     expect(state.loading).to.be.true;
     expect(state.searchTerm).to.be.eq('foo');
@@ -81,7 +81,7 @@ describe('List reducer', () => {
   it('can handle `SearchFilesSuccess`', () => {
     const listItems = [{ identifier: 'id_12' }] as ListItem[];
     const action = new fromList.SearchFilesSuccess(listItems);
-    const state = fromList.listReducer(undefined, action);
+    const state = listReducer(undefined, action);
 
     expect(state.items).to.be.eqls(listItems);
     expect(state.loading).to.be.false;
@@ -89,7 +89,7 @@ describe('List reducer', () => {
 
   it('can handle `SearchFilesFailure`', () => {
     const action = new fromList.SearchFilesFailure('error');
-    const state = fromList.listReducer(undefined, action);
+    const state = listReducer(undefined, action);
 
     expect(state.error).to.be.eqls('error');
     expect(state.loading).to.be.false;

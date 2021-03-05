@@ -11,14 +11,16 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import * as fromFileActions from '../redux/ducks/file-actions';
 import { AjaxResponse } from 'rxjs/ajax';
 import { isString } from 'lodash-es';
 import { extractStorageFromIdentifier } from '../lib/utils';
-import { RootState } from '../redux/ducks';
-import * as fromTree from '../redux/ducks/tree';
-import * as fromList from '../redux/ducks/list';
+import { RootState } from '../redux/ducks/reducers';
 import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { FileActions } from '../redux/ducks/actions';
+import {
+  getListItemByIdentifier,
+  getTreeNodeByIdentifier,
+} from '../redux/ducks/selectors';
 
 interface FileResponseItem {
   id: string;
@@ -49,27 +51,27 @@ interface UploadFilesResponse {
 
 export class UndoActionResolverService {
   getUndoAction(
-    action: fromFileActions.Actions,
+    action: FileActions.Actions,
     ajaxResponse: AjaxResponse,
     state: RootState
-  ): fromFileActions.UndoFilesAction | undefined {
+  ): FileActions.UndoFilesAction | undefined {
     switch (action.type) {
-      case fromFileActions.RENAME_FILE:
+      case FileActions.RENAME_FILE:
         return this.getUndoRenameAction(action, ajaxResponse.response, state);
-      case fromFileActions.MOVE_FILES:
+      case FileActions.MOVE_FILES:
         return this.getUndoMoveAction(action, ajaxResponse.response, state);
-      case fromFileActions.COPY_FILES:
+      case FileActions.COPY_FILES:
         return this.getUndoCopyAction(action, ajaxResponse.response);
-      case fromFileActions.ADD_FOLDER:
+      case FileActions.ADD_FOLDER:
         return this.getUndoAddFolderAction(action, ajaxResponse.response);
     }
   }
 
   private getUndoRenameAction(
-    action: fromFileActions.RenameFile,
+    action: FileActions.RenameFile,
     renameResponse: RenameResponse,
     state: RootState
-  ): fromFileActions.UndoFilesAction | undefined {
+  ): FileActions.UndoFilesAction | undefined {
     const oldItem = this.getItemFromStore(state, action.identifier);
     if (null === oldItem) {
       return;
@@ -88,14 +90,14 @@ export class UndoActionResolverService {
       'data[rename][0][target]': oldItem.name,
     };
 
-    return new fromFileActions.UndoFilesAction(data);
+    return new FileActions.UndoFilesAction(data);
   }
 
   private getUndoMoveAction(
-    action: fromFileActions.MoveFiles,
+    action: FileActions.MoveFiles,
     moveResponse: MoveResponse,
     state: RootState
-  ): fromFileActions.UndoFilesAction {
+  ): FileActions.UndoFilesAction {
     const data: { [key: string]: string } = {};
     action.identifiers.forEach((identifier: string, index) => {
       const oldItem = this.getItemFromStore(state, identifier);
@@ -122,13 +124,13 @@ export class UndoActionResolverService {
       ] = oldItem.parentIdentifier as string;
     });
 
-    return new fromFileActions.UndoFilesAction(data);
+    return new FileActions.UndoFilesAction(data);
   }
 
   private getUndoCopyAction(
-    action: fromFileActions.CopyFiles,
+    action: FileActions.CopyFiles,
     copyResponse: CopyResponse
-  ): fromFileActions.UndoFilesAction {
+  ): FileActions.UndoFilesAction {
     const data: { [key: string]: string } = {};
 
     copyResponse.copy.forEach(
@@ -150,13 +152,13 @@ export class UndoActionResolverService {
       }
     );
 
-    return new fromFileActions.UndoFilesAction(data);
+    return new FileActions.UndoFilesAction(data);
   }
 
   private getUndoAddFolderAction(
-    action: fromFileActions.AddFolder,
+    action: FileActions.AddFolder,
     newFolderResponse: NewFolderResponse
-  ): fromFileActions.UndoFilesAction {
+  ): FileActions.UndoFilesAction {
     const data: { [key: string]: string } = {};
 
     newFolderResponse.newfolder.forEach(
@@ -169,7 +171,7 @@ export class UndoActionResolverService {
       }
     );
 
-    return new fromFileActions.UndoFilesAction(data);
+    return new FileActions.UndoFilesAction(data);
   }
 
   private getItemFromStore(
@@ -177,8 +179,8 @@ export class UndoActionResolverService {
     identifier: string
   ): Typo3Node | ListItem | null {
     return (
-      fromTree.getTreeNodeByIdentifier(state)(identifier) ||
-      fromList.getListItemByIdentifier(state)(identifier)
+      getTreeNodeByIdentifier(state)(identifier) ||
+      getListItemByIdentifier(state)(identifier)
     );
   }
 }

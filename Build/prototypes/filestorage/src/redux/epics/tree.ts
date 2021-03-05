@@ -12,7 +12,6 @@
  */
 
 import { ActionsObservable, StateObservable } from 'redux-observable';
-import * as fromTree from '../ducks/tree';
 import {
   catchError,
   distinctUntilChanged,
@@ -24,43 +23,45 @@ import {
 import { Observable, of } from 'rxjs';
 import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
 import { Action } from 'redux';
-import * as fromList from '../ducks/list';
 import { getUrl } from '../../services/backend-url.service';
 import { ApiService } from '../../services/api.service';
-import { RootState } from '../ducks';
+import { RootState } from '../ducks/reducers';
+import { ListActions, TreeActions } from '../ducks/actions';
 
 export const fetchTreeData = (
-  action$: ActionsObservable<fromTree.LoadTreeData>,
+  action$: ActionsObservable<TreeActions.LoadTreeData>,
   state$: StateObservable<RootState>,
   dependencies: { apiService: ApiService }
 ): Observable<Action> => {
   let isInit = false;
-  return action$.ofType(fromTree.LOAD_TREE_DATA).pipe(
+  return action$.ofType(TreeActions.LOAD_TREE_DATA).pipe(
     tap(action => (isInit = action.init)),
     switchMap(() =>
       dependencies.apiService.getJSON<Typo3Node[]>(getUrl('treeUrl')).pipe(
         mergeMap(data => {
-          const actions: Action[] = [new fromTree.LoadTreeDataSuccess(data)];
+          const actions: Action[] = [new TreeActions.LoadTreeDataSuccess(data)];
           if (isInit && data.length > 0) {
             const node = data[0];
             node.parentsStateIdentifier = [];
 
-            actions.push(new fromTree.ExpandTreeNode(node.identifier));
-            actions.push(new fromTree.SelectTreeNode(node.identifier));
-            actions.push(new fromList.LoadListData(node.folderUrl));
+            actions.push(new TreeActions.ExpandTreeNode(node.identifier));
+            actions.push(new TreeActions.SelectTreeNode(node.identifier));
+            actions.push(new ListActions.LoadListData(node.folderUrl));
           }
           return actions;
         }),
-        catchError(error => of(new fromTree.LoadTreeDataFailure(error.message)))
+        catchError(error =>
+          of(new TreeActions.LoadTreeDataFailure(error.message))
+        )
       )
     )
   );
 };
 
 export const selectTreeNode = (
-  action$: ActionsObservable<fromTree.SelectTreeNode>
+  action$: ActionsObservable<TreeActions.SelectTreeNode>
 ): Observable<void> => {
-  return action$.ofType(fromTree.SELECT_TREE_NODE).pipe(
+  return action$.ofType(TreeActions.SELECT_TREE_NODE).pipe(
     distinctUntilChanged(),
     tap(action => (window.location.hash = action.identifier)),
     ignoreElements()

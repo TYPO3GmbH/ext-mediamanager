@@ -11,12 +11,11 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Action } from 'redux';
-import { RootState } from './index';
-import { createSelector } from 'reselect';
-
-export const SET_SIDEBAR_WIDTH = '[LAYOUT] SET SIDEBAR WIDTH';
-export const TOGGLE_SIDEBAR = '[LAYOUT] TOGGLE SIDEBAR';
+import {
+  Actions,
+  SET_SIDEBAR_WIDTH,
+  TOGGLE_SIDEBAR,
+} from '../../actions/layout';
 
 export type LayoutState = Readonly<{
   sidebarWidth: number;
@@ -41,27 +40,3 @@ export const layoutReducer = (
       return state;
   }
 };
-
-export class SetSidebarWidth implements Action {
-  readonly type = SET_SIDEBAR_WIDTH;
-
-  constructor(public sidebarWidth: number) {}
-}
-
-export class ToggleSidebar implements Action {
-  readonly type = TOGGLE_SIDEBAR;
-}
-
-export type Actions = SetSidebarWidth | ToggleSidebar;
-
-const layoutSelector = (state: RootState) => state.layout;
-
-export const getSidebarWidth = createSelector(
-  layoutSelector,
-  layout => layout.sidebarWidth
-);
-
-export const isSidebarVisible = createSelector(
-  layoutSelector,
-  layout => layout.sidebarVisible
-);

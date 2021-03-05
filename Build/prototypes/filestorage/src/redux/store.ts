@@ -18,7 +18,7 @@ import {
   createStore,
   Middleware,
 } from 'redux';
-import { rootReducer } from './ducks';
+import { rootReducer } from './ducks/reducers';
 import { createEpicMiddleware } from 'redux-observable';
 import { rootEpic } from './epics';
 import { FlashMessagesService } from '../services/flash-messages.service';

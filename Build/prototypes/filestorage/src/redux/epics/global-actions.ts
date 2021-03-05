@@ -12,35 +12,30 @@
  */
 
 import { ActionsObservable, StateObservable } from 'redux-observable';
-import * as fromActions from '../ducks/global-actions';
 import { mergeMap, switchMap } from 'rxjs/operators';
-import * as fromTree from '../ducks/tree';
-import * as fromList from '../ducks/list';
-import { RootState } from '../ducks';
+import { RootState } from '../ducks/reducers';
 import { Observable } from 'rxjs';
 import { Action } from 'redux';
 import { FlashMessagesService } from '../../services/flash-messages.service';
+import { ReloadListData } from '../ducks/actions/list';
+import { LoadTreeData } from '../ducks/actions/tree';
+import { GlobalActions } from '../ducks/actions';
 
 export const reload = (
-  action$: ActionsObservable<fromActions.Reload>
+  action$: ActionsObservable<GlobalActions.Reload>
 ): Observable<Action> => {
   return action$
-    .ofType(fromActions.RELOAD)
-    .pipe(
-      mergeMap(() => [
-        new fromTree.LoadTreeData(false),
-        new fromList.ReloadListData(),
-      ])
-    );
+    .ofType(GlobalActions.RELOAD)
+    .pipe(mergeMap(() => [new LoadTreeData(false), new ReloadListData()]));
 };
 
 export const loadFlashMessages = (
-  action$: ActionsObservable<fromActions.LoadFlashMessages>,
+  action$: ActionsObservable<GlobalActions.LoadFlashMessages>,
   state$: StateObservable<RootState>,
   dependencies: { flashMessagesService: FlashMessagesService }
 ): Observable<unknown> => {
   return action$
-    .ofType(fromActions.LOAD_FLASH_MESSAGES)
+    .ofType(GlobalActions.LOAD_FLASH_MESSAGES)
     .pipe(
       switchMap(action =>
         dependencies.flashMessagesService.fetchFlashMessages(action)

@@ -12,10 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { createSelector } from 'reselect';
-import { RootState } from './index';
-import { isExecutingFileAction } from './file-actions';
-import { SeverityEnum } from '../../../../shared/src/types/Severity';
+import { SeverityEnum } from '../../../../../../shared/src/types/Severity';
 
 export const RELOAD = '[GLOBAL] RELOAD';
 export const LOAD_FLASH_MESSAGES = '[GLOBAL] LOAD FLASH MESSAGES';
@@ -34,10 +31,4 @@ export class LoadFlashMessages implements Action {
   ) {}
 }
 
-export const isLoading = createSelector(
-  (state: RootState) => state,
-  state =>
-    isExecutingFileAction(state.fileActions) ||
-    state.list.loading ||
-    state.tree.loading
-);
+export type Actions = Reload | LoadFlashMessages;

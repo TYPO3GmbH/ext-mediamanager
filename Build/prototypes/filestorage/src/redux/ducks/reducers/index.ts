@@ -16,7 +16,7 @@ import { layoutReducer } from './layout';
 import { viewModeReducer } from './view-mode';
 import { treeReducer } from './tree';
 import { listReducer } from './list';
-import { fileActionsReducer } from './file-actions';
+import { fileActionsReducer } from './file';
 
 export const rootReducer = combineReducers({
   layout: layoutReducer,

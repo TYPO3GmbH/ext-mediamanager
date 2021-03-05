@@ -14,12 +14,12 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import '../src/typo3-file-action-undo-button.js';
 import { Typo3FileActionUndoButton } from '../src/typo3-file-action-undo-button';
-import { UndoFilesAction } from '../src/redux/ducks/file-actions';
+import { FileActions } from '../src/redux/ducks/actions';
 
 describe('Typo3FileActionUndoButton', () => {
   let element: Typo3FileActionUndoButton;
   beforeEach(async () => {
-    const undoAction = new UndoFilesAction({});
+    const undoAction = new FileActions.UndoFilesAction({});
     element = await fixture(
       html`
         <typo3-file-action-undo-button

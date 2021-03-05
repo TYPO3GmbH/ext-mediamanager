@@ -21,7 +21,6 @@ import {
 } from 'rxjs/operators';
 import { EMPTY, fromEvent, Observable } from 'rxjs';
 import { getUrl } from './backend-url.service';
-import * as fromGlobalActions from '../redux/ducks/global-actions';
 import { MessageHandler } from '../../../shared/src/lib/message-handler';
 import { translate } from './translation.service';
 import {
@@ -31,7 +30,7 @@ import {
 import { isEqual } from 'lodash-es';
 import { ApiService } from './api.service';
 import { ShowSnackbarMessage } from '../../../shared/src/types/show-snackbar-message';
-import { UndoFilesAction } from '../redux/ducks/file-actions';
+import { FileActions, GlobalActions } from '../redux/ducks/actions';
 
 interface Message {
   message: string;
@@ -43,7 +42,7 @@ export class FlashMessagesService {
   constructor(protected apiService: ApiService) {}
 
   fetchFlashMessages(
-    action: fromGlobalActions.LoadFlashMessages
+    action: GlobalActions.LoadFlashMessages
   ): Observable<unknown> {
     const flashMessagesUrl: string = getUrl('flashMessagesUrl');
     return this.apiService.getJSON<Message[]>(flashMessagesUrl).pipe(
@@ -82,8 +81,8 @@ export class FlashMessagesService {
           filter(data => SNACKBAR_ACTION_MESSAGE_TYPE == data.type),
           filter(data =>
             isEqual(
-              (data.actionData.data as UndoFilesAction).formData,
-              (undoAction as UndoFilesAction)!.formData
+              (data.actionData.data as FileActions.UndoFilesAction).formData,
+              (undoAction as FileActions.UndoFilesAction)!.formData
             )
           ),
           timeout(5000),

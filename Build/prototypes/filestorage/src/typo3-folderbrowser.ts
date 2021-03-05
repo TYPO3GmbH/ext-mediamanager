@@ -24,20 +24,25 @@ import { Typo3Filestorage } from './typo3-filestorage';
 import themeStyles from '../../../theme/index.pcss';
 import fileStorageStyles from './typo3-filestorage.pcss';
 import styles from './typo3-filebrowser.pcss';
-import * as fromList from './redux/ducks/list';
 import { IframeHelper } from '../../shared/src/lib/iframe-helper';
 import { MessageHandler } from '../../shared/src/lib/message-handler';
 import { translate } from './services/translation.service';
 import { store } from './redux/store';
 import { Typo3Card } from '../../../packages/card/src/typo3-card';
 import { orderBy } from 'lodash-es';
-import * as fromView from './redux/ducks/view-mode';
 import { Typo3Tooltip } from '../../../packages/tooltip/src/typo3-tooltip';
 import { ShowSnackbarMessage } from '../../shared/src/types/show-snackbar-message';
-import { SnackbarVariants } from '../../../packages/snackbar/src/lib/snackbar-variants';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
-import * as fromTree from './redux/ducks/tree';
 import { SeverityEnum } from '../../shared/src/types/Severity';
+import { ListActions, TreeActions } from './redux/ducks/actions';
+
+import {
+  getListItemByIdentifier,
+  getSelectedItems,
+  getSortDirection,
+  getSortField,
+  isEmptySelection,
+} from './redux/ducks/selectors';
 
 @customElement('typo3-folderbrowser')
 export class Typo3Folderbrowser extends Typo3Filestorage {
@@ -54,7 +59,7 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
     // trigger resize event (after modal is visible)
     setTimeout(() => dispatchEvent(new Event('resize')), 200);
     if (this.expandFolder) {
-      store.dispatch(new fromTree.ExpandTreeNode(this.expandFolder));
+      store.dispatch(new TreeActions.ExpandTreeNode(this.expandFolder));
     }
   }
 
@@ -77,9 +82,9 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
   }
 
   _onInsert(): void {
-    const identifiers = fromList
-      .getSelectedItems(this.state)
-      .map(item => item.identifier);
+    const identifiers = getSelectedItems(this.state).map(
+      item => item.identifier
+    );
 
     this._sendForeignInsertCommand(identifiers);
     this._closeModal();
@@ -115,24 +120,24 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
       .filter(item => this._itemIsSelectable(item))
       .map(item => item.identifier);
 
-    store.dispatch(new fromList.SetSelection(identifier));
+    store.dispatch(new ListActions.SetSelection(identifier));
   }
 
   _onCardgridSelectionChange(event: CustomEvent<Typo3Card[]>): void {
     const identifier = event.detail
       .map((element: Typo3Card) => '' + element.value)
-      .map(identifer => fromList.getListItemByIdentifier(this.state)(identifer))
+      .map(identifer => getListItemByIdentifier(this.state)(identifer))
       .filter(item => item && this._itemIsSelectable(item))
       .map(item => (item as ListItem).identifier);
 
-    store.dispatch(new fromList.SetSelection(identifier));
+    store.dispatch(new ListActions.SetSelection(identifier));
   }
 
   _orderItemsForCardgridView(listItems: ListItem[]): ListItem[] {
     return orderBy(
       listItems,
-      [item => this._itemIsSelectable(item), fromView.getSortField(this.state)],
-      ['desc', fromView.getSortDirection(this.state)]
+      [item => this._itemIsSelectable(item), getSortField(this.state)],
+      ['desc', getSortDirection(this.state)]
     );
   }
 
@@ -161,7 +166,7 @@ export class Typo3Folderbrowser extends Typo3Filestorage {
             </typo3-button>
             <typo3-button
               color="primary"
-              .disabled="${fromList.isEmptySelection(this.state)}"
+              .disabled="${isEmptySelection(this.state)}"
               @click="${this._onInsert}"
               >${translate('folder_browser.button.insert')}
             </typo3-button>

@@ -12,19 +12,11 @@
  */
 
 import { ActionsObservable, StateObservable } from 'redux-observable';
-import * as fromActions from '../../ducks/file-actions';
-import { RootState } from '../../ducks';
+import { RootState } from '../../ducks/reducers';
 import { ModalService } from '../../../services/modal.service';
 import { concat, forkJoin, Observable, of } from 'rxjs';
 import { Action } from 'redux';
-import {
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import {
   ModalData,
   ModalType,
@@ -40,6 +32,7 @@ import {
 } from '../../../../../shared/src/types/conflict-file-dto';
 import * as _ from 'lodash-es';
 import { OverrideFileAction } from '../../../../../shared/src/types/override-file-action';
+import { FileActions } from '../../ducks/actions';
 
 function handleFilesUpload(
   files: File[],
@@ -61,25 +54,25 @@ function handleFilesUpload(
   return apiService.postFormData(getUrl('fileActionUrl'), formData).pipe(
     mergeMap(() => {
       const actions: Action[] = [
-        new fromActions.UploadFilesSuccess(
+        new FileActions.UploadFilesSuccess(
           translate('message.header.filesUploaded')
         ),
       ];
       return actions;
     }),
-    catchError(() => of(new fromActions.UploadFilesFailure()))
+    catchError(() => of(new FileActions.UploadFilesFailure()))
   );
 }
 
 export const uploadFiles = (
-  action$: ActionsObservable<fromActions.UploadFiles>,
+  action$: ActionsObservable<FileActions.UploadFiles>,
   state$: StateObservable<RootState>,
   dependencies: {
     undoActionResolverService: UndoActionResolverService;
     apiService: ApiService;
   }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.UPLOAD_FILES).pipe(
+  return action$.ofType(FileActions.UPLOAD_FILES).pipe(
     switchMap(action => {
       const files: File[] = [];
       const targetIdentifier = action.node.identifier;
@@ -142,7 +135,7 @@ export const uploadFiles = (
       if (data.conflictFiles.length > 0) {
         observables.push(
           of(
-            new fromActions.UploadFilesConflicts(
+            new FileActions.UploadFilesConflicts(
               data.conflictFiles,
               data.target
             )
@@ -155,11 +148,11 @@ export const uploadFiles = (
 };
 
 export const uploadFilesConflict = (
-  action$: ActionsObservable<fromActions.UploadFilesConflicts>,
+  action$: ActionsObservable<FileActions.UploadFilesConflicts>,
   state$: StateObservable<RootState>,
   dependencies: { modalService: ModalService; apiService: ApiService }
 ): Observable<Action> => {
-  return action$.ofType(fromActions.UPLOAD_FILES_CONFLICTS).pipe(
+  return action$.ofType(FileActions.UPLOAD_FILES_CONFLICTS).pipe(
     switchMap(action => {
       const modalData: ModalData = {
         type: ModalType.HTML,
