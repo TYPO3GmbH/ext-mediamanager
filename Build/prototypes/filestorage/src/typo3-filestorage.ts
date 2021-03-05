@@ -544,67 +544,78 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected render(): TemplateResult {
     return html`
-      <typo3-splitpane @splitter-dragend="${this._onSplitterDragend}">
-        <div
-          class="content_left"
-          style=${styleMap({
-            flex: '1 1 ' + fromLayout.getSidebarWidth(this.state) + '%',
-            display: fromLayout.isSidebarVisible(this.state) ? '' : 'none',
-          })}
-        >
-          <div class="topbar-wrapper">
-            <typo3-topbar>
-              <div slot="left">${this.renderStoragesDropDown}</div>
-            </typo3-topbar>
-            <typo3-topbar>
-              <div slot="left">
-                ${this.renderNewFolderButton} ${this.renderUploadButton}
+      <div class="content">
+        ${false === fromLayout.isSidebarVisible(this.state)
+          ? html` <div class="navigation-switcher">
+              <div class="topbar-wrapper">
+                <typo3-topbar>
+                  <div slot="right">${this.renderTreeToggleButton}</div>
+                </typo3-topbar>
+                <typo3-topbar> </typo3-topbar>
               </div>
-            </typo3-topbar>
+            </div>`
+          : html``}
+        <typo3-splitpane @splitter-dragend="${this._onSplitterDragend}">
+          <div
+            class="content_left"
+            style=${styleMap({
+              flex: '1 1 ' + fromLayout.getSidebarWidth(this.state) + '%',
+              display: fromLayout.isSidebarVisible(this.state) ? '' : 'none',
+            })}
+          >
+            <div class="topbar-wrapper">
+              <typo3-topbar>
+                <div slot="left">${this.renderStoragesDropDown}</div>
+                <div slot="right">${this.renderTreeToggleButton}</div>
+              </typo3-topbar>
+              <typo3-topbar>
+                <div slot="left">
+                  ${this.renderNewFolderButton} ${this.renderUploadButton}
+                </div>
+              </typo3-topbar>
+            </div>
+            ${this.renderFolderTree}
           </div>
-          ${this.renderFolderTree}
-        </div>
-        <typo3-dropzone
-          class="content_right"
-          style="${'flex: 1 1 ' +
-          (100 - fromLayout.getSidebarWidth(this.state)) +
-          '%'}"
-          @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
-          @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
-        >
-          <div slot="allowed-drop-message" class="dropzone-drop-message">
-            <span class="dropzone-drop-message__title"
-              >${translate('dragFiles.allowed.header')}</span
-            >
-            <span>${translate('dragFiles.allowed.message')}</span>
-          </div>
-          <div slot="denied-drop-message" class="dropzone-drop-message">
-            <span class="dropzone-drop-message__title"
-              >${translate('dragFiles.denied.header')}</span
-            >
-            <span>${translate('dragFiles.denied.message')}</span>
-          </div>
-          <div class="topbar-wrapper">
-            <typo3-topbar>
-              <div slot="left">
-                ${this.renderTreeToggleButton} ${this.renderBreadcrumb}
-              </div>
-              <div slot="right">
-                ${this.renderSearchField} ${this.renderSortingDropdown}
-                ${this.renderViewModeDropDown}
-              </div>
-            </typo3-topbar>
-            <typo3-topbar>
-              <div slot="left">
-                ${this.renderDownloadButton} ${this.renderDeleteButton}
-                ${this.renderMoveToButton} ${this.renderCopyToButton}
-              </div>
-              <div slot="right">${this.renderSelectionButton}</div>
-            </typo3-topbar>
-          </div>
-          ${this.renderMainContent}
-        </typo3-dropzone>
-      </typo3-splitpane>
+          <typo3-dropzone
+            class="content_right"
+            style="${'flex: 1 1 ' +
+            (100 - fromLayout.getSidebarWidth(this.state)) +
+            '%'}"
+            @typo3-dropzone-drop="${this._onDragAndDropFileUpload}"
+            @typo3-dropzone-should-accept="${this._onDropZoneShouldAccept}"
+          >
+            <div slot="allowed-drop-message" class="dropzone-drop-message">
+              <span class="dropzone-drop-message__title"
+                >${translate('dragFiles.allowed.header')}</span
+              >
+              <span>${translate('dragFiles.allowed.message')}</span>
+            </div>
+            <div slot="denied-drop-message" class="dropzone-drop-message">
+              <span class="dropzone-drop-message__title"
+                >${translate('dragFiles.denied.header')}</span
+              >
+              <span>${translate('dragFiles.denied.message')}</span>
+            </div>
+            <div class="topbar-wrapper">
+              <typo3-topbar>
+                <div slot="left">${this.renderBreadcrumb}</div>
+                <div slot="right">
+                  ${this.renderSearchField} ${this.renderSortingDropdown}
+                  ${this.renderViewModeDropDown}
+                </div>
+              </typo3-topbar>
+              <typo3-topbar>
+                <div slot="left">
+                  ${this.renderDownloadButton} ${this.renderDeleteButton}
+                  ${this.renderMoveToButton} ${this.renderCopyToButton}
+                </div>
+                <div slot="right">${this.renderSelectionButton}</div>
+              </typo3-topbar>
+            </div>
+            ${this.renderMainContent}
+          </typo3-dropzone>
+        </typo3-splitpane>
+      </div>
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
@@ -973,13 +984,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       ? 'fileTree.collapse'
       : 'fileTree.expand';
 
+    const toggleIcon = fromLayout.isSidebarVisible(this.state)
+      ? 'actions-chevron-left'
+      : 'actions-chevron-right';
+
     return html`
       <typo3-button
         title="${translate(translationKey)}"
         label="${translate(translationKey)}"
         @click="${this._onToggleFileTree}"
       >
-        ${createSVGElement('toggleTree', 'icon')}
+        ${createSVGElement(toggleIcon, 'icon')}
       </typo3-button>
     `;
   }

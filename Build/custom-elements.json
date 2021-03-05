@@ -590,7 +590,11 @@
 					"type": "Length"
 				},
 				{
-					"name": "--typo3-splitpane-splitter-background",
+					"name": "--typo3-splitpane-splitter-color",
+					"type": "Color"
+				},
+				{
+					"name": "--typo3-splitpane-splitter-color-hover",
 					"type": "Color"
 				},
 				{

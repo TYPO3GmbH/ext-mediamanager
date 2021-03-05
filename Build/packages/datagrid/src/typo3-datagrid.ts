@@ -220,7 +220,9 @@ export class Typo3Datagrid extends LitElement {
         delay(200),
         tap(
           () =>
-            (this.transformedColumns = this.getColumnsWithCaluclatedWidths())
+            (this.transformedColumns = [
+              ...this.getColumnsWithCaluclatedWidths(),
+            ])
         )
       )
       .subscribe();

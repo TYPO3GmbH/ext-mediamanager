@@ -21,13 +21,36 @@
 }
 
 [part='splitter'] {
-    flex: none;
-    position: relative;
-    z-index: 1;
-    overflow: visible;
-    min-width: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
-    min-height: var(--typo3-splitpane-splitter-size, var(--typo3-global-splitpane-splitter-size));
-    background-color: var(--typo3-splitpane-splitter-background, var(--typo3-global-splitpane-splitter-bg));
+    display: block;
+    flex: 0 0 auto;
+    width: var(--typo3-splitpane-splitter-size, var(--typo3-global-default-border-width));
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 3;
+    background-color: var(--typo3-splitpane-splitter-color, var(--typo3-global-splitpane-splitter-color));
+    transition: background-color .2s ease-in-out, border .2s ease-in-out;
+}
+
+[part='splitter']:hover {
+    background-color: var(--typo3-splitpane-splitter-color-hover, var(--typo3-global-splitpane-splitter-color-hover));
+}
+
+[part='splitter']::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 0.5rem;
+    margin-left: -0.3125rem;
+    border-right: 0.125rem solid transparent;
+    box-sizing: border-box;
+}
+
+[part='splitter']:hover::after {
+    border-right: 0.125rem solid var(--typo3-splitpane-splitter-color-hover, var(--typo3-global-splitpane-splitter-color-hover));
 }
 
 :host(:not([orientation='vertical'])) > [part='splitter'] {
