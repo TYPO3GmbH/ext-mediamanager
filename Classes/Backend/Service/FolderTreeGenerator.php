@@ -173,7 +173,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             'clipboardIdentifier' => $clipboardIdentifier,
             'parentIdentifier' => $parentFolder instanceof Folder && !$isStorage ? $parentFolder->getCombinedIdentifier() : null,
             'sysType' => '_FOLDER',
-            'contextMenuType' => $isStorage ? 'sys_file_storage' : 'sys_file',
+            'contextMenuType' => 'sys_file',
         ];
     }
 

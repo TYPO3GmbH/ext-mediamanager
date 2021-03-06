@@ -24,7 +24,7 @@ export interface Cell {
   height: number;
   isGrid: boolean;
   isHeader: boolean;
-  header: {
+  header?: {
     name: string;
   };
   data: {};

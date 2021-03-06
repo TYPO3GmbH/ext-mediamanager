@@ -657,8 +657,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   protected get renderBreadcrumb(): TemplateResult {
     if (isInSearchMode(this.state)) {
-      return html` ${translate('labels.search')}:
-      "${getSearchTermString(this.state)}"`;
+      return html`<span
+        >${translate('labels.search')}: ${getSearchTermString(this.state)}</span
+      >`;
     }
 
     const nodes = getSelectedTreeNodePath(this.state) as Typo3Node[];
@@ -689,13 +690,15 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         const icon = isSelected ? 'actions-check-circle-alt' : 'actions-circle';
         const color = isSelected ? '#0078e6' : '#777';
 
+        if (listItem.notSelectable) {
+          return listItem;
+        }
+
         return {
           ...listItem,
           selected: `<svg class="icon-color" role="img" fill="${color}"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#${icon}"/></svg>`,
         };
       });
-      console.log(rows);
-
       const sorters = DatagridSorter.getDatagridSorters(this.datagridSchema);
       return html`
         <typo3-datagrid

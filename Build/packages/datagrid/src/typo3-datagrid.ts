@@ -125,7 +125,7 @@ export class Typo3Datagrid extends LitElement {
           --cdg-cell-font: var(--typo3-global-datagrid-font);
           --cdg-cell-height: var(--typo3-global-datagrid-cell-height);
           --cdg-cell-hover-background-color: transparent;
-          --cdg-column-header-cell-background-color: transparent;
+          --cdg-column-header-cell-background-color: #fff;
           --cdg-column-header-cell-border-color: transparent;
           --cdg-column-header-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
           --cdg-column-header-cell-cap-background-color: transparent;
@@ -143,7 +143,7 @@ export class Typo3Datagrid extends LitElement {
           --cdg-grid-background-color: #fff;
           --cdg-grid-border-color: transparent;
           --cdg-grid-border-width: var(--typo3-global-datagrid-cell-border-width);
-          --cdg-row-header-cell-background-color: transparent;
+          --cdg-row-header-cell-background-color: #fff;
           --cdg-row-header-cell-border-color: transparent;
           --cdg-row-header-cell-hover-background-color: transparent;
           --cdg-selection-overlay-borderColor: transparent;
@@ -224,19 +224,24 @@ export class Typo3Datagrid extends LitElement {
             (this.transformedColumns = [
               ...this.getColumnsWithCaluclatedWidths(),
             ])
-        )
+        ),
+        tap(() => this.setGridDimensions())
       )
       .subscribe();
   }
 
   _onRenderText(e: RenderCellEvent): void {
     if (this._isSvgCell(e.cell)) {
-      e.cell.formattedValue = '';
+      (e.cell as Cell).formattedValue = '';
     }
     this._handleDisabledRow(e);
   }
 
   _onAfterRendercell(e: RenderCellEvent): void {
+    if (undefined === e.cell?.value) {
+      return;
+    }
+
     if (this._isSvgCell(e.cell)) {
       if (!this.imageBuffer[e.cell.value]) {
         const domElement = new DOMParser().parseFromString(
@@ -294,15 +299,15 @@ export class Typo3Datagrid extends LitElement {
         return;
       }
 
-      const image = this.imageBuffer[e.cell.value];
+      const image = this.imageBuffer[e.cell?.value];
       if (image && image.width !== 0) {
         const targetWidth = image.width;
         const targetHeight = image.height;
 
         e.ctx.fillStyle = 'blue';
 
-        const x = e.cell.x + (e.cell.width - targetWidth) / 2;
-        const y = e.cell.y + (e.cell.height - targetHeight) / 2;
+        const x = e.cell?.x + (e.cell?.width - targetWidth) / 2;
+        const y = e.cell?.y + (e.cell.height - targetHeight) / 2;
 
         this._handleDisabledRow(e);
 
@@ -312,6 +317,9 @@ export class Typo3Datagrid extends LitElement {
   }
 
   _onRendercell(e: RenderCellEvent): void {
+    if (undefined === e.cell) {
+      return;
+    }
     // Draw upper border
     e.ctx.beginPath();
     e.ctx.moveTo(e.cell.x, e.cell.y);
@@ -325,7 +333,11 @@ export class Typo3Datagrid extends LitElement {
   _onContextmenu(e: ContextMenuEvent): void {
     e.preventDefault();
 
-    if (true === e.cell.isHeader) {
+    if (true === e.cell?.isHeader) {
+      return;
+    }
+
+    if (undefined === e.cell?.data) {
       return;
     }
 
@@ -341,7 +353,7 @@ export class Typo3Datagrid extends LitElement {
   }
 
   _onDblClick(e: CanvasDataGridEvent): void {
-    if (true === e.cell.isHeader) {
+    if (true === e.cell?.isHeader) {
       return;
     }
 
@@ -354,14 +366,8 @@ export class Typo3Datagrid extends LitElement {
       e.preventDefault();
       return;
     }
-    console.log(e);
 
-    if (e.cell.isHeader) {
-      e.preventDefault();
-      return;
-    }
-
-    if (e.cell.header.name === 'selected') {
+    if (e.cell?.header?.name === 'selected') {
       this.canvasGrid.selectRow(e.cell.rowIndex, true);
       e.preventDefault();
       return;
@@ -377,7 +383,7 @@ export class Typo3Datagrid extends LitElement {
   }
 
   _onMouseup(e: CanvasDataGridEvent): void {
-    if (true === e.cell.isHeader) {
+    if (true === e.cell?.isHeader) {
       return;
     }
     if (this.inEditMode) {
@@ -388,7 +394,7 @@ export class Typo3Datagrid extends LitElement {
     }
 
     this.clicks += 1;
-    const selectedIndex = e.cell.selected ? e.cell.rowIndex : undefined;
+    const selectedIndex = e.cell?.selected ? e.cell.rowIndex : undefined;
 
     if (this.clicks === 1) {
       this.latestSelectedRowIndex = selectedIndex;
@@ -406,7 +412,7 @@ export class Typo3Datagrid extends LitElement {
           const dblClickEvent = new CustomEvent('typo3-datagrid-dblclick', {
             bubbles: true,
             composed: true,
-            detail: e.cell.data,
+            detail: e.cell?.data,
           });
           this.dispatchEvent(dblClickEvent);
           this.latestSelectedRowIndex = undefined;
@@ -420,7 +426,7 @@ export class Typo3Datagrid extends LitElement {
     if (false === this._isEditableCell(e.cell)) {
       return;
     }
-    if (true != e.cell.selected) {
+    if (true != e.cell?.selected) {
       return;
     }
     this.canvasGrid.beginEditAt(e.cell.columnIndex, e.cell.rowIndex);
@@ -430,8 +436,8 @@ export class Typo3Datagrid extends LitElement {
     e.preventDefault();
     const canvasStyle = this.canvasGrid.style;
 
-    let x = e.cell.x;
-    let y = e.cell.y;
+    let x = e.cell?.x ?? 0;
+    let y = e.cell?.y ?? 0;
 
     e.ctx.font = canvasStyle.columnHeaderCellFont;
     const headerTextWidth = e.ctx.measureText(e.header.title).width;
@@ -443,7 +449,7 @@ export class Typo3Datagrid extends LitElement {
       ah = canvasStyle.columnHeaderOrderByArrowHeight;
 
     x += +mr + headerTextWidth + 5;
-    y += e.cell.height / 2 - ah * 1.5;
+    y += (e.cell?.height ?? 1) / 2 - ah * 1.5;
     e.ctx.fillStyle = canvasStyle.columnHeaderOrderByArrowColor;
     e.ctx.strokeStyle = canvasStyle.columnHeaderOrderByArrowBorderColor;
     e.ctx.lineWidth = canvasStyle.columnHeaderOrderByArrowBorderWidth;
@@ -502,12 +508,12 @@ export class Typo3Datagrid extends LitElement {
       return;
     }
 
-    if (event.value !== event.cell.value) {
+    if (event.value !== event.cell?.value) {
       const changeEvent = new CustomEvent('typo3-datagrid-value-change', {
         detail: {
-          field: event.cell.header.name,
+          field: event.cell?.header?.name,
           value: event.value,
-          data: event.cell.data,
+          data: event.cell?.data,
         },
       });
       this.dispatchEvent(changeEvent);
@@ -548,27 +554,39 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
-  _isEditableCell(cell: Cell): boolean {
-    return this.editableColumns.indexOf(cell.header.name) !== -1;
+  _isEditableCell(cell: Cell | undefined): boolean {
+    if (undefined === cell) {
+      return false;
+    }
+
+    if (undefined === cell.header?.name) {
+      return false;
+    }
+
+    return this.editableColumns.indexOf(cell.header?.name) !== -1;
   }
 
-  _isDisabledRow(cell: Cell): boolean {
+  _isDisabledRow(cell: Cell | undefined): boolean {
     return (
+      cell !== undefined &&
       false === cell.isHeader &&
       Object.prototype.hasOwnProperty.call(cell.data, 'disabled') &&
       true === (cell.data as { disabled: boolean }).disabled
     );
   }
 
-  _isNotSelectableRow(cell: Cell): boolean {
+  _isNotSelectableRow(cell: Cell | undefined): boolean {
     return (
+      cell !== undefined &&
+      cell.data &&
       Object.prototype.hasOwnProperty.call(cell.data, 'notSelectable') &&
       true === (cell.data as { notSelectable: boolean }).notSelectable
     );
   }
 
-  _isSvgCell(cell: Cell): boolean {
+  _isSvgCell(cell: Cell | undefined): boolean {
     return (
+      cell !== undefined &&
       cell.type === 'html' &&
       '' !== cell.value &&
       cell.rowIndex > -1 &&
@@ -587,5 +605,11 @@ export class Typo3Datagrid extends LitElement {
       this.canvasGrid.sorters,
       this.sorters
     );
+    this.setGridDimensions();
+  }
+
+  protected setGridDimensions(): void {
+    this.canvasGrid.style.width = this.offsetWidth + 'px';
+    this.canvasGrid.style.height = this.offsetHeight + 'px';
   }
 }
