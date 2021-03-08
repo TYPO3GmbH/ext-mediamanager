@@ -12,90 +12,96 @@ import '../../../out-tsc/packages/datagrid/src/typo3-datagrid';
 <Preview withToolbar>
     <Story name="Simple" height="220px">
         {html`
-      <typo3-datagrid
-        @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
-        @typo3-datagrid-dblclick="${(e) => action(`typo3-datagrid-dblclick`)(e.detail)}"
-        @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
-        schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
-        data='[
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 1 column 1",
-          "description": "row 1 column 2",
-          "foo": "row 1 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 2 column 1",
-          "description": "row 2 column 2",
-          "foo": "row 3 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 3 column 1",
-          "description": "row 3 column 2",
-          "foo": "row 3 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 4 column 1",
-          "description": "row 4 column 2",
-          "foo": "row 4 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 5 column 1",
-          "description": "row 5 column 2",
-          "foo": "row 5 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 6 column 1",
-          "description": "row 6 column 2",
-          "foo": "row 6 column 3"
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\"><use xlink:href=\\"node_modules/@typo3/icons/dist/sprites/apps.svg#apps-filetree-folder-default\\"></use></svg>",
-          "title": "disabled row 7 column 1",
-          "description": "disabled row 7 column 2",
-          "foo": "disabled row 7 column 3",
-          "disabled": true
-        },
-        {
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\"><use xlink:href=\\"node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel\\"></use></svg>",
-          "title": "not selectable row 8 column 1",
-          "description": "not selectable 8 column 2",
-          "foo": "not selectable 8 column 3",
-          "notSelectable": true
-        }
-      ]'></typo3-datagrid>
+        <div style="width:90vw; height: 90vh; display:flex">
+          <typo3-datagrid
+            style="flex: 1"
+            @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
+            @typo3-datagrid-dblclick="${(e) => action(`typo3-datagrid-dblclick`)(e.detail)}"
+            @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
+            schema='[{"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
+            data='[
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 1 column 1",
+              "description": "row 1 column 2",
+              "foo": "row 1 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 2 column 1",
+              "description": "row 2 column 2",
+              "foo": "row 3 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 3 column 1",
+              "description": "row 3 column 2",
+              "foo": "row 3 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 4 column 1",
+              "description": "row 4 column 2",
+              "foo": "row 4 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#FFC857\\" d=\\"M16 4v10H0V2h7l1.33 2H16z\\"/><path fill=\\"#E8A33D\\" d=\\"M16 5H8.33L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 5 column 1",
+              "description": "row 5 column 2",
+              "foo": "row 5 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 6 column 1",
+              "description": "row 6 column 2",
+              "foo": "row 6 column 3"
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\"><use xlink:href=\\"node_modules/@typo3/icons/dist/sprites/apps.svg#apps-filetree-folder-default\\"></use></svg>",
+              "title": "disabled row 7 column 1",
+              "description": "disabled row 7 column 2",
+              "foo": "disabled row 7 column 3",
+              "disabled": true
+            },
+            {
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\"><use xlink:href=\\"node_modules/@typo3/icons/dist/sprites/mimetypes.svg#mimetypes-excel\\"></use></svg>",
+              "title": "not selectable row 8 column 1",
+              "description": "not selectable 8 column 2",
+              "foo": "not selectable 8 column 3",
+              "notSelectable": true
+            }
+          ]'></typo3-datagrid>
+        </div>
     `}
     </Story>
     <Story name="Grid with editable column (description)" height="220px">
         {html`
-      <typo3-datagrid
-        @typo3-datagrid-value-change="${(e) => action(`typo3-datagrid-value-change`)(e.detail)}"
-        @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
-        @typo3-datagrid-dblclick="${(e) => action(`typo3-datagrid-dblclick`)(e.detail)}"
-        @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
-        editableColumns='["description"]'
-        schema='[{"name": "identifier", "type": "text", "title": " ", "hidden": true }, {"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
-        data='[
-        {
-          "identifier": "1",
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 1 column 1",
-          "description": "row 1 column 2",
-          "foo": "row 1 column 3"
-        },
-        {
-          "identifier": "2",
-          "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
-          "title": "row 2 column 1",
-          "description": "row 2 column 2",
-          "foo": "row 3 column 3"
-        }
-      ]'></typo3-datagrid>
+      <div style="width:90vw; height: 90vh; display:flex">
+          <typo3-datagrid
+            style="flex: 1"
+            @typo3-datagrid-value-change="${(e) => action(`typo3-datagrid-value-change`)(e.detail)}"
+            @typo3-datagrid-contextmenu="${(e) => action(`typo3-datagrid-contextmenu`)(e.detail)}"
+            @typo3-datagrid-dblclick="${(e) => action(`typo3-datagrid-dblclick`)(e.detail)}"
+            @typo3-datagrid-selection-change="${(e) => action(`typo3-datagrid-selection-change`)(e.detail)}"
+            editableColumns='["description"]'
+            schema='[{"name": "identifier", "type": "text", "title": " ", "hidden": true }, {"name":"icon", "type":"html", "width":"24", "title":" "}, {"name":"title", "title":"The Title"}, {"name":"description", "title":"The Description"}, {"name":"foo", "title":"The Foo"}]'
+            data='[
+            {
+              "identifier": "1",
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 1 column 1",
+              "description": "row 1 column 2",
+              "foo": "row 1 column 3"
+            },
+            {
+              "identifier": "2",
+              "icon": "<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 16 16\\" width=\\"16\\" height=\\"16\\" style=\\"padding:4px;\\"><g><path fill=\\"#AAA\\" d=\\"M16 4v10H0V2h7l1.3 2H16z\\"/><path opacity=\\".43\\" d=\\"M16 5H8.3L7 7H0V4h16v1z\\"/></g></svg>",
+              "title": "row 2 column 1",
+              "description": "row 2 column 2",
+              "foo": "row 3 column 3"
+            }
+          ]'></typo3-datagrid>
+      </div>
     `}
     </Story>
 </Preview>
