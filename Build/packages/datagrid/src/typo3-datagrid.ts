@@ -124,7 +124,7 @@ export class Typo3Datagrid extends LitElement {
           --cdg-cell-color: var(--typo3-global-datagrid-cell-color);
           --cdg-cell-font: var(--typo3-global-datagrid-font);
           --cdg-cell-height: var(--typo3-global-datagrid-cell-height);
-          --cdg-cell-hover-background-color: transparent;
+          --cdg-cell-hover-background-color: var(--typo3-global-gray-lighter);
           --cdg-column-header-cell-background-color: #fff;
           --cdg-column-header-cell-border-color: transparent;
           --cdg-column-header-cell-border-width: var(--typo3-global-datagrid-cell-border-width);
@@ -156,6 +156,7 @@ export class Typo3Datagrid extends LitElement {
         .schema="${columns}"
         editable="${this.editableColumns.length > 0}"
         selectionmode="row"
+        hovermode="row"
         showrowheaders="false"
         @afterrendercell="${this._onAfterRendercell}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
@@ -170,6 +171,7 @@ export class Typo3Datagrid extends LitElement {
         @renderorderbyarrow="${this._onRenderOrderByArrow}"
         @rendertext="${this._onRenderText}"
         @selectionchanged="${this._onSelectionChanged}"
+        @touchstart="${this._onTouchStart}"
       ></canvas-datagrid>
     `;
   }
@@ -597,6 +599,12 @@ export class Typo3Datagrid extends LitElement {
   _onClickOutsideOfEditArea = () => {
     this._endEdit();
   };
+
+  _onTouchStart(e: CanvasDataGridEvent) {
+    if (e.cell?.header?.name === 'selected') {
+      e.stopPropagation();
+    }
+  }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
