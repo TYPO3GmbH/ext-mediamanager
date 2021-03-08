@@ -174,7 +174,6 @@ class FileProvider extends AbstractProvider
             return false;
         }
 
-
         foreach ($this->records as $record) {
             if (false === $record->checkActionPermission('read')) {
                 return false;
