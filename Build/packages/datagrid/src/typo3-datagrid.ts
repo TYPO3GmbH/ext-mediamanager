@@ -55,6 +55,8 @@ export class Typo3Datagrid extends LitElement {
   @property({ type: Array }) editableColumns: string[] = [];
   @property({ type: Array }) selectedRows: { [key: string]: string }[] = [];
   @property({ type: String }) rowIdentifier = 'identifier';
+  @property({ type: String }) ascArrowSvgUrl = '';
+  @property({ type: String }) descArrowSvgUrl = '';
 
   @internalProperty()
   transformedColumns: CellHeader[] = [];
@@ -246,58 +248,7 @@ export class Typo3Datagrid extends LitElement {
 
     if (this._isSvgCell(e.cell)) {
       if (!this.imageBuffer[e.cell.value]) {
-        const domElement = new DOMParser().parseFromString(
-          e.cell.value,
-          'text/html'
-        );
-        const useElement = domElement.querySelector('use') as SVGUseElement;
-
-        if (!useElement) {
-          return;
-        }
-
-        const src = useElement.href.baseVal;
-        const id = src.replace(/.*#/, '');
-        const img = new Image();
-
-        this.imageBuffer[e.cell.value] = img;
-
-        const fillColor = (domElement.querySelector(
-          'svg'
-        ) as SVGElement).getAttribute('fill');
-        if (fillColor) {
-          this.fillColorBuffer[id] = fillColor;
-        }
-
-        fetch(src)
-          .then(r => r.text())
-          .then(markup =>
-            new DOMParser().parseFromString(markup, 'image/svg+xml')
-          )
-          .then(doc => {
-            const node = doc.getElementById(id) as HTMLElement;
-            node.setAttribute('width', '16px');
-            node.setAttribute('height', '16px');
-            if (this.fillColorBuffer[id]) {
-              node.setAttribute('fill', this.fillColorBuffer[id]);
-            }
-            const xml = new XMLSerializer().serializeToString(node);
-            const svgURL = xml
-              .replace('symbol', 'svg')
-              .replace('symbol', 'svg');
-
-            const svg = new Blob([svgURL], {
-              type: 'image/svg+xml',
-            });
-            const domURL = self.URL || self.webkitURL || self;
-            const url = domURL.createObjectURL(svg);
-
-            img.onload = () => {
-              this.canvasGrid.draw();
-              domURL.revokeObjectURL(url);
-            };
-            img.src = url;
-          });
+        this.loadExternalSVG(e.cell?.value);
         return;
       }
 
@@ -370,7 +321,7 @@ export class Typo3Datagrid extends LitElement {
     }
 
     if (e.cell?.header?.name === 'selected') {
-      this.canvasGrid.selectRow(e.cell.rowIndex, true);
+      this.addRowToSelection(e.cell);
       e.preventDefault();
       return;
     }
@@ -444,33 +395,32 @@ export class Typo3Datagrid extends LitElement {
     e.ctx.font = canvasStyle.columnHeaderCellFont;
     const headerTextWidth = e.ctx.measureText(e.header.title).width;
 
-    const mt = canvasStyle.columnHeaderOrderByArrowMarginTop,
-      ml = canvasStyle.columnHeaderOrderByArrowMarginLeft,
-      mr = canvasStyle.columnHeaderOrderByArrowMarginRight,
-      aw = canvasStyle.columnHeaderOrderByArrowWidth,
+    const mr = canvasStyle.columnHeaderOrderByArrowMarginRight,
       ah = canvasStyle.columnHeaderOrderByArrowHeight;
 
     x += +mr + headerTextWidth + 5;
     y += (e.cell?.height ?? 1) / 2 - ah * 1.5;
-    e.ctx.fillStyle = canvasStyle.columnHeaderOrderByArrowColor;
-    e.ctx.strokeStyle = canvasStyle.columnHeaderOrderByArrowBorderColor;
-    e.ctx.lineWidth = canvasStyle.columnHeaderOrderByArrowBorderWidth;
 
-    e.ctx.beginPath();
-    x = x + ml;
-    y = y + mt;
+    if (this.canvasGrid.orderBy === e.cell?.header?.name) {
+      const icon =
+        this.canvasGrid.orderDirection === 'asc'
+          ? this.ascArrowSvgUrl
+          : this.descArrowSvgUrl;
 
-    if (this.canvasGrid.orderDirection === 'desc') {
-      e.ctx.moveTo(x + aw, y);
-      e.ctx.lineTo(x + aw * 0.5, y + ah);
-      e.ctx.lineTo(x, y);
-    } else {
-      e.ctx.moveTo(x, y + ah);
-      e.ctx.lineTo(x + aw * 0.5, y);
-      e.ctx.lineTo(x + aw, y + ah);
+      const arrowSVG = `<svg class="icon-color" fill="#0078e6" role="img"><use xlink:href="${icon}" /></svg>`;
+
+      if (!this.imageBuffer[arrowSVG]) {
+        this.loadExternalSVG(arrowSVG);
+      }
+
+      const image = this.imageBuffer[arrowSVG];
+
+      if (image && image.width !== 0) {
+        const targetWidth = image.width;
+        const targetHeight = image.height;
+        e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
+      }
     }
-
-    e.ctx.stroke();
   }
 
   _onSelectionChanged(event: {
@@ -619,5 +569,59 @@ export class Typo3Datagrid extends LitElement {
   protected setGridDimensions(): void {
     this.canvasGrid.style.width = this.offsetWidth + 'px';
     this.canvasGrid.style.height = this.offsetHeight + 'px';
+  }
+
+  protected loadExternalSVG(html: string) {
+    const domElement = new DOMParser().parseFromString(html, 'text/html');
+    const useElement = domElement.querySelector('use') as SVGUseElement;
+
+    if (!useElement) {
+      return;
+    }
+    const img = new Image();
+    this.imageBuffer[html] = img;
+
+    const src = useElement.href.baseVal;
+    const id = src.replace(/.*#/, '');
+
+    const fillColor = (domElement.querySelector(
+      'svg'
+    ) as SVGElement).getAttribute('fill');
+    if (fillColor) {
+      this.fillColorBuffer[id] = fillColor;
+    }
+
+    fetch(src)
+      .then(r => r.text())
+      .then(markup => new DOMParser().parseFromString(markup, 'image/svg+xml'))
+      .then(doc => {
+        const node = doc.getElementById(id) as HTMLElement;
+        node.setAttribute('width', '16px');
+        node.setAttribute('height', '16px');
+        if (this.fillColorBuffer[id]) {
+          node.setAttribute('fill', this.fillColorBuffer[id]);
+        }
+        const xml = new XMLSerializer().serializeToString(node);
+        const svgURL = xml.replace('symbol', 'svg').replace('symbol', 'svg');
+
+        const svg = new Blob([svgURL], {
+          type: 'image/svg+xml',
+        });
+        const domURL = self.URL || self.webkitURL || self;
+        const url = domURL.createObjectURL(svg);
+
+        img.onload = () => {
+          this.canvasGrid.draw();
+          domURL.revokeObjectURL(url);
+        };
+        img.src = url;
+      });
+  }
+
+  protected addRowToSelection(cell: Cell): void {
+    const searchField: Record<string, string> = {};
+    searchField[this.rowIdentifier] = cell.data[this.rowIdentifier];
+    const originalIndex = _.findIndex(this.canvasGrid.data, searchField);
+    this.canvasGrid.selectRow(originalIndex, true);
   }
 }

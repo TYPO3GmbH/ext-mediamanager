@@ -25,6 +25,7 @@ interface CustomCanvasCSStyleDeclaration extends CSSStyleDeclaration {
 
 export interface CanvasDatagrid extends HTMLElement {
   data: { [key: string]: string }[];
+  orderBy: string;
   orderDirection: 'asc' | 'desc';
   style: CustomCanvasCSStyleDeclaration;
   selectedRows: { [key: string]: string }[];

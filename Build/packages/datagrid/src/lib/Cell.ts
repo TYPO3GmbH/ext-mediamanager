@@ -27,5 +27,5 @@ export interface Cell {
   header?: {
     name: string;
   };
-  data: {};
+  data: Record<string, string>;
 }
