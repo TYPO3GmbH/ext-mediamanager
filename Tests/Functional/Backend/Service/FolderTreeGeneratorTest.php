@@ -155,7 +155,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
                 'overlayIcon' => null,
                 'parentIdentifier' => null,
                 'sysType' => '_FOLDER',
-                'contextMenuType' => 'sys_file_storage',
+                'contextMenuType' => 'sys_file',
             ],
             [
                 'stateIdentifier' => '_230043429',

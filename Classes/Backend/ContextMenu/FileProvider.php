@@ -51,6 +51,11 @@ class FileProvider extends AbstractProvider
             'iconIdentifier' => 'actions-eye',
             'callbackAction' => 'showFile',
         ],
+        'download' => [
+            'label' => 'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf:cm.download',
+            'iconIdentifier' => 'actions-download',
+            'callbackAction' => 'download',
+        ],
         'divider' => [
             'type' => 'divider',
         ],
@@ -132,6 +137,9 @@ class FileProvider extends AbstractProvider
                 break;
 
             //for both files and folders
+            case 'download':
+                $canRender = $this->canDownload();
+                break;
             case 'copy':
                 $canRender = $this->canBeCopied();
                 break;
@@ -158,6 +166,21 @@ class FileProvider extends AbstractProvider
     protected function canShowInfo(): bool
     {
         return $this->isSingleRecordMode() && $this->isFile($this->getSingleRecord());
+    }
+
+    protected function canDownload(): bool
+    {
+        if ('list' !== $this->context) {
+            return false;
+        }
+
+
+        foreach ($this->records as $record) {
+            if (false === $record->checkActionPermission('read')) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected function canReplace(): bool

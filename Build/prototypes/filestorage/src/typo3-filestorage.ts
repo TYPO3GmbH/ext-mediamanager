@@ -98,6 +98,7 @@ import {
 } from './redux/ducks/selectors/layout';
 import { isLoading } from './redux/ducks/selectors/global';
 import { RootState } from './redux/ducks/reducers';
+import { getIconUrl } from './services/icon-url.service';
 
 @customElement('typo3-filestorage')
 export class Typo3Filestorage extends connect(store)(LitElement) {
@@ -249,7 +250,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     let contextItems = [event.detail.node];
     if (context === 'list' && selectedItems.length > 0) {
       // use selection if element is part of selection
-      if (_.some(selectedItems, event.detail.node)) {
+      if (_.some(selectedItems, { identifier: event.detail.node.identifier })) {
         contextItems = selectedItems;
       }
     }
@@ -422,6 +423,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         storeAction = new FileActions.ShowFile(
           additionalAttributes!['data-url']
         );
+        break;
+      case 'download':
+        storeAction = new FileActions.DownloadFiles(identifiers);
         break;
       case 'deleteFile':
         storeAction = new FileActions.DeleteFilesConfirm(identifiers);
@@ -696,7 +700,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
         return {
           ...listItem,
-          selected: `<svg class="icon-color" role="img" fill="${color}"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#${icon}"/></svg>`,
+          selected: `<svg class="icon-color" role="img" fill="${color}"><use xlink:href="${getIconUrl(
+            icon
+          )}" /></svg>`,
         };
       });
       const sorters = DatagridSorter.getDatagridSorters(this.datagridSchema);
