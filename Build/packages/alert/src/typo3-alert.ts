@@ -22,7 +22,13 @@ import {
 import styles from './typo3-alert.pcss';
 import themeStyles from '../../../theme/index.pcss';
 
-export type Color = 'default' | 'success' | 'info' | 'warning' | 'danger';
+export type Color =
+  | 'primary'
+  | 'default'
+  | 'success'
+  | 'info'
+  | 'warning'
+  | 'danger';
 
 /**
  * @fires typo3-alert-close - Dispatched when dismissible alert is closed
@@ -51,8 +57,6 @@ export type Color = 'default' | 'success' | 'info' | 'warning' | 'danger';
  * @cssprop --typo3-alert-close-btn-font-size
  * @cssprop --typo3-alert-close-btn-font-weight
  * @cssprop --typo3-alert-close-btn-line-height
- * @cssprop --typo3-alert-close-btn-color
- * @cssprop --typo3-alert-close-btn-color-hover
  */
 @customElement('typo3-alert')
 export class Typo3Alert extends LitElement {

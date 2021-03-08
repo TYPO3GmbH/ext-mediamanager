@@ -158,6 +158,7 @@ class AppConfigProvider implements AppConfigProviderInterface
             'actions-chevron-right' => 'actions-chevron-right',
             'actions-sort-amount-down' => 'actions-sort-amount-down',
             'actions-sort-amount-up' => 'actions-sort-amount-up',
+            'actions-info-circle-alt' => 'actions-info-circle-alt',
         ];
 
         return \array_map(function (string $identifier) {

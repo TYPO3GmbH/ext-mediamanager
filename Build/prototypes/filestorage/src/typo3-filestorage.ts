@@ -718,6 +718,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           .editableColumns="${this.itemsEditEnabled ? ['name'] : []}"
           .selectedRows="${getSelectedItems(this.state)}"
           .sorters="${sorters}"
+          ascArrowSvgUrl="${getIconUrl('actions-sort-amount-up')}"
+          descArrowSvgUrl="${getIconUrl('actions-sort-amount-down')}"
           @dragstart="${this._onDragStart}"
           @contextmenu="${this._onContextMenuWithoutContext}"
           @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"

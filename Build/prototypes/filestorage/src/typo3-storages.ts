@@ -97,7 +97,10 @@ export class Typo3Storages extends LitElement {
     }
 
     return html` <div class="main-content">
-      <typo3-alert color="info">${translate('selectStorageInfo')}</typo3-alert>
+      <typo3-alert color="primary" dismissible>
+        ${createSVGElement('actions-info-circle-alt')}
+        ${translate('selectStorageInfo')}
+      </typo3-alert>
       <typo3-grid>
         ${this.storages.map(storage => this.renderStoragCard(storage))}
       </typo3-grid>

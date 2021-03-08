@@ -4,7 +4,7 @@
 
 #alert {
     display: flex;
-    padding: var(--typo3-alert-padding-y, .75rem) var(--typo3-alert-padding-y, 1.25rem);
+    padding: var(--typo3-alert-padding-y, .75rem) var(--typo3-alert-padding-y, 1rem);
     margin-bottom: var(--typo3-alert-margin-bottom, 1rem);
     border: var(--typo3-global-alert-border-width) solid transparent;
     border-radius: var(--typo3-global-alert-border-radius);
@@ -19,17 +19,24 @@
     font-size: var(--typo3-alert-close-btn-font-size, var(--typo3-global-close-btn-font-size));
     font-weight: var(--typo3-alert-close-btn-font-weight, var(--typo3-global-close-btn-font-weight));
     line-height: var(--typo3-alert-close-btn-line-height, var(--typo3-global-close-btn-line-height));
-    color: var(--typo3-alert-close-btn-color, var(--typo3-global-close-btn-color));
     opacity: var(--typo3-alert-close-btn-color, .5);
     text-shadow: 0 1px 0 #fff;
     background-color: transparent;
     border: none;
     cursor: pointer;
+    outline: none;
+    color: inherit;
+}
 
-    :hover {
-        text-decoration: none;
-        opacity: var(--typo3-alert-close-btn-color-hover, .75);
-    }
+#btn-close:hover {
+    text-decoration: none;
+    opacity: var(--typo3-alert-close-btn-color-hover, .75);
+}
+
+:host([color='primary']) #alert {
+    color: var(--typo3-alert-primary-color, var(--typo3-global-badge-primary-color));
+    background-color: var(--typo3-alert-primary-background-color, var(--typo3-global-badge-primary-bg));
+    border-color: var(--typo3-global-brand-primary-border-color, var(--typo3-global-brand-primary-border-color));
 }
 
 :host([color='success']) #alert {
@@ -54,4 +61,10 @@
     color: var(--typo3-alert-danger-color, var(--typo3-global-alert-danger-color));
     background-color: var(--typo3-alert-danger-background-color, var(--typo3-global-alert-danger-bg));
     border-color: var(--typo3-alert-danger-border-color, var(--typo3-global-alert-danger-border));
+}
+
+slot {
+    display: flex;
+    vertical-align: center;
+    align-items: center;
 }
