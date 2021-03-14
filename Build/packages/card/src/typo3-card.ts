@@ -23,6 +23,7 @@ import {
 
 import styles from './typo3-card.pcss';
 import themeStyles from '../../../theme/index.pcss';
+import { classMap } from 'lit-html/directives/class-map';
 
 /**
  * @fires typo3-card-title-rename - Event fired on title rename
@@ -60,7 +61,10 @@ export class Typo3Card extends LitElement {
       </div>
       <div class="body">
         <div
-          class="title"
+          class=${classMap({
+            title: true,
+            edit: this.inEditMode,
+          })}
           ?contentEditable="${this.titleEditable}"
           @click="${this._onClick}"
           @dblclick="${this._onDblclick}"
