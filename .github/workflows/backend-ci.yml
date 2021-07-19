@@ -37,7 +37,7 @@ jobs:
         run: composer info
 
       - name: CGL
-        run: php-cs-fixer fix --verbose --config ./Build/.php_cs --dry-run
+        run: php-cs-fixer fix --verbose --config ./Build/.php-cs-fixer.php --dry-run
 
       - name: Unit Tests
         run: ./etc/scripts/runTests.sh -s unit
