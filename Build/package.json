@@ -56,8 +56,8 @@
 	"scripts": {
 		"lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
 		"format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-		"lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check --ignore-path .gitignore",
-		"format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write --ignore-path .gitignore",
+		"lint:prettier": "prettier \"**/*.js\" \"**/*.ts\" --check",
+		"format:prettier": "prettier \"**/*.js\" \"**/*.ts\" --write",
 		"lint": "npm run lint:eslint && npm run lint:prettier",
 		"format": "npm run format:eslint && npm run format:prettier",
 		"test": "npm run build:dev && karma start --coverage",
