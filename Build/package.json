@@ -73,7 +73,6 @@
 		"deploy-storybook": "storybook-to-ghpages"
 	},
 	"dependencies": {
-		"@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
 		"canvas-datagrid": "^0.3.4",
 		"d3": "^6.5.0",
 		"lit-element": "^2.0.1",
