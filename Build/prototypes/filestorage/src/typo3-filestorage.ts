@@ -390,6 +390,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       event.preventDefault();
       return;
     }
+    if (false === currentNode.allowEdit) {
+      event.preventDefault();
+      return;
+    }
+
     if (null === event.detail.dataTransfer) {
       event.preventDefault();
       return;
