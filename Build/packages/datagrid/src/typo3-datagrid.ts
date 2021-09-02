@@ -150,6 +150,8 @@ export class Typo3Datagrid extends LitElement {
           --cdg-row-header-cell-hover-background-color: transparent;
           --cdg-selection-overlay-borderColor: transparent;
           --cdg-disabled-cell-opacity: 0.5;
+          --cdg-edit-cell-font-size: 12;
+          --cdg-edit-cell-font-family: var(--typo3-global-font-family-base);
         "
         allowcolumnreordering="false"
         allowcolumnresize="false"
