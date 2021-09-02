@@ -58,9 +58,8 @@ export class Typo3Storages extends LitElement {
                 ? html`<typo3-button
                     @click="${() => this._onRelocate(newStorageUrl)}"
                   >
-                     ${createSVGElement('addFolder', 'icon')}
-                     ${translate('new')}
-                  </typo3-button`
+                    ${createSVGElement('addFolder', 'icon')} ${translate('new')}
+                  </typo3-button>`
                 : html``}
             </div>
           </typo3-topbar>
