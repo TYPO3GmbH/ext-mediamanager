@@ -14,7 +14,7 @@ Install web components
 
 Build web components
 
-    (cd Build; npm build:prod)
+    (cd Build; npm run build:prod)
 
 
 [PHPUnit](https://phpunit.de) Unit tests
