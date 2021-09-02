@@ -1,0 +1,65 @@
+{
+  "_from": "@material/mwc-list@^0.18.0",
+  "_id": "@material/mwc-list@0.18.0",
+  "_inBundle": false,
+  "_integrity": "sha512-mzcAtJkUG2icPvSaIwxDI8pLWt1szVmL629ccm6nCwdFuYeQEwjIj7aR8xD0kZ4rgaOi8IgXH2Kq5YZnywdIXA==",
+  "_location": "/@material/mwc-list",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@material/mwc-list@^0.18.0",
+    "name": "@material/mwc-list",
+    "escapedName": "@material%2fmwc-list",
+    "scope": "@material",
+    "rawSpec": "^0.18.0",
+    "saveSpec": null,
+    "fetchSpec": "^0.18.0"
+  },
+  "_requiredBy": [
+    "/@material/mwc-menu"
+  ],
+  "_resolved": "https://registry.npmjs.org/@material/mwc-list/-/mwc-list-0.18.0.tgz",
+  "_shasum": "d801a4e99b51da89d33c20043b3f565c9dee9bda",
+  "_spec": "@material/mwc-list@^0.18.0",
+  "_where": "/Users/tobiaswojtylak/Dev/filelist-ng/Build/node_modules/@material/mwc-menu",
+  "bundleDependencies": false,
+  "dependencies": {
+    "@material/base": "=8.0.0-canary.096a7a066.0",
+    "@material/dom": "=8.0.0-canary.096a7a066.0",
+    "@material/list": "=8.0.0-canary.096a7a066.0",
+    "@material/mwc-base": "^0.18.0",
+    "@material/mwc-checkbox": "^0.18.0",
+    "@material/mwc-radio": "^0.18.0",
+    "@material/mwc-ripple": "^0.18.0",
+    "lit-element": "^2.3.0",
+    "lit-html": "^1.1.2",
+    "tslib": "^1.10.0"
+  },
+  "deprecated": false,
+  "description": "Material Design list web component",
+  "devDependencies": {
+    "@material/density": "=8.0.0-canary.096a7a066.0",
+    "@material/feature-targeting": "=8.0.0-canary.096a7a066.0",
+    "@material/mwc-icon": "^0.18.0",
+    "@material/mwc-menu": "^0.18.0",
+    "@material/ripple": "=8.0.0-canary.096a7a066.0",
+    "@material/rtl": "=8.0.0-canary.096a7a066.0",
+    "@material/theme": "=8.0.0-canary.096a7a066.0",
+    "@material/typography": "=8.0.0-canary.096a7a066.0"
+  },
+  "gitHead": "907d4d7d7235b3a3256595bce22f0d7db165adab",
+  "keywords": [
+    "material design",
+    "web components",
+    "list"
+  ],
+  "license": "Apache-2.0",
+  "main": "mwc-list.js",
+  "module": "mwc-list.js",
+  "name": "@material/mwc-list",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.18.0"
+}

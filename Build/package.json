@@ -73,7 +73,6 @@
 		"deploy-storybook": "storybook-to-ghpages"
 	},
 	"dependencies": {
-		"@material/mwc-menu": "^0.18.0",
 		"@vaadin/vaadin-split-layout": "git+https://github.com/vaadin/vaadin-split-layout.git#next",
 		"canvas-datagrid": "^0.3.4",
 		"d3": "^6.5.0",

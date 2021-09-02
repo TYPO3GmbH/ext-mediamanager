@@ -1,0 +1,59 @@
+{
+  "_from": "@material/dom@8.0.0-canary.096a7a066.0",
+  "_id": "@material/dom@8.0.0-canary.096a7a066.0",
+  "_inBundle": false,
+  "_integrity": "sha512-JfMeg+lORzHouIWBaL8HbfNutH6mAMUHv649TJEZSMIp7lkrBUXnXdJNP1CybqHKqVbNlMAIb41PBJm93tpxUw==",
+  "_location": "/@material/dom",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@material/dom@8.0.0-canary.096a7a066.0",
+    "name": "@material/dom",
+    "escapedName": "@material%2fdom",
+    "scope": "@material",
+    "rawSpec": "8.0.0-canary.096a7a066.0",
+    "saveSpec": null,
+    "fetchSpec": "8.0.0-canary.096a7a066.0"
+  },
+  "_requiredBy": [
+    "/@material/list",
+    "/@material/menu",
+    "/@material/mwc-base",
+    "/@material/mwc-list",
+    "/@material/mwc-ripple",
+    "/@material/radio",
+    "/@material/ripple"
+  ],
+  "_resolved": "https://registry.npmjs.org/@material/dom/-/dom-8.0.0-canary.096a7a066.0.tgz",
+  "_shasum": "5976a60cd570fea4b078e0e9f303fad3823d2938",
+  "_spec": "@material/dom@8.0.0-canary.096a7a066.0",
+  "_where": "/Users/tobiaswojtylak/Dev/filelist-ng/Build/node_modules/@material/menu",
+  "bugs": {
+    "url": "https://github.com/material-components/material-components-web/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@material/feature-targeting": "8.0.0-canary.096a7a066.0",
+    "tslib": "^1.9.3"
+  },
+  "deprecated": false,
+  "description": "DOM manipulation utilities for Material Components for the web",
+  "gitHead": "c1f4491c464cef40f62d03f687af7b443805fb7e",
+  "homepage": "https://github.com/material-components/material-components-web#readme",
+  "license": "MIT",
+  "main": "dist/mdc.dom.js",
+  "module": "index.js",
+  "name": "@material/dom",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/material-components/material-components-web.git",
+    "directory": "packages/mdc-dom"
+  },
+  "sideEffects": false,
+  "types": "dist/mdc.dom.d.ts",
+  "version": "8.0.0-canary.096a7a066.0"
+}
