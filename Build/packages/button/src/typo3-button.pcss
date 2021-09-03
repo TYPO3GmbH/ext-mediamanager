@@ -294,3 +294,8 @@ slot[name='icon']::slotted(*) {
     border-color: transparent;
     background: none;
 }
+
+:host([only-icon]) #button:hover {
+    background-color: var(--typo3-btn-default-background-color-hover, var(--typo3-global-brand-default-hover));
+    border-color: var(--typo3-btn-default-border-color-hover, var(--typo3-global-brand-default-border-color-hover));
+}

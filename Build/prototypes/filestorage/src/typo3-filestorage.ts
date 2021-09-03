@@ -636,7 +636,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
             </div>
             <div class="topbar-wrapper">
               <typo3-topbar>
-                <div slot="left">${this.renderBreadcrumb}</div>
+                <div slot="left">
+                  ${this.renderBreadcrumb}${this.renderRefreshButton}
+                </div>
                 <div slot="right">
                   ${this.renderSearchField} ${this.renderSortingDropdown}
                   ${this.renderViewModeDropDown}
@@ -1119,6 +1121,18 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         ${createSVGElement('search', 'search-icon')}
         ${createSVGElement('reset', 'reset-icon')}
       </typo3-search>
+    `;
+  }
+
+  protected get renderRefreshButton(): TemplateResult {
+    return html`
+      <typo3-button
+        only-icon
+        @click="${this.refresh}"
+        title="${translate('labels.refresh')}"
+      >
+        ${createSVGElement('refresh', 'icon')}
+      </typo3-button>
     `;
   }
 
