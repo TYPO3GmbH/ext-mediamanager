@@ -841,7 +841,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       messageKey = 'dragFiles.message.upload';
     }
 
-    return html` <div class="main-content main-content-info">
+    return html` <div
+      class="main-content main-content-info"
+      @contextmenu="${this._onContextMenuWithoutContext}"
+    >
       ${createSVGElement(iconKey)}
       <h3>${translate(titleKey)}</h3>
       <span>${translate(messageKey)}</span>
