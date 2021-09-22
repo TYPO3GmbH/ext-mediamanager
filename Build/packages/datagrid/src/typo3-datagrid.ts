@@ -445,6 +445,12 @@ export class Typo3Datagrid extends LitElement {
     if (false === this._isEditableCell(event.cell)) {
       event.preventDefault();
     }
+    if (true !== event.cell?.selected) {
+      this.addRowToSelectionByIdentifier(
+        event.cell?.data[this.rowIdentifier] as string
+      );
+      event.preventDefault();
+    }
   }
 
   _onBeforeSortColumn(): void {
