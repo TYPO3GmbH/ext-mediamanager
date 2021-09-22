@@ -164,6 +164,7 @@ export class Typo3Datagrid extends LitElement {
         showrowheaders="false"
         @afterrendercell="${this._onAfterRendercell}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
+        @beforesortcolumn="${this._onBeforeSortColumn}"
         @beginedit="${this._onBeginEdit}"
         @beginmove="${this._onBeginmove}"
         @mouseup="${this._onMouseup}"
@@ -446,6 +447,16 @@ export class Typo3Datagrid extends LitElement {
   _onBeforeBeginEdit(event: CanvasDataGridEvent): void {
     if (false === this._isEditableCell(event.cell)) {
       event.preventDefault();
+    }
+  }
+
+  _onBeforeSortColumn(): void {
+    if (this.selectedRows.length > 0) {
+      this.dispatchEvent(
+        new CustomEvent('typo3-datagrid-selection-change', {
+          detail: [],
+        })
+      );
     }
   }
 
