@@ -150,17 +150,17 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
   get datagridSchema(): CellHeader[] {
     const fields: CellHeader[] = [
       {
-        name: 'identifier',
-        type: 'text',
-        title: ' ',
-        hidden: true,
-        sortable: false,
-      },
-      {
         name: 'selected',
         type: 'html',
         title: ' ',
         width: '24',
+      },
+      {
+        name: 'identifier',
+        type: 'text',
+        title: ' ',
+        width: '0',
+        sortable: false,
       },
       {
         name: 'icon',
@@ -306,7 +306,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     this._onContextMenu(customEvent);
   }
 
-  _onSelectViewMode(event: CustomEvent<SelectedDetail>): void {
+  _onSelectViewMode(event: CustomEvent<SelectedDetail<number>>): void {
     const viewMode = Object.values(ViewMode)[event.detail.index];
     store.dispatch(new ViewModeActions.SetViewMode(viewMode as ViewMode));
   }

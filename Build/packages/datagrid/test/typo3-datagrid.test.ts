@@ -204,6 +204,6 @@ describe('Typo3Datagrid', () => {
     element._onBeforeSortColumn();
 
     const { detail } = await listener;
-    expect(detail).to.be.eq([]);
+    expect(detail).to.be.an('array').that.is.empty;
   });
 });
