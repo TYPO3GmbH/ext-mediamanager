@@ -94,47 +94,29 @@ export class Typo3Grid extends LitElement {
       return;
     }
 
-    let selectedItems = this.selectedItems;
-
     const isTogglButtonClick = event
       .composedPath()
       .some(element => (element as HTMLElement).tagName === 'BUTTON');
 
     const multiSelection =
       !!(event.metaKey || event.ctrlKey) || isTogglButtonClick;
+
     if (!element.hasAttribute('selected')) {
-      element.setAttribute('selected', 'selected');
-      if (multiSelection) {
-        selectedItems.push(element);
-      } else {
-        selectedItems.forEach(item => item.removeAttribute('selected'));
-        selectedItems = [element];
-      }
-    } else {
-      if (multiSelection) {
-        element.removeAttribute('selected');
-        selectedItems = this.selectedItems.filter(
-          selectedItem => selectedItem != element
-        );
-      } else {
-        this.selectedItems
-          .filter(selectedItem => selectedItem != element)
-          .forEach(item => item.removeAttribute('selected'));
-        selectedItems = [element];
-      }
+      this.selectItems([element], multiSelection);
+    } else if (multiSelection) {
+      const items = this.selectedItems.filter(
+        selectedItem => selectedItem != element
+      );
+
+      this.selectItems(items, false);
     }
-    this.dispatchEvent(
-      new CustomEvent('typo3-grid-selection-changed', { detail: selectedItems })
-    );
   };
 
   _onKeyDown = (event: KeyboardEvent) => {
+    const startFocusedElementIndex = this.focusedElementIndex;
     switch (event.key) {
       case 'Escape':
-        this.selectedItems.forEach(item => item.removeAttribute('selected'));
-        this.dispatchEvent(
-          new CustomEvent('typo3-grid-selection-changed', { detail: [] })
-        );
+        this.selectItems([], false);
         event.preventDefault();
         break;
       case 'Enter':
@@ -145,29 +127,55 @@ export class Typo3Grid extends LitElement {
         break;
       case 'a':
         if (event.metaKey || event.ctrlKey) {
-          this.items.forEach(item => item.setAttribute('selected', 'selected'));
-
-          this.dispatchEvent(
-            new CustomEvent('typo3-grid-selection-changed', {
-              detail: this.items,
-            })
-          );
+          this.selectItems(this.items);
           event.preventDefault();
         }
         break;
       case 'ArrowRight':
         this.focusElement(this.focusedElementIndex + 1);
+        if (event.shiftKey) {
+          this.selectItems(
+            this.items.slice(
+              startFocusedElementIndex,
+              this.focusedElementIndex + 1
+            )
+          );
+        }
         event.preventDefault();
         break;
       case 'ArrowLeft':
         this.focusElement(this.focusedElementIndex - 1);
+        if (event.shiftKey) {
+          this.selectItems(
+            this.items.slice(
+              this.focusedElementIndex,
+              startFocusedElementIndex + 1
+            )
+          );
+        }
         break;
       case 'ArrowDown':
         this.focusElement(this.focusedElementIndex + this.numOfColumns);
+        if (event.shiftKey) {
+          this.selectItems(
+            this.items.slice(
+              startFocusedElementIndex,
+              this.focusedElementIndex + 1
+            )
+          );
+        }
         event.preventDefault();
         break;
       case 'ArrowUp':
         this.focusElement(this.focusedElementIndex - this.numOfColumns);
+        if (event.shiftKey) {
+          this.selectItems(
+            this.items.slice(
+              this.focusedElementIndex,
+              startFocusedElementIndex + 1
+            )
+          );
+        }
         event.preventDefault();
         break;
       case 'Home':
@@ -219,5 +227,22 @@ export class Typo3Grid extends LitElement {
       getComputedStyle(this.grid, null).getPropertyValue('column-gap')
     );
     return Math.round((gridWidth + gap) / (minWidth + gap));
+  }
+
+  protected selectItems(items: HTMLElement[], addToSelection = true): void {
+    if (false === this.selectable) {
+      return;
+    }
+
+    if (false === addToSelection) {
+      this.selectedItems.forEach(item => item.removeAttribute('selected'));
+    }
+
+    items.forEach(item => item.setAttribute('selected', 'selected'));
+    this.dispatchEvent(
+      new CustomEvent('typo3-grid-selection-changed', {
+        detail: this.selectedItems,
+      })
+    );
   }
 }

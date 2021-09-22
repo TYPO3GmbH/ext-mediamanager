@@ -205,4 +205,32 @@ describe('Typo3Grid', () => {
 
     expect(cardItemOne.hasAttribute('selected')).to.be.true;
   });
+
+  it('selects current and left item on arrow left with shift key pressed`', async () => {
+    cardItemTwo.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', {
+      key: 'ArrowLeft',
+      shiftKey: true,
+    });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(cardItemOne.hasAttribute('selected')).to.be.true;
+    expect(cardItemTwo.hasAttribute('selected')).to.be.true;
+  });
+
+  it('selects current and right item on arrow right with shift key pressed`', async () => {
+    cardItemOne.focus();
+    await elementUpdated(element);
+    const event = new KeyboardEvent('keydown', {
+      key: 'ArrowRight',
+      shiftKey: true,
+    });
+    element.dispatchEvent(event);
+    await elementUpdated(element);
+
+    expect(cardItemOne.hasAttribute('selected')).to.be.true;
+    expect(cardItemTwo.hasAttribute('selected')).to.be.true;
+  });
 });
