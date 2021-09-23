@@ -111,7 +111,7 @@ export const confirmDeleteFiles = (
         title: data.title,
         content: data.message,
         type: ModalType.CONFIRM,
-        variant: ModalVariant.warning,
+        variant: ModalVariant.danger,
         dismissible: true,
         modalButtons: [
           {
@@ -121,7 +121,7 @@ export const confirmDeleteFiles = (
           },
           {
             label: data.deleteText,
-            color: 'warning',
+            color: ModalVariant.danger,
             action: 'typo3-confirm-delete',
           },
         ],
