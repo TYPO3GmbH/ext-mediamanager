@@ -104,7 +104,7 @@ export class Typo3Datagrid extends LitElement {
   }
 
   get renderGrid(): TemplateResult {
-    const borderDragMode = this.draggable ? 'move' : 'none';
+    const borderDragMode = 'none';
     const columns =
       this.transformedColumns.length > 0
         ? this.transformedColumns
@@ -165,7 +165,6 @@ export class Typo3Datagrid extends LitElement {
         @afterrendercell="${this._onAfterRendercell}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
         @beginedit="${this._onBeginEdit}"
-        @beginmove="${this._onBeginmove}"
         @mouseup="${this._onMouseup}"
         @contextmenu="${this._onContextmenu}"
         @dblclick="${this._onDblClick}"
@@ -234,6 +233,16 @@ export class Typo3Datagrid extends LitElement {
         tap(() => this.setGridDimensions())
       )
       .subscribe();
+
+    this.addEventListener('dragstart', e => {
+      e.preventDefault();
+      if (this.draggable) {
+        const newEvent = new MouseEvent('mousedown', e);
+        this.dispatchEvent(newEvent);
+        this._endEdit();
+        this.canvasGrid.blur();
+      }
+    });
   }
 
   _onRenderText(e: RenderCellEvent): void {
@@ -327,14 +336,8 @@ export class Typo3Datagrid extends LitElement {
       e.preventDefault();
       return;
     }
-  }
-
-  _onBeginmove(): void {
-    // trigger mouseup to prevent default move handling
-    setTimeout(
-      () => document.body.dispatchEvent(new MouseEvent('mouseup')),
-      10
-    );
+    // prevent d3 drag handler to come in play
+    e.NativeEvent?.stopPropagation();
   }
 
   _onMouseup(e: CanvasDataGridEvent): void {
@@ -554,7 +557,7 @@ export class Typo3Datagrid extends LitElement {
 
   _onTouchStart(e: CanvasDataGridEvent) {
     if (e.cell?.header?.name === 'selected') {
-      e.stopPropagation();
+      e.NativeEvent?.stopPropagation();
     }
   }
 

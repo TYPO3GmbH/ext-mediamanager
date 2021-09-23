@@ -503,6 +503,13 @@ export class Typo3SvgTree extends LitElement {
           .attr('rx', '3')
           .attr('ry', '3');
       }
+      this.dispatchEvent(
+        new CustomEvent('typo3-node-mouseover', {
+          bubbles: true,
+          detail: node,
+          composed: true,
+        })
+      );
     };
 
     self.mouseOut = (node: Node) => {
@@ -517,6 +524,12 @@ export class Typo3SvgTree extends LitElement {
           .attr('rx', '0')
           .attr('ry', '0');
       }
+      this.dispatchEvent(
+        new CustomEvent('typo3-node-mouseout', {
+          bubbles: true,
+          composed: true,
+        })
+      );
     };
 
     return self;

@@ -30,15 +30,16 @@ import styles from './typo3-filestorage.pcss';
 import { Action } from 'redux';
 
 import {
+  FileActions,
+  GlobalActions,
+  LayoutActions,
   ListActions,
   TreeActions,
   ViewModeActions,
-  GlobalActions,
-  FileActions,
-  LayoutActions,
 } from './redux/ducks/actions';
 
 import { Node } from '../../../types/node';
+import * as _ from 'lodash-es';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
@@ -51,7 +52,6 @@ import {
   ContextMenuItemClickEvent,
   MoveFilesModalEvent,
   MoveTreeNodeEvent,
-  TreeNodeDropEvent,
 } from './types/events';
 import { translate } from './services/translation.service';
 import { styleMap } from 'lit-html/directives/style-map';
@@ -64,33 +64,29 @@ import { EMPTY } from 'rxjs';
 import { Typo3ContextMenuOption } from '../../../packages/menu/src/lib/Typo3ContextMenuOption';
 import { CellHeader } from '../../../packages/datagrid/src/lib/cell-header';
 import { getUrl } from './services/backend-url.service';
-import * as _ from 'lodash-es';
 import { ViewMode } from './types/view-mode';
 
 import {
   getExpandedTreeNodeIds,
-  getLastSelectedTreeNodeId,
-  getSelectedTreeNode,
-  getSelectedTreeNodePath,
-  getTreeNodeByIdentifier,
-  getTreeNodes,
-  selectedTreeNodeIdentifiers,
   getItems,
+  getLastSelectedTreeNodeId,
   getSearchTermString,
   getSelectedItems,
+  getSelectedTreeNode,
+  getSelectedTreeNodePath,
+  getSortDirection,
+  getSortField,
+  getTreeNodeByIdentifier,
+  getTreeNodes,
+  isDownloadingFiles,
   isEmptySelection,
   isInSearchMode,
   isItemSelected,
-  getSortDirection,
-  getSortField,
   isListMode,
   isSortDirection,
   isSortField,
   isTilesMode,
-  getDragMode,
-  isCopyDragMode,
-  isDownloadingFiles,
-  isDraggingFiles,
+  selectedTreeNodeIdentifiers,
 } from './redux/ducks/selectors';
 import {
   getSidebarWidth,
@@ -99,9 +95,12 @@ import {
 import { isLoading } from './redux/ducks/selectors/global';
 import { RootState } from './redux/ducks/reducers';
 import { getIconUrl } from './services/icon-url.service';
+import { Typo3DragBehaviourMixin } from './typo3-drag-behaviour-mixin';
 
 @customElement('typo3-filestorage')
-export class Typo3Filestorage extends connect(store)(LitElement) {
+export class Typo3Filestorage extends connect(store)(
+  Typo3DragBehaviourMixin(LitElement)
+) {
   @property({ type: Array }) storages: Storage[] = [];
   @property({ type: Number }) selectedStorageUid = 0;
   @property({ type: Boolean }) itemsDragDropEnabled = false;
@@ -131,15 +130,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   public connectedCallback(): void {
     super.connectedCallback();
-    this.addEventListener('dragend', this._onDragEnd);
-    this.addEventListener('dragover', this._onDragOver);
     window.addEventListener('hashchange', this._onWindowHashChange);
   }
 
   public disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('dragend', this._onDragEnd);
-    this.addEventListener('dragover', this._onDragOver);
     window.addEventListener('hashchange', this._onWindowHashChange);
   }
 
@@ -464,70 +459,14 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
   }
 
-  _onDragStart(e: DragEvent): void {
-    store.dispatch(new FileActions.DragFilesStart());
-    const dummyElement = document.createElement('div');
-    dummyElement.textContent = '.';
-    dummyElement.style.position = 'absolute';
-
-    document.body.appendChild(dummyElement);
-    e.dataTransfer!.setDragImage(dummyElement, 0, 0);
-  }
-
-  _onItemDragOver(e: DragEvent, item: ListItem): void {
-    if (!e.dataTransfer) {
-      return;
-    }
-
-    if (item.sysType != '_FOLDER') {
-      e.dataTransfer.dropEffect = 'none';
-      return;
-    }
-
-    if (false === item.allowEdit) {
-      e.dataTransfer.dropEffect = 'none';
-      return;
-    }
-
-    e.dataTransfer.dropEffect = 'move';
-    e.preventDefault();
-  }
-
-  _onItemDrop(e: DragEvent, item: ListItem): void {
-    const identifiers = getSelectedItems(this.state).map(
-      (listItem: ListItem) => listItem.identifier
+  _onItemMouseOver(e: DragEvent, item: ListItem): void {
+    this.dispatchEvent(
+      new CustomEvent('typo3-card-mouseover', { detail: item })
     );
-    store.dispatch(new FileActions.DragFilesEnd());
-
-    const action = isCopyDragMode(this.state)
-      ? new FileActions.CopyFiles(identifiers, item)
-      : new FileActions.MoveFiles(identifiers, item);
-    store.dispatch(action);
   }
 
-  _onTreeNodeDrop(e: TreeNodeDropEvent): void {
-    const identifiers = getSelectedItems(this.state).map(
-      (listItem: ListItem) => listItem.identifier
-    );
-    store.dispatch(new FileActions.DragFilesEnd());
-
-    const action = isCopyDragMode(this.state)
-      ? new FileActions.CopyFiles(identifiers, e.detail.node)
-      : new FileActions.MoveFiles(identifiers, e.detail.node);
-    store.dispatch(action);
-  }
-
-  _onDragEnd(): void {
-    store.dispatch(new FileActions.DragFilesEnd());
-  }
-
-  _onDragOver(e: DragEvent): void {
-    const dragMode = e.ctrlKey == true ? 'copy' : 'move';
-    if (dragMode != getDragMode(this.state)) {
-      store.dispatch(new FileActions.DragFilesChangeMode(dragMode));
-    }
-    this.filesDragHandler.style.top = e.offsetY + 10 + 'px';
-    this.filesDragHandler.style.left = e.offsetX + 'px';
+  _onItemMouseOut(): void {
+    this.dispatchEvent(new CustomEvent('typo3-card-mouseout'));
   }
 
   _showFilesModalDialog(mode: 'copy' | 'move'): void {
@@ -690,10 +629,10 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       <typo3-context-menu
         @typo3-context-menu-item-click="${this._onContextMenuItemClick}"
       ></typo3-context-menu>
-      ${this.renderDragHandler}
       <typo3-files-modal
         @typo3-move-files="${this._onMoveFilesModal}"
       ></typo3-files-modal>
+      ${super.render()}
     `;
   }
 
@@ -758,7 +697,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           .sorters="${sorters}"
           ascArrowSvgUrl="${getIconUrl('actions-sort-amount-up')}"
           descArrowSvgUrl="${getIconUrl('actions-sort-amount-down')}"
-          @dragstart="${this._onDragStart}"
           @contextmenu="${this._onContextMenuWithoutContext}"
           @typo3-datagrid-selection-change="${this._onDatagridSelectionChange}"
           @typo3-datagrid-contextmenu="${this._onContextMenu}"
@@ -840,9 +778,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       variant="${listData.thumbnailUrl ? 'preview' : variant}"
       ?titleEditable="${titleEditable}"
       draggable="${draggable ? 'true' : 'false'}"
-      @dragstart="${this._onDragStart}"
-      @dragover="${(e: DragEvent) => this._onItemDragOver(e, listData)}"
-      @drop="${(e: DragEvent) => this._onItemDrop(e, listData)}"
+      @mouseover="${(e: DragEvent) => this._onItemMouseOver(e, listData)}"
+      @mouseout="${(e: DragEvent) => this._onItemMouseOut()}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
@@ -1106,8 +1043,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         .selectedNodeIds="${selectedTreeNodeIdentifiers(this.state)}"
         ?editable="${this.itemsEditEnabled}"
         ?dragDropEnabled="${this.itemsDragDropEnabled}"
-        ?inDropMode="${isDraggingFiles(this.state)}"
-        @typo3-node-drop="${this._onTreeNodeDrop}"
         @typo3-node-select="${(e: CustomEvent<Node>) =>
           this._onSelectedNode(e.detail)}"
         @typo3-node-contextmenu="${(e: ContextMenuEvent) =>
@@ -1120,28 +1055,6 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         @typo3-node-add="${(e: CustomEvent) =>
           this._onFolderAdd(e.detail.node, e.detail.parentNode)}"
       ></typo3-filetree>
-    `;
-  }
-
-  protected get renderDragHandler(): TemplateResult {
-    let iconKey = 'moveTo';
-    let message = translate('dnd.move.message');
-    let title = translate('dnd.move.title');
-
-    if (isCopyDragMode(this.state)) {
-      iconKey = 'copyTo';
-      message = translate('dnd.copy.message');
-      title = translate('dnd.copy.title');
-    }
-
-    title = title.replace(/%\w*/gm, '' + getSelectedItems(this.state).length);
-
-    return html`
-      <typo3-draghandler .hidden="${isDraggingFiles(this.state) !== true}">
-        ${createSVGElement(iconKey, 'icon')}
-        <span slot="title">${title}</span>
-        <span slot="message">${unsafeHTML(message)}</span>
-      </typo3-draghandler>
     `;
   }
 
