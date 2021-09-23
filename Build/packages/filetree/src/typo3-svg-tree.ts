@@ -1034,9 +1034,8 @@ export class Typo3SvgTree extends LitElement {
   }
 
   _switchFocusNode(node: Node): void {
-    const nodeElement = this.querySelector(
-      'identifier-' + this._getNodeStateIdentifier(node)
-    ) as SVGElement;
+    const nodeElementId = '#identifier-' + this._getNodeStateIdentifier(node);
+    const nodeElement = this.wrapper.querySelector(nodeElementId) as SVGElement;
     this._switchFocus(nodeElement);
   }
 
