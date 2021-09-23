@@ -173,6 +173,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
             'sysType' => $resource instanceof FileInterface ? '_FILE' : '_FOLDER',
             'parentIdentifier' => $parentFolder instanceof Folder ? $parentFolder->getCombinedIdentifier() : null,
             'contextMenuType' => 'sys_file',
+            'allowEdit' => $resource->checkActionPermission('rename'),
         ];
     }
 }

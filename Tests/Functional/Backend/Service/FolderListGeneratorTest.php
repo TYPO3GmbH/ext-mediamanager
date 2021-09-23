@@ -111,6 +111,9 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $subFolder->method('getModificationTime')
             ->willReturn(1609319601);
 
+        $subFolder->method('checkActionPermission')
+            ->willReturn(true);
+
         $icon = $this->createMock(Icon::class);
 
         $icon->method('getMarkup')
@@ -145,13 +148,13 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'type' => 'Folder',
             'variants' => '-',
             'references' => '-',
-            'rw' => 'R',
+            'rw' => 'RW',
             'clipboardIdentifier' => '95ed07cec0',
             'sysType' => '_FOLDER',
             'cardFolderIcon' => '<svg></svg>',
             'parentIdentifier' => '1:/',
             'contextMenuType' => 'sys_file',
-
+            'allowEdit' => true,
         ]], $result);
     }
 
@@ -273,6 +276,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
             'uid' => 13,
             'extension' => 'xls',
             'contextMenuType' => 'sys_file',
+            'allowEdit' => true,
         ]], $result);
     }
 }
