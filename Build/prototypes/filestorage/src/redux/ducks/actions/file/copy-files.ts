@@ -21,7 +21,10 @@ export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
 export class CopyFiles implements Action {
   readonly type = COPY_FILES;
 
-  constructor(public identifiers: string[], public target: Typo3Node) {}
+  constructor(
+    public identifiers: string[],
+    public target: Typo3Node | ListItem
+  ) {}
 }
 
 export class CopyFilesFailure implements Action {

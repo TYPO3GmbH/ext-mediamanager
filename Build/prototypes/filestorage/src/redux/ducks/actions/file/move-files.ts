@@ -22,7 +22,10 @@ export const MOVE_FILES_FAILURE = '[FILE] MOVE FILES FAILURE';
 export class MoveFiles implements Action {
   readonly type = MOVE_FILES;
 
-  constructor(public identifiers: string[], public target: Typo3Node) {}
+  constructor(
+    public identifiers: string[],
+    public target: Typo3Node | ListItem
+  ) {}
 }
 
 export class MoveFilesFailure implements Action {

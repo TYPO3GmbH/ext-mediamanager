@@ -13,6 +13,7 @@
 
 interface ListItem {
   uid: string;
+  allowEdit: boolean;
   extension: string;
   identifier: string;
   icon: string;

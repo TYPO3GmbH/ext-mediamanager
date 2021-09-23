@@ -474,6 +474,37 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     e.dataTransfer!.setDragImage(dummyElement, 0, 0);
   }
 
+  _onItemDragOver(e: DragEvent, item: ListItem): void {
+    if (!e.dataTransfer) {
+      return;
+    }
+
+    if (item.sysType != '_FOLDER') {
+      e.dataTransfer.dropEffect = 'none';
+      return;
+    }
+
+    if (false === item.allowEdit) {
+      e.dataTransfer.dropEffect = 'none';
+      return;
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    e.preventDefault();
+  }
+
+  _onItemDrop(e: DragEvent, item: ListItem): void {
+    const identifiers = getSelectedItems(this.state).map(
+      (listItem: ListItem) => listItem.identifier
+    );
+    store.dispatch(new FileActions.DragFilesEnd());
+
+    const action = isCopyDragMode(this.state)
+      ? new FileActions.CopyFiles(identifiers, item)
+      : new FileActions.MoveFiles(identifiers, item);
+    store.dispatch(action);
+  }
+
   _onTreeNodeDrop(e: TreeNodeDropEvent): void {
     const identifiers = getSelectedItems(this.state).map(
       (listItem: ListItem) => listItem.identifier
@@ -808,6 +839,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
           : 'true'
       }"
       @dragstart="${this._onDragStart}"
+      @dragover="${(e: DragEvent) => this._onItemDragOver(e, listData)}"
+      @drop="${(e: DragEvent) => this._onItemDrop(e, listData)}"
       @contextmenu="${contextMenuCallback}"
       @dblclick="${() => this._onItemDblClick(listData)}"
       @typo3-card-title-rename="${(e: CustomEvent) =>
