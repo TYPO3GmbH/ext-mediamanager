@@ -13,7 +13,7 @@
 
 export enum ModalVariant {
   'warning' = 'warning',
-  'error' = 'error',
+  'danger' = 'danger',
   'info' = 'info',
   'default' = 'default',
 }
