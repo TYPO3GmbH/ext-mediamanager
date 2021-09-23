@@ -12,7 +12,7 @@
  */
 
 import { expect } from '@open-wc/testing';
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 import {
   fileActionsReducer,
   FileActionsState,
@@ -42,8 +42,8 @@ describe('File Actions reducer', () => {
 
   it('can handle `AddFolder`', () => {
     const action = new fromFileActions.AddFolder(
-      { identifier: 'id-1' } as Typo3Node,
-      {} as Typo3Node
+      { identifier: 'id-1' } as Node,
+      {} as Node
     );
     const state = fileActionsReducer(undefined, action);
     expect(state.isAddingFolder).to.be.true;
@@ -100,7 +100,7 @@ describe('File Actions reducer', () => {
   it('can handle `UploadFiles`', () => {
     const action = new fromFileActions.UploadFiles(
       {} as DataTransfer,
-      { identifier: 'id-1' } as Typo3Node
+      { identifier: 'id-1' } as Node
     );
     const state = fileActionsReducer(undefined, action);
     expect(state.isUploadingFiles).to.be.true;
@@ -140,7 +140,7 @@ describe('File Actions reducer', () => {
   });
 
   it('can handle `MoveFiles`', () => {
-    const action = new fromFileActions.MoveFiles(['id-1'], {} as Typo3Node);
+    const action = new fromFileActions.MoveFiles(['id-1'], {} as Node);
     const state = fileActionsReducer(undefined, action);
     expect(state.isMovingFiles).to.be.true;
   });
@@ -158,7 +158,7 @@ describe('File Actions reducer', () => {
   });
 
   it('can handle `CopyFiles`', () => {
-    const action = new fromFileActions.CopyFiles(['id-1'], {} as Typo3Node);
+    const action = new fromFileActions.CopyFiles(['id-1'], {} as Node);
     const state = fileActionsReducer(undefined, action);
     expect(state.isCopyingFiles).to.be.true;
   });

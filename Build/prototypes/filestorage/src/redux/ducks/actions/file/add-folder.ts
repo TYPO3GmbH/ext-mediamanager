@@ -13,7 +13,7 @@
 
 import { Action } from 'redux';
 import { SuccessAction } from './success';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 
 export const ADD_FOLDER = '[FILE] ADD FOLDER';
 export const ADD_FOLDER_SUCCESS = '[FILE] ADD FOLDER SUCCESS';
@@ -22,7 +22,7 @@ export const ADD_FOLDER_FAILURE = '[FILE] ADD FOLDER FAILURE';
 export class AddFolder implements Action {
   readonly type = ADD_FOLDER;
 
-  constructor(public node: Typo3Node, public parentNode: Typo3Node) {}
+  constructor(public node: Node, public parentNode: Node) {}
 }
 
 export class AddFolderSuccess implements SuccessAction {

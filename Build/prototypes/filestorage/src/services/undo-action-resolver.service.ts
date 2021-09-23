@@ -15,7 +15,7 @@ import { AjaxResponse } from 'rxjs/ajax';
 import { isString } from 'lodash-es';
 import { extractStorageFromIdentifier } from '../lib/utils';
 import { RootState } from '../redux/ducks/reducers';
-import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../types/node';
 import { FileActions } from '../redux/ducks/actions';
 import {
   getListItemByIdentifier,
@@ -177,7 +177,7 @@ export class UndoActionResolverService {
   private getItemFromStore(
     state: RootState,
     identifier: string
-  ): Typo3Node | ListItem | null {
+  ): Node | ListItem | null {
     return (
       getTreeNodeByIdentifier(state)(identifier) ||
       getListItemByIdentifier(state)(identifier)

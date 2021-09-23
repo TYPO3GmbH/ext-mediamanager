@@ -11,7 +11,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 import {
   Actions,
   COLLAPSE_TREE_NODE,
@@ -23,7 +23,7 @@ import {
 } from '../../actions/tree';
 
 export type TreeState = Readonly<{
-  nodes: Typo3Node[];
+  nodes: Node[];
   loading: boolean;
   error: string | null;
   selectedNodeId: string | null;

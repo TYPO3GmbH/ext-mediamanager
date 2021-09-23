@@ -21,7 +21,7 @@ import {
   TemplateResult,
 } from 'lit-element';
 import { Typo3Modal } from '../../../packages/modal/src/typo3-modal';
-import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../types/node';
 import themeStyles from '../../../theme/index.pcss';
 import styles from './typo3-files-modal.pcss';
 import { addSlotToRawHtml, resolveNodePath } from './lib/utils';
@@ -34,11 +34,11 @@ export class Typo3FilesModal extends LitElement {
   public static styles = [themeStyles, styles];
 
   @property({ type: String }) mode: 'move' | 'copy' = 'move';
-  @property({ type: Array }) nodes: Typo3Node[] = [];
+  @property({ type: Array }) nodes: Node[] = [];
   @property({ type: Array }) expandedNodeIds: string[] = [];
   @property({ type: Array }) selectedFiles: ListItem[] = [];
 
-  @internalProperty() target: Typo3Node | null = null;
+  @internalProperty() target: Node | null = null;
 
   @query('typo3-modal') modal!: Typo3Modal;
 
@@ -112,11 +112,11 @@ export class Typo3FilesModal extends LitElement {
     this.modal.close();
   }
 
-  _onSelectedNode(event: CustomEvent<Typo3Node>): void {
+  _onSelectedNode(event: CustomEvent<Node>): void {
     this.target = event.detail;
   }
 
-  _getFullPath(target: Typo3Node | null): string {
+  _getFullPath(target: Node | null): string {
     return resolveNodePath(this.nodes, target)
       .map(node => node.name)
       .join('/');

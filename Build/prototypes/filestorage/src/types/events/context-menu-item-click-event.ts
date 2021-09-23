@@ -11,12 +11,12 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 import { ContextMenuItemOption } from '../context-menu-item-option';
 
 export interface ContextMenuItemClickEvent extends CustomEvent {
   detail: {
-    context: (ListItem | Typo3Node)[];
+    context: (ListItem | Node)[];
     option: ContextMenuItemOption;
   };
 }

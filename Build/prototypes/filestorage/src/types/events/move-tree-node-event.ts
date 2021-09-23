@@ -11,12 +11,12 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 
 export interface MoveTreeNodeEvent extends CustomEvent {
   detail: {
     event: DragEvent;
-    node: Typo3Node;
-    target: Typo3Node;
+    node: Node;
+    target: Node;
   };
 }

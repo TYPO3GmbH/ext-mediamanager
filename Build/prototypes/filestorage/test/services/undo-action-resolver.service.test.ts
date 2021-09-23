@@ -21,7 +21,7 @@ import {
   UndoFilesAction,
 } from '../../src/redux/ducks/actions/file';
 import { AjaxResponse } from 'rxjs/ajax';
-import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../types/node';
 import { RootState } from '../../src/redux/ducks/reducers';
 
 describe('UndoActionResolverService', () => {
@@ -71,7 +71,7 @@ describe('UndoActionResolverService', () => {
   it('will return `UndoAction` for `MoveFiles` ', () => {
     const action = new MoveFiles(['1:/test/hello.jpg', '1:/test/dir/'], {
       identifier: '1:/new_dir',
-    } as Typo3Node);
+    } as Node);
     const response = {
       response: {
         move: [{ identifier: '/new_dir/hello.jpg' }, '/new_dir/dir'],
@@ -92,7 +92,7 @@ describe('UndoActionResolverService', () => {
   it('will return `UndoAction` for `CopyFiles` ', () => {
     const action = new CopyFiles(['1:/test/hello.jpg', '1:/test/dir/'], {
       identifier: '1:/new_dir',
-    } as Typo3Node);
+    } as Node);
     const response = {
       response: {
         copy: [{ identifier: '/new_dir/hello.jpg' }, '/new_dir/dir'],
@@ -110,8 +110,8 @@ describe('UndoActionResolverService', () => {
 
   it('will return `UndoAction` for `AddFolder` ', () => {
     const action = new AddFolder(
-      { name: 'New' } as Typo3Node,
-      { identifier: '1:/test/dir/' } as Typo3Node
+      { name: 'New' } as Node,
+      { identifier: '1:/test/dir/' } as Node
     );
     const response = {
       response: {

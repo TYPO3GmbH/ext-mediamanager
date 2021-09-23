@@ -12,7 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 
 export const COPY_FILES = '[FILE] COPY FILES';
 export const COPY_FILES_SUCCESS = '[FILE] COPY FILES SUCCESS';
@@ -21,10 +21,7 @@ export const COPY_FILES_FAILURE = '[FILE] COPY FILES FAILURE';
 export class CopyFiles implements Action {
   readonly type = COPY_FILES;
 
-  constructor(
-    public identifiers: string[],
-    public target: Typo3Node | ListItem
-  ) {}
+  constructor(public identifiers: string[], public target: Node | ListItem) {}
 }
 
 export class CopyFilesFailure implements Action {

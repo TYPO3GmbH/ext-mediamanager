@@ -11,16 +11,16 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../types/node';
 
 export function addSlotToRawHtml(html: string, slotName: string): string {
   return html.replace(/(<\w*)(.*)/, '$1 slot="' + slotName + '"$2');
 }
 
 export function resolveNodePath(
-  nodes: Typo3Node[],
-  selectedNode: Typo3Node | null
-): Typo3Node[] {
+  nodes: Node[],
+  selectedNode: Node | null
+): Node[] {
   if (0 === nodes.length) {
     return [];
   }
@@ -30,7 +30,7 @@ export function resolveNodePath(
 
   const path = [];
 
-  let currentNode: null | Typo3Node = selectedNode;
+  let currentNode: null | Node = selectedNode;
   while (null !== currentNode) {
     path.unshift(currentNode);
     currentNode =

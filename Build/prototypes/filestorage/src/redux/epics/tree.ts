@@ -21,7 +21,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 import { Action } from 'redux';
 import { getUrl } from '../../services/backend-url.service';
 import { ApiService } from '../../services/api.service';
@@ -37,7 +37,7 @@ export const fetchTreeData = (
   return action$.ofType(TreeActions.LOAD_TREE_DATA).pipe(
     tap(action => (isInit = action.init)),
     switchMap(() =>
-      dependencies.apiService.getJSON<Typo3Node[]>(getUrl('treeUrl')).pipe(
+      dependencies.apiService.getJSON<Node[]>(getUrl('treeUrl')).pipe(
         mergeMap(data => {
           const actions: Action[] = [new TreeActions.LoadTreeDataSuccess(data)];
           if (isInit && data.length > 0) {

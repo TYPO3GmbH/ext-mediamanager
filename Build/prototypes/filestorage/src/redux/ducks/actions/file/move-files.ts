@@ -12,7 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 import { SuccessAction } from './success';
 
 export const MOVE_FILES = '[FILE] MOVE FILES';
@@ -22,10 +22,7 @@ export const MOVE_FILES_FAILURE = '[FILE] MOVE FILES FAILURE';
 export class MoveFiles implements Action {
   readonly type = MOVE_FILES;
 
-  constructor(
-    public identifiers: string[],
-    public target: Typo3Node | ListItem
-  ) {}
+  constructor(public identifiers: string[], public target: Node | ListItem) {}
 }
 
 export class MoveFilesFailure implements Action {

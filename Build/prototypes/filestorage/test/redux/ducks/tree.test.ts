@@ -13,7 +13,7 @@
 
 import { expect } from '@open-wc/testing';
 import * as fromTree from '../../../src/redux/ducks/actions/tree';
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 import { treeReducer } from '../../../src/redux/ducks/reducers/tree';
 
 describe('Tree reducer', () => {
@@ -38,7 +38,7 @@ describe('Tree reducer', () => {
   });
 
   it('sets tree data on `LoadTreeDataSuccess`', () => {
-    const treeNodes = [{ identifier: 'id_12' }] as Typo3Node[];
+    const treeNodes = [{ identifier: 'id_12' }] as Node[];
     const action = new fromTree.LoadTreeDataSuccess(treeNodes);
     const state = treeReducer(undefined, action);
 

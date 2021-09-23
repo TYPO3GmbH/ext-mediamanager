@@ -12,7 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 
 export const LOAD_TREE_DATA = '[TREE] LOAD DATA';
 export const LOAD_TREE_DATA_SUCCESS = '[TREE] LOAD DATA SUCCESS';
@@ -30,7 +30,7 @@ export class LoadTreeData implements Action {
 export class LoadTreeDataSuccess implements Action {
   readonly type = LOAD_TREE_DATA_SUCCESS;
 
-  constructor(public data: Typo3Node[]) {}
+  constructor(public data: Node[]) {}
 }
 
 export class LoadTreeDataFailure implements Action {

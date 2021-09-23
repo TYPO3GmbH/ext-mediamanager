@@ -12,7 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 import { SuccessAction } from './success';
 
 export const CLIPBOARD_COPY_FILE = '[FILE][CLIPBOARD] COPY FILE';
@@ -22,7 +22,7 @@ export const CLIPBOARD_PASTE_SUCCESS = '[FILE][CLIPBOARD] PASTE SUCCESS';
 export const CLIPBOARD_PASTE_FAILURE = '[FILE][CLIPBOARD] PASTE FAILURE';
 
 abstract class ClipboardAction {
-  constructor(public contextItems: (Typo3Node | ListItem)[]) {}
+  constructor(public contextItems: (Node | ListItem)[]) {}
 }
 
 export class ClipboardCopyFile extends ClipboardAction implements Action {

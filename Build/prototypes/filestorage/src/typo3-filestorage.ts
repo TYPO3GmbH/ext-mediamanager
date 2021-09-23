@@ -38,7 +38,7 @@ import {
   LayoutActions,
 } from './redux/ducks/actions';
 
-import { Typo3Node } from '../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../types/node';
 import { orderBy } from 'lodash-es';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { addSlotToRawHtml } from './lib/utils';
@@ -233,7 +233,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onSelectedNode(node: Typo3Node): void {
+  _onSelectedNode(node: Node): void {
     store.dispatch(new TreeActions.SelectTreeNode(node.identifier));
     store.dispatch(new ListActions.LoadListData(node.folderUrl));
   }
@@ -295,7 +295,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     }
     const customEvent = new CustomEvent<{
       event: MouseEvent;
-      node: Typo3Node | ListItem;
+      node: Node | ListItem;
     }>('unassigned-contextMenu', {
       detail: {
         node: currentNode,
@@ -337,11 +337,11 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     );
   }
 
-  _onNodeExpand(event: CustomEvent<Typo3Node>): void {
+  _onNodeExpand(event: CustomEvent<Node>): void {
     store.dispatch(new TreeActions.ExpandTreeNode(event.detail.identifier));
   }
 
-  _onNodeCollapse(event: CustomEvent<Typo3Node>): void {
+  _onNodeCollapse(event: CustomEvent<Node>): void {
     store.dispatch(new TreeActions.CollapseTreeNode(event.detail.identifier));
   }
 
@@ -356,7 +356,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     store.dispatch(new FileActions.RenameFile(identifier, name));
   }
 
-  _onFolderAdd(node: Typo3Node, parentNode: Typo3Node): void {
+  _onFolderAdd(node: Node, parentNode: Node): void {
     store.dispatch(new FileActions.AddFolder(node, parentNode));
   }
 
@@ -368,7 +368,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
     const action = new FileActions.UploadFiles(
       dataTransfer as DataTransfer,
-      currentNode as Typo3Node
+      currentNode as Node
     ) as Action;
 
     store.dispatch(action);
@@ -378,7 +378,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     const currentNode = getSelectedTreeNode(this.state);
     const action = new FileActions.UploadFiles(
       event.detail.dataTransfer as DataTransfer,
-      currentNode as Typo3Node
+      currentNode as Node
     ) as Action;
 
     store.dispatch(action);
@@ -409,7 +409,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
 
   _onContextMenuItemClick(event: ContextMenuItemClickEvent): void {
     const contextItems = event.detail.context;
-    const contextItem: Typo3Node | ListItem = event.detail.context[0];
+    const contextItem: Node | ListItem = event.detail.context[0];
     const callbackAction = event.detail.option.callbackAction;
     const identifiers = contextItems.map(node => node.identifier);
 
@@ -704,7 +704,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       >`;
     }
 
-    const nodes = getSelectedTreeNodePath(this.state) as Typo3Node[];
+    const nodes = getSelectedTreeNodePath(this.state) as Node[];
     const itemsHtml = nodes.map(
       node =>
         html` <typo3-breadcrumb-item
@@ -1106,7 +1106,7 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
         ?dragDropEnabled="${this.itemsDragDropEnabled}"
         ?inDropMode="${isDraggingFiles(this.state)}"
         @typo3-node-drop="${this._onTreeNodeDrop}"
-        @typo3-node-select="${(e: CustomEvent<Typo3Node>) =>
+        @typo3-node-select="${(e: CustomEvent<Node>) =>
           this._onSelectedNode(e.detail)}"
         @typo3-node-contextmenu="${(e: ContextMenuEvent) =>
           this._onContextMenu(e, 'tree')}"

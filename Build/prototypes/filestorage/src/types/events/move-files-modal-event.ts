@@ -11,12 +11,12 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import { Typo3Node } from '../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../types/node';
 
 export interface MoveFilesModalEvent extends CustomEvent {
   detail: {
     mode: 'copy' | 'move';
     files: ListItem[];
-    target: Typo3Node;
+    target: Node;
   };
 }

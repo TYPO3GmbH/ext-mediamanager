@@ -17,7 +17,7 @@ import {
   extractStorageFromIdentifier,
   resolveNodePath,
 } from '../../src/lib/utils';
-import { Typo3Node } from '../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../types/node';
 
 describe('Utils', () => {
   it('can add slot to raw html', () => {
@@ -36,7 +36,7 @@ describe('Utils', () => {
     const selectedNode = {
       identifier: 'NodeB',
       parentIdentifier: 'NodeA',
-    } as Typo3Node;
+    } as Node;
 
     expect(resolveNodePath([], selectedNode)).to.be.eql([]);
   });
@@ -55,7 +55,7 @@ describe('Utils', () => {
         identifier: 'NodeC',
         parentIdentifier: 'NodeA',
       },
-    ] as Typo3Node[];
+    ] as Node[];
 
     expect(resolveNodePath(nodes, null)).to.be.eql([]);
   });
@@ -64,7 +64,7 @@ describe('Utils', () => {
     const selectedNode = {
       identifier: 'NodeB',
       parentIdentifier: 'NodeA',
-    } as Typo3Node;
+    } as Node;
 
     const nodes = [
       {
@@ -79,7 +79,7 @@ describe('Utils', () => {
         identifier: 'NodeC',
         parentIdentifier: 'NodeA',
       },
-    ] as Typo3Node[];
+    ] as Node[];
 
     expect(
       resolveNodePath(nodes, selectedNode).map(node => node.identifier)

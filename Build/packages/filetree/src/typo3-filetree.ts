@@ -21,7 +21,7 @@ import {
 } from 'lit-element';
 
 import { Typo3SvgTree } from './typo3-svg-tree';
-import { Typo3Node } from './lib/typo3-node';
+import { Node } from '../../../types/node';
 import * as d3 from 'd3';
 import { D3DragEvent, DragBehavior } from 'd3';
 import { Selection } from 'd3-selection';
@@ -95,7 +95,7 @@ export class Typo3Filetree extends Typo3SvgTree {
   }
 
   renderDragHandler(): TemplateResult {
-    const draggedNode = this.draggedNode as Typo3Node;
+    const draggedNode = this.draggedNode as Node;
 
     return html`
       <div
@@ -126,7 +126,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     `;
   }
 
-  get draggedNode(): Typo3Node | null {
+  get draggedNode(): Node | null {
     return this.processedNodes.find(node => node._isDragged) ?? null;
   }
 
@@ -148,11 +148,11 @@ export class Typo3Filetree extends Typo3SvgTree {
       depth: parentNodeData.depth + 1,
       x: parentNodeData.x,
       y: parentNodeData.y,
-    } as Typo3Node;
+    } as Node;
 
     const index = this.processedNodes.indexOf(parentNodeData) + 1;
 
-    const removeNode = (newNode: Typo3Node): void => {
+    const removeNode = (newNode: Node): void => {
       const index = this.nodes.indexOf(newNode);
 
       // if newNode is only one child
@@ -246,12 +246,12 @@ export class Typo3Filetree extends Typo3SvgTree {
     (inputElement as HTMLInputElement).select();
   }
 
-  _selectNode(node: Typo3Node): void {
+  _selectNode(node: Node): void {
     this.selectedNodeIds = [node.identifier];
     super._selectNode(node);
   }
 
-  _clickOnLabel(node: Typo3Node): void {
+  _clickOnLabel(node: Node): void {
     this.clicks += 1;
     if (node.identifier === '0') {
       super._clickOnLabel(node);
@@ -270,7 +270,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     }
   }
 
-  _editNodeLabel(node: Typo3Node): void {
+  _editNodeLabel(node: Node): void {
     const self = this;
 
     if (!node.allowEdit || !self.editable) {
@@ -356,7 +356,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     }
   }
 
-  _sendEditNodeLabelCommand(node: Typo3Node, newName: string): void {
+  _sendEditNodeLabelCommand(node: Node, newName: string): void {
     this.dispatchEvent(
       new CustomEvent('typo3-node-rename', {
         detail: {
@@ -367,7 +367,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     );
   }
 
-  _sendAddNodeCommand(node: Typo3Node, parentNode: Typo3Node): void {
+  _sendAddNodeCommand(node: Node, parentNode: Node): void {
     this.dispatchEvent(
       new CustomEvent('typo3-node-add', {
         detail: {
@@ -404,10 +404,10 @@ export class Typo3Filetree extends Typo3SvgTree {
       .drag()
       .clickDistance(5)
       .on('start', event => this.dragStart(event))
-      .on('drag', (event: D3DragEvent<any, any, any>, node: Typo3Node) =>
+      .on('drag', (event: D3DragEvent<any, any, any>, node: Node) =>
         this.dragDragged(event, node)
       )
-      .on('end', (event: D3DragEvent<any, any, any>, node: Typo3Node) =>
+      .on('end', (event: D3DragEvent<any, any, any>, node: Node) =>
         this.dragEnd(event, node)
       );
   }
@@ -422,7 +422,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     };
   }
 
-  dragDragged(event: D3DragEvent<any, any, any>, node: Typo3Node): boolean {
+  dragDragged(event: D3DragEvent<any, any, any>, node: Node): boolean {
     if (0 === node.depth) {
       return false;
     }
@@ -455,7 +455,7 @@ export class Typo3Filetree extends Typo3SvgTree {
     this.allowDrop = !node.isOver && this.isOverSvg;
   }
 
-  dragEnd(event: D3DragEvent<any, any, any>, node: Typo3Node): boolean {
+  dragEnd(event: D3DragEvent<any, any, any>, node: Node): boolean {
     this.inDropMode = false;
     document.body.style.pointerEvents = 'auto';
 

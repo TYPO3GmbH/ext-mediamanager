@@ -14,7 +14,7 @@
 import { expect, fixture, html, oneEvent } from '@open-wc/testing';
 import '../src/typo3-filetree.js';
 import { Typo3Filetree } from '../src/typo3-filetree';
-import { Typo3Node } from '../src/lib/typo3-node';
+import { Node } from '../../../types/node';
 
 describe('Typo3Filetree', () => {
   let element: Typo3Filetree;
@@ -28,7 +28,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-expand` on showChildren', async () => {
-    const node = { identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Node;
 
     const listener = oneEvent(element, 'typo3-node-expand');
 
@@ -38,7 +38,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-collapse` on hideChildren', async () => {
-    const node = { identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Node;
 
     const listener = oneEvent(element, 'typo3-node-collapse');
 
@@ -49,7 +49,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-select` on select', async () => {
-    const node = { identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Node;
     const listener = oneEvent(element, 'typo3-node-select');
 
     element._selectNode(node);
@@ -59,7 +59,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-contextmenu` on contextmenu', async () => {
-    const node = { identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Node;
     const listener = oneEvent(element, 'typo3-node-contextmenu');
     const mouseEvent = new MouseEvent('contextmenu');
 
@@ -71,7 +71,7 @@ describe('Typo3Filetree', () => {
   });
 
   it('it fires `typo3-node-rename` on node rename', async () => {
-    const node = { identifier: '1234' } as Typo3Node;
+    const node = { identifier: '1234' } as Node;
     const listener = oneEvent(element, 'typo3-node-rename');
 
     element._sendEditNodeLabelCommand(node, 'New Name');

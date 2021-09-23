@@ -12,7 +12,7 @@
  */
 
 import { Action } from 'redux';
-import { Typo3Node } from '../../../../../../../packages/filetree/src/lib/typo3-node';
+import { Node } from '../../../../../../../types/node';
 import { ConflictFileDto } from '../../../../../../shared/src/types/conflict-file-dto';
 import { SuccessAction } from './success';
 
@@ -24,7 +24,7 @@ export const UPLOAD_FILES_CONFLICTS = '[FILE] UPLOAD FILES CONFLICTS';
 export class UploadFiles implements Action {
   readonly type = UPLOAD_FILES;
 
-  constructor(public dataTransfer: DataTransfer, public node: Typo3Node) {}
+  constructor(public dataTransfer: DataTransfer, public node: Node) {}
 }
 
 export class UploadFilesSuccess implements SuccessAction {
@@ -40,5 +40,5 @@ export class UploadFilesFailure implements Action {
 export class UploadFilesConflicts implements Action {
   readonly type = UPLOAD_FILES_CONFLICTS;
 
-  constructor(public files: ConflictFileDto[], public node: Typo3Node) {}
+  constructor(public files: ConflictFileDto[], public node: Node) {}
 }

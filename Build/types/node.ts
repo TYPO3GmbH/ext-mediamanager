@@ -11,7 +11,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-export interface Typo3Node {
+export interface Node {
   allowDelete: boolean;
   allowEdit: boolean;
   depth: number;
