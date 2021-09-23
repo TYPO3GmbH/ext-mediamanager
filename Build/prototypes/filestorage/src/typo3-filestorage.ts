@@ -822,6 +822,12 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
     };
 
     const isSelected = isItemSelected(this.state)(listData.identifier);
+    const titleEditable =
+      this.itemsEditEnabled && listData.allowEdit && isSelected;
+    const draggable =
+      this.itemsDragDropEnabled &&
+      listData.allowEdit &&
+      !isEmptySelection(this.state);
 
     return html` <typo3-card
       slot="item"
@@ -832,14 +838,8 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : variant}"
-      ?titleEditable="${
-        this.itemsEditEnabled && listData.allowEdit && isSelected
-      }"
-      draggable="${
-        !this.itemsDragDropEnabled || isEmptySelection(this.state)
-          ? 'false'
-          : 'true'
-      }"
+      ?titleEditable="${titleEditable}"
+      draggable="${draggable ? 'true' : 'false'}"
       @dragstart="${this._onDragStart}"
       @dragover="${(e: DragEvent) => this._onItemDragOver(e, listData)}"
       @drop="${(e: DragEvent) => this._onItemDrop(e, listData)}"
