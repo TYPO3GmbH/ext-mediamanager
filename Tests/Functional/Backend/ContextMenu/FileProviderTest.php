@@ -78,8 +78,14 @@ class FileProviderTest extends FunctionalTestCase
      *
      * @dataProvider provideData
      */
-    public function it_returns_correct_options(array $expectedItemsKeys, ResourceInterface $resource, string $context = 'list'): void
-    {
+    public function it_returns_correct_options(
+        array $expectedItemsKeys,
+        ResourceInterface $resource,
+        $copyPasteFeatureFlag = false,
+        string $context = 'list'
+    ): void {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['features'][FileProvider::COPY_PASTE_FEATURE_NAME] = $copyPasteFeatureFlag;
+
         $subject =  new FileProvider('sys_file', json_encode(['1:/fileA.jpg']), $context);
 
         $this->resourceFactoryMock->method('retrieveFileOrFolderObject')
@@ -115,8 +121,14 @@ class FileProviderTest extends FunctionalTestCase
             ->willReturn(true);
 
         yield 'Writable file' => [
+            ['info', 'show', 'download', 'divider', 'divider2', 'replace', 'delete'],
+            $writableFile,
+        ];
+
+        yield 'Writable file (copy paste feature flag enabled)' => [
             ['info', 'show', 'download', 'divider', 'copy', 'cut', 'divider2', 'replace', 'delete'],
             $writableFile,
+            true,
         ];
 
         $writableFolder = $this->createMock(Folder::class);
@@ -124,13 +136,27 @@ class FileProviderTest extends FunctionalTestCase
             ->willReturn(true);
 
         yield 'Writable folder' => [
-            ['download', 'divider', 'copy', 'cut', 'divider2', 'delete'],
+            ['download', 'divider', 'divider2', 'delete'],
             $writableFolder,
         ];
 
+        yield 'Writable folder (copy paste feature flag enabled)' => [
+            ['download', 'divider', 'copy', 'cut', 'divider2', 'delete'],
+            $writableFolder,
+            true,
+        ];
+
         yield 'Writable folder (tree context)' => [
+            ['new', 'divider', 'divider2', 'delete'],
+            $writableFolder,
+            false,
+            'tree',
+        ];
+
+        yield 'Writable folder (tree context & copy paste feature flag enabled)' => [
             ['new', 'divider', 'copy', 'cut', 'divider2', 'delete'],
             $writableFolder,
+            true,
             'tree',
         ];
     }

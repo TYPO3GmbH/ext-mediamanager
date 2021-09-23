@@ -29,4 +29,9 @@ defined('TYPO3_MODE') or die();
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Clipboard\Clipboard::class] = [
         'className' => \TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard::class,
     ];
+
+    // copy/paste feature flag (disabled by default)
+    if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['features'][\TYPO3\CMS\Mediamanager\Backend\ContextMenu\FileProvider::COPY_PASTE_FEATURE_NAME])) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['features'][\TYPO3\CMS\Mediamanager\Backend\ContextMenu\FileProvider::COPY_PASTE_FEATURE_NAME] = false;
+    }
 })();
