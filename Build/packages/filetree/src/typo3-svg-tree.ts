@@ -617,8 +617,8 @@ export class Typo3SvgTree extends LitElement {
         .attr('class', 'node-icon-container')
         .attr('title', this._getNodeTitle)
         .attr('data-toggle', 'tooltip')
-        .on('click', (_, node: Node) => {
-          this._clickOnIcon(node, this);
+        .on('click', (event, node: Node) => {
+          this._onContextmenu(event, node);
         });
 
       nodeContainer
@@ -951,13 +951,6 @@ export class Typo3SvgTree extends LitElement {
     return this.processedNodes.filter(
       node => this.selectedNodeIds.indexOf(node.identifier) != -1
     );
-  }
-
-  /**
-   * Event handler for clicking on a node's icon
-   */
-  _clickOnIcon(node: Node, element: HTMLElement): void {
-    this.dispatch.call('contextmenu', node, element);
   }
 
   /**
