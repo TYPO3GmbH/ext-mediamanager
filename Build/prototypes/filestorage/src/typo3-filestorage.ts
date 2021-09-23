@@ -832,7 +832,9 @@ export class Typo3Filestorage extends connect(store)(LitElement) {
       title="${listData.name}"
       subtitle="${listData.modified}"
       variant="${listData.thumbnailUrl ? 'preview' : variant}"
-      ?titleEditable="${this.itemsEditEnabled && isSelected}"
+      ?titleEditable="${
+        this.itemsEditEnabled && listData.allowEdit && isSelected
+      }"
       draggable="${
         !this.itemsDragDropEnabled || isEmptySelection(this.state)
           ? 'false'
