@@ -452,7 +452,11 @@ export class Typo3Filetree extends Typo3SvgTree {
 
     this.dragHandler.style.left = left + 'px';
     this.dragHandler.style.top = top + 'px';
-    this.allowDrop = !node.isOver && this.isOverSvg;
+
+    const hoveredNode = this._getHoveredNode();
+
+    this.allowDrop =
+      !node.isOver && this.isOverSvg && true === hoveredNode?.allowEdit;
   }
 
   dragEnd(event: D3DragEvent<any, any, any>, node: Node): boolean {
@@ -471,14 +475,11 @@ export class Typo3Filetree extends Typo3SvgTree {
     node._isDragged = false;
     this.inDropMode = false;
 
-    if (node.isOver) {
+    if (false === this.allowDrop) {
       return false;
     }
 
-    const target = this._getHoveredNode();
-    if (!target) {
-      return false;
-    }
+    const target = this._getHoveredNode() as Node;
 
     this.dispatchEvent(
       new CustomEvent('typo3-node-move', {
