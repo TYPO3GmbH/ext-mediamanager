@@ -179,6 +179,10 @@ export function Typo3DragBehaviourMixin<T extends Constructor<LitElement>>(
         (listItem: ListItem) => listItem.identifier
       );
 
+      if (0 === identifiers.length) {
+        return false;
+      }
+
       return false === identifiers.includes(this.currentTarget?.identifier);
     }
 
@@ -214,7 +218,10 @@ export function Typo3DragBehaviourMixin<T extends Constructor<LitElement>>(
       title = title.replace(/%\w*/gm, '' + getSelectedItems(this.state).length);
 
       return html`
-        <typo3-draghandler .hidden="${isDraggingFiles(this.state) !== true}">
+        <typo3-draghandler
+          .hidden="${isDraggingFiles(this.state) !== true ||
+          0 === getSelectedItems(this.state).length}"
+        >
           ${createSVGElement(iconKey, 'icon')}
           <span slot="title">${title}</span>
           <span slot="message">${unsafeHTML(message)}</span>
