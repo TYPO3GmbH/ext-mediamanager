@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace TYPO3\CMS\Mediamanager\Backend\ContextMenu;
 
 use TYPO3\CMS\Backend\ContextMenu\ItemProviders\AbstractProvider;
+use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -28,11 +29,16 @@ use TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard;
 
 class FileProvider extends AbstractProvider
 {
+    public const COPY_PASTE_FEATURE_NAME = 'mediamanagerCopyPaste';
+
     /** @var File|Folder[] */
     protected $records = [];
 
     /** @var ResourceFactory */
     private $resourceFactory;
+
+    /** @var Features */
+    private $featuresService;
 
     /** @var string[][] */
     protected $itemsConfiguration = [
@@ -99,6 +105,7 @@ class FileProvider extends AbstractProvider
         parent::initialize();
 
         $this->resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+        $this->featuresService = GeneralUtility::makeInstance(Features::class);
 
         $identifiers = \json_decode($this->identifier, true);
         $this->records = \array_map(
@@ -194,16 +201,20 @@ class FileProvider extends AbstractProvider
 
     protected function canBeCopied(): bool
     {
-        return $this->getSingleRecord()->checkActionPermission('read') && $this->getSingleRecord()->checkActionPermission('copy');
+        return  $this->copyPasteEnabled() && $this->getSingleRecord()->checkActionPermission('read') && $this->getSingleRecord()->checkActionPermission('copy');
     }
 
     protected function canBeCut(): bool
     {
-        return $this->getSingleRecord()->checkActionPermission('move');
+        return $this->copyPasteEnabled() && $this->getSingleRecord()->checkActionPermission('move');
     }
 
     protected function canBePastedInto(): bool
     {
+        if (false === $this->copyPasteEnabled()) {
+            return false;
+        }
+
         if (false === $this->isSingleRecordMode()) {
             return false;
         }
@@ -313,5 +324,10 @@ class FileProvider extends AbstractProvider
     private function isSingleRecordMode(): bool
     {
         return \count($this->records) === 1;
+    }
+
+    protected function copyPasteEnabled(): bool
+    {
+        return $this->featuresService->isFeatureEnabled(self::COPY_PASTE_FEATURE_NAME);
     }
 }
