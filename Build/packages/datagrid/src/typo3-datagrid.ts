@@ -264,6 +264,7 @@ export class Typo3Datagrid extends LitElement {
 
         this._handleDisabledRow(e);
 
+        e.ctx.imageSmoothingEnabled = false;
         e.ctx.drawImage(image, x, y, targetWidth, targetHeight);
       }
     }
