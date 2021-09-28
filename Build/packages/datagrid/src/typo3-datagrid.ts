@@ -38,6 +38,7 @@ import styles from './typo3-datagrid.pcss';
 import { styleMap } from 'lit-html/directives/style-map';
 import { fromEvent, Subscription } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
+import { SelectionChangedEvent } from './lib/event/SelectionChangedEvent';
 
 /**
  *@fires typo3-datagrid-selection-change - Dispatched on change of selection
@@ -164,6 +165,7 @@ export class Typo3Datagrid extends LitElement {
         showrowheaders="false"
         @afterrendercell="${this._onAfterRendercell}"
         @beforebeginedit="${this._onBeforeBeginEdit}"
+        @beforesortcolumn="${this._onBeforeSortColumn}"
         @beginedit="${this._onBeginEdit}"
         @beginmove="${this._onBeginmove}"
         @mouseup="${this._onMouseup}"
@@ -197,19 +199,15 @@ export class Typo3Datagrid extends LitElement {
 
   updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has('selectedRows')) {
-      const expectedRowNumbers = this.selectedRows.map(row =>
-        this.canvasGrid.data.findIndex(
-          dataRow => dataRow[this.rowIdentifier] === row[this.rowIdentifier]
-        )
-      );
+      const expectedIds = this.selectedRows.map(row => row[this.rowIdentifier]);
 
-      const currentSelectedRowNumbers = this.canvasGrid.selectedRows
-        .map((value, key) => (value ? key : undefined))
-        .filter(rowNumber => typeof rowNumber != 'undefined');
+      const currentSelectedIds = this.canvasGrid.selectedRows
+        .filter(value => value)
+        .map(value => value[this.rowIdentifier]);
 
-      if (_.xor(expectedRowNumbers, currentSelectedRowNumbers).length != 0) {
+      if (_.xor(expectedIds, currentSelectedIds).length != 0) {
         this.canvasGrid.selectNone();
-        expectedRowNumbers.forEach(row => this.canvasGrid.selectRow(row));
+        expectedIds.forEach(id => this.addRowToSelectionByIdentifier(id));
       }
     }
   }
@@ -323,7 +321,9 @@ export class Typo3Datagrid extends LitElement {
     }
 
     if (e.cell?.header?.name === 'selected') {
-      this.addRowToSelection(e.cell);
+      this.addRowToSelectionByIdentifier(
+        e.cell.data[this.rowIdentifier] as string
+      );
       e.preventDefault();
       return;
     }
@@ -425,15 +425,13 @@ export class Typo3Datagrid extends LitElement {
     }
   }
 
-  _onSelectionChanged(event: {
-    selectedData: { [key: number]: string }[];
-  }): void {
-    const selectedKeys: string[] = event.selectedData.map((value, key) =>
-      value ? '' + key : ''
-    );
+  _onSelectionChanged(event: SelectionChangedEvent): void {
+    const selectedIdentifiers = event.selectedData
+      .filter(value => value)
+      .map(value => value[this.rowIdentifier]);
 
-    const selectedData = this.canvasGrid.data.filter((value, index) =>
-      selectedKeys.includes('' + index)
+    const selectedData = this.canvasGrid.data.filter(value =>
+      selectedIdentifiers.includes(value[this.rowIdentifier])
     );
 
     this.dispatchEvent(
@@ -446,6 +444,22 @@ export class Typo3Datagrid extends LitElement {
   _onBeforeBeginEdit(event: CanvasDataGridEvent): void {
     if (false === this._isEditableCell(event.cell)) {
       event.preventDefault();
+    }
+    if (true !== event.cell?.selected) {
+      this.addRowToSelectionByIdentifier(
+        event.cell?.data[this.rowIdentifier] as string
+      );
+      event.preventDefault();
+    }
+  }
+
+  _onBeforeSortColumn(): void {
+    if (this.selectedRows.length > 0) {
+      this.dispatchEvent(
+        new CustomEvent('typo3-datagrid-selection-change', {
+          detail: [],
+        })
+      );
     }
   }
 
@@ -620,9 +634,9 @@ export class Typo3Datagrid extends LitElement {
       });
   }
 
-  protected addRowToSelection(cell: Cell): void {
+  protected addRowToSelectionByIdentifier(identifier: string): void {
     const searchField: Record<string, string> = {};
-    searchField[this.rowIdentifier] = cell.data[this.rowIdentifier];
+    searchField[this.rowIdentifier] = identifier;
     const originalIndex = _.findIndex(this.canvasGrid.data, searchField);
     this.canvasGrid.selectRow(originalIndex, true);
   }

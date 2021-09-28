@@ -196,4 +196,14 @@ describe('Typo3Datagrid', () => {
     const { detail } = await listener;
     expect(detail).to.be.eql({ identifier: 1 });
   });
+
+  it('will fire a `typo3-datagrid-selection-changed` event before sort column', async () => {
+    element.selectedRows = [{ id: 'row1' }];
+    const listener = oneEvent(element, 'typo3-datagrid-selection-change');
+
+    element._onBeforeSortColumn();
+
+    const { detail } = await listener;
+    expect(detail).to.be.an('array').that.is.empty;
+  });
 });
