@@ -350,7 +350,11 @@ export class Typo3Datagrid extends LitElement {
     }
 
     this.clicks += 1;
-    const selectedIndex = e.cell?.selected ? e.cell.rowIndex : undefined;
+    const selectedRows = this.canvasGrid.selectedRows.filter(i => i);
+    const selectedIndex =
+      selectedRows.length === 1 && e.cell?.selected
+        ? e.cell.rowIndex
+        : undefined;
 
     if (this.clicks === 1) {
       this.latestSelectedRowIndex = selectedIndex;
