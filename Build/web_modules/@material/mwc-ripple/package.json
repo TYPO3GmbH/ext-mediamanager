@@ -49,7 +49,6 @@
     "web components",
     "ripple"
   ],
-  "license": "Apache-2.0",
   "main": "mwc-ripple.js",
   "module": "mwc-ripple.js",
   "name": "@material/mwc-ripple",

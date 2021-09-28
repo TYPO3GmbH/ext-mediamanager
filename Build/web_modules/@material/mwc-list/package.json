@@ -54,7 +54,6 @@
     "web components",
     "list"
   ],
-  "license": "Apache-2.0",
   "main": "mwc-list.js",
   "module": "mwc-list.js",
   "name": "@material/mwc-list",

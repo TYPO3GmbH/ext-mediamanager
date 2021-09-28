@@ -73,9 +73,15 @@
 		"deploy-storybook": "storybook-to-ghpages"
 	},
 	"dependencies": {
+		"@material/base": "^8.0.0",
+		"@material/dom": "^8.0.0",
+		"@material/list": "^8.0.0",
+		"@material/menu": "^8.0.0",
+		"@material/menu-surface": "^8.0.0",
+		"@material/ripple": "^8.0.0",
 		"canvas-datagrid": "^0.3.4",
 		"d3": "^6.5.0",
-		"lit-element": "^2.0.1",
+		"lit-element": "^2.3.0",
 		"lit-html": "^1.0.0",
 		"lodash-es": "^4.17.20",
 		"pwa-helpers": "^0.9.1",

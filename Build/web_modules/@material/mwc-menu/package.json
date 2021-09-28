@@ -45,7 +45,6 @@
     "web components",
     "menu"
   ],
-  "license": "Apache-2.0",
   "main": "mwc-menu.js",
   "module": "mwc-menu.js",
   "name": "@material/mwc-menu",

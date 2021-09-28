@@ -47,7 +47,6 @@
   },
   "gitHead": "907d4d7d7235b3a3256595bce22f0d7db165adab",
   "homepage": "https://github.com/material-components/material-components-web-components#readme",
-  "license": "Apache-2.0",
   "main": "base-element.js",
   "module": "base-element.js",
   "name": "@material/mwc-base",
