@@ -34,7 +34,7 @@ class FileThumbnailUrlProvider implements FileThumbnailUrlProviderInterface
                 ['height' => self::THUMBNAIL_HEIGHT, 'width' => self::THUMBNAIL_WIDTH]
             );
             if ($processedFile) {
-                return PathUtility::getAbsoluteWebPath($processedFile->getPublicUrl());
+                return $processedFile->getPublicUrl(true);
             }
         }
         return null;
