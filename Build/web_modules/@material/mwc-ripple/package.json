@@ -1,0 +1,64 @@
+{
+  "_from": "@material/mwc-ripple@^0.18.0",
+  "_id": "@material/mwc-ripple@0.18.0",
+  "_inBundle": false,
+  "_integrity": "sha512-6+7QQmMXmbd42rQOPEmMnY7Sp7EsewI7Ar0N/d6MNrd+4LIcC+G9+mIambZ+r5Gs7i3/HTBdehKl37jCW5Equw==",
+  "_location": "/@material/mwc-ripple",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@material/mwc-ripple@^0.18.0",
+    "name": "@material/mwc-ripple",
+    "escapedName": "@material%2fmwc-ripple",
+    "scope": "@material",
+    "rawSpec": "^0.18.0",
+    "saveSpec": null,
+    "fetchSpec": "^0.18.0"
+  },
+  "_requiredBy": [
+    "/@material/mwc-checkbox",
+    "/@material/mwc-list",
+    "/@material/mwc-radio"
+  ],
+  "_resolved": "https://registry.npmjs.org/@material/mwc-ripple/-/mwc-ripple-0.18.0.tgz",
+  "_shasum": "3f8e5ddc5d1f1a53cc818b7159dfc7dd02926fbf",
+  "_spec": "@material/mwc-ripple@^0.18.0",
+  "_where": "/Users/tobiaswojtylak/Dev/filelist-ng/Build/node_modules/@material/mwc-list",
+  "bugs": {
+    "url": "https://github.com/material-components/material-components-web-components/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@material/dom": "=8.0.0-canary.096a7a066.0",
+    "@material/mwc-base": "^0.18.0",
+    "@material/ripple": "=8.0.0-canary.096a7a066.0",
+    "lit-element": "^2.3.0",
+    "lit-html": "^1.1.2",
+    "tslib": "^1.10.0"
+  },
+  "deprecated": false,
+  "description": "Material Design ripple web component",
+  "devDependencies": {
+    "@material/theme": "=8.0.0-canary.096a7a066.0"
+  },
+  "gitHead": "907d4d7d7235b3a3256595bce22f0d7db165adab",
+  "homepage": "https://github.com/material-components/material-components-web-components#readme",
+  "keywords": [
+    "material design",
+    "web components",
+    "ripple"
+  ],
+  "main": "mwc-ripple.js",
+  "module": "mwc-ripple.js",
+  "name": "@material/mwc-ripple",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/material-components/material-components-web-components.git",
+    "directory": "packages/ripple"
+  },
+  "version": "0.18.0"
+}

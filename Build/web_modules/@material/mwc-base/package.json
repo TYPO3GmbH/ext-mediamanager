@@ -1,0 +1,62 @@
+{
+  "_from": "@material/mwc-base@^0.18.0",
+  "_id": "@material/mwc-base@0.18.0",
+  "_inBundle": false,
+  "_integrity": "sha512-75CuivLaw7lSaIrkPvBaYyD6AwbYEu0M7sgnNAvHK/W5nrK1GViLJIKG87edCHhSRshZVjnDpyDIBJMR7yj03g==",
+  "_location": "/@material/mwc-base",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@material/mwc-base@^0.18.0",
+    "name": "@material/mwc-base",
+    "escapedName": "@material%2fmwc-base",
+    "scope": "@material",
+    "rawSpec": "^0.18.0",
+    "saveSpec": null,
+    "fetchSpec": "^0.18.0"
+  },
+  "_requiredBy": [
+    "/@material/mwc-checkbox",
+    "/@material/mwc-list",
+    "/@material/mwc-menu",
+    "/@material/mwc-radio",
+    "/@material/mwc-ripple"
+  ],
+  "_resolved": "https://registry.npmjs.org/@material/mwc-base/-/mwc-base-0.18.0.tgz",
+  "_shasum": "5e6d8c2a894cd480f8e4866c616f807b63d28440",
+  "_spec": "@material/mwc-base@^0.18.0",
+  "_where": "/Users/tobiaswojtylak/Dev/filelist-ng/Build/node_modules/@material/mwc-menu",
+  "bugs": {
+    "url": "https://github.com/material-components/material-components-web-components/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@material/base": "=8.0.0-canary.096a7a066.0",
+    "@material/dom": "=8.0.0-canary.096a7a066.0",
+    "lit-element": "^2.3.0",
+    "tslib": "^1.10.0"
+  },
+  "deprecated": false,
+  "description": "> :warning: These components are a work in progress. They are pre-release and should be considered experimental, as they may undergo major changes before release. We are experimenting with alternate architectures and approaches with the goal of allowing us to bring the most correct and optimal implementation of Material components to the widest possible audiences. Visible progress may be slow, as this research is across teams and repositories so is not consistently reflected in commits to this codebase. :warning:",
+  "devDependencies": {
+    "@material/elevation": "=8.0.0-canary.096a7a066.0",
+    "@material/feature-targeting": "=8.0.0-canary.096a7a066.0",
+    "@material/ripple": "=8.0.0-canary.096a7a066.0",
+    "@material/theme": "=8.0.0-canary.096a7a066.0"
+  },
+  "gitHead": "907d4d7d7235b3a3256595bce22f0d7db165adab",
+  "homepage": "https://github.com/material-components/material-components-web-components#readme",
+  "main": "base-element.js",
+  "module": "base-element.js",
+  "name": "@material/mwc-base",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/material-components/material-components-web-components.git",
+    "directory": "packages/base"
+  },
+  "version": "0.18.0"
+}

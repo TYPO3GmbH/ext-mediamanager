@@ -1,0 +1,55 @@
+{
+  "_from": "@material/mwc-menu@0.18.0",
+  "_id": "@material/mwc-menu@0.18.0",
+  "_inBundle": false,
+  "_integrity": "sha512-8Q13SEZaA65YowURGrUWnIubjVOK3my5OUHHhlJ/jGH76RuZTZAJ5rwPl+JzUZjJNdPeOE5MdEUgIYSE88pFbw==",
+  "_location": "/@material/mwc-menu",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@material/mwc-menu@0.18.0",
+    "name": "@material/mwc-menu",
+    "escapedName": "@material%2fmwc-menu",
+    "scope": "@material",
+    "rawSpec": "0.18.0",
+    "saveSpec": null,
+    "fetchSpec": "0.18.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@material/mwc-menu/-/mwc-menu-0.18.0.tgz",
+  "_shasum": "f596f3c90c8aa7f59e9b9269cc039cbcf396a5f4",
+  "_spec": "@material/mwc-menu@0.18.0",
+  "_where": "/Users/tobiaswojtylak/Dev/filelist-ng/Build",
+  "bundleDependencies": false,
+  "dependencies": {
+    "@material/menu": "=8.0.0-canary.096a7a066.0",
+    "@material/menu-surface": "=8.0.0-canary.096a7a066.0",
+    "@material/mwc-base": "^0.18.0",
+    "@material/mwc-list": "^0.18.0",
+    "lit-element": "^2.3.0",
+    "lit-html": "^1.1.2",
+    "tslib": "^1.10.0"
+  },
+  "deprecated": false,
+  "description": "Material Design menu web component",
+  "devDependencies": {
+    "@material/shape": "=8.0.0-canary.096a7a066.0"
+  },
+  "gitHead": "907d4d7d7235b3a3256595bce22f0d7db165adab",
+  "keywords": [
+    "material design",
+    "web components",
+    "menu"
+  ],
+  "main": "mwc-menu.js",
+  "module": "mwc-menu.js",
+  "name": "@material/mwc-menu",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.18.0"
+}

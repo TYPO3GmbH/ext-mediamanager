@@ -83,4 +83,5 @@ module.exports = {
       2,
     ],
   },
+  ignorePatterns: ['web_modules/**/*'],
 };
