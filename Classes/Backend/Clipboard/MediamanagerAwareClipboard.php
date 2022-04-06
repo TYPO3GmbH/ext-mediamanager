@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\Mediamanager\Backend\Clipboard;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Clipboard\Clipboard as BaseClipboard;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
@@ -27,7 +28,7 @@ class MediamanagerAwareClipboard extends BaseClipboard
     /**
      * {@inheritdoc}
      */
-    public function setCmd($cmd)
+    public function setCmd(array $cmd): void
     {
         if (self::MEDIAMANAGER_CLIPBOARD_PAD === $this->current && is_array($cmd['el'])) {
             $this->clipData[$this->current]['el'] = [];
@@ -38,7 +39,7 @@ class MediamanagerAwareClipboard extends BaseClipboard
     /**
      * {@inheritdoc}
      */
-    public function initializeClipboard()
+    public function initializeClipboard(?ServerRequestInterface $request = null): void
     {
         $userTsConfig = $this->getBackendUser()->getTSConfig();
         $clipData = $this->getBackendUser()->getModuleData('clipboard', $userTsConfig['options.']['saveClipboard'] ? '' : 'ses');
