@@ -30,7 +30,7 @@ class ArchiveGenerator implements ArchiveGeneratorInterface
     {
         $name = \tempnam(\sys_get_temp_dir(), 'zip');
         $zipArchive = new \ZipArchive();
-        $zipArchive->open($name);
+        $zipArchive->open($name, \ZipArchive::OVERWRITE);
 
         foreach ($resources as $resource) {
             $this->addResourceToArchive($resource, $zipArchive, $resource->getParentFolder()->getName());
