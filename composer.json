@@ -22,19 +22,28 @@
 		"issues": "https://forge.typo3.org",
 		"source": "https://github.com/TYPO3/TYPO3.CMS"
 	},
+	"minimum-stability": "dev",
     "require": {
 		"php": "^7.2 || ^8.0",
-        "typo3/cms-core": "^12.0",
+        "typo3/cms-core": "12.*.*@dev",
         "ext-zip": "*",
         "ext-json": "*"
     },
     "require-dev": {
-        "typo3/testing-framework": "dev-master",
+		"phpunit/phpunit": "^9.5.20",
+		"typo3/coding-standgit ards": "^0.5.3",
+		"phpstan/phpstan": "^1.8.0",
+		"phpstan/phpstan-phpunit": "^1.1.1",
+		"typo3/testing-framework": "dev-main",
         "roave/security-advisories": "dev-latest"
     },
     "config": {
         "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
+        "bin-dir": ".Build/bin",
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -47,9 +56,10 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": [
-            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-        ]
+		"post-autoload-dump": [
+			"mkdir -p .Build/Web/typo3conf/ext/",
+			"[ -L .Build/Web/typo3conf/ext/mediamanager ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mediamanager"
+		]
     },
     "extra": {
         "typo3/cms": {

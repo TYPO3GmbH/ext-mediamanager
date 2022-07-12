@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 #
-# TYPO3 core test runner based on docker and docker-compose.
+# Test runner based on docker and docker-compose.
 #
 
 # Function to write a .env file in etc/testing-docker/local
 # This is read by docker-compose and vars defined here are
-# used in etc/testing-docker/local/docker-compose.yml
+# used in etc/testing-docker/docker-compose.yml
 setUpDockerComposeDotEnv() {
     # Delete possibly existing local .env file if exists
     [ -e .env ] && rm .env
@@ -22,59 +22,58 @@ setUpDockerComposeDotEnv() {
     # Your local user
     echo "ROOT_DIR"=${ROOT_DIR} >> .env
     echo "HOST_USER=${USER}" >> .env
-    echo "TEST_FILE=${TEST_FILE}" >> .env
     echo "PHP_XDEBUG_ON=${PHP_XDEBUG_ON}" >> .env
-    echo "PHP_XDEBUG_PORT=${PHP_XDEBUG_PORT}" >> .env
     echo "DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}" >> .env
-    echo "EXTRA_TEST_OPTIONS=${EXTRA_TEST_OPTIONS}" >> .env
     echo "SCRIPT_VERBOSE=${SCRIPT_VERBOSE}" >> .env
+    echo "CGLCHECK_DRY_RUN=${CGLCHECK_DRY_RUN}" >> .env
 }
 
 # Load help text into $HELP
 read -r -d '' HELP <<EOF
-mediamanager test runner. Execute unit test suite and some other details.
-Also used by travis-ci for test execution.
-Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
-Usage: $0 [options] [file]
-No arguments: Run all unit tests with PHP 7.4
+testing-framework test runner. Execute unit test suite and some other details.
+Also used by github actions for test execution.
+
+Usage: $0 [options]
+
+No arguments: Run all unit tests with PHP 8.1
+
 Options:
     -s <...>
         Specifies which test suite to run
-            - composerInstall: "composer install", handy if host has no PHP, uses composer cache of users home
-            - composerValidate: "composer validate"
+            - cgl: test and fix all php files
+            - clean: clean up build and testing related files
+            - composerUpdate: "composer update"
             - lint: PHP linting
+            - phpstan: phpstan analyze
+            - phpstanGenerateBaseline: regenerate phpstan baseline, handy after phpstan updates
             - unit (default): PHP unit tests
-    -p <7.4>
+
+    -p <8.1>
         Specifies the PHP minor version to be used
-            - 7.4 (default):use PHP 7.4
-    -e "<phpunit options>"
-        Only with -s unit
-        Additional options to send to phpunit tests.
-        For phpunit, options starting with "--" must be added after options starting with "-".
-        Example -e "-v --filter canRetrieveValueWithGP" to enable verbose output AND filter tests
-        named "canRetrieveValueWithGP"
+            - 8.1 (default): use PHP 8.1
+
     -x
-        Only with -s unit
+        Only with -s cgl|unit
         Send information to host instance for test or system under test break points. This is especially
-        useful if a local PhpStorm instance is listening on default xdebug port 9000. A different port
+        useful if a local PhpStorm instance is listening on default xdebug port 9003. A different port
         can be selected with -y
-    -y <port>
-        Send xdebug information to a different port than default 9000 if an IDE like PhpStorm
-        is not listening on default port.
-    -u
-        Update existing typo3gmbh/phpXY:latest docker images. Maintenance call to docker pull latest
-        versions of the main php images. The images are updated once in a while and only the youngest
-        ones are supported by core testing. Use this if weird test errors occur. Also removes obsolete
-        image versions of typo3gmbh/phpXY.
+
+    -n
+        Only with -s cgl
+        Activate dry-run in CGL check that does not actively change files and only prints broken ones.
+
     -v
         Enable verbose script output. Shows variables and docker commands.
+
     -h
         Show this help.
+
 Examples:
-    # Run unit tests using PHP 7.4
-    ./Build/Scripts/runTests.sh
-    # Run unit tests using PHP  8 (not implemented yet)
-    ./Build/Scripts/runTests.sh -p 8
+    # Run unit tests using default PHP version
+    ./etc/Scripts/runTests.sh
+
+    # Run unit tests using PHP 8.1
+    ./etc/Scripts/runTests.sh -p 8.1
 EOF
 
 # Test if docker-compose exists, else exit out with error
@@ -94,11 +93,10 @@ cd ../testing-docker || exit 1
 # Option defaults
 ROOT_DIR=`readlink -f ${PWD}/../../`
 TEST_SUITE="unit"
-PHP_VERSION="7.4"
+PHP_VERSION="8.1"
 PHP_XDEBUG_ON=0
-PHP_XDEBUG_PORT=9000
-EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
+CGLCHECK_DRY_RUN=""
 
 # Option parsing
 # Reset in case getopts has been used previously in the shell
@@ -106,7 +104,7 @@ OPTIND=1
 # Array for invalid options
 INVALID_OPTIONS=();
 # Simple option parsing based on getopts (! not getopt)
-while getopts ":s:p:e:xy:huv" OPT; do
+while getopts ":s:p:hxnv" OPT; do
     case ${OPT} in
         s)
             TEST_SUITE=${OPTARG}
@@ -114,24 +112,18 @@ while getopts ":s:p:e:xy:huv" OPT; do
         p)
             PHP_VERSION=${OPTARG}
             ;;
-        e)
-            EXTRA_TEST_OPTIONS=${OPTARG}
-            ;;
-        x)
-            PHP_XDEBUG_ON=1
-            ;;
-        y)
-            PHP_XDEBUG_PORT=${OPTARG}
-            ;;
         h)
             echo "${HELP}"
             exit 0
             ;;
-        u)
-            TEST_SUITE=update
+        n)
+            CGLCHECK_DRY_RUN="-n"
             ;;
         v)
             SCRIPT_VERBOSE=1
+            ;;
+        x)
+            PHP_XDEBUG_ON=1
             ;;
         \?)
             INVALID_OPTIONS+=(${OPTARG})
@@ -153,23 +145,8 @@ if [ ${#INVALID_OPTIONS[@]} -ne 0 ]; then
     exit 1
 fi
 
-# Move "7.3" to "php73", the latter is the docker container name
+# Move "7.2" to "php72", the latter is the docker container name
 DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
-
-# Set $1 to first mass argument, this is the optional test file or test directory to execute
-shift $((OPTIND - 1))
-if [ -n "${1}" ]; then
-    TEST_FILE="Web/typo3conf/ext/mediamanager/${1}"
-else
-    case ${TEST_SUITE} in
-        unit)
-            TEST_FILE="Web/typo3conf/ext/mediamanager/Tests/Unit"
-            ;;
-        functional)
-            TEST_FILE="Web/typo3conf/ext/mediamanager/Tests/Functional"
-            ;;
-    esac
-fi
 
 if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
     set -x
@@ -177,15 +154,22 @@ fi
 
 # Suite execution
 case ${TEST_SUITE} in
-    composerInstall)
+    cgl)
+        # Active dry-run for cgl needs not "-n" but specific options
+        if [[ ! -z ${CGLCHECK_DRY_RUN} ]]; then
+            CGLCHECK_DRY_RUN="--dry-run --diff"
+        fi
         setUpDockerComposeDotEnv
-        docker-compose run composer_install
+        docker-compose run cgl
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
-    composerValidate)
+    clean)
+        rm -rf ../../composer.lock ../../.Build/ ../../public
+        ;;
+    composerUpdate)
         setUpDockerComposeDotEnv
-        docker-compose run composer_validate
+        docker-compose run composer_update
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
@@ -195,24 +179,23 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
+    phpstan)
+        setUpDockerComposeDotEnv
+        docker-compose run phpstan
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
+    phpstanGenerateBaseline)
+        setUpDockerComposeDotEnv
+        docker-compose run phpstan_generate_baseline
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
     unit)
         setUpDockerComposeDotEnv
         docker-compose run unit
         SUITE_EXIT_CODE=$?
         docker-compose down
-        ;;
-
-    functional)
-        setUpDockerComposeDotEnv
-        docker-compose run functional_mariadb10
-        SUITE_EXIT_CODE=$?
-        docker-compose down
-        ;;
-    update)
-        # pull typo3gmbh/phpXY:latest versions of those ones that exist locally
-        docker images typo3gmbh/php*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
-        # remove "dangling" typo3gmbh/phpXY images (those tagged as <none>)
-        docker images typo3gmbh/php* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2

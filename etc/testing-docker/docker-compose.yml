@@ -1,14 +1,40 @@
 version: '2.3'
 services:
+  cgl:
+    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    user: "${HOST_UID}"
+    volumes:
+      - ${ROOT_DIR}:${ROOT_DIR}
+    working_dir: ${ROOT_DIR}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >
+      /bin/sh -c "
+        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
+          set -x
+        fi
+        php -v | grep '^PHP';
+        if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
+          php -dxdebug.mode=off \
+            .Build/bin/php-cs-fixer fix \
+              -v \
+              ${CGLCHECK_DRY_RUN} \
+              --config=.Build/vendor/typo3/coding-standards/templates/extension_php-cs-fixer.dist.php  \
+              --using-cache=no Classes/ Resources/ Tests/
+        else
+          XDEBUG_MODE=\"debug,develop\" \
+          XDEBUG_TRIGGER=\"foo\" \
+          XDEBUG_CONFIG=\"client_host=host.docker.internal\" \
+          PHP_CS_FIXER_ALLOW_XDEBUG=1 \
+          .Build/bin/php-cs-fixer fix \
+            -v \
+            ${CGLCHECK_DRY_RUN} \
+            --config=.Build/vendor/typo3/coding-standards/templates/extension_php-cs-fixer.dist.php  \
+            --using-cache=no Classes/ Resources/ Tests/
+        fi
+      "
 
-  mariadb10:
-    image: mariadb:10
-    environment:
-      MYSQL_ROOT_PASSWORD: funcp
-    tmpfs:
-      - /var/lib/mysql/:rw,noexec,nosuid
-
-  composer_install:
+  composer_update:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
     volumes:
@@ -22,26 +48,9 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        composer install;
+        php -v | grep '^PHP';
+        composer update --no-progress --no-interaction;
       "
-
-  composer_validate:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
-    user: ${HOST_UID}
-    volumes:
-      - ${ROOT_DIR}:${ROOT_DIR}
-      - ${HOST_HOME}:${HOST_HOME}
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-    working_dir: ${ROOT_DIR}
-    command: >
-      /bin/sh -c "
-        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
-          set -x
-        fi
-        composer validate;
-      "
-
   lint:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: ${HOST_UID}
@@ -56,7 +65,39 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        find . -name \\*.php ! -path "./.Build/\\*" -print0 | xargs -0 -n1 -P4 php -n -dxdebug.mode=off -l >/dev/null
+        find . -name \\*.php ! -path "./.Build/\\*" ! -path "./public/\\*" -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null
+      "
+
+  phpstan:
+    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    user: "${HOST_UID}"
+    volumes:
+      - ${ROOT_DIR}:${ROOT_DIR}
+    working_dir: ${ROOT_DIR}
+    command: >
+      /bin/sh -c "
+        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
+          set -x
+        fi
+        mkdir -p .Build/.cache
+        php -v | grep '^PHP';
+        php -dxdebug.mode=off .Build/bin/phpstan analyze -c Build/phpstan/phpstan.neon --no-progress --no-interaction
+      "
+
+  phpstan_generate_baseline:
+    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    user: "${HOST_UID}"
+    volumes:
+      - ${ROOT_DIR}:${ROOT_DIR}
+    working_dir: ${ROOT_DIR}
+    command: >
+      /bin/sh -c "
+        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
+          set -x
+        fi
+        mkdir -p .Build/.cache
+        php -v | grep '^PHP';
+        php -dxdebug.mode=off .Build/bin/phpstan analyze -c Build/phpstan/phpstan.neon --no-progress --no-interaction --generate-baseline=Build/phpstan/phpstan-baseline.neon
       "
 
   unit:
@@ -67,57 +108,22 @@ services:
       - ${HOST_HOME}:${HOST_HOME}
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
-    working_dir: ${ROOT_DIR}/.Build
+    working_dir: ${ROOT_DIR}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        php -v | grep '^PHP'
-        if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          php -dxdebug.mode=off bin/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
-        else
-          DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_CONFIG=\"remote_port=${PHP_XDEBUG_PORT} remote_enable=1 remote_host=$${DOCKER_HOST}\" \
-          bin/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
-        fi
-      "
-
-  functional_mariadb10:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
-    user: ${HOST_UID}
-    links:
-      - mariadb10
-    volumes:
-      - ${ROOT_DIR}:${ROOT_DIR}
-      - ${HOST_HOME}:${HOST_HOME}
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-    environment:
-      typo3DatabaseName: func_test
-      typo3DatabaseUsername: root
-      typo3DatabasePassword: funcp
-      typo3DatabaseHost: mariadb10
-    working_dir: ${ROOT_DIR}/.Build
-    command: >
-      /bin/sh -c "
-        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
-          set -x
-        fi
-        echo Waiting for database start...;
-        while ! nc -z mariadb10 3306; do
-          sleep 1;
-        done;
-        echo Database is up;
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          bin/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          .Build/bin/phpunit Tests/Unit/;
         else
-          DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
-          bin/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          XDEBUG_CONFIG=\"client_host=host.docker.internal\" \
+          .Build/bin/phpunit Tests/Unit/;
         fi
       "
