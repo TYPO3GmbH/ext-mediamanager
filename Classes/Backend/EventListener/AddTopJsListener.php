@@ -30,6 +30,6 @@ class AddTopJsListener
     public function __invoke(AfterBackendPageRenderEvent $event): void
     {
         $this->pageRenderer->addJsFile('EXT:mediamanager/Resources/Public/JavaScript/top_es.js');
-        $event->setContent($event->getContent() . "\n" . '<typo3-top-container style="height:0"></typo3-top-container>');
+        $event->setContent('<typo3-top-container style="height:0"></typo3-top-container>' . "\n" . $event->getContent());
     }
 }
