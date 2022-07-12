@@ -31,8 +31,13 @@ services:
   TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController:
     tags: ['backend.controller']
 
+  TYPO3\CMS\Mediamanager\Backend\EventListener\AddTopJsListener:
+    tags:
+      - name: event.listener
+        identifier: 'mediamanager/backend/add-top-js'
+
   TYPO3\CMS\Mediamanager\Backend\EventListener\ModifyFolderIconListener:
     tags:
       - name: event.listener
-        identifier: 'mediamanager-modify-folder-icon'
+        identifier: 'mediamanager/backend/modify-folder-icon'
         event: TYPO3\CMS\Core\Imaging\Event\ModifyIconForResourcePropertiesEvent

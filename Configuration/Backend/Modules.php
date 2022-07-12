@@ -18,7 +18,7 @@ declare(strict_types=1);
 return [
     'file_mediamanager' => [
         'parent' => 'file',
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'online,custom',
         'path' => '/module/file/Mediamanager',
         'labels' => 'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf',
