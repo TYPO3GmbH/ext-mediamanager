@@ -33,7 +33,7 @@ class FolderThumbnailProvider implements FolderThumbnailProviderInterface
     {
         $thumbnailUrl = $this->getFolderThumbnailUrl($folder);
 
-        if (null === $thumbnailUrl) {
+        if ($thumbnailUrl === null) {
             return null;
         }
 
@@ -60,7 +60,7 @@ HTML;
         foreach ($folder->getFiles() as $file) {
             $thumbnailUrl = $this->fileThumbnailUrlProvider->getThumbnailUrl($file);
 
-            if (null !== $thumbnailUrl) {
+            if ($thumbnailUrl !== null) {
                 return $thumbnailUrl;
             }
         }

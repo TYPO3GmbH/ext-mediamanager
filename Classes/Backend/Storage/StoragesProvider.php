@@ -78,6 +78,6 @@ class StoragesProvider implements StoragesProviderInterface
             return $storage->getUid() === $storageId;
         });
 
-        return 1 === \count($filteredStorages) ? \current($filteredStorages) : null;
+        return \count($filteredStorages) === 1 ? \current($filteredStorages) : null;
     }
 }

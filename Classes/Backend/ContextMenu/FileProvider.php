@@ -97,7 +97,7 @@ class FileProvider extends AbstractProvider
 
     public function canHandle(): bool
     {
-        return 'sys_file' === $this->table;
+        return $this->table === 'sys_file';
     }
 
     protected function initialize()
@@ -135,7 +135,7 @@ class FileProvider extends AbstractProvider
                 $canRender = $this->canReplace();
                 break;
 
-            //just for folders
+                //just for folders
             case 'new':
                 $canRender = $this->canCreateNew();
                 break;
@@ -143,7 +143,7 @@ class FileProvider extends AbstractProvider
                 $canRender = $this->canBePastedInto();
                 break;
 
-            //for both files and folders
+                //for both files and folders
             case 'download':
                 $canRender = $this->canDownload();
                 break;
@@ -163,7 +163,7 @@ class FileProvider extends AbstractProvider
     protected function canBeDeleted(): bool
     {
         foreach ($this->records as $record) {
-            if (false === $record->checkActionPermission('delete')) {
+            if ($record->checkActionPermission('delete') === false) {
                 return false;
             }
         }
@@ -177,12 +177,12 @@ class FileProvider extends AbstractProvider
 
     protected function canDownload(): bool
     {
-        if ('list' !== $this->context) {
+        if ($this->context !== 'list') {
             return false;
         }
 
         foreach ($this->records as $record) {
-            if (false === $record->checkActionPermission('read')) {
+            if ($record->checkActionPermission('read') === false) {
                 return false;
             }
         }
@@ -196,7 +196,7 @@ class FileProvider extends AbstractProvider
 
     protected function canCreateNew(): bool
     {
-        return $this->isSingleRecordMode() && $this->isFolder($this->getSingleRecord()) && $this->getSingleRecord()->checkActionPermission('write') && 'tree' === $this->context;
+        return $this->isSingleRecordMode() && $this->isFolder($this->getSingleRecord()) && $this->getSingleRecord()->checkActionPermission('write') && $this->context === 'tree';
     }
 
     protected function canBeCopied(): bool
@@ -211,19 +211,19 @@ class FileProvider extends AbstractProvider
 
     protected function canBePastedInto(): bool
     {
-        if (false === $this->copyPasteEnabled()) {
+        if ($this->copyPasteEnabled() === false) {
             return false;
         }
 
-        if (false === $this->isSingleRecordMode()) {
+        if ($this->isSingleRecordMode() === false) {
             return false;
         }
 
-        if (false === $this->isFolder($this->getSingleRecord())) {
+        if ($this->isFolder($this->getSingleRecord()) === false) {
             return false;
         }
 
-        if (false === $this->getSingleRecord()->checkActionPermission('write')) {
+        if ($this->getSingleRecord()->checkActionPermission('write') === false) {
             return false;
         }
 
@@ -235,11 +235,11 @@ class FileProvider extends AbstractProvider
         foreach ($clipboardElements as $clipboardElement) {
             $fileOrFolderInClipBoard = $this->resourceFactory->retrieveFileOrFolderObject($clipboardElement);
 
-            if (($fileOrFolderInClipBoard instanceof Folder) && false === $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard)) {
+            if (($fileOrFolderInClipBoard instanceof Folder) && $this->foldersAreInTheSameRoot($fileOrFolderInClipBoard) === false) {
                 return false;
             }
 
-            if (false !== $fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->getSingleRecord(), $fileOrFolderInClipBoard)) {
+            if ($fileOrFolderInClipBoard->getStorage()->isWithinFolder($this->getSingleRecord(), $fileOrFolderInClipBoard) !== false) {
                 return false;
             }
         }
@@ -261,17 +261,17 @@ class FileProvider extends AbstractProvider
 
     protected function isRecordInClipboard(string $mode = ''): bool
     {
-        if ('' !== $mode && !$this->getSingleRecord()->checkActionPermission($mode)) {
+        if ($mode !== '' && !$this->getSingleRecord()->checkActionPermission($mode)) {
             return false;
         }
         $isSelected = '';
         // Pseudo table name for use in the clipboard.
         $table = '_FILE';
         $uid = substr(md5($this->getSingleRecord()->getCombinedIdentifier()), 0, 10);
-        if ('normal' === $this->clipboard->current) {
+        if ($this->clipboard->current === 'normal') {
             $isSelected = $this->clipboard->isSelected($table, $uid);
         }
-        return '' === $mode ? !empty($isSelected) : $isSelected === $mode;
+        return $mode === '' ? !empty($isSelected) : $isSelected === $mode;
     }
 
     protected function isStorageRoot(): bool
@@ -293,7 +293,7 @@ class FileProvider extends AbstractProvider
     {
         $attributes = [];
 
-        if ('show' === $itemName) {
+        if ($itemName === 'show') {
             $attributes += [
                 'data-url' => PathUtility::getAbsoluteWebPath($this->getSingleRecord()->getPublicUrl(true)),
             ];

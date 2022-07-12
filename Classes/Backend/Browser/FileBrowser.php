@@ -124,7 +124,7 @@ class FileBrowser implements ElementBrowserInterface
      */
     public function processSessionData($data)
     {
-        if (null !== $this->expandFolder) {
+        if ($this->expandFolder !== null) {
             $data['expandFolder'] = $this->expandFolder;
             $store = true;
         } else {
@@ -141,5 +141,4 @@ class FileBrowser implements ElementBrowserInterface
     {
         return $this->identifier;
     }
-
 }

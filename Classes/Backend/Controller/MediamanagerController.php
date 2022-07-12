@@ -90,7 +90,7 @@ class MediamanagerController
         $this->view->getRenderingContext()->setControllerAction('storage');
 
         $storageUid = $request->getQueryParams()['uid'] ?? null;
-        if (null === $storageUid) {
+        if ($storageUid === null) {
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 

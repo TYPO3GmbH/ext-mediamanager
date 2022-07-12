@@ -50,7 +50,7 @@ class FileStorageProvider extends FileProvider
 
     public function canHandle(): bool
     {
-        return 'sys_file_storage' === $this->table;
+        return $this->table === 'sys_file_storage';
     }
 
     protected function canShowInfo(): bool

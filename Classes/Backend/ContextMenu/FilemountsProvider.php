@@ -38,6 +38,6 @@ class FilemountsProvider extends FileProvider
 
     public function canHandle(): bool
     {
-        return 'sys_filemounts' === $this->table;
+        return $this->table === 'sys_filemounts';
     }
 }

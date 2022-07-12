@@ -85,12 +85,12 @@ class FileThumbnailUrlProviderTest extends UnitTestCase
     public function it_will_return_url_for_image_file(): void
     {
         $processedFile = $this->createConfiguredMock(ProcessedFile::class, [
-            'getPublicUrl' => '/resource.jpg'
+            'getPublicUrl' => '/resource.jpg',
         ]);
 
         $file = $this->createConfiguredMock(File::class, [
             'isImage' => true,
-            'process' => $processedFile
+            'process' => $processedFile,
         ]);
 
         self::assertEquals('/resource.jpg', $this->subject->getThumbnailUrl($file));
@@ -102,13 +102,13 @@ class FileThumbnailUrlProviderTest extends UnitTestCase
     public function it_will_return_url_for_media_file(): void
     {
         $processedFile = $this->createConfiguredMock(ProcessedFile::class, [
-            'getPublicUrl' => '/resource.jpg'
+            'getPublicUrl' => '/resource.jpg',
         ]);
 
         $file = $this->createConfiguredMock(File::class, [
             'isImage' => false,
             'isMediaFile' => true,
-            'process' => $processedFile
+            'process' => $processedFile,
         ]);
 
         self::assertEquals('/resource.jpg', $this->subject->getThumbnailUrl($file));

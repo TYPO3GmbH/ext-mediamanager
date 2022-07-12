@@ -55,17 +55,17 @@ class DownloadFilesController
 
         $identifiers = $parsedBody['identifiers'] ?? [];
 
-        if (0 === \count($identifiers)) {
+        if (\count($identifiers) === 0) {
             return new HtmlResponse('Parameter "identifiers" is missing or empty', 400);
         }
 
         // handle single file: no zip required
-        if (1 === \count($identifiers)) {
+        if (\count($identifiers) === 1) {
             $identifier = \current($identifiers);
             $fileOrFolderObject = $this->resourceFactory->retrieveFileOrFolderObject($identifier);
 
             if ($fileOrFolderObject instanceof File) {
-                if (false === $fileOrFolderObject->checkActionPermission('read')) {
+                if ($fileOrFolderObject->checkActionPermission('read') === false) {
                     return new HtmlResponse('Missing read permissions  for ' . $fileOrFolderObject->getName(), 403);
                 }
                 return new RedirectResponse(
@@ -81,7 +81,7 @@ class DownloadFilesController
         $resourceSizeValidator = $this->downloadSizeValidatorFactory->createValidator();
         $validationResult = $resourceSizeValidator->validate($resources);
 
-        if (true === $validationResult->hasErrors()) {
+        if ($validationResult->hasErrors() === true) {
             return new HtmlResponse($validationResult->getFirstError()->getMessage(), 400);
         }
 

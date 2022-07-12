@@ -46,10 +46,10 @@ class ResourcesDeleteHelperTest extends UnitTestCase
         $this->backendUserMock->uc = ['titleLen' => 200];
 
         $languageServiceProviderMock = $this->createConfiguredMock(LanguageServiceProvider::class, [
-            'getLanguageService' => $this->languageServiceMock
+            'getLanguageService' => $this->languageServiceMock,
         ]);
         $backendUserProvider = $this->createConfiguredMock(BackendUserProvider::class, [
-            'getBackendUser' => $this->backendUserMock
+            'getBackendUser' => $this->backendUserMock,
         ]);
 
         $this->subject = new ResourcesDeleteHelper($languageServiceProviderMock, $backendUserProvider);

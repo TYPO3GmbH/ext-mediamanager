@@ -51,7 +51,7 @@ class DeleteResourcesModalControllerTest extends UnitTestCase
 
         $this->languageServiceMock = $this->createMock(LanguageService::class);
         $languageServiceProviderMock = $this->createConfiguredMock(LanguageServiceProvider::class, [
-            'getLanguageService' => $this->languageServiceMock
+            'getLanguageService' => $this->languageServiceMock,
         ]);
         $this->controller = new DeleteResourcesModalController($this->resourceFactoryMock, $this->resourcesDeleteHelperMock, $languageServiceProviderMock);
     }

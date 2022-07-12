@@ -51,7 +51,7 @@ class DeleteResourcesModalController
         $queryParams = $request->getQueryParams();
         $identifiers = $queryParams['identifiers'] ?? [];
 
-        if (0 === \count($identifiers)) {
+        if (\count($identifiers) === 0) {
             return new HtmlResponse('Parameter "identifiers" is missing or empty', 400);
         }
 

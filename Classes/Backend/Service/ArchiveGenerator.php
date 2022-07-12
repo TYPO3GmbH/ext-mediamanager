@@ -42,7 +42,7 @@ class ArchiveGenerator implements ArchiveGeneratorInterface
 
     private function addResourceToArchive(ResourceInterface $resource, \ZipArchive $zipArchive, string $directory): void
     {
-        if (false === $resource->checkActionPermission('read')) {
+        if ($resource->checkActionPermission('read') === false) {
             return;
         }
 

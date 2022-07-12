@@ -78,7 +78,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             $stateIdentifier = $rootLevelFolder->getStorage()->getUid() . '_' . $folderHashSpecUID;
             $this->specUIDmap[$folderHashSpecUID] = $combinedIdentifier;
 
-            if (false === $resourceStorage->isOnline()) {
+            if ($resourceStorage->isOnline() === false) {
                 $rootLevelFolderName .= ' (' . $this->languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_mod_file.xlf:sys_file_storage.isOffline') . ')';
             }
 

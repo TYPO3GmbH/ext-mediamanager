@@ -72,7 +72,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
         $storage = $folderObject->getStorage();
 
         $folders = \array_filter($storage->getFoldersInFolder($folderObject), static function (Folder $folder) {
-            return FolderInterface::ROLE_PROCESSING !== $folder->getRole();
+            return $folder->getRole() !== FolderInterface::ROLE_PROCESSING;
         });
 
         $folderItems = \array_map([$this, 'formatFolder'], $folders);
@@ -97,10 +97,10 @@ class FolderListGenerator implements FolderListGeneratorInterface
         return \array_merge(
             $this->formatResource($folder),
             [
-                'size' => $numFiles . ' ' . $this->languageService->getLL(1 === $numFiles ? 'file' : 'files'),
+                'size' => $numFiles . ' ' . $this->languageService->getLL($numFiles === 1 ? 'file' : 'files'),
                 'sizeRaw' => (int)$numFiles,
                 'type' => $this->languageService->getLL('folder'),
-                'cardFolderIcon' => $folderIcon
+                'cardFolderIcon' => $folderIcon,
             ]
         );
     }

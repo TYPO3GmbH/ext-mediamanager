@@ -55,7 +55,7 @@ class FolderThumbnailProviderTest extends UnitTestCase
         $file = $this->createMock(File::class);
 
         $folder = $this->createConfiguredMock(Folder::class, [
-            'getFiles' => [$file]
+            'getFiles' => [$file],
         ]);
 
         self::assertNull($this->subject->getFolderThumbnailIcon($folder));
@@ -73,7 +73,7 @@ class FolderThumbnailProviderTest extends UnitTestCase
             ->willReturn('http://www.test.typo/file.jpg');
 
         $folder = $this->createConfiguredMock(Folder::class, [
-            'getFiles' => [$file]
+            'getFiles' => [$file],
         ]);
 
         $result = $this->subject->getFolderThumbnailIcon($folder);

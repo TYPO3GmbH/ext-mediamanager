@@ -86,7 +86,7 @@ class ModifyFolderIconListenerTest extends UnitTestCase
             new ModifyIconForResourcePropertiesEvent(
                 $this->createConfiguredMock(Folder::class, [
                     'getFileCount' => 0,
-                    'getSubfolders' => []
+                    'getSubfolders' => [],
                 ]),
                 Icon::SIZE_DEFAULT,
                 [],
@@ -100,7 +100,7 @@ class ModifyFolderIconListenerTest extends UnitTestCase
             new ModifyIconForResourcePropertiesEvent(
                 $this->createConfiguredMock(Folder::class, [
                     'getFileCount' => 1,
-                    'getSubfolders' => []
+                    'getSubfolders' => [],
                 ]),
                 Icon::SIZE_DEFAULT,
                 [],
@@ -114,7 +114,7 @@ class ModifyFolderIconListenerTest extends UnitTestCase
             new ModifyIconForResourcePropertiesEvent(
                 $this->createConfiguredMock(Folder::class, [
                     'getFileCount' => 0,
-                    'getSubfolders' => [$this->createMock(Folder::class)]
+                    'getSubfolders' => [$this->createMock(Folder::class)],
                 ]),
                 Icon::SIZE_DEFAULT,
                 [],

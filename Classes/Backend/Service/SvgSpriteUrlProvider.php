@@ -34,17 +34,17 @@ class SvgSpriteUrlProvider implements IconUrlProviderInterface
 
     public function getUrl(Icon $icon = null): ?string
     {
-        if (null === $icon) {
+        if ($icon === null) {
             return null;
         }
         $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($icon->getIdentifier());
 
-        if (null === $iconConfiguration || !isset($iconConfiguration['options']['sprite'])) {
+        if ($iconConfiguration === null || !isset($iconConfiguration['options']['sprite'])) {
             throw new \RuntimeException('Missing sprite for icon ' . $icon->getIdentifier());
         }
 
         $iconSource = $iconConfiguration['options']['sprite'];
-        if (0 === \strpos($iconSource, 'EXT:') || 0 !== \strpos($iconSource, '/')) {
+        if (\strpos($iconSource, 'EXT:') === 0 || \strpos($iconSource, '/') !== 0) {
             $iconSource = GeneralUtility::getFileAbsFileName($iconSource);
         }
         return PathUtility::getAbsoluteWebPath($iconSource);

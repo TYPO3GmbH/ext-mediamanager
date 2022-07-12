@@ -44,13 +44,13 @@ class FolderTreeController
     {
         $storageId = $request->getQueryParams()['uid'] ?? null;
 
-        if (null === $storageId) {
+        if ($storageId === null) {
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
         $storage = $this->storagesProvider->getStorageForUserById((int)$storageId);
 
-        if (null === $storage) {
+        if ($storage === null) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);
         }
 

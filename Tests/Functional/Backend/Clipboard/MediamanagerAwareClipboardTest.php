@@ -71,7 +71,7 @@ class MediamanagerAwareClipboardTest extends FunctionalTestCase
             'el' => [
                  'file_1.jpg',
                  'file_2.jpg',
-            ]
+            ],
         ];
 
         $this->subject->setCmd($data);

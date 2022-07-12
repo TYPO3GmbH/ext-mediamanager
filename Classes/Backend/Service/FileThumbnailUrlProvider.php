@@ -19,7 +19,6 @@ namespace TYPO3\CMS\Mediamanager\Backend\Service;
 
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ProcessedFile;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 class FileThumbnailUrlProvider implements FileThumbnailUrlProviderInterface
 {

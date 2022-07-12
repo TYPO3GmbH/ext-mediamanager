@@ -46,17 +46,17 @@ class SearchFilesController
         $storageId = $request->getQueryParams()['uid'] ?? null;
         $searchTerm = $request->getQueryParams()['search'] ?? null;
 
-        if (null === $storageId) {
+        if ($storageId === null) {
             return new HtmlResponse('Parameter "uid" is missing', 400);
         }
 
-        if (null === $searchTerm) {
+        if ($searchTerm === null) {
             return new HtmlResponse('Parameter "search" is missing', 400);
         }
 
         $storage = $this->storagesProvider->getStorageForUserById((int)$storageId);
 
-        if (null === $storage) {
+        if ($storage === null) {
             return new HtmlResponse(\sprintf('Storage "%s" could not be found', $storageId), 404);
         }
 

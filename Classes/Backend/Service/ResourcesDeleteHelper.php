@@ -47,11 +47,11 @@ class ResourcesDeleteHelper implements ResourcesDeleteHelperInterface, Singleton
     {
         $languageService = $this->languageServiceProvider->getLanguageService();
 
-        if (0 === count($resources)) {
+        if (count($resources) === 0) {
             return '';
         }
 
-        if (1 === count($resources)) {
+        if (count($resources) === 1) {
             return \sprintf(
                 $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:mess.delete'),
                 $this->getDisplayResourceName($resources[0])
@@ -77,22 +77,22 @@ class ResourcesDeleteHelper implements ResourcesDeleteHelperInterface, Singleton
     {
         $languageService = $this->languageServiceProvider->getLanguageService();
         switch (true) {
-           case $resource instanceof Folder:
-               return BackendUtility::referenceCount(
-                   '_FILE',
-                   $resource->getIdentifier(),
-                   ' ' . $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFolder')
-               );
+            case $resource instanceof Folder:
+                return BackendUtility::referenceCount(
+                    '_FILE',
+                    $resource->getIdentifier(),
+                    ' ' . $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFolder')
+                );
 
-           case $resource instanceof File:
-               return BackendUtility::referenceCount(
-                   'sys_file',
-                   (string)$resource->getUid(),
-                   ' ' . $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFile')
-               );
+            case $resource instanceof File:
+                return BackendUtility::referenceCount(
+                    'sys_file',
+                    (string)$resource->getUid(),
+                    ' ' . $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.referencesToFile')
+                );
 
-           default:
-               return '';
-       }
+            default:
+                return '';
+        }
     }
 }

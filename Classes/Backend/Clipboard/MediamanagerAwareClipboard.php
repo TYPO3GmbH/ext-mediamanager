@@ -30,7 +30,7 @@ class MediamanagerAwareClipboard extends BaseClipboard
      */
     public function setCmd(array $cmd): void
     {
-        if (self::MEDIAMANAGER_CLIPBOARD_PAD === $this->current && is_array($cmd['el'])) {
+        if ($this->current === self::MEDIAMANAGER_CLIPBOARD_PAD && is_array($cmd['el'])) {
             $this->clipData[$this->current]['el'] = [];
         }
         parent::setCmd($cmd);

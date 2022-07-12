@@ -30,7 +30,7 @@ class ModifyFolderIconListener
             return;
         }
 
-        if (self::DEFAULT_ICON_FOLDER !== $event->getIconIdentifier()) {
+        if ($event->getIconIdentifier() !== self::DEFAULT_ICON_FOLDER) {
             return;
         }
 

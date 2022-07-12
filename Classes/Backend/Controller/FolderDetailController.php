@@ -44,23 +44,23 @@ class FolderDetailController
     {
         $combinedIdentifier = $request->getQueryParams()['identifier'] ?? null;
 
-        if (null === $combinedIdentifier) {
+        if ($combinedIdentifier === null) {
             return new HtmlResponse('Parameter "identifier" is missing', 400);
         }
 
         $storage = $this->resourceFactory->getStorageObjectFromCombinedIdentifier($combinedIdentifier);
 
-        if (null === $storage) {
+        if ($storage === null) {
             return new HtmlResponse(\sprintf('Storage for  "%s" is missing', $combinedIdentifier), 404);
         }
 
         $folderId = \substr($combinedIdentifier, \strpos($combinedIdentifier, ':') + 1);
 
-        if (false === $storage->hasFolder($folderId)) {
+        if ($storage->hasFolder($folderId) === false) {
             return new HtmlResponse(\sprintf('Folder "%s" is missing', $folderId), 404);
         }
 
-        if (0 === $storage->getUid()) {
+        if ($storage->getUid() === 0) {
             return new HtmlResponse('You are not allowed to access files outside your storages', 405);
         }
 
