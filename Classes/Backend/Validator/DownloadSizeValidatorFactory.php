@@ -34,10 +34,8 @@ class DownloadSizeValidatorFactory implements DownloadSizeValidatorFactoryInterf
     public function createValidator(): AbstractValidator
     {
         /** @var AbstractValidator $resourceSizeValidator */
-        $resourceSizeValidator = GeneralUtility::makeInstance(ResourcesSizeValidator::class, [
-            'maximum' => (int)$this->extensionConfiguration->get('mediamanager', 'maxDownloadSizeMB'),
-        ]);
-
+        $resourceSizeValidator = GeneralUtility::makeInstance(ResourcesSizeValidator::class);
+        $resourceSizeValidator->setOptions(['maximum' => (int)$this->extensionConfiguration->get('mediamanager', 'maxDownloadSizeMB')]);
         return $resourceSizeValidator;
     }
 }

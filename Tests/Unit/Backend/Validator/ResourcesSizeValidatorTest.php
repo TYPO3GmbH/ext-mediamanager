@@ -35,8 +35,9 @@ class ResourcesSizeValidatorTest extends UnitTestCase
         parent::setUp();
         $this->validator = $this->getMockBuilder(ResourcesSizeValidator::class)
             ->onlyMethods(['translateErrorMessage'])
-            ->setConstructorArgs([['maximum' => self::DEFAULT_MAX_SIZE]])
             ->getMock();
+
+        $this->validator->setOptions(['maximum' => self::DEFAULT_MAX_SIZE]);
     }
 
     /**
