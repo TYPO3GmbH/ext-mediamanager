@@ -28,7 +28,7 @@ return [
         'routes' => [
             '_default' => [
                 'target' =>  \TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController::class . '::indexAction',
-            ]
-        ]
+            ],
+        ],
     ],
 ];

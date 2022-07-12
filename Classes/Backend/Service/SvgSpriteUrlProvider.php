@@ -44,7 +44,7 @@ class SvgSpriteUrlProvider implements IconUrlProviderInterface
         }
 
         $iconSource = $iconConfiguration['options']['sprite'];
-        if (\strpos($iconSource, 'EXT:') === 0 || \strpos($iconSource, '/') !== 0) {
+        if (\str_starts_with($iconSource, 'EXT:')   || !\str_starts_with($iconSource, '/')) {
             $iconSource = GeneralUtility::getFileAbsFileName($iconSource);
         }
         return PathUtility::getAbsoluteWebPath($iconSource);

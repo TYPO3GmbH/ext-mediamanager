@@ -542,12 +542,6 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
-    cglGit)
-        setUpDockerComposeDotEnv
-        docker-compose run cgl_git
-        SUITE_EXIT_CODE=$?
-        docker-compose down
-        ;;
     checkAnnotations)
         setUpDockerComposeDotEnv
         docker-compose run check_annotations

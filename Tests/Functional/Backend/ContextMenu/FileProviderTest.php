@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\Mediamanager\Tests\Functional\Backend\ContextMenu;
 
 use TYPO3\CMS\Backend\Clipboard\Clipboard;
-use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;

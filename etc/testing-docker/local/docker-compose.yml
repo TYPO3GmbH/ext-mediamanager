@@ -456,33 +456,19 @@ services:
         node_modules/grunt/bin/grunt scripts
       "
 
-  cgl_git:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
-    user: "${HOST_UID}"
-    volumes:
-      - ${EXT_ROOT}:${EXT_ROOT}
-    working_dir: ${EXT_ROOT}
-    command: >
-      /bin/sh -c "
-        if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
-          set -x
-        fi
-        Build/Scripts/cglFixMyCommit.sh ${CGLCHECK_DRY_RUN};
-      "
-
   cgl_all:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${EXT_ROOT}:${EXT_ROOT}
-    working_dir: ${EXT_ROOT}
+    working_dir: ${EXT_ROOT}/.Build/
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
         php -dxdebug.mode=off bin/php-cs-fixer fix -v ${CGLCHECK_DRY_RUN} --path-mode intersection \
-          --config=Build/php-cs-fixer.php typo3/
+          --config=../etc/php-cs-fixer.php ../
       "
 
   check_annotations:
