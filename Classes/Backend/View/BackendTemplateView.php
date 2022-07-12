@@ -29,7 +29,6 @@ class BackendTemplateView extends StandaloneView
      */
     public function initializeView()
     {
-        parent::initializeView();
         $this->setTemplateRootPaths(static::DEFAULT_TEMPLATE_ROOT_PATHS);
         $this->getRequest()->setControllerExtensionName(self::DEFAULT_EXTENSION_NAME);
     }

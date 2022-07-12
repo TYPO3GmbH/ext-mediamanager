@@ -41,13 +41,20 @@ class MediamanagerAwareClipboard extends BaseClipboard
      */
     public function initializeClipboard(?ServerRequestInterface $request = null): void
     {
+        // Initialize the request
+        // @todo: Clipboard does two things: It is a repository to find out which records
+        //        are in the clipboard, and it is a class to help with rendering the
+        //        clipboard. $request is optional and only used in rendering.
+        //        It would be better to split these two aspects into single classes.
+        $this->request = $request ?? $GLOBALS['TYPO3_REQUEST'] ?? null;
+
         $userTsConfig = $this->getBackendUser()->getTSConfig();
-        $clipData = $this->getBackendUser()->getModuleData('clipboard', $userTsConfig['options.']['saveClipboard'] ? '' : 'ses');
+        $clipData = $this->getBackendUser()->getModuleData('clipboard', !empty($userTsConfig['options.']['saveClipboard'])  ? '' : 'ses') ?: [];
         foreach ($this->getDefinedClipboardPadNames() as $padName) {
-            $this->clipData[$padName] = is_array($clipData[$padName]) ? $clipData[$padName] : [];
+            $this->clipData[$padName] = isset($clipData[$padName]) && is_array($clipData[$padName]) ? $clipData[$padName] : [];
         }
 
-        $this->clipData['current'] = ($this->current = isset($this->clipData[$clipData['current']]) ? $clipData['current'] : 'normal');
+        $this->clipData['current'] = ($this->current = isset($clipData['current'], $this->clipData[$clipData['current']]) ? $clipData['current'] : 'normal');
     }
 
     /**

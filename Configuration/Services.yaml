@@ -10,6 +10,19 @@ services:
   TYPO3\CMS\Mediamanager\Backend\Browser\:
     resource: '../Classes/Backend/Browser/*'
     public: true
+    autoconfigure: false
+
+  TYPO3\CMS\Mediamanager\Backend\Browser\FileBrowser:
+    decorates: TYPO3\CMS\Recordlist\Browser\FileBrowser
+
+  TYPO3\CMS\Mediamanager\Backend\Browser\FolderBrowser:
+    decorates: TYPO3\CMS\Recordlist\Browser\FolderBrowser
+
+  TYPO3\CMS\Mediamanager\Backend\Clipboard\MediamanagerAwareClipboard:
+    decorates: TYPO3\CMS\Backend\Clipboard\Clipboard
+
+  TYPO3\CMS\Mediamanager\Backend\ContextMenu\FileProvider:
+    decorates: TYPO3\CMS\Filelist\ContextMenu\ItemProviders\FileProvider
 
   TYPO3\CMS\Mediamanager\Backend\Controller\:
     resource: '../Classes/Backend/Controller/*'

@@ -156,7 +156,7 @@ class FolderListGenerator implements FolderListGeneratorInterface
         $combinedIdentifier = $resource->getCombinedIdentifier();
         $icon = $this->iconFactory->getIconForResource($resource, Icon::SIZE_SMALL);
         $isWritable = $resource->checkActionPermission('write');
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+        $clipboardIdentifier =  substr(md5($combinedIdentifier), 0, 10);
         $parentFolder = $resource->getParentFolder();
 
         return [

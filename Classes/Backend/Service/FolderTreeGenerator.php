@@ -158,7 +158,7 @@ class FolderTreeGenerator implements FolderTreeGeneratorInterface
             $isStorage ? ['mount-root' => true] : []
         );
 
-        $clipboardIdentifier = GeneralUtility::shortMD5($combinedIdentifier);
+        $clipboardIdentifier = substr(md5($combinedIdentifier), 0, 10);
         $parentFolder = $folder->getParentFolder();
 
         return [

@@ -24,7 +24,7 @@
 	},
     "require": {
 		"php": "^7.2 || ^8.0",
-        "typo3/cms-core": "^11.3",
+        "typo3/cms-core": "^12.0",
         "ext-zip": "*",
         "ext-json": "*"
     },

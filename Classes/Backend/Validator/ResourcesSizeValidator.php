@@ -34,7 +34,7 @@ class ResourcesSizeValidator extends AbstractValidator
     /**
      * @param ResourceInterface[] $value
      */
-    public function isValid($value)
+    public function isValid($value): void
     {
         $rawSize = \array_sum(\array_map([$this, 'getResourceSize'], $value));
 

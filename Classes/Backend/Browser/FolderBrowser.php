@@ -27,6 +27,8 @@ use TYPO3\CMS\Recordlist\Browser\ElementBrowserInterface;
 
 class FolderBrowser implements ElementBrowserInterface
 {
+    private string $identifier = 'folder';
+
     /** @var UriBuilder */
     private $uriBuilder;
 
@@ -121,9 +123,17 @@ class FolderBrowser implements ElementBrowserInterface
             $data['expandFolder'] = $this->expandFolder;
             $store = true;
         } else {
-            $this->expandFolder = $data['expandFolder'];
+            $this->expandFolder = $data['expandFolder'] ?? null;
             $store = false;
         }
         return [$data, $store];
+    }
+
+    /**
+     * Returns the identifier for the browser
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 }

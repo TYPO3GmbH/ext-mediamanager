@@ -13,23 +13,13 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 (static function () {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
-        'file',
-        'Mediamanager',
-        'bottom',
-        null,
-        [
-            'name' => 'file_Mediamanager',
-            'routeTarget' => \TYPO3\CMS\Mediamanager\Backend\Controller\MediamanagerController::class . '::indexAction',
-            'access' => 'user,group',
-            'workspaces' => 'online,custom',
-            'icon' => 'EXT:mediamanager/Resources/Public/Icons/module-mediamanager.svg',
-            'labels' => 'LLL:EXT:mediamanager/Resources/Private/Language/locallang_mod_mediamanager.xlf',
-            'navigationComponentId' => null,
-            'inheritNavigationComponentFromMainModule' => false,
-        ]
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    $iconRegistry->registerIcon(
+        'module-mediamanager',
+        TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        [ 'source' => 'EXT:mediamanager/Resources/Public/Icons/module-mediamanager.svg' ]
     );
 })();
