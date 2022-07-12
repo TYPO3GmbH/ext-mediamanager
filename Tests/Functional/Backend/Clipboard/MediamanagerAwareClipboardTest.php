@@ -24,7 +24,8 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class MediamanagerAwareClipboardTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/filelist',
         'typo3conf/ext/mediamanager',
     ];
 

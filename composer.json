@@ -30,13 +30,15 @@
         "ext-json": "*"
     },
     "require-dev": {
+		"typo3/cms-filelist": "12.*.*@dev",
 		"phpunit/phpunit": "^9.5.20",
 		"typo3/coding-standards": "^0.5.3",
 		"phpstan/phpstan": "^1.8.0",
 		"phpstan/phpstan-phpunit": "^1.1.1",
 		"typo3/testing-framework": "dev-main",
-        "roave/security-advisories": "dev-latest"
-    },
+        "roave/security-advisories": "dev-latest",
+		"typo3/cms-composer-installers": "^3.0"
+	},
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",

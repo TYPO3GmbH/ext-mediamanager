@@ -21,6 +21,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\FolderInterface;
@@ -39,7 +40,8 @@ class FolderListGeneratorTest extends FunctionalTestCase
     /** @var FolderListGenerator */
     private $generator;
 
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/filelist',
         'typo3conf/ext/mediamanager',
     ];
 
@@ -62,7 +64,7 @@ class FolderListGeneratorTest extends FunctionalTestCase
         $fileReferencesProviderMock->method('getReferencesCount')
             ->willReturn(2);
 
-        $GLOBALS['LANG'] = LanguageService::create('default');
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
 
         $this->fileThumbnailUrlProvider = $this->createMock(FileThumbnailUrlProviderInterface::class);
         $this->folderThumbnailProvider = $this->createMock(FolderThumbnailProviderInterface::class);

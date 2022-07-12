@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -38,7 +39,8 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
     /** @var FolderTreeGenerator */
     private $generator;
 
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/filelist',
         'typo3conf/ext/mediamanager',
     ];
 
@@ -58,7 +60,7 @@ class FolderTreeGeneratorTest extends FunctionalTestCase
         $this->backendUserMock->method('isAdmin')
             ->willReturn(true);
 
-        $GLOBALS['LANG'] = LanguageService::create('default');
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
         $GLOBALS['BE_USER'] = $this->backendUserMock;
 
         $this->generator = new FolderTreeGenerator(

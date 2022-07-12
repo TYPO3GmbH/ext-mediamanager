@@ -19,6 +19,7 @@ namespace TYPO3\CMS\Mediamanager\Tests\Functional\Backend\ContextMenu;
 
 use TYPO3\CMS\Backend\Clipboard\Clipboard;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -29,7 +30,8 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class FileProviderTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/filelist',
         'typo3conf/ext/mediamanager',
     ];
 
@@ -43,7 +45,7 @@ class FileProviderTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $GLOBALS['LANG'] = LanguageService::create('default');
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('default');
 
         $this->setUpBackendUserFromFixture(1);
 
@@ -59,7 +61,8 @@ class FileProviderTest extends FunctionalTestCase
      */
     public function it_can_handle_files(): void
     {
-        $subject = new FileProvider('sys_file', \json_encode(['1:/fileA.jpg']), 'tree');
+        $subject = new FileProvider();
+        $subject->setContext('sys_file', \json_encode(['1:/fileA.jpg']), 'tree');
 
         self::assertTrue($subject->canHandle());
     }
@@ -69,7 +72,9 @@ class FileProviderTest extends FunctionalTestCase
      */
     public function it_wont_handle_something_other_than_files(): void
     {
-        $subject =  new FileProvider('something_different', \json_encode(['1:/fileA.jpg']), 'tree');
+        $subject =  new FileProvider();
+        $subject->setContext('something_different', \json_encode(['1:/fileA.jpg']), 'tree');
+
         self::assertFalse($subject->canHandle());
     }
 
@@ -86,7 +91,8 @@ class FileProviderTest extends FunctionalTestCase
     ): void {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['features'][FileProvider::COPY_PASTE_FEATURE_NAME] = $copyPasteFeatureFlag;
 
-        $subject =  new FileProvider('sys_file', json_encode(['1:/fileA.jpg']), $context);
+        $subject =  new FileProvider();
+        $subject->setContext('sys_file', json_encode(['1:/fileA.jpg']), $context);
 
         $this->resourceFactoryMock->method('retrieveFileOrFolderObject')
             ->willReturn($resource);
@@ -101,6 +107,8 @@ class FileProviderTest extends FunctionalTestCase
         $readableFile = $this->createMock(File::class);
         $readableFile->method('checkActionPermission')
             ->willReturn(false);
+        $readableFile->method('getPublicUrl')
+            ->willReturn('foo');
 
         yield 'Readable file' => [
             ['info', 'show', 'divider', 'divider2'],
@@ -119,6 +127,8 @@ class FileProviderTest extends FunctionalTestCase
         $writableFile = $this->createMock(File::class);
         $writableFile->method('checkActionPermission')
             ->willReturn(true);
+        $writableFile->method('getPublicUrl')
+            ->willReturn('foo');
 
         yield 'Writable file' => [
             ['info', 'show', 'download', 'divider', 'divider2', 'replace', 'delete'],

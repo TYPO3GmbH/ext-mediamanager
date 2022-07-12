@@ -31,7 +31,8 @@ class FileReferencesProviderTest extends FunctionalTestCase
     /** @var FileReferencesProvider */
     private $subject;
 
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
+        'typo3/sysext/filelist',
         'typo3conf/ext/mediamanager',
     ];
 

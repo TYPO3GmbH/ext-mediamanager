@@ -788,7 +788,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP'
-        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ../Tests/Functional/ ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
+        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
@@ -838,7 +838,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP'
-        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ../Tests/Functional/ ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
+        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
@@ -888,7 +888,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP'
-        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ../Tests/Functional/ ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE}\"
+        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE}\"
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
@@ -928,7 +928,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP'
-        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ../Tests/Functional/ ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE}\"
+        COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE}\"
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
         else
@@ -1068,12 +1068,12 @@ services:
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          vendor/phpunit/phpunit/phpunit ../Tests/Unit/ ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
-          vendor/phpunit/phpunit/phpunit ../Tests/Unit/ ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "
 

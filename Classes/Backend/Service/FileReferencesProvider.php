@@ -80,8 +80,8 @@ class FileReferencesProvider implements FileReferencesProviderInterface
                 )
             )
             ->groupBy('ref_uid')
-            ->execute()
-            ->fetchAll();
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         return \array_combine(
             \array_column($referenceCount, 'ref_uid'),
