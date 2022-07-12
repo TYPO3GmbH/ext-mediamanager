@@ -5,6 +5,7 @@
 /.Build
 composer.lock
 /.idea
+/etc/testing-docker/local/.env 
 /Build/node_modules
 /Documentation-GENERATED-temp
 /public/
